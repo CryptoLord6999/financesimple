@@ -4,27 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Finance Minimal</title>
-    <!-- Подключаем Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключаем Tailwind CSS для премиального стиля -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Премиальные шрифты и сглаживание */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #09090b; /* Zinc 950 */
+            background-color: #09090b;
             color: #fafafa;
             -webkit-font-smoothing: antialiased;
         }
         .glass-card {
-            background: rgba(24, 24, 27, 0.6); /* Zinc 900 с прозрачностью */
+            background: rgba(24, 24, 27, 0.6);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .input-premium {
             background: transparent;
             border: none;
-            border-bottom: 1px solid #3f3f46; /* Zinc 700 */
+            border-bottom: 1px solid #3f3f46;
             color: white;
             font-size: 1.5rem;
             font-weight: 300;
@@ -33,9 +30,8 @@
             transition: border-color 0.3s ease;
         }
         .input-premium:focus {
-            border-bottom-color: #a1a1aa; /* Zinc 400 */
+            border-bottom-color: #a1a1aa;
         }
-        /* Скрываем стрелочки у input type number */
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
@@ -45,6 +41,13 @@
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        .reset-btn {
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+        .reset-btn:hover {
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -72,19 +75,22 @@
 
     <!-- История -->
     <div class="flex-1 overflow-y-auto">
-        <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase mb-4">История операций</p>
+        <div class="flex justify-between items-center mb-4">
+            <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
+            <button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-600 text-xs font-medium tracking-widest uppercase hover:text-rose-400 transition-colors">
+                Обнулить
+            </button>
+        </div>
         <div id="history" class="space-y-3 pb-6">
             <!-- Сюда добавляются транзакции -->
         </div>
     </div>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Разворачиваем на весь экран
+        tg.expand();
         
-        // Настройка цветов под тему Telegram (если пользователь использует светлую тему)
         if (tg.colorScheme === 'light') {
             document.body.style.backgroundColor = '#ffffff';
             document.body.style.color = '#18181b';
@@ -92,7 +98,6 @@
             document.querySelector('.input-premium').style.borderBottomColor = '#d4d4d8';
         }
 
-        // Состояние приложения
         let balance = parseFloat(localStorage.getItem('balance')) || 0;
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
@@ -100,40 +105,40 @@
         const amountEl = document.getElementById('amount');
         const historyEl = document.getElementById('history');
 
-        // Форматирование денег (1 000 000 ₽)
         const formatMoney = (num) => {
             return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
         };
 
-        // Обновление интерфейса
         const updateUI = () => {
             balanceEl.textContent = formatMoney(balance);
             historyEl.innerHTML = '';
             
-            transactions.slice().reverse().forEach((t, index) => {
-                const isIncome = t.type === 'income';
-                const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
-                const sign = isIncome ? '+' : '−';
-                
-                const div = document.createElement('div');
-                div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
-                div.innerHTML = `
-                    <span class="text-zinc-300 font-light">${t.desc}</span>
-                    <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
-                `;
-                historyEl.appendChild(div);
-            });
+            if (transactions.length === 0) {
+                historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
+            } else {
+                transactions.slice().reverse().forEach((t, index) => {
+                    const isIncome = t.type === 'income';
+                    const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                    const sign = isIncome ? '+' : '−';
+                    
+                    const div = document.createElement('div');
+                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                    div.innerHTML = `
+                        <span class="text-zinc-300 font-light">${t.desc}</span>
+                        <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
+                    `;
+                    historyEl.appendChild(div);
+                });
+            }
 
-            // Сохранение в LocalStorage (данные не пропадут при закрытии)
             localStorage.setItem('balance', balance);
             localStorage.setItem('transactions', JSON.stringify(transactions));
         };
 
-        // Добавление транзакции
         const addTransaction = (type) => {
             const amount = parseFloat(amountEl.value);
             if (!amount || amount <= 0) {
-                tg.HapticFeedback.notificationOccurred('error'); // Вибрация ошибки
+                tg.HapticFeedback.notificationOccurred('error');
                 return;
             }
 
@@ -151,19 +156,38 @@
             });
 
             amountEl.value = '';
-            tg.HapticFeedback.impactOccurred('light'); // Приятная тактильная отдача
+            tg.HapticFeedback.impactOccurred('light');
             updateUI();
         };
 
-        // Обработка нажатия Enter в поле ввода
+        // 🔄 ФУНКЦИЯ СБРОСА
+        const resetAll = () => {
+            if (transactions.length === 0) {
+                tg.HapticFeedback.notificationOccurred('warning');
+                return;
+            }
+            
+            // Двойное подтверждение через вибрацию
+            tg.HapticFeedback.notificationOccurred('warning');
+            
+            if (confirm('Обнулить баланс и всю историю?')) {
+                balance = 0;
+                transactions = [];
+                localStorage.removeItem('balance');
+                localStorage.removeItem('transactions');
+                tg.HapticFeedback.notificationOccurred('success');
+                updateUI();
+            } else {
+                tg.HapticFeedback.impactOccurred('soft');
+            }
+        };
+
         amountEl.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                // По умолчанию добавляем как расход, если не указано иное, или можно сделать логику
                 addTransaction('expense');
             }
         });
 
-        // Первичная отрисовка
         updateUI();
     </script>
 </body>
