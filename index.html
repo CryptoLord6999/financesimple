@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finance Minimal</title>
+    <!-- Подключаем Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем Tailwind CSS для премиального стиля -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Премиальные шрифты и сглаживание */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #09090b; /* Zinc 950 */
+            color: #fafafa;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(24, 24, 27, 0.6); /* Zinc 900 с прозрачностью */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .input-premium {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #3f3f46; /* Zinc 700 */
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .input-premium:focus {
+            border-bottom-color: #a1a1aa; /* Zinc 400 */
+        }
+        /* Скрываем стрелочки у input type number */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+        .transaction-item {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen p-6">
+
+    <!-- Баланс -->
+    <div class="flex-1 flex flex-col justify-center items-center mb-8">
+        <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
+        <h1 id="balance" class="text-6xl font-extralight tracking-tight text-white">0 ₽</h1>
+    </div>
+
+    <!-- Ввод -->
+    <div class="glass-card rounded-3xl p-6 mb-6">
+        <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal">
+        
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
+                + Доход
+            </button>
+            <button onclick="addTransaction('expense')" class="bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
+                − Расход
+            </button>
+        </div>
+    </div>
+
+    <!-- История -->
+    <div class="flex-1 overflow-y-auto">
+        <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase mb-4">История операций</p>
+        <div id="history" class="space-y-3 pb-6">
+            <!-- Сюда добавляются транзакции -->
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Разворачиваем на весь экран
+        
+        // Настройка цветов под тему Telegram (если пользователь использует светлую тему)
+        if (tg.colorScheme === 'light') {
+            document.body.style.backgroundColor = '#ffffff';
+            document.body.style.color = '#18181b';
+            document.querySelector('.input-premium').style.color = '#18181b';
+            document.querySelector('.input-premium').style.borderBottomColor = '#d4d4d8';
+        }
+
+        // Состояние приложения
+        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        const balanceEl = document.getElementById('balance');
+        const amountEl = document.getElementById('amount');
+        const historyEl = document.getElementById('history');
+
+        // Форматирование денег (1 000 000 ₽)
+        const formatMoney = (num) => {
+            return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+        };
+
+        // Обновление интерфейса
+        const updateUI = () => {
+            balanceEl.textContent = formatMoney(balance);
+            historyEl.innerHTML = '';
+            
+            transactions.slice().reverse().forEach((t, index) => {
+                const isIncome = t.type === 'income';
+                const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                const sign = isIncome ? '+' : '−';
+                
+                const div = document.createElement('div');
+                div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                div.innerHTML = `
+                    <span class="text-zinc-300 font-light">${t.desc}</span>
+                    <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
+                `;
+                historyEl.appendChild(div);
+            });
+
+            // Сохранение в LocalStorage (данные не пропадут при закрытии)
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        };
+
+        // Добавление транзакции
+        const addTransaction = (type) => {
+            const amount = parseFloat(amountEl.value);
+            if (!amount || amount <= 0) {
+                tg.HapticFeedback.notificationOccurred('error'); // Вибрация ошибки
+                return;
+            }
+
+            if (type === 'income') {
+                balance += amount;
+            } else {
+                balance -= amount;
+            }
+
+            transactions.push({
+                type: type,
+                amount: amount,
+                desc: type === 'income' ? 'Пополнение' : 'Списание',
+                date: new Date().toISOString()
+            });
+
+            amountEl.value = '';
+            tg.HapticFeedback.impactOccurred('light'); // Приятная тактильная отдача
+            updateUI();
+        };
+
+        // Обработка нажатия Enter в поле ввода
+        amountEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                // По умолчанию добавляем как расход, если не указано иное, или можно сделать логику
+                addTransaction('expense');
+            }
+        });
+
+        // Первичная отрисовка
+        updateUI();
+    </script>
+</body>
+</html>
