@@ -1,1216 +1,617 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finance Minimal</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-            color: #2c3e50;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-        }
-        .input-premium {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #cbd5e0;
-            color: #2c3e50;
-            font-size: 1.5rem;
-            font-weight: 300;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-        .input-premium:focus { border-bottom-color: #667eea; }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .transaction-item { animation: slideIn 0.3s ease-out forwards; }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .reset-btn { opacity: 0.4; transition: opacity 0.3s ease; }
-        .reset-btn:hover { opacity: 0.8; }
-        .sync-indicator {
-            font-size: 0.75rem;
-            color: #718096;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-        .sync-indicator.syncing { color: #667eea; }
-        .sync-indicator.synced { color: #48bb78; }
-        .sync-indicator.error { color: #f56565; }
-        .sync-indicator.warning { color: #ed8936; }
-        .stats-row { display: flex; gap: 0.75rem; margin-top: 1rem; }
-        .stat-card {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.6rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-        .stat-label {
-            font-size: 0.65rem;
-            color: #718096;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .stat-value { font-size: 1.1rem; font-weight: 600; margin-top: 0.2rem; }
-        .income-color { color: #48bb78; }
-        .expense-color { color: #f56565; }
-        .revenue-color { color: #ed8936; }
-        .adjustment-color { color: #667eea; }
-        .button-group {
-            display: flex;
-            gap: 0.4rem;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
-        }
-        .modal.active { display: flex; align-items: flex-end; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1.5rem 1.5rem 0 0;
-            padding: 1.25rem 1rem 2rem;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s ease-out;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        .modal-close {
-            width: 2.5rem; height: 0.3rem;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 0.15rem;
-            margin: 0 auto 0.75rem;
-        }
-        .modal-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-        .report-item {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .report-label {
-            font-size: 0.7rem;
-            color: #718096;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-        .report-value { font-size: 1.25rem; font-weight: 700; color: #2c3e50; }
-        .report-divider {
-            height: 1px;
-            background: rgba(0, 0, 0, 0.08);
-            margin: 0.75rem 0;
-        }
-        .settings-input-group {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .settings-input-label {
-            font-size: 0.7rem;
-            color: #718096;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-        .settings-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #667eea;
-            color: #2c3e50;
-            font-size: 1.25rem;
-            font-weight: 600;
-            text-align: center;
-            outline: none;
-            padding: 0.35rem 0;
-        }
-        .settings-input-hint {
-            font-size: 0.7rem;
-            color: #a0aec0;
-            margin-top: 0.35rem;
-        }
-        .button-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
-        .button-row button { flex: 1; padding: 0.75rem; border-radius: 0.875rem; font-weight: 500; font-size: 0.9rem; }
-        .capital-color { color: #9f7aea; }
-        .turnover-color { color: #4299e1; }
-        .site-balance-color { color: #667eea; }
-        
-        .month-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.5rem;
-            margin-bottom: 0.75rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .month-nav-btn {
-            width: 2rem; height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            border-radius: 0.6rem;
-            font-size: 1rem;
-        }
-        .month-nav-btn:active { transform: scale(0.95); }
-        .month-nav-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .today-btn {
-            background: rgba(72, 187, 120, 0.1);
-            color: #48bb78;
-            padding: 0.25rem 0.6rem;
-            border-radius: 0.4rem;
-            font-size: 0.7rem;
-            font-weight: 500;
-            margin-top: 0.2rem;
-            display: inline-block;
-        }
-        .month-summary {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .month-summary-card {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.6rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .month-summary-label {
-            font-size: 0.65rem;
-            color: #718096;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.15rem;
-        }
-        .month-summary-value { font-size: 1rem; font-weight: 700; }
-        .days-table {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .days-table-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 0.4rem;
-            padding: 0.5rem 0.75rem;
-            background: rgba(102, 126, 234, 0.1);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            font-size: 0.65rem;
-            color: #718096;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .days-table-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 0.4rem;
-            padding: 0.6rem 0.75rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 0.8rem;
-            align-items: center;
-        }
-        .days-table-row:last-child { border-bottom: none; }
-        .day-date { color: #2c3e50; font-weight: 500; font-size: 0.8rem; }
-        .day-date-sub { font-size: 0.65rem; color: #a0aec0; font-weight: 400; }
-        .day-income { color: #48bb78; font-weight: 600; text-align: right; font-size: 0.8rem; }
-        .day-expense { color: #f56565; font-weight: 600; text-align: right; font-size: 0.8rem; }
-        .day-revenue { color: #ed8936; font-weight: 600; text-align: right; font-size: 0.8rem; }
-        .no-data-message {
-            padding: 1.5rem 1rem;
-            text-align: center;
-            color: #a0aec0;
-            font-size: 0.85rem;
-        }
-        .save-report-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 0.875rem;
-            font-weight: 600;
-            margin-top: 0.75rem;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-            font-size: 0.9rem;
-        }
-        .save-report-btn:active { transform: scale(0.98); }
-        .saved-indicator {
-            background: rgba(72, 187, 120, 0.1);
-            border: 1px solid rgba(72, 187, 120, 0.3);
-            color: #48bb78;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.75rem;
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-        .adjustment-info {
-            background: rgba(102, 126, 234, 0.08);
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 0.75rem;
-            padding: 0.65rem 0.75rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.75rem;
-            color: #4c51bf;
-            line-height: 1.4;
-        }
-        .report-settings-btn {
-            width: 100%;
-            padding: 0.6rem;
-            background: rgba(113, 128, 150, 0.1);
-            color: #4a5568;
-            border: 1px solid rgba(113, 128, 150, 0.2);
-            border-radius: 0.75rem;
-            font-weight: 500;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-        }
-        .report-settings-btn:active { transform: scale(0.98); }
-        .report-history-item {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 0.875rem;
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        .report-history-date {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .report-history-time {
-            font-size: 0.7rem;
-            color: #a0aec0;
-            margin-top: 0.15rem;
-        }
-        .report-history-summary {
-            font-size: 0.7rem;
-            color: #718096;
-            margin-top: 0.25rem;
-        }
-        .delete-report-btn {
-            background: rgba(245, 101, 101, 0.1);
-            color: #f56565;
-            border: 1px solid rgba(245, 101, 101, 0.2);
-            padding: 0.4rem 0.75rem;
-            border-radius: 0.6rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        .delete-report-btn:active { transform: scale(0.95); }
-        .empty-reports-message {
-            padding: 2rem 1rem;
-            text-align: center;
-            color: #a0aec0;
-            font-size: 0.85rem;
-        }
-        .close-modal-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(226, 232, 240, 0.8);
-            color: #4a5568;
-            border-radius: 0.875rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-            margin-top: 0.75rem;
-        }
-        .close-modal-btn:active { transform: scale(0.98); }
-        
-        /* Исправление для блока баланса/капитала/сайта */
-        .balance-capital-site {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .bcs-item {
-            text-align: center;
-        }
-        .bcs-label {
-            font-size: 0.65rem;
-            color: #718096;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.2rem;
-        }
-        .bcs-value {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Finance Minimal</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#f5f7fa 0%,#e8ecf1 100%);color:#2c3e50;-webkit-font-smoothing:antialiased;min-height:100vh}
+.glass-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);box-shadow:0 8px 32px rgba(0,0,0,0.05)}
+.input-premium{background:transparent;border:none;border-bottom:2px solid #cbd5e0;color:#2c3e50;font-size:1.5rem;font-weight:300;text-align:center;outline:none;transition:border-color 0.3s ease}
+.input-premium:focus{border-bottom-color:#667eea}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.transaction-item{animation:slideIn 0.3s ease-out forwards}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.reset-btn{opacity:0.4;transition:opacity 0.3s ease}
+.reset-btn:hover{opacity:0.8}
+.sync-indicator{font-size:0.75rem;color:#718096;margin-top:0.5rem;text-align:center}
+.sync-indicator.syncing{color:#667eea}
+.sync-indicator.synced{color:#48bb78}
+.sync-indicator.error{color:#f56565}
+.sync-indicator.warning{color:#ed8936}
+.stats-row{display:flex;gap:0.75rem;margin-top:1rem}
+.stat-card{flex:1;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
+.stat-label{font-size:0.65rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em}
+.stat-value{font-size:1.1rem;font-weight:600;margin-top:0.2rem}
+.income-color{color:#48bb78}
+.expense-color{color:#f56565}
+.revenue-color{color:#ed8936}
+.capital-color{color:#9f7aea}
+.turnover-color{color:#4299e1}
+.site-balance-color{color:#667eea}
+.button-group{display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;justify-content:center}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;animation:fadeIn 0.3s ease-out}
+.modal.active{display:flex;align-items:flex-end}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-content{width:100%;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.8);border-radius:1.5rem 1.5rem 0 0;padding:1.25rem 1rem 2rem;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease-out;box-shadow:0 -8px 32px rgba(0,0,0,0.1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-close{width:2.5rem;height:0.3rem;background:rgba(0,0,0,0.1);border-radius:0.15rem;margin:0 auto 0.75rem}
+.modal-title{font-size:1.35rem;font-weight:700;text-align:center;margin-bottom:1rem;color:#2c3e50}
+.report-item{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.report-label{font-size:0.7rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem}
+.report-value{font-size:1.25rem;font-weight:700;color:#2c3e50}
+.report-divider{height:1px;background:rgba(0,0,0,0.08);margin:0.75rem 0}
+.settings-input-group{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.settings-input-label{font-size:0.7rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;display:block}
+.settings-input{width:100%;background:transparent;border:none;border-bottom:2px solid #667eea;color:#2c3e50;font-size:1.25rem;font-weight:600;text-align:center;outline:none;padding:0.35rem 0}
+.settings-input-hint{font-size:0.7rem;color:#a0aec0;margin-top:0.35rem}
+.button-row{display:flex;gap:0.5rem;margin-top:0.75rem}
+.button-row button{flex:1;padding:0.75rem;border-radius:0.875rem;font-weight:500;font-size:0.9rem}
+.month-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;margin-bottom:0.75rem}
+.month-summary-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.month-summary-label{font-size:0.65rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem}
+.month-summary-value{font-size:1rem;font-weight:700}
+.save-report-btn{width:100%;padding:0.75rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:0.875rem;font-weight:600;margin-top:0.75rem;box-shadow:0 4px 12px rgba(102,126,234,0.3);font-size:0.9rem}
+.save-report-btn:active{transform:scale(0.98)}
+.adjustment-info{background:rgba(102,126,234,0.08);border:1px solid rgba(102,126,234,0.2);border-radius:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#4c51bf;line-height:1.4}
+.report-list-item{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.report-list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
+.report-list-date{font-size:0.9rem;font-weight:600;color:#2c3e50}
+.report-list-time{font-size:0.7rem;color:#a0aec0;margin-top:0.15rem}
+.report-list-actions{display:flex;gap:0.4rem}
+.report-action-btn{padding:0.35rem 0.6rem;border-radius:0.5rem;font-size:0.7rem;font-weight:500}
+.edit-btn{background:rgba(102,126,234,0.1);color:#667eea;border:1px solid rgba(102,126,234,0.2)}
+.delete-btn{background:rgba(245,101,101,0.1);color:#f56565;border:1px solid rgba(245,101,101,0.2)}
+.report-list-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:0.4rem;font-size:0.75rem}
+.report-stat{display:flex;justify-content:space-between;padding:0.25rem 0}
+.report-stat-label{color:#718096}
+.report-stat-value{font-weight:600}
+.summary-card{background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem;padding:1rem;margin-bottom:0.75rem}
+.summary-title{font-size:0.85rem;font-weight:600;color:#4c51bf;margin-bottom:0.5rem;text-align:center}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem}
+.summary-item{text-align:center}
+.summary-label{font-size:0.65rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em}
+.summary-value{font-size:1.1rem;font-weight:700;margin-top:0.15rem}
+.empty-reports-message{padding:2rem 1rem;text-align:center;color:#a0aec0;font-size:0.85rem}
+.close-modal-btn{width:100%;padding:0.75rem;background:rgba(226,232,240,0.8);color:#4a5568;border-radius:0.875rem;font-weight:500;font-size:0.9rem;margin-top:0.75rem}
+.close-modal-btn:active{transform:scale(0.98)}
+</style>
 </head>
 <body class="flex flex-col h-screen p-6">
 
-    <!-- Баланс -->
-    <div class="flex-1 flex flex-col justify-center items-center mb-8">
-        <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
-        <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
-        <div id="syncStatus" class="sync-indicator">подключение...</div>
-        
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-label">Доход</div>
-                <div class="stat-value income-color" id="totalIncome">0 ₽</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Расход</div>
-                <div class="stat-value expense-color" id="totalExpense">0 ₽</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Выручка</div>
-                <div class="stat-value revenue-color" id="totalRevenue">0 ₽</div>
-            </div>
-        </div>
+<div class="flex-1 flex flex-col justify-center items-center mb-8">
+<p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
+<h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
+<div id="syncStatus" class="sync-indicator">подключение...</div>
+<div class="stats-row">
+<div class="stat-card"><div class="stat-label">Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
+</div>
+<div class="button-group">
+<button onclick="openIndicators()" class="px-4 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📈 Показатели</button>
+<button onclick="openReport()" class="px-4 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
+<button onclick="openAdjustment()" class="px-4 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
+<button onclick="openSettings()" class="px-4 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">⚙️ Настройки</button>
+</div>
+</div>
 
-        <div class="button-group">
-            <button onclick="openIndicators()" class="px-4 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
-                📈 Показатели
-            </button>
-            <button onclick="openReport()" class="px-4 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
-                📊 Отчет
-            </button>
-            <button onclick="openAdjustment()" class="px-4 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
-                ✏️ Корректировка
-            </button>
-            <button onclick="openSettings()" class="px-4 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
-                ⚙️ Настройки
-            </button>
-        </div>
-    </div>
+<div class="glass-card rounded-3xl p-6 mb-6">
+<input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
+<div class="grid grid-cols-2 gap-4">
+<button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">+ Доход</button>
+<button onclick="addTransaction('expense')" class="bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">− Расход</button>
+</div>
+</div>
 
-    <!-- Ввод -->
-    <div class="glass-card rounded-3xl p-6 mb-6">
-        <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
-        
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
-                + Доход
-            </button>
-            <button onclick="addTransaction('expense')" class="bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
-                − Расход
-            </button>
-        </div>
-    </div>
+<div class="flex-1 overflow-y-auto">
+<div class="flex justify-between items-center mb-4">
+<p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
+<button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-500 text-xs font-medium tracking-widest uppercase hover:text-rose-500 transition-colors">Обнулить</button>
+</div>
+<div id="history" class="space-y-3 pb-6"></div>
+</div>
 
-    <!-- История -->
-    <div class="flex-1 overflow-y-auto">
-        <div class="flex justify-between items-center mb-4">
-            <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
-            <button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-500 text-xs font-medium tracking-widest uppercase hover:text-rose-500 transition-colors">
-                Обнулить
-            </button>
-        </div>
-        <div id="history" class="space-y-3 pb-6"></div>
-    </div>
+<!-- Показатели -->
+<div id="indicatorsModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">📈 Показатели</div>
+<div class="month-summary">
+<div class="month-summary-card" style="border-color:rgba(66,153,225,0.3)"><div class="month-summary-label">💹 Оборот</div><div class="month-summary-value turnover-color" id="indicatorsTurnover">0 ₽</div></div>
+<div class="month-summary-card" style="border-color:rgba(237,137,54,0.3)"><div class="month-summary-label">💰 Выручка</div><div class="month-summary-value revenue-color" id="indicatorsRevenue">0 ₽</div></div>
+<div class="month-summary-card" style="border-color:rgba(72,187,120,0.3)"><div class="month-summary-label">🟢 Доходы</div><div class="month-summary-value income-color" id="indicatorsTotalIncome">0 ₽</div></div>
+<div class="month-summary-card" style="border-color:rgba(245,101,101,0.3)"><div class="month-summary-label">🔴 Расходы</div><div class="month-summary-value expense-color" id="indicatorsTotalExpense">0 ₽</div></div>
+</div>
+<div class="report-divider"></div>
+<div class="report-item"><div class="report-label">⚪ Текущий баланс</div><div class="report-value" id="indicatorsBalance">0 ₽</div></div>
+<div class="report-item" style="background:rgba(159,122,234,0.1);border-color:rgba(159,122,234,0.3)"><div class="report-label">💜 Капитал</div><div class="report-value capital-color" id="indicatorsCapital">0 ₽</div></div>
+<div class="report-item" style="background:rgba(102,126,234,0.1);border-color:rgba(102,126,234,0.3)"><div class="report-label">🔵 Баланс на сайте</div><div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div></div>
+<button onclick="saveReportFromIndicators()" class="save-report-btn">💾 Сохранить отчет</button>
+<button onclick="closeIndicators()" class="close-modal-btn">Закрыть</button>
+</div>
+</div>
 
-    <!-- Модальное окно показателей -->
-    <div id="indicatorsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close"></div>
-            <div class="modal-title">📈 Показатели</div>
-            
-            <div class="month-summary">
-                <div class="month-summary-card" style="border-color: rgba(66, 153, 225, 0.3);">
-                    <div class="month-summary-label">💹 Оборот</div>
-                    <div class="month-summary-value turnover-color" id="indicatorsTurnover">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(237, 137, 54, 0.3);">
-                    <div class="month-summary-label">💰 Выручка</div>
-                    <div class="month-summary-value revenue-color" id="indicatorsRevenue">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(72, 187, 120, 0.3);">
-                    <div class="month-summary-label">🟢 Доходы</div>
-                    <div class="month-summary-value income-color" id="indicatorsTotalIncome">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(245, 101, 101, 0.3);">
-                    <div class="month-summary-label">🔴 Расходы</div>
-                    <div class="month-summary-value expense-color" id="indicatorsTotalExpense">0 ₽</div>
-                </div>
-            </div>
+<!-- Отчеты -->
+<div id="reportModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">📊 Отчеты</div>
+<div class="summary-card">
+<div class="summary-title">📊 Сводка по всем отчетам</div>
+<div class="summary-grid">
+<div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-value turnover-color" id="summaryTurnover">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-value revenue-color" id="summaryRevenue">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-value income-color" id="summaryIncome">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
+</div>
+</div>
+<div id="reportsList"></div>
+<button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
+</div>
+</div>
 
-            <div class="report-divider"></div>
+<!-- Редактирование отчета -->
+<div id="editReportModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">✏️ Редактировать отчет</div>
+<div class="adjustment-info">💡 Измените значения и нажмите "Сохранить".</div>
+<div id="editReportFields"></div>
+<div class="button-row">
+<button onclick="saveEditedReport()" class="bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200">✓ Сохранить</button>
+<button onclick="closeEditReport()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">✕ Отмена</button>
+</div>
+</div>
+</div>
 
-            <div class="report-item">
-                <div class="report-label">⚪ Текущий баланс</div>
-                <div class="report-value" id="indicatorsBalance">0 ₽</div>
-            </div>
-            <div class="report-item" style="background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.3);">
-                <div class="report-label">💜 Капитал</div>
-                <div class="report-value capital-color" id="indicatorsCapital">0 ₽</div>
-            </div>
-            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
-                <div class="report-label">🔵 Баланс на сайте</div>
-                <div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div>
-            </div>
+<!-- Корректировка -->
+<div id="adjustmentModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">✏️ Корректировка</div>
+<div class="adjustment-info">💡 Изменения запишутся в историю как "Корректировка" и не повлияют на доходы/расходы.</div>
+<div class="settings-input-group">
+<label class="settings-input-label">⚪ Новый баланс (₽)</label>
+<input type="number" id="adjustmentBalanceInput" class="settings-input" placeholder="0" step="0.01">
+<div class="settings-input-hint">Текущий: <span id="currentBalanceHint">0 ₽</span></div>
+</div>
+<div class="settings-input-group">
+<label class="settings-input-label">💜 Новый капитал (₽)</label>
+<input type="number" id="adjustmentCapitalInput" class="settings-input" placeholder="0" step="0.01">
+<div class="settings-input-hint">Текущий: <span id="currentCapitalHint">0 ₽</span></div>
+</div>
+<div class="settings-input-group">
+<label class="settings-input-label">📝 Комментарий</label>
+<input type="text" id="adjustmentCommentInput" class="settings-input" placeholder="Например: пересчёт" style="font-size:0.95rem;text-align:left">
+</div>
+<div class="button-row">
+<button onclick="saveAdjustment()" class="bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200">✓ Применить</button>
+<button onclick="closeAdjustment()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">✕ Отмена</button>
+</div>
+</div>
+</div>
 
-            <button onclick="closeIndicators()" class="close-modal-btn">Закрыть</button>
-        </div>
-    </div>
+<!-- Настройки -->
+<div id="settingsModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">⚙️ Настройки</div>
+<div class="settings-input-group">
+<label class="settings-input-label">💰 Начальный капитал (₽)</label>
+<input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
+</div>
+<div class="settings-input-group">
+<label class="settings-input-label">% выручки от доходов</label>
+<input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
+</div>
+<div class="settings-input-group">
+<label class="settings-input-label">% выручки от расходов</label>
+<input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
+</div>
+<div class="report-divider"></div>
+<div class="report-item" style="background:rgba(102,126,234,0.1);border-color:rgba(102,126,234,0.3)">
+<div class="report-label">Формула выручки</div>
+<div class="text-sm text-blue-500 mt-1" style="font-size:0.8rem">(Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)</div>
+</div>
+<div class="button-row">
+<button onclick="saveSettings()" class="bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200">✓ Сохранить</button>
+<button onclick="closeSettings()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">✕ Отмена</button>
+</div>
+</div>
+</div>
 
-    <!-- Модальное окно месячного отчета -->
-    <div id="reportModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close"></div>
-            <div class="modal-title">📊 Месячный отчет</div>
-            
-            <div class="month-nav">
-                <button onclick="changeMonth(-1)" class="month-nav-btn">←</button>
-                <div style="text-align: center;">
-                    <div class="month-nav-title" id="reportMonthTitle">Январь 2025</div>
-                    <button onclick="goToCurrentMonth()" class="today-btn">Сегодня</button>
-                </div>
-                <button onclick="changeMonth(1)" class="month-nav-btn">→</button>
-            </div>
+<script>
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand()}
 
-            <div class="month-summary">
-                <div class="month-summary-card" style="border-color: rgba(66, 153, 225, 0.3);">
-                    <div class="month-summary-label">💹 Оборот</div>
-                    <div class="month-summary-value turnover-color" id="monthTurnover">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(237, 137, 54, 0.3);">
-                    <div class="month-summary-label">💰 Выручка</div>
-                    <div class="month-summary-value revenue-color" id="monthRevenue">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(72, 187, 120, 0.3);">
-                    <div class="month-summary-label">🟢 Доходы</div>
-                    <div class="month-summary-value income-color" id="monthIncome">0 ₽</div>
-                </div>
-                <div class="month-summary-card" style="border-color: rgba(245, 101, 101, 0.3);">
-                    <div class="month-summary-label">🔴 Расходы</div>
-                    <div class="month-summary-value expense-color" id="monthExpense">0 ₽</div>
-                </div>
-            </div>
+const getUserId=()=>{
+const tgUserId=tg?.initDataUnsafe?.user?.id;
+if(tgUserId)return 'tg_'+tgUserId;
+let userId=localStorage.getItem('userId');
+if(!userId){userId='user_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);localStorage.setItem('userId',userId)}
+return userId;
+};
+const USER_ID=getUserId();
 
-            <!-- ИСПРАВЛЕННЫЙ блок баланса/капитала/сайта -->
-            <div class="report-item">
-                <div class="balance-capital-site">
-                    <div class="bcs-item">
-                        <div class="bcs-label">⚪ Баланс</div>
-                        <div class="bcs-value" id="reportBalance">0 ₽</div>
-                    </div>
-                    <div class="bcs-item">
-                        <div class="bcs-label capital-color">💜 Капитал</div>
-                        <div class="bcs-value capital-color" id="reportCapital">0 ₽</div>
-                    </div>
-                    <div class="bcs-item">
-                        <div class="bcs-label site-balance-color">🔵 Сайт</div>
-                        <div class="bcs-value site-balance-color" id="reportSiteBalance">0 ₽</div>
-                    </div>
-                </div>
-            </div>
+let balance=0;
+let transactions=[];
+let savedReports={};
+let isOnline=navigator.onLine;
+let isSyncing=false;
+let incomePercent=7;
+let expensePercent=2.5;
+let capital=0;
+let saveTimeout=null;
+let useFirebase=false;
+let userRef=null;
+let currentEditingReportKey=null;
 
-            <div class="days-table">
-                <div class="days-table-header">
-                    <div>День</div>
-                    <div style="text-align: right;">Доход</div>
-                    <div style="text-align: right;">Расход</div>
-                    <div style="text-align: right;">Выручка</div>
-                </div>
-                <div id="daysTableBody"></div>
-            </div>
+const balanceEl=document.getElementById('balance');
+const amountEl=document.getElementById('amount');
+const historyEl=document.getElementById('history');
+const syncStatusEl=document.getElementById('syncStatus');
+const totalIncomeEl=document.getElementById('totalIncome');
+const totalExpenseEl=document.getElementById('totalExpense');
+const totalRevenueEl=document.getElementById('totalRevenue');
+const indicatorsModal=document.getElementById('indicatorsModal');
+const reportModal=document.getElementById('reportModal');
+const editReportModal=document.getElementById('editReportModal');
+const settingsModal=document.getElementById('settingsModal');
+const adjustmentModal=document.getElementById('adjustmentModal');
+const resetBtn=document.getElementById('resetBtn');
 
-            <button onclick="saveReport()" class="save-report-btn">💾 Сохранить отчет</button>
-            <div id="savedIndicator" class="saved-indicator" style="display: none;">
-                ✅ Отчет сохранен: <span id="savedDate"></span>
-            </div>
+const formatMoney=(num)=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(num);
+const formatMoneyShort=(num)=>{
+if(num===0)return '0';
+if(Math.abs(num)>=1000000)return (num/1000000).toFixed(1).replace('.0','')+'М';
+if(Math.abs(num)>=1000)return (num/1000).toFixed(1).replace('.0','')+'К';
+return Math.round(num).toString();
+};
 
-            <button onclick="openReportSettings()" class="report-settings-btn">⚙️ Настройки отчета</button>
-            <button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
-        </div>
-    </div>
+const haptic=(type,style='light')=>{
+if(tg?.HapticFeedback){try{if(type==='notification')tg.HapticFeedback.notificationOccurred(style);else if(type==='impact')tg.HapticFeedback.impactOccurred(style)}catch(e){}}
+};
 
-    <!-- Модальное окно настроек отчета -->
-    <div id="reportSettingsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close"></div>
-            <div class="modal-title">⚙️ Настройки отчета</div>
-            
-            <div class="adjustment-info">
-                💡 Здесь можно удалить сохраненные отчеты за конкретные дни.
-            </div>
+const MONTH_NAMES_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
-            <div id="reportsList"></div>
+const calculateStats=()=>{
+let totalIncome=0,totalExpense=0;
+transactions.forEach((t)=>{if(t.type==='income')totalIncome+=t.amount;else if(t.type==='expense')totalExpense+=t.amount});
+const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
+return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense,siteBalance:capital-balance};
+};
 
-            <button onclick="closeReportSettings()" class="close-modal-btn">Закрыть</button>
-        </div>
-    </div>
+const updateSyncStatus=(status)=>{
+const statuses={syncing:{text:'☁️ синхронизация...',class:'syncing'},synced:{text:'☁️ сохранено в облаке',class:'synced'},offline:{text:'💾 локально',class:''},error:{text:'⚠️ ошибка',class:'error'},local:{text:'💾 локальное хранилище',class:'warning'}};
+const s=statuses[status]||statuses.syncing;
+syncStatusEl.textContent=s.text;
+syncStatusEl.className='sync-indicator '+s.class;
+};
 
-    <!-- Модальное окно корректировки -->
-    <div id="adjustmentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close"></div>
-            <div class="modal-title">✏️ Корректировка</div>
-            
-            <div class="adjustment-info">
-                💡 Изменения запишутся в историю как "Корректировка" и не повлияют на доходы/расходы.
-            </div>
-            
-            <div class="settings-input-group">
-                <label class="settings-input-label">⚪ Новый баланс (₽)</label>
-                <input type="number" id="adjustmentBalanceInput" class="settings-input" placeholder="0" step="0.01">
-                <div class="settings-input-hint">Текущий: <span id="currentBalanceHint">0 ₽</span></div>
-            </div>
-            
-            <div class="settings-input-group">
-                <label class="settings-input-label">💜 Новый капитал (₽)</label>
-                <input type="number" id="adjustmentCapitalInput" class="settings-input" placeholder="0" step="0.01">
-                <div class="settings-input-hint">Текущий: <span id="currentCapitalHint">0 ₽</span></div>
-            </div>
-            
-            <div class="settings-input-group">
-                <label class="settings-input-label">📝 Комментарий</label>
-                <input type="text" id="adjustmentCommentInput" class="settings-input" placeholder="Например: пересчёт" style="font-size: 0.95rem; text-align: left;">
-            </div>
+const updateUI=()=>{
+balanceEl.textContent=formatMoney(balance);
+const stats=calculateStats();
+totalIncomeEl.textContent=formatMoney(stats.totalIncome);
+totalExpenseEl.textContent=formatMoney(stats.totalExpense);
+totalRevenueEl.textContent=formatMoney(stats.revenue);
+historyEl.innerHTML='';
+if(transactions.length===0){historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>'}
+else{transactions.slice().reverse().forEach((t)=>{
+const div=document.createElement('div');
+div.className='transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
+let colorClass,sign,desc;
+const date=new Date(t.date);
+const timeStr=isNaN(date.getTime())?'':date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+if(t.type==='income'){colorClass='text-emerald-600';sign='+';desc=t.desc||'Пополнение'}
+else if(t.type==='expense'){colorClass='text-rose-600';sign='−';desc=t.desc||'Списание'}
+else if(t.type==='adjustment'){colorClass='text-indigo-600';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка')}
+const amountDisplay=t.type==='adjustment'?`${sign}${formatMoney(Math.abs(t.amount))}`:`${sign} ${formatMoney(t.amount)}`;
+div.innerHTML=`<div class="flex flex-col"><span class="font-light">${desc}</span><span class="text-zinc-500 text-xs">${timeStr}</span></div><span class="${colorClass} font-medium text-lg">${amountDisplay}</span>`;
+historyEl.appendChild(div);
+})}
+resetBtn.style.display=transactions.length===0?'none':'block';
+saveToLocal();
+};
 
-            <div class="button-row">
-                <button onclick="saveAdjustment()" class="bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200">
-                    ✓ Применить
-                </button>
-                <button onclick="closeAdjustment()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">
-                    ✕ Отмена
-                </button>
-            </div>
-        </div>
-    </div>
+const saveToLocal=()=>{try{
+localStorage.setItem('balance',balance.toString());
+localStorage.setItem('transactions',JSON.stringify(transactions));
+localStorage.setItem('savedReports',JSON.stringify(savedReports));
+localStorage.setItem('incomePercent',incomePercent.toString());
+localStorage.setItem('expensePercent',expensePercent.toString());
+localStorage.setItem('capital',capital.toString());
+}catch(e){console.error(e)}};
 
-    <!-- Модальное окно настроек -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close"></div>
-            <div class="modal-title">⚙️ Настройки</div>
-            
-            <div class="settings-input-group">
-                <label class="settings-input-label">💰 Начальный капитал (₽)</label>
-                <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
-            </div>
-            <div class="settings-input-group">
-                <label class="settings-input-label">% выручки от доходов</label>
-                <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
-            </div>
-            <div class="settings-input-group">
-                <label class="settings-input-label">% выручки от расходов</label>
-                <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
-            </div>
+const loadFromLocal=()=>{try{
+balance=parseFloat(localStorage.getItem('balance'))||0;
+transactions=JSON.parse(localStorage.getItem('transactions'))||[];
+savedReports=JSON.parse(localStorage.getItem('savedReports'))||{};
+incomePercent=parseFloat(localStorage.getItem('incomePercent'))||7;
+expensePercent=parseFloat(localStorage.getItem('expensePercent'))||2.5;
+capital=parseFloat(localStorage.getItem('capital'))||0;
+return true;
+}catch(e){return false}};
 
-            <div class="report-divider"></div>
-
-            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
-                <div class="report-label">Формула выручки</div>
-                <div class="text-sm text-blue-500 mt-1" style="font-size: 0.8rem;">
-                    (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
-                </div>
-            </div>
-
-            <div class="button-row">
-                <button onclick="saveSettings()" class="bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200">
-                    ✓ Сохранить
-                </button>
-                <button onclick="closeSettings()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">
-                    ✕ Отмена
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
-        const tg = window.Telegram?.WebApp;
-        if (tg) { tg.ready(); tg.expand(); }
-
-        const getUserId = () => {
-            const tgUserId = tg?.initDataUnsafe?.user?.id;
-            if (tgUserId) return 'tg_' + tgUserId;
-            let userId = localStorage.getItem('userId');
-            if (!userId) {
-                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('userId', userId);
-            }
-            return userId;
-        };
-        const USER_ID = getUserId();
-
-        let balance = 0;
-        let transactions = [];
-        let savedReports = {};
-        let isOnline = navigator.onLine;
-        let isSyncing = false;
-        let incomePercent = 7;
-        let expensePercent = 2.5;
-        let capital = 0;
-        let saveTimeout = null;
-        let useFirebase = false;
-        let userRef = null;
-        let reportDate = new Date();
-
-        const balanceEl = document.getElementById('balance');
-        const amountEl = document.getElementById('amount');
-        const historyEl = document.getElementById('history');
-        const syncStatusEl = document.getElementById('syncStatus');
-        const totalIncomeEl = document.getElementById('totalIncome');
-        const totalExpenseEl = document.getElementById('totalExpense');
-        const totalRevenueEl = document.getElementById('totalRevenue');
-        const indicatorsModal = document.getElementById('indicatorsModal');
-        const reportModal = document.getElementById('reportModal');
-        const reportSettingsModal = document.getElementById('reportSettingsModal');
-        const settingsModal = document.getElementById('settingsModal');
-        const adjustmentModal = document.getElementById('adjustmentModal');
-        const resetBtn = document.getElementById('resetBtn');
-
-        const formatMoney = (num) => new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
-        const formatMoneyShort = (num) => {
-            if (num === 0) return '0';
-            if (Math.abs(num) >= 1000000) return (num / 1000000).toFixed(1).replace('.0', '') + 'М';
-            if (Math.abs(num) >= 1000) return (num / 1000).toFixed(1).replace('.0', '') + 'К';
-            return Math.round(num).toString();
-        };
-
-        const haptic = (type, style = 'light') => {
-            if (tg?.HapticFeedback) {
-                try {
-                    if (type === 'notification') tg.HapticFeedback.notificationOccurred(style);
-                    else if (type === 'impact') tg.HapticFeedback.impactOccurred(style);
-                } catch (e) {}
-            }
-        };
-
-        const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        const MONTH_NAMES_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-        const DAY_NAMES = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
-
-        const calculateStats = () => {
-            let totalIncome = 0, totalExpense = 0;
-            transactions.forEach((t) => {
-                if (t.type === 'income') totalIncome += t.amount;
-                else if (t.type === 'expense') totalExpense += t.amount;
-            });
-            const revenue = totalIncome * (incomePercent / 100) + totalExpense * (expensePercent / 100);
-            return { totalIncome, totalExpense, revenue, turnover: totalIncome + totalExpense, siteBalance: capital - balance };
-        };
-
-        const calculateMonthStats = (year, month) => {
-            let totalIncome = 0, totalExpense = 0;
-            const daysData = {};
-            transactions.forEach((t) => {
-                const date = new Date(t.date);
-                if (isNaN(date.getTime())) return;
-                if (date.getFullYear() === year && date.getMonth() === month) {
-                    const dayKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-                    if (!daysData[dayKey]) daysData[dayKey] = { date: date, income: 0, expense: 0 };
-                    if (t.type === 'income') { totalIncome += t.amount; daysData[dayKey].income += t.amount; }
-                    else if (t.type === 'expense') { totalExpense += t.amount; daysData[dayKey].expense += t.amount; }
-                }
-            });
-            const revenue = totalIncome * (incomePercent / 100) + totalExpense * (expensePercent / 100);
-            Object.keys(daysData).forEach(key => {
-                const d = daysData[key];
-                d.revenue = d.income * (incomePercent / 100) + d.expense * (expensePercent / 100);
-            });
-            return { totalIncome, totalExpense, revenue, turnover: totalIncome + totalExpense, days: Object.values(daysData).sort((a, b) => a.date - b.date) };
-        };
-
-        const updateSyncStatus = (status) => {
-            const statuses = {
-                syncing: { text: '☁️ синхронизация...', class: 'syncing' },
-                synced: { text: '☁️ сохранено в облаке', class: 'synced' },
-                offline: { text: '💾 локально', class: '' },
-                error: { text: '⚠️ ошибка', class: 'error' },
-                local: { text: '💾 локальное хранилище', class: 'warning' }
-            };
-            const s = statuses[status] || statuses.syncing;
-            syncStatusEl.textContent = s.text;
-            syncStatusEl.className = 'sync-indicator ' + s.class;
-        };
-
-        const updateUI = () => {
-            balanceEl.textContent = formatMoney(balance);
-            const stats = calculateStats();
-            totalIncomeEl.textContent = formatMoney(stats.totalIncome);
-            totalExpenseEl.textContent = formatMoney(stats.totalExpense);
-            totalRevenueEl.textContent = formatMoney(stats.revenue);
-
-            historyEl.innerHTML = '';
-            if (transactions.length === 0) {
-                historyEl.innerHTML = '<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
-            } else {
-                transactions.slice().reverse().forEach((t) => {
-                    const div = document.createElement('div');
-                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
-                    let colorClass, sign, desc;
-                    const date = new Date(t.date);
-                    const timeStr = isNaN(date.getTime()) ? '' : date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    if (t.type === 'income') { colorClass = 'text-emerald-600'; sign = '+'; desc = t.desc || 'Пополнение'; }
-                    else if (t.type === 'expense') { colorClass = 'text-rose-600'; sign = '−'; desc = t.desc || 'Списание'; }
-                    else if (t.type === 'adjustment') { colorClass = 'text-indigo-600'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
-                    const amountDisplay = t.type === 'adjustment' ? `${sign}${formatMoney(Math.abs(t.amount))}` : `${sign} ${formatMoney(t.amount)}`;
-                    div.innerHTML = `<div class="flex flex-col"><span class="font-light">${desc}</span><span class="text-zinc-500 text-xs">${timeStr}</span></div><span class="${colorClass} font-medium text-lg">${amountDisplay}</span>`;
-                    historyEl.appendChild(div);
-                });
-            }
-            resetBtn.style.display = transactions.length === 0 ? 'none' : 'block';
-            saveToLocal();
-        };
-
-        const saveToLocal = () => {
-            try {
-                localStorage.setItem('balance', balance.toString());
-                localStorage.setItem('transactions', JSON.stringify(transactions));
-                localStorage.setItem('savedReports', JSON.stringify(savedReports));
-                localStorage.setItem('incomePercent', incomePercent.toString());
-                localStorage.setItem('expensePercent', expensePercent.toString());
-                localStorage.setItem('capital', capital.toString());
-            } catch (e) { console.error(e); }
-        };
-
-        const loadFromLocal = () => {
-            try {
-                balance = parseFloat(localStorage.getItem('balance')) || 0;
-                transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-                savedReports = JSON.parse(localStorage.getItem('savedReports')) || {};
-                incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
-                expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
-                capital = parseFloat(localStorage.getItem('capital')) || 0;
-                return true;
-            } catch (e) { return false; }
-        };
-
-        const initFirebase = () => {
-            try {
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
+const initFirebase=()=>{try{
+const firebaseConfig={
+apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
   authDomain: "financesimple-7c73a.firebaseapp.com",
   databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "financesimple-7c73a",
   storageBucket: "financesimple-7c73a.firebasestorage.app",
   messagingSenderId: "1072812838336",
   appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
-                };
-                if (firebaseConfig.apiKey.includes('AIzaSyD0vf8kHH')) { useFirebase = false; return false; }
-                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                userRef = firebase.database().ref(`users/${USER_ID}`);
-                useFirebase = true;
-                return true;
-            } catch (e) { useFirebase = false; return false; }
-        };
+};
+if(firebaseConfig.apiKey.includes('AIzaSyD0vf8kHH')){useFirebase=false;return false}
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+userRef=firebase.database().ref(`users/${USER_ID}`);
+useFirebase=true;
+return true;
+}catch(e){useFirebase=false;return false}};
 
-        const saveToServer = () => {
-            if (!useFirebase || !isOnline) { updateSyncStatus(useFirebase ? 'offline' : 'local'); return; }
-            if (saveTimeout) clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                if (isSyncing) return;
-                isSyncing = true;
-                updateSyncStatus('syncing');
-                try {
-                    const stats = calculateStats();
-                    await userRef.set({
-                        balance, transactions, savedReports,
-                        totalIncome: stats.totalIncome, totalExpense: stats.totalExpense, revenue: stats.revenue,
-                        incomePercent, expensePercent, capital,
-                        lastUpdated: new Date().toISOString()
-                    });
-                    updateSyncStatus('synced');
-                } catch (e) { updateSyncStatus('error'); } finally { isSyncing = false; }
-            }, 500);
-        };
+const saveToServer=()=>{
+if(!useFirebase||!isOnline){updateSyncStatus(useFirebase?'offline':'local');return}
+if(saveTimeout)clearTimeout(saveTimeout);
+saveTimeout=setTimeout(async()=>{
+if(isSyncing)return;
+isSyncing=true;
+updateSyncStatus('syncing');
+try{
+const stats=calculateStats();
+await userRef.set({balance,transactions,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,capital,lastUpdated:new Date().toISOString()});
+updateSyncStatus('synced');
+}catch(e){updateSyncStatus('error')}finally{isSyncing=false}
+},500);
+};
 
-        const loadFromServer = () => {
-            if (!useFirebase) { loadFromLocal(); updateUI(); updateSyncStatus('local'); return; }
-            updateSyncStatus('syncing');
-            userRef.once('value').then((snapshot) => {
-                const data = snapshot.val();
-                if (data && data.transactions) {
-                    balance = data.balance || 0;
-                    transactions = data.transactions || [];
-                    savedReports = data.savedReports || {};
-                    incomePercent = data.incomePercent || 7;
-                    expensePercent = data.expensePercent || 2.5;
-                    capital = data.capital || 0;
-                    updateUI();
-                    updateSyncStatus('synced');
-                } else { loadFromLocal(); updateUI(); if (isOnline) saveToServer(); }
-            }).catch(() => { loadFromLocal(); updateUI(); updateSyncStatus('offline'); });
-        };
+const loadFromServer=()=>{
+if(!useFirebase){loadFromLocal();updateUI();updateSyncStatus('local');return}
+updateSyncStatus('syncing');
+userRef.once('value').then((snapshot)=>{
+const data=snapshot.val();
+if(data&&data.transactions){
+balance=data.balance||0;
+transactions=data.transactions||[];
+savedReports=data.savedReports||{};
+incomePercent=data.incomePercent||7;
+expensePercent=data.expensePercent||2.5;
+capital=data.capital||0;
+updateUI();
+updateSyncStatus('synced');
+}else{loadFromLocal();updateUI();if(isOnline)saveToServer()}
+}).catch(()=>{loadFromLocal();updateUI();updateSyncStatus('offline')});
+};
 
-        const addTransaction = (type) => {
-            const amount = parseFloat(amountEl.value);
-            if (!amount || amount <= 0) { haptic('notification', 'error'); return; }
-            if (amount > 999999999) { alert('Слишком большая сумма'); return; }
-            if (type === 'income') balance += amount; else balance -= amount;
-            transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() });
-            amountEl.value = '';
-            haptic('impact', 'light');
-            updateUI();
-            saveToServer();
-        };
+const addTransaction=(type)=>{
+const amount=parseFloat(amountEl.value);
+if(!amount||amount<=0){haptic('notification','error');return}
+if(amount>999999999){alert('Слишком большая сумма');return}
+if(type==='income')balance+=amount;else balance-=amount;
+transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});
+amountEl.value='';
+haptic('impact','light');
+updateUI();
+saveToServer();
+};
 
-        // ИСПРАВЛЕННАЯ функция обнуления - автосохранение отчета перед обнулением
-        const resetAll = () => {
-            if (transactions.length === 0) { haptic('notification', 'warning'); return; }
-            haptic('notification', 'warning');
-            
-            const doReset = () => {
-                // ⚠️ ПЕРЕД обнулением сохраняем текущий отчет за сегодня (если есть данные)
-                const todayKey = new Date().toISOString().split('T')[0];
-                const currentMonth = new Date().getMonth();
-                const currentYear = new Date().getFullYear();
-                const monthStats = calculateMonthStats(currentYear, currentMonth);
-                
-                // Если есть данные за текущий месяц - сохраняем отчет
-                if (monthStats.totalIncome > 0 || monthStats.totalExpense > 0) {
-                    const reportData = {
-                        turnover: monthStats.turnover,
-                        revenue: monthStats.revenue,
-                        income: monthStats.totalIncome,
-                        expense: monthStats.totalExpense,
-                        balance: balance,
-                        capital: capital,
-                        siteBalance: capital - balance,
-                        savedAt: new Date().toISOString()
-                    };
-                    
-                    // Если уже есть сохраненный отчет за сегодня - суммируем
-                    if (savedReports[todayKey]) {
-                        const existing = savedReports[todayKey];
-                        reportData.turnover += existing.turnover;
-                        reportData.revenue += existing.revenue;
-                        reportData.income += existing.income;
-                        reportData.expense += existing.expense;
-                    }
-                    
-                    savedReports[todayKey] = reportData;
-                }
-                
-                // Теперь обнуляем
-                balance = 0;
-                transactions = [];
-                
-                haptic('notification', 'success');
-                updateUI();
-                saveToLocal();
-                saveToServer();
-            };
-            
-            if (tg?.showConfirm) {
-                tg.showConfirm('Обнулить баланс и историю операций?\n\n💾 Текущие данные отчета будут автоматически сохранены.', function(confirmed) {
-                    if (confirmed) doReset(); else haptic('impact', 'soft');
-                });
-            } else {
-                if (confirm('Обнулить баланс и историю операций?\n\n💾 Текущие данные отчета будут автоматически сохранены.')) doReset();
-                else haptic('impact', 'soft');
-            }
-        };
+const resetAll=()=>{
+if(transactions.length===0){haptic('notification','warning');return}
+haptic('notification','warning');
+const doReset=()=>{
+balance=0;
+transactions=[];
+haptic('notification','success');
+updateUI();
+saveToLocal();
+saveToServer();
+};
+if(tg?.showConfirm){tg.showConfirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.',function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
+else{if(confirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.'))doReset();else haptic('impact','soft')}
+};
 
-        // ===== КОРРЕКТИРОВКА =====
-        window.openAdjustment = () => {
-            document.getElementById('adjustmentBalanceInput').value = '';
-            document.getElementById('adjustmentCapitalInput').value = '';
-            document.getElementById('adjustmentCommentInput').value = '';
-            document.getElementById('currentBalanceHint').textContent = formatMoney(balance);
-            document.getElementById('currentCapitalHint').textContent = formatMoney(capital);
-            adjustmentModal.classList.add('active');
-            haptic('impact', 'medium');
-        };
-        window.closeAdjustment = () => adjustmentModal.classList.remove('active');
-        window.saveAdjustment = () => {
-            const newBalanceStr = document.getElementById('adjustmentBalanceInput').value;
-            const newCapitalStr = document.getElementById('adjustmentCapitalInput').value;
-            const comment = document.getElementById('adjustmentCommentInput').value.trim();
-            const newBalance = newBalanceStr !== '' ? parseFloat(newBalanceStr) : null;
-            const newCapital = newCapitalStr !== '' ? parseFloat(newCapitalStr) : null;
-            if (newBalance === null && newCapital === null) { alert('Введите хотя бы одно значение'); return; }
-            if (newBalance !== null && (isNaN(newBalance) || newBalance < -999999999 || newBalance > 999999999)) { alert('Некорректный баланс'); return; }
-            if (newCapital !== null && (isNaN(newCapital) || newCapital < 0 || newCapital > 999999999)) { alert('Некорректный капитал'); return; }
-            
-            if (newBalance !== null && newBalance !== balance) {
-                const diff = newBalance - balance;
-                balance = newBalance;
-                const desc = diff >= 0 ? 'Корректировка (+)' : 'Корректировка (−)';
-                transactions.push({ type: 'adjustment', amount: diff, desc: comment ? `${desc}: ${comment}` : desc, date: new Date().toISOString() });
-            }
-            if (newCapital !== null && newCapital !== capital) {
-                capital = newCapital;
-                if (newBalance === null || newBalance === balance) {
-                    transactions.push({ type: 'adjustment', amount: 0, desc: comment ? `Корректировка капитала: ${comment}` : 'Корректировка капитала', date: new Date().toISOString() });
-                }
-            }
-            haptic('notification', 'success');
-            updateUI();
-            saveToServer();
-            closeAdjustment();
-        };
+// ПОКАЗАТЕЛИ
+window.openIndicators=()=>{
+const stats=calculateStats();
+document.getElementById('indicatorsTurnover').textContent=formatMoney(stats.turnover);
+document.getElementById('indicatorsRevenue').textContent=formatMoney(stats.revenue);
+document.getElementById('indicatorsBalance').textContent=formatMoney(balance);
+document.getElementById('indicatorsCapital').textContent=formatMoney(capital);
+document.getElementById('indicatorsSiteBalance').textContent=formatMoney(stats.siteBalance);
+document.getElementById('indicatorsTotalIncome').textContent=formatMoney(stats.totalIncome);
+document.getElementById('indicatorsTotalExpense').textContent=formatMoney(stats.totalExpense);
+indicatorsModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeIndicators=()=>indicatorsModal.classList.remove('active');
 
-        // ===== ПОКАЗАТЕЛИ =====
-        window.openIndicators = () => {
-            const stats = calculateStats();
-            document.getElementById('indicatorsTurnover').textContent = formatMoney(stats.turnover);
-            document.getElementById('indicatorsRevenue').textContent = formatMoney(stats.revenue);
-            document.getElementById('indicatorsBalance').textContent = formatMoney(balance);
-            document.getElementById('indicatorsCapital').textContent = formatMoney(capital);
-            document.getElementById('indicatorsSiteBalance').textContent = formatMoney(stats.siteBalance);
-            document.getElementById('indicatorsTotalIncome').textContent = formatMoney(stats.totalIncome);
-            document.getElementById('indicatorsTotalExpense').textContent = formatMoney(stats.totalExpense);
-            indicatorsModal.classList.add('active');
-            haptic('impact', 'medium');
-        };
-        window.closeIndicators = () => indicatorsModal.classList.remove('active');
+window.saveReportFromIndicators=()=>{
+const stats=calculateStats();
+const now=new Date();
+const key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);
+savedReports[key]={
+date:now.toISOString(),
+turnover:stats.turnover,
+income:stats.totalIncome,
+expense:stats.totalExpense,
+revenue:stats.revenue,
+balance:balance,
+capital:capital,
+siteBalance:stats.siteBalance
+};
+saveToLocal();
+saveToServer();
+haptic('notification','success');
+alert('✅ Отчет сохранен!');
+closeIndicators();
+};
 
-        // ===== ОТЧЕТ =====
-        const renderMonthReport = () => {
-            const year = reportDate.getFullYear();
-            const month = reportDate.getMonth();
-            document.getElementById('reportMonthTitle').textContent = `${MONTH_NAMES[month]} ${year}`;
-            const stats = calculateMonthStats(year, month);
-            document.getElementById('monthTurnover').textContent = formatMoney(stats.turnover);
-            document.getElementById('monthRevenue').textContent = formatMoney(stats.revenue);
-            document.getElementById('monthIncome').textContent = formatMoney(stats.totalIncome);
-            document.getElementById('monthExpense').textContent = formatMoney(stats.totalExpense);
-            document.getElementById('reportBalance').textContent = formatMoney(balance);
-            document.getElementById('reportCapital').textContent = formatMoney(capital);
-            document.getElementById('reportSiteBalance').textContent = formatMoney(capital - balance);
-            
-            const tbody = document.getElementById('daysTableBody');
-            tbody.innerHTML = '';
-            if (stats.days.length === 0) {
-                tbody.innerHTML = '<div class="no-data-message">📭 В этом месяце нет операций</div>';
-            } else {
-                stats.days.forEach((day) => {
-                    const date = day.date;
-                    const row = document.createElement('div');
-                    row.className = 'days-table-row';
-                    row.innerHTML = `
-                        <div class="day-date">${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]}<div class="day-date-sub">${DAY_NAMES[date.getDay()]}</div></div>
-                        <div class="day-income">${day.income > 0 ? '+' + formatMoneyShort(day.income) : '—'}</div>
-                        <div class="day-expense">${day.expense > 0 ? '−' + formatMoneyShort(day.expense) : '—'}</div>
-                        <div class="day-revenue">${day.revenue > 0 ? formatMoneyShort(day.revenue) : '—'}</div>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            
-            const todayKey = new Date().toISOString().split('T')[0];
-            const savedIndicator = document.getElementById('savedIndicator');
-            if (savedReports[todayKey]) {
-                document.getElementById('savedDate').textContent = new Date(savedReports[todayKey].savedAt).toLocaleString('ru-RU');
-                savedIndicator.style.display = 'block';
-            } else {
-                savedIndicator.style.display = 'none';
-            }
-        };
-        
-        window.openReport = () => {
-            reportDate = new Date();
-            renderMonthReport();
-            reportModal.classList.add('active');
-            haptic('impact', 'medium');
-        };
-        window.closeReport = () => reportModal.classList.remove('active');
-        window.changeMonth = (delta) => {
-            reportDate.setMonth(reportDate.getMonth() + delta);
-            renderMonthReport();
-            haptic('impact', 'light');
-        };
-        window.goToCurrentMonth = () => {
-            reportDate = new Date();
-            renderMonthReport();
-            haptic('impact', 'light');
-        };
-        
-        window.saveReport = () => {
-            const todayKey = new Date().toISOString().split('T')[0];
-            const monthStats = calculateMonthStats(reportDate.getFullYear(), reportDate.getMonth());
-            const reportData = {
-                turnover: monthStats.turnover, revenue: monthStats.revenue,
-                income: monthStats.totalIncome, expense: monthStats.totalExpense,
-                balance, capital, siteBalance: capital - balance,
-                savedAt: new Date().toISOString()
-            };
-            if (savedReports[todayKey]) {
-                const existing = savedReports[todayKey];
-                reportData.turnover += existing.turnover;
-                reportData.revenue += existing.revenue;
-                reportData.income += existing.income;
-                reportData.expense += existing.expense;
-            }
-            savedReports[todayKey] = reportData;
-            document.getElementById('savedDate').textContent = new Date().toLocaleString('ru-RU');
-            document.getElementById('savedIndicator').style.display = 'block';
-            saveToLocal();
-            saveToServer();
-            haptic('notification', 'success');
-        };
+// ОТЧЕТЫ
+window.openReport=()=>{
+renderReportsList();
+renderSummary();
+reportModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeReport=()=>reportModal.classList.remove('active');
 
-        // ===== НАСТРОЙКИ ОТЧЕТА =====
-        window.openReportSettings = () => {
-            renderReportsList();
-            reportSettingsModal.classList.add('active');
-            haptic('impact', 'medium');
-        };
-        window.closeReportSettings = () => reportSettingsModal.classList.remove('active');
+const renderSummary=()=>{
+let totalTurnover=0,totalRevenue=0,totalIncome=0,totalExpense=0;
+Object.values(savedReports).forEach(report=>{
+totalTurnover+=report.turnover||0;
+totalRevenue+=report.revenue||0;
+totalIncome+=report.income||0;
+totalExpense+=report.expense||0;
+});
+document.getElementById('summaryTurnover').textContent=formatMoney(totalTurnover);
+document.getElementById('summaryRevenue').textContent=formatMoney(totalRevenue);
+document.getElementById('summaryIncome').textContent=formatMoney(totalIncome);
+document.getElementById('summaryExpense').textContent=formatMoney(totalExpense);
+};
 
-        const renderReportsList = () => {
-            const list = document.getElementById('reportsList');
-            list.innerHTML = '';
-            const keys = Object.keys(savedReports).sort().reverse();
-            
-            if (keys.length === 0) {
-                list.innerHTML = '<div class="empty-reports-message">📭 Нет сохраненных отчетов</div>';
-                return;
-            }
-            
-            keys.forEach(key => {
-                const report = savedReports[key];
-                const date = new Date(key + 'T00:00:00');
-                const dayName = DAY_NAMES[date.getDay()];
-                const dateStr = `${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]}, ${dayName}`;
-                const timeStr = new Date(report.savedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                
-                const item = document.createElement('div');
-                item.className = 'report-history-item';
-                item.innerHTML = `
-                    <div style="flex: 1;">
-                        <div class="report-history-date">${dateStr}</div>
-                        <div class="report-history-time">Сохранено в ${timeStr}</div>
-                        <div class="report-history-summary">
-                            💹 ${formatMoneyShort(report.turnover)} · 💰 ${formatMoneyShort(report.revenue)}
-                        </div>
-                    </div>
-                    <button class="delete-report-btn" onclick="deleteReport('${key}')">🗑️ Удалить</button>
-                `;
-                list.appendChild(item);
-            });
-        };
+const renderReportsList=()=>{
+const list=document.getElementById('reportsList');
+list.innerHTML='';
+const keys=Object.keys(savedReports).sort().reverse();
+if(keys.length===0){list.innerHTML='<div class="empty-reports-message">📭 Нет сохраненных отчетов<br><span style="font-size:0.75rem;margin-top:0.5rem;display:block">Нажмите "Показатели" → "Сохранить отчет"</span></div>';return}
+keys.forEach(key=>{
+const report=savedReports[key];
+const date=new Date(report.date);
+const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
+const timeStr=date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+const item=document.createElement('div');
+item.className='report-list-item';
+item.innerHTML=`<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
+list.appendChild(item);
+});
+};
 
-        window.deleteReport = (dayKey) => {
-            const date = new Date(dayKey + 'T00:00:00');
-            const dateStr = `${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
-            
-            const doDelete = () => {
-                delete savedReports[dayKey];
-                saveToLocal();
-                saveToServer();
-                renderReportsList();
-                renderMonthReport();
-                haptic('notification', 'success');
-            };
-            
-            if (tg?.showConfirm) {
-                tg.showConfirm(`Удалить отчет за ${dateStr}?`, function(confirmed) {
-                    if (confirmed) doDelete();
-                });
-            } else {
-                if (confirm(`Удалить отчет за ${dateStr}?`)) doDelete();
-            }
-        };
+// РЕДАКТИРОВАНИЕ
+window.editReport=(key)=>{
+currentEditingReportKey=key;
+const report=savedReports[key];
+const fields=document.getElementById('editReportFields');
+fields.innerHTML=`<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance}" step="0.01"></div>`;
+editReportModal.classList.add('active');
+haptic('impact','medium');
+};
 
-        // ===== НАСТРОЙКИ =====
-        window.openSettings = () => {
-            document.getElementById('capitalInput').value = capital;
-            document.getElementById('incomePercentInput').value = incomePercent;
-            document.getElementById('expensePercentInput').value = expensePercent;
-            settingsModal.classList.add('active');
-            haptic('impact', 'medium');
-        };
-        window.closeSettings = () => settingsModal.classList.remove('active');
-        window.saveSettings = () => {
-            const newCapital = parseFloat(document.getElementById('capitalInput').value);
-            const newIncomePercent = parseFloat(document.getElementById('incomePercentInput').value);
-            const newExpensePercent = parseFloat(document.getElementById('expensePercentInput').value);
-            if (isNaN(newCapital) || newCapital < 0) { alert('Некорректный капитал'); return; }
-            if (isNaN(newIncomePercent) || newIncomePercent < 0 || newIncomePercent > 100) { alert('Некорректный % доходов'); return; }
-            if (isNaN(newExpensePercent) || newExpensePercent < 0 || newExpensePercent > 100) { alert('Некорректный % расходов'); return; }
-            capital = newCapital;
-            incomePercent = newIncomePercent;
-            expensePercent = newExpensePercent;
-            document.getElementById('currentIncomePercent').textContent = incomePercent;
-            document.getElementById('currentExpensePercent').textContent = expensePercent;
-            updateUI();
-            saveToServer();
-            closeSettings();
-            haptic('notification', 'success');
-        };
+window.saveEditedReport=()=>{
+if(!currentEditingReportKey)return;
+const report=savedReports[currentEditingReportKey];
+report.turnover=parseFloat(document.getElementById('editTurnover').value)||0;
+report.revenue=parseFloat(document.getElementById('editRevenue').value)||0;
+report.income=parseFloat(document.getElementById('editIncome').value)||0;
+report.expense=parseFloat(document.getElementById('editExpense').value)||0;
+report.balance=parseFloat(document.getElementById('editBalance').value)||0;
+report.capital=parseFloat(document.getElementById('editCapital').value)||0;
+report.siteBalance=parseFloat(document.getElementById('editSiteBalance').value)||0;
+saveToLocal();
+saveToServer();
+renderReportsList();
+renderSummary();
+closeEditReport();
+haptic('notification','success');
+};
 
-        // ===== EVENT LISTENERS =====
-        [indicatorsModal, reportModal, reportSettingsModal, settingsModal, adjustmentModal].forEach(modal => {
-            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
-        });
-        window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveToServer(); });
-        window.addEventListener('offline', () => { isOnline = false; updateSyncStatus('offline'); });
-        amountEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTransaction('expense'); });
-        window.addEventListener('beforeunload', () => saveToLocal());
-        document.addEventListener('visibilitychange', () => { if (document.hidden) saveToLocal(); });
+window.closeEditReport=()=>{editReportModal.classList.remove('active');currentEditingReportKey=null};
 
-        window.addTransaction = addTransaction;
-        window.resetAll = resetAll;
+window.deleteReport=(key)=>{
+const report=savedReports[key];
+const date=new Date(report.date);
+const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
+const doDelete=()=>{
+delete savedReports[key];
+saveToLocal();
+saveToServer();
+renderReportsList();
+renderSummary();
+haptic('notification','success');
+};
+if(tg?.showConfirm){tg.showConfirm(`Удалить отчет за ${dateStr}?`,function(confirmed){if(confirmed)doDelete()})}
+else{if(confirm(`Удалить отчет за ${dateStr}?`))doDelete()}
+};
 
-        initFirebase();
-        loadFromServer();
-    </script>
+// КОРРЕКТИРОВКА
+window.openAdjustment=()=>{
+document.getElementById('adjustmentBalanceInput').value='';
+document.getElementById('adjustmentCapitalInput').value='';
+document.getElementById('adjustmentCommentInput').value='';
+document.getElementById('currentBalanceHint').textContent=formatMoney(balance);
+document.getElementById('currentCapitalHint').textContent=formatMoney(capital);
+adjustmentModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeAdjustment=()=>adjustmentModal.classList.remove('active');
+window.saveAdjustment=()=>{
+const newBalanceStr=document.getElementById('adjustmentBalanceInput').value;
+const newCapitalStr=document.getElementById('adjustmentCapitalInput').value;
+const comment=document.getElementById('adjustmentCommentInput').value.trim();
+const newBalance=newBalanceStr!==''?parseFloat(newBalanceStr):null;
+const newCapital=newCapitalStr!==''?parseFloat(newCapitalStr):null;
+if(newBalance===null&&newCapital===null){alert('Введите хотя бы одно значение');return}
+if(newBalance!==null&&(isNaN(newBalance)||newBalance<-999999999||newBalance>999999999)){alert('Некорректный баланс');return}
+if(newCapital!==null&&(isNaN(newCapital)||newCapital<0||newCapital>999999999)){alert('Некорректный капитал');return}
+if(newBalance!==null&&newBalance!==balance){
+const diff=newBalance-balance;
+balance=newBalance;
+const desc=diff>=0?'Корректировка (+)':'Корректировка (−)';
+transactions.push({type:'adjustment',amount:diff,desc:comment?`${desc}: ${comment}`:desc,date:new Date().toISOString()});
+}
+if(newCapital!==null&&newCapital!==capital){
+capital=newCapital;
+if(newBalance===null||newBalance===balance){transactions.push({type:'adjustment',amount:0,desc:comment?`Корректировка капитала: ${comment}`:'Корректировка капитала',date:new Date().toISOString()})}
+}
+haptic('notification','success');
+updateUI();
+saveToServer();
+closeAdjustment();
+};
+
+// НАСТРОЙКИ
+window.openSettings=()=>{
+document.getElementById('capitalInput').value=capital;
+document.getElementById('incomePercentInput').value=incomePercent;
+document.getElementById('expensePercentInput').value=expensePercent;
+settingsModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeSettings=()=>settingsModal.classList.remove('active');
+window.saveSettings=()=>{
+const newCapital=parseFloat(document.getElementById('capitalInput').value);
+const newIncomePercent=parseFloat(document.getElementById('incomePercentInput').value);
+const newExpensePercent=parseFloat(document.getElementById('expensePercentInput').value);
+if(isNaN(newCapital)||newCapital<0){alert('Некорректный капитал');return}
+if(isNaN(newIncomePercent)||newIncomePercent<0||newIncomePercent>100){alert('Некорректный % доходов');return}
+if(isNaN(newExpensePercent)||newExpensePercent<0||newExpensePercent>100){alert('Некорректный % расходов');return}
+capital=newCapital;
+incomePercent=newIncomePercent;
+expensePercent=newExpensePercent;
+document.getElementById('currentIncomePercent').textContent=incomePercent;
+document.getElementById('currentExpensePercent').textContent=expensePercent;
+updateUI();
+saveToServer();
+closeSettings();
+haptic('notification','success');
+};
+
+// EVENT LISTENERS
+[indicatorsModal,reportModal,editReportModal,settingsModal,adjustmentModal].forEach(modal=>{modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')})});
+window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveToServer()});
+window.addEventListener('offline',()=>{isOnline=false;updateSyncStatus('offline')});
+amountEl.addEventListener('keypress',(e)=>{if(e.key==='Enter')addTransaction('expense')});
+window.addEventListener('beforeunload',()=>saveToLocal());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveToLocal()});
+
+window.addTransaction=addTransaction;
+window.resetAll=resetAll;
+
+initFirebase();
+loadFromServer();
+</script>
 </body>
 </html>
