@@ -53,32 +53,32 @@
         .sync-indicator.synced { color: #48bb78; }
         .sync-indicator.error { color: #f56565; }
         .sync-indicator.warning { color: #ed8936; }
-        .stats-row { display: flex; gap: 1rem; margin-top: 1rem; }
+        .stats-row { display: flex; gap: 0.75rem; margin-top: 1rem; }
         .stat-card {
             flex: 1;
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
-            padding: 0.75rem;
+            border-radius: 0.875rem;
+            padding: 0.6rem;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .stat-value { font-size: 1.25rem; font-weight: 600; margin-top: 0.25rem; }
+        .stat-value { font-size: 1.1rem; font-weight: 600; margin-top: 0.2rem; }
         .income-color { color: #48bb78; }
         .expense-color { color: #f56565; }
         .revenue-color { color: #ed8936; }
         .adjustment-color { color: #667eea; }
         .button-group {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -95,11 +95,11 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-content {
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 2rem 2rem 0 0;
-            padding: 2rem 1.5rem 3rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1.25rem 1rem 2rem;
             max-height: 90vh;
             overflow-y: auto;
             animation: slideUp 0.3s ease-out;
@@ -113,45 +113,52 @@
             width: 2.5rem; height: 0.3rem;
             background: rgba(0, 0, 0, 0.1);
             border-radius: 0.15rem;
-            margin: 0 auto 1rem;
+            margin: 0 auto 0.75rem;
+        }
+        .modal-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #2c3e50;
         }
         .report-item {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-radius: 0.875rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
         .report-label {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
-        .report-value { font-size: 1.75rem; font-weight: 700; color: #2c3e50; }
+        .report-value { font-size: 1.25rem; font-weight: 700; color: #2c3e50; }
         .report-divider {
             height: 1px;
             background: rgba(0, 0, 0, 0.08);
-            margin: 1.5rem 0;
+            margin: 0.75rem 0;
         }
         .settings-input-group {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-radius: 0.875rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
         .settings-input-label {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.4rem;
             display: block;
         }
         .settings-input {
@@ -160,19 +167,19 @@
             border: none;
             border-bottom: 2px solid #667eea;
             color: #2c3e50;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
             text-align: center;
             outline: none;
-            padding: 0.5rem 0;
+            padding: 0.35rem 0;
         }
         .settings-input-hint {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #a0aec0;
-            margin-top: 0.5rem;
+            margin-top: 0.35rem;
         }
-        .button-row { display: flex; gap: 0.75rem; }
-        .button-row button { flex: 1; }
+        .button-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+        .button-row button { flex: 1; padding: 0.75rem; border-radius: 0.875rem; font-weight: 500; font-size: 0.9rem; }
         .capital-color { color: #9f7aea; }
         .turnover-color { color: #4299e1; }
         .site-balance-color { color: #667eea; }
@@ -183,73 +190,75 @@
             justify-content: space-between;
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-radius: 0.875rem;
+            padding: 0.5rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
         .month-nav-btn {
-            width: 2.5rem; height: 2.5rem;
+            width: 2rem; height: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(102, 126, 234, 0.1);
             color: #667eea;
-            border-radius: 0.75rem;
-            font-size: 1.25rem;
+            border-radius: 0.6rem;
+            font-size: 1rem;
         }
         .month-nav-btn:active { transform: scale(0.95); }
         .month-nav-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #2c3e50;
         }
         .today-btn {
             background: rgba(72, 187, 120, 0.1);
             color: #48bb78;
-            padding: 0.4rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.4rem;
+            font-size: 0.7rem;
             font-weight: 500;
+            margin-top: 0.2rem;
+            display: inline-block;
         }
         .month-summary {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
         .month-summary-card {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
-            padding: 1rem;
+            border-radius: 0.875rem;
+            padding: 0.6rem;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
         .month-summary-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
         }
-        .month-summary-value { font-size: 1.1rem; font-weight: 700; }
+        .month-summary-value { font-size: 1rem; font-weight: 700; }
         .days-table {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
+            border-radius: 0.875rem;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
         .days-table-header {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
+            gap: 0.4rem;
+            padding: 0.5rem 0.75rem;
             background: rgba(102, 126, 234, 0.1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #718096;
             font-weight: 600;
             text-transform: uppercase;
@@ -258,54 +267,121 @@
         .days-table-row {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 0.5rem;
-            padding: 0.85rem 1rem;
+            gap: 0.4rem;
+            padding: 0.6rem 0.75rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             align-items: center;
         }
         .days-table-row:last-child { border-bottom: none; }
-        .day-date { color: #2c3e50; font-weight: 500; }
-        .day-date-sub { font-size: 0.7rem; color: #a0aec0; font-weight: 400; }
-        .day-income { color: #48bb78; font-weight: 600; text-align: right; }
-        .day-expense { color: #f56565; font-weight: 600; text-align: right; }
-        .day-revenue { color: #ed8936; font-weight: 600; text-align: right; }
+        .day-date { color: #2c3e50; font-weight: 500; font-size: 0.8rem; }
+        .day-date-sub { font-size: 0.65rem; color: #a0aec0; font-weight: 400; }
+        .day-income { color: #48bb78; font-weight: 600; text-align: right; font-size: 0.8rem; }
+        .day-expense { color: #f56565; font-weight: 600; text-align: right; font-size: 0.8rem; }
+        .day-revenue { color: #ed8936; font-weight: 600; text-align: right; font-size: 0.8rem; }
         .no-data-message {
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             text-align: center;
             color: #a0aec0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .save-report-btn {
             width: 100%;
-            padding: 1rem;
+            padding: 0.75rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 1rem;
+            border-radius: 0.875rem;
             font-weight: 600;
-            margin-top: 1rem;
+            margin-top: 0.75rem;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            font-size: 0.9rem;
         }
         .save-report-btn:active { transform: scale(0.98); }
         .saved-indicator {
             background: rgba(72, 187, 120, 0.1);
             border: 1px solid rgba(72, 187, 120, 0.3);
             color: #48bb78;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-            margin-top: 1rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
             text-align: center;
         }
         .adjustment-info {
             background: rgba(102, 126, 234, 0.08);
             border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.75rem;
             color: #4c51bf;
+            line-height: 1.4;
         }
+        .report-settings-btn {
+            width: 100%;
+            padding: 0.6rem;
+            background: rgba(113, 128, 150, 0.1);
+            color: #4a5568;
+            border: 1px solid rgba(113, 128, 150, 0.2);
+            border-radius: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .report-settings-btn:active { transform: scale(0.98); }
+        .report-history-item {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 0.875rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        .report-history-date {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .report-history-time {
+            font-size: 0.7rem;
+            color: #a0aec0;
+            margin-top: 0.15rem;
+        }
+        .report-history-summary {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+        .delete-report-btn {
+            background: rgba(245, 101, 101, 0.1);
+            color: #f56565;
+            border: 1px solid rgba(245, 101, 101, 0.2);
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .delete-report-btn:active { transform: scale(0.95); }
+        .empty-reports-message {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        .close-modal-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(226, 232, 240, 0.8);
+            color: #4a5568;
+            border-radius: 0.875rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+        }
+        .close-modal-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -376,17 +452,29 @@
     <div id="indicatorsModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold mb-6 text-center">📈 Финансовые показатели</h2>
+            <div class="modal-title">📈 Показатели</div>
             
-            <div class="report-item" style="background: rgba(66, 153, 225, 0.1); border-color: rgba(66, 153, 225, 0.3);">
-                <div class="report-label">💹 Общий оборот</div>
-                <div class="report-value turnover-color" id="indicatorsTurnover">0 ₽</div>
+            <div class="month-summary">
+                <div class="month-summary-card" style="border-color: rgba(66, 153, 225, 0.3);">
+                    <div class="month-summary-label">💹 Оборот</div>
+                    <div class="month-summary-value turnover-color" id="indicatorsTurnover">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(237, 137, 54, 0.3);">
+                    <div class="month-summary-label">💰 Выручка</div>
+                    <div class="month-summary-value revenue-color" id="indicatorsRevenue">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(72, 187, 120, 0.3);">
+                    <div class="month-summary-label">🟢 Доходы</div>
+                    <div class="month-summary-value income-color" id="indicatorsTotalIncome">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(245, 101, 101, 0.3);">
+                    <div class="month-summary-label">🔴 Расходы</div>
+                    <div class="month-summary-value expense-color" id="indicatorsTotalExpense">0 ₽</div>
+                </div>
             </div>
-            <div class="report-item">
-                <div class="report-label">💰 Выручка</div>
-                <div class="report-value revenue-color" id="indicatorsRevenue">0 ₽</div>
-            </div>
+
             <div class="report-divider"></div>
+
             <div class="report-item">
                 <div class="report-label">⚪ Текущий баланс</div>
                 <div class="report-value" id="indicatorsBalance">0 ₽</div>
@@ -399,18 +487,8 @@
                 <div class="report-label">🔵 Баланс на сайте</div>
                 <div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div>
             </div>
-            <div class="report-divider"></div>
-            <div class="report-item">
-                <div class="report-label">🟢 Всего доходов</div>
-                <div class="report-value income-color" id="indicatorsTotalIncome">0 ₽</div>
-            </div>
-            <div class="report-item">
-                <div class="report-label">🔴 Всего расходов</div>
-                <div class="report-value expense-color" id="indicatorsTotalExpense">0 ₽</div>
-            </div>
-            <button onclick="closeIndicators()" class="w-full mt-6 px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
-                Закрыть
-            </button>
+
+            <button onclick="closeIndicators()" class="close-modal-btn">Закрыть</button>
         </div>
     </div>
 
@@ -418,13 +496,13 @@
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold mb-6 text-center">📊 Месячный отчет</h2>
+            <div class="modal-title">📊 Месячный отчет</div>
             
             <div class="month-nav">
                 <button onclick="changeMonth(-1)" class="month-nav-btn">←</button>
                 <div style="text-align: center;">
                     <div class="month-nav-title" id="reportMonthTitle">Январь 2025</div>
-                    <button onclick="goToCurrentMonth()" class="today-btn mt-1">Сегодня</button>
+                    <button onclick="goToCurrentMonth()" class="today-btn">Сегодня</button>
                 </div>
                 <button onclick="changeMonth(1)" class="month-nav-btn">→</button>
             </div>
@@ -449,16 +527,18 @@
             </div>
 
             <div class="report-item">
-                <div class="report-label">⚪ Текущий баланс</div>
-                <div class="report-value" id="reportBalance">0 ₽</div>
-            </div>
-            <div class="report-item" style="background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.3);">
-                <div class="report-label">💜 Капитал</div>
-                <div class="report-value capital-color" id="reportCapital">0 ₽</div>
-            </div>
-            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
-                <div class="report-label">🔵 Баланс на сайте</div>
-                <div class="report-value site-balance-color" id="reportSiteBalance">0 ₽</div>
+                <div class="report-label">⚪ Баланс · 💜 Капитал · 🔵 Сайт</div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
+                    <div style="flex: 1;">
+                        <div class="report-value" id="reportBalance" style="font-size: 1rem;">0 ₽</div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="report-value capital-color" id="reportCapital" style="font-size: 1rem;">0 ₽</div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="report-value site-balance-color" id="reportSiteBalance" style="font-size: 1rem;">0 ₽</div>
+                    </div>
+                </div>
             </div>
 
             <div class="days-table">
@@ -471,16 +551,29 @@
                 <div id="daysTableBody"></div>
             </div>
 
-            <button onclick="saveReport()" class="save-report-btn">
-                💾 Сохранить отчет
-            </button>
+            <button onclick="saveReport()" class="save-report-btn">💾 Сохранить отчет</button>
             <div id="savedIndicator" class="saved-indicator" style="display: none;">
-                ✅ Отчет сохранен на <span id="savedDate"></span>
+                ✅ Отчет сохранен: <span id="savedDate"></span>
             </div>
 
-            <button onclick="closeReport()" class="w-full mt-4 px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
-                Закрыть
-            </button>
+            <button onclick="openReportSettings()" class="report-settings-btn">⚙️ Настройки отчета</button>
+            <button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек отчета -->
+    <div id="reportSettingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close"></div>
+            <div class="modal-title">⚙️ Настройки отчета</div>
+            
+            <div class="adjustment-info">
+                💡 Здесь можно удалить сохраненные отчеты за конкретные дни.
+            </div>
+
+            <div id="reportsList"></div>
+
+            <button onclick="closeReportSettings()" class="close-modal-btn">Закрыть</button>
         </div>
     </div>
 
@@ -488,14 +581,14 @@
     <div id="adjustmentModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold mb-4 text-center">✏️ Корректировка</h2>
+            <div class="modal-title">✏️ Корректировка</div>
             
             <div class="adjustment-info">
-                💡 Изменения будут записаны в историю как "Корректировка" и не повлияют на расчёт доходов/расходов.
+                💡 Изменения запишутся в историю как "Корректировка" и не повлияют на доходы/расходы.
             </div>
             
             <div class="settings-input-group">
-                <label class="settings-input-label">⚪ Новый текущий баланс (₽)</label>
+                <label class="settings-input-label">⚪ Новый баланс (₽)</label>
                 <input type="number" id="adjustmentBalanceInput" class="settings-input" placeholder="0" step="0.01">
                 <div class="settings-input-hint">Текущий: <span id="currentBalanceHint">0 ₽</span></div>
             </div>
@@ -507,15 +600,15 @@
             </div>
             
             <div class="settings-input-group">
-                <label class="settings-input-label">📝 Комментарий (необязательно)</label>
-                <input type="text" id="adjustmentCommentInput" class="settings-input" placeholder="Например: пересчёт, инвентаризация" style="font-size: 1rem; text-align: left;">
+                <label class="settings-input-label">📝 Комментарий</label>
+                <input type="text" id="adjustmentCommentInput" class="settings-input" placeholder="Например: пересчёт" style="font-size: 0.95rem; text-align: left;">
             </div>
 
             <div class="button-row">
-                <button onclick="saveAdjustment()" class="px-4 py-3 bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                <button onclick="saveAdjustment()" class="bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200">
                     ✓ Применить
                 </button>
-                <button onclick="closeAdjustment()" class="px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                <button onclick="closeAdjustment()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">
                     ✕ Отмена
                 </button>
             </div>
@@ -526,35 +619,35 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold mb-6 text-center">⚙️ Настройки</h2>
+            <div class="modal-title">⚙️ Настройки</div>
             
             <div class="settings-input-group">
                 <label class="settings-input-label">💰 Начальный капитал (₽)</label>
                 <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
             </div>
             <div class="settings-input-group">
-                <label class="settings-input-label">Процент выручки от доходов (%)</label>
+                <label class="settings-input-label">% выручки от доходов</label>
                 <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
             </div>
             <div class="settings-input-group">
-                <label class="settings-input-label">Процент выручки от расходов (%)</label>
+                <label class="settings-input-label">% выручки от расходов</label>
                 <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
             </div>
 
             <div class="report-divider"></div>
 
             <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
-                <div class="report-label">Текущая формула</div>
-                <div class="text-sm text-blue-500 mt-2">
-                    Выручка = (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
+                <div class="report-label">Формула выручки</div>
+                <div class="text-sm text-blue-500 mt-1" style="font-size: 0.8rem;">
+                    (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
                 </div>
             </div>
 
             <div class="button-row">
-                <button onclick="saveSettings()" class="px-4 py-3 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                <button onclick="saveSettings()" class="bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200">
                     ✓ Сохранить
                 </button>
-                <button onclick="closeSettings()" class="px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                <button onclick="closeSettings()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">
                     ✕ Отмена
                 </button>
             </div>
@@ -564,12 +657,8 @@
     <script>
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-        }
+        if (tg) { tg.ready(); tg.expand(); }
 
-        // ===== ПОСТОЯННЫЙ ID ПОЛЬЗОВАТЕЛЯ =====
         const getUserId = () => {
             const tgUserId = tg?.initDataUnsafe?.user?.id;
             if (tgUserId) return 'tg_' + tgUserId;
@@ -582,7 +671,6 @@
         };
         const USER_ID = getUserId();
 
-        // ===== СОСТОЯНИЕ ПРИЛОЖЕНИЯ =====
         let balance = 0;
         let transactions = [];
         let savedReports = {};
@@ -596,7 +684,6 @@
         let userRef = null;
         let reportDate = new Date();
 
-        // ===== DOM =====
         const balanceEl = document.getElementById('balance');
         const amountEl = document.getElementById('amount');
         const historyEl = document.getElementById('history');
@@ -606,17 +693,12 @@
         const totalRevenueEl = document.getElementById('totalRevenue');
         const indicatorsModal = document.getElementById('indicatorsModal');
         const reportModal = document.getElementById('reportModal');
+        const reportSettingsModal = document.getElementById('reportSettingsModal');
         const settingsModal = document.getElementById('settingsModal');
         const adjustmentModal = document.getElementById('adjustmentModal');
         const resetBtn = document.getElementById('resetBtn');
 
-        // ===== УТИЛИТЫ =====
-        const formatMoney = (num) => {
-            return new Intl.NumberFormat('ru-RU', {
-                style: 'currency', currency: 'RUB', maximumFractionDigits: 0
-            }).format(num);
-        };
-
+        const formatMoney = (num) => new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
         const formatMoneyShort = (num) => {
             if (num === 0) return '0';
             if (Math.abs(num) >= 1000000) return (num / 1000000).toFixed(1).replace('.0', '') + 'М';
@@ -629,29 +711,22 @@
                 try {
                     if (type === 'notification') tg.HapticFeedback.notificationOccurred(style);
                     else if (type === 'impact') tg.HapticFeedback.impactOccurred(style);
-                } catch (e) { console.warn('Haptic error:', e); }
+                } catch (e) {}
             }
         };
 
-        const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-                             'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        const MONTH_NAMES_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-        const DAY_NAMES = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+        const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const MONTH_NAMES_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+        const DAY_NAMES = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
 
         const calculateStats = () => {
             let totalIncome = 0, totalExpense = 0;
             transactions.forEach((t) => {
                 if (t.type === 'income') totalIncome += t.amount;
                 else if (t.type === 'expense') totalExpense += t.amount;
-                // Корректировки НЕ учитываются в доходах/расходах
             });
-            const incomeRevenue = totalIncome * (incomePercent / 100);
-            const expenseRevenue = totalExpense * (expensePercent / 100);
-            const revenue = incomeRevenue + expenseRevenue;
-            const turnover = totalIncome + totalExpense;
-            const siteBalance = capital - balance;
-            return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue, turnover, siteBalance };
+            const revenue = totalIncome * (incomePercent / 100) + totalExpense * (expensePercent / 100);
+            return { totalIncome, totalExpense, revenue, turnover: totalIncome + totalExpense, siteBalance: capital - balance };
         };
 
         const calculateMonthStats = (year, month) => {
@@ -663,43 +738,29 @@
                 if (date.getFullYear() === year && date.getMonth() === month) {
                     const dayKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                     if (!daysData[dayKey]) daysData[dayKey] = { date: date, income: 0, expense: 0 };
-                    // Только income и expense учитываются
-                    if (t.type === 'income') {
-                        totalIncome += t.amount;
-                        daysData[dayKey].income += t.amount;
-                    } else if (t.type === 'expense') {
-                        totalExpense += t.amount;
-                        daysData[dayKey].expense += t.amount;
-                    }
+                    if (t.type === 'income') { totalIncome += t.amount; daysData[dayKey].income += t.amount; }
+                    else if (t.type === 'expense') { totalExpense += t.amount; daysData[dayKey].expense += t.amount; }
                 }
             });
-            const incomeRevenue = totalIncome * (incomePercent / 100);
-            const expenseRevenue = totalExpense * (expensePercent / 100);
-            const revenue = incomeRevenue + expenseRevenue;
-            const turnover = totalIncome + totalExpense;
+            const revenue = totalIncome * (incomePercent / 100) + totalExpense * (expensePercent / 100);
             Object.keys(daysData).forEach(key => {
-                const day = daysData[key];
-                day.revenue = day.income * (incomePercent / 100) + day.expense * (expensePercent / 100);
+                const d = daysData[key];
+                d.revenue = d.income * (incomePercent / 100) + d.expense * (expensePercent / 100);
             });
-            const sortedDays = Object.values(daysData).sort((a, b) => a.date - b.date);
-            return { totalIncome, totalExpense, revenue, turnover, days: sortedDays };
+            return { totalIncome, totalExpense, revenue, turnover: totalIncome + totalExpense, days: Object.values(daysData).sort((a, b) => a.date - b.date) };
         };
 
         const updateSyncStatus = (status) => {
             const statuses = {
                 syncing: { text: '☁️ синхронизация...', class: 'syncing' },
                 synced: { text: '☁️ сохранено в облаке', class: 'synced' },
-                offline: { text: '💾 автосохранение локально', class: '' },
-                error: { text: '⚠️ ошибка синхронизации', class: 'error' },
+                offline: { text: '💾 локально', class: '' },
+                error: { text: '⚠️ ошибка', class: 'error' },
                 local: { text: '💾 локальное хранилище', class: 'warning' }
             };
             const s = statuses[status] || statuses.syncing;
             syncStatusEl.textContent = s.text;
             syncStatusEl.className = 'sync-indicator ' + s.class;
-        };
-
-        const updateResetButtonVisibility = () => {
-            resetBtn.style.display = transactions.length === 0 ? 'none' : 'block';
         };
 
         const updateUI = () => {
@@ -716,44 +777,21 @@
                 transactions.slice().reverse().forEach((t) => {
                     const div = document.createElement('div');
                     div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
-                    
                     let colorClass, sign, desc;
                     const date = new Date(t.date);
                     const timeStr = isNaN(date.getTime()) ? '' : date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    
-                    if (t.type === 'income') {
-                        colorClass = 'text-emerald-600';
-                        sign = '+';
-                        desc = t.desc || 'Пополнение';
-                    } else if (t.type === 'expense') {
-                        colorClass = 'text-rose-600';
-                        sign = '−';
-                        desc = t.desc || 'Списание';
-                    } else if (t.type === 'adjustment') {
-                        colorClass = 'text-indigo-600';
-                        sign = t.amount >= 0 ? '+' : '';
-                        desc = '✏️ ' + (t.desc || 'Корректировка');
-                    }
-
-                    const amountDisplay = t.type === 'adjustment' 
-                        ? `${sign}${formatMoney(Math.abs(t.amount))}`
-                        : `${sign} ${formatMoney(t.amount)}`;
-
-                    div.innerHTML = `
-                        <div class="flex flex-col">
-                            <span class="font-light">${desc}</span>
-                            <span class="text-zinc-500 text-xs">${timeStr}</span>
-                        </div>
-                        <span class="${colorClass} font-medium text-lg">${amountDisplay}</span>
-                    `;
+                    if (t.type === 'income') { colorClass = 'text-emerald-600'; sign = '+'; desc = t.desc || 'Пополнение'; }
+                    else if (t.type === 'expense') { colorClass = 'text-rose-600'; sign = '−'; desc = t.desc || 'Списание'; }
+                    else if (t.type === 'adjustment') { colorClass = 'text-indigo-600'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
+                    const amountDisplay = t.type === 'adjustment' ? `${sign}${formatMoney(Math.abs(t.amount))}` : `${sign} ${formatMoney(t.amount)}`;
+                    div.innerHTML = `<div class="flex flex-col"><span class="font-light">${desc}</span><span class="text-zinc-500 text-xs">${timeStr}</span></div><span class="${colorClass} font-medium text-lg">${amountDisplay}</span>`;
                     historyEl.appendChild(div);
                 });
             }
-            updateResetButtonVisibility();
+            resetBtn.style.display = transactions.length === 0 ? 'none' : 'block';
             saveToLocal();
         };
 
-        // ===== СОХРАНЕНИЕ В LOCALSTORAGE =====
         const saveToLocal = () => {
             try {
                 localStorage.setItem('balance', balance.toString());
@@ -762,30 +800,21 @@
                 localStorage.setItem('incomePercent', incomePercent.toString());
                 localStorage.setItem('expensePercent', expensePercent.toString());
                 localStorage.setItem('capital', capital.toString());
-                localStorage.setItem('lastSave', new Date().toISOString());
-            } catch (e) {
-                console.error('Ошибка сохранения:', e);
-            }
+            } catch (e) { console.error(e); }
         };
 
         const loadFromLocal = () => {
             try {
                 balance = parseFloat(localStorage.getItem('balance')) || 0;
-                const txStr = localStorage.getItem('transactions');
-                transactions = txStr ? JSON.parse(txStr) : [];
-                const reportsStr = localStorage.getItem('savedReports');
-                savedReports = reportsStr ? JSON.parse(reportsStr) : {};
+                transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                savedReports = JSON.parse(localStorage.getItem('savedReports')) || {};
                 incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
                 expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
                 capital = parseFloat(localStorage.getItem('capital')) || 0;
                 return true;
-            } catch (e) {
-                console.error('Ошибка загрузки:', e);
-                return false;
-            }
+            } catch (e) { return false; }
         };
 
-        // ===== FIREBASE =====
         const initFirebase = () => {
             try {
                 const firebaseConfig = {
@@ -797,32 +826,17 @@
   messagingSenderId: "1072812838336",
   appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
                 };
-
-                if (firebaseConfig.apiKey.includes('AIzaSyD0vf8kHH') || 
-                    firebaseConfig.appId.includes('abcdef')) {
-                    useFirebase = false;
-                    return false;
-                }
-
+                if (firebaseConfig.apiKey.includes('AIzaSyD0vf8kHH')) { useFirebase = false; return false; }
                 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                const db = firebase.database();
-                userRef = db.ref(`users/${USER_ID}`);
+                userRef = firebase.database().ref(`users/${USER_ID}`);
                 useFirebase = true;
                 return true;
-            } catch (error) {
-                console.error('Ошибка Firebase:', error);
-                useFirebase = false;
-                return false;
-            }
+            } catch (e) { useFirebase = false; return false; }
         };
 
         const saveToServer = () => {
-            if (!useFirebase || !isOnline) {
-                updateSyncStatus(useFirebase ? 'offline' : 'local');
-                return;
-            }
+            if (!useFirebase || !isOnline) { updateSyncStatus(useFirebase ? 'offline' : 'local'); return; }
             if (saveTimeout) clearTimeout(saveTimeout);
-
             saveTimeout = setTimeout(async () => {
                 if (isSyncing) return;
                 isSyncing = true;
@@ -830,77 +844,40 @@
                 try {
                     const stats = calculateStats();
                     await userRef.set({
-                        balance: balance,
-                        transactions: transactions,
-                        savedReports: savedReports,
-                        totalIncome: stats.totalIncome,
-                        totalExpense: stats.totalExpense,
-                        revenue: stats.revenue,
-                        incomePercent: incomePercent,
-                        expensePercent: expensePercent,
-                        capital: capital,
+                        balance, transactions, savedReports,
+                        totalIncome: stats.totalIncome, totalExpense: stats.totalExpense, revenue: stats.revenue,
+                        incomePercent, expensePercent, capital,
                         lastUpdated: new Date().toISOString()
                     });
                     updateSyncStatus('synced');
-                } catch (error) {
-                    console.error('Ошибка сохранения:', error);
-                    updateSyncStatus('error');
-                } finally {
-                    isSyncing = false;
-                }
+                } catch (e) { updateSyncStatus('error'); } finally { isSyncing = false; }
             }, 500);
         };
 
         const loadFromServer = () => {
-            if (!useFirebase) {
-                loadFromLocal();
-                updateUI();
-                updateSyncStatus('local');
-                return;
-            }
+            if (!useFirebase) { loadFromLocal(); updateUI(); updateSyncStatus('local'); return; }
             updateSyncStatus('syncing');
-            userRef.once('value')
-                .then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data && data.transactions) {
-                        balance = data.balance || 0;
-                        transactions = data.transactions || [];
-                        savedReports = data.savedReports || {};
-                        incomePercent = data.incomePercent || 7;
-                        expensePercent = data.expensePercent || 2.5;
-                        capital = data.capital || 0;
-                        updateUI();
-                        updateSyncStatus('synced');
-                    } else {
-                        loadFromLocal();
-                        updateUI();
-                        if (isOnline) saveToServer();
-                    }
-                })
-                .catch((error) => {
-                    console.error('Ошибка загрузки:', error);
-                    loadFromLocal();
+            userRef.once('value').then((snapshot) => {
+                const data = snapshot.val();
+                if (data && data.transactions) {
+                    balance = data.balance || 0;
+                    transactions = data.transactions || [];
+                    savedReports = data.savedReports || {};
+                    incomePercent = data.incomePercent || 7;
+                    expensePercent = data.expensePercent || 2.5;
+                    capital = data.capital || 0;
                     updateUI();
-                    updateSyncStatus('offline');
-                });
+                    updateSyncStatus('synced');
+                } else { loadFromLocal(); updateUI(); if (isOnline) saveToServer(); }
+            }).catch(() => { loadFromLocal(); updateUI(); updateSyncStatus('offline'); });
         };
 
-        // ===== ДЕЙСТВИЯ =====
         const addTransaction = (type) => {
             const amount = parseFloat(amountEl.value);
             if (!amount || amount <= 0) { haptic('notification', 'error'); return; }
-            if (amount > 999999999) { haptic('notification', 'error'); alert('Слишком большая сумма'); return; }
-
-            if (type === 'income') balance += amount;
-            else balance -= amount;
-
-            transactions.push({
-                type: type,
-                amount: amount,
-                desc: type === 'income' ? 'Пополнение' : 'Списание',
-                date: new Date().toISOString()
-            });
-
+            if (amount > 999999999) { alert('Слишком большая сумма'); return; }
+            if (type === 'income') balance += amount; else balance -= amount;
+            transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() });
             amountEl.value = '';
             haptic('impact', 'light');
             updateUI();
@@ -910,23 +887,21 @@
         const resetAll = () => {
             if (transactions.length === 0) { haptic('notification', 'warning'); return; }
             haptic('notification', 'warning');
-            
             const doReset = () => {
                 balance = 0;
                 transactions = [];
+                // ⚠️ ВАЖНО: savedReports НЕ очищаем!
                 haptic('notification', 'success');
                 updateUI();
                 saveToLocal();
                 saveToServer();
             };
-            
             if (tg?.showConfirm) {
-                tg.showConfirm('Обнулить баланс и всю историю?', function(confirmed) {
-                    if (confirmed) doReset();
-                    else haptic('impact', 'soft');
+                tg.showConfirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.', function(confirmed) {
+                    if (confirmed) doReset(); else haptic('impact', 'soft');
                 });
             } else {
-                if (confirm('Обнулить баланс и всю историю?')) doReset();
+                if (confirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.')) doReset();
                 else haptic('impact', 'soft');
             }
         };
@@ -941,65 +916,29 @@
             adjustmentModal.classList.add('active');
             haptic('impact', 'medium');
         };
-
-        window.closeAdjustment = () => {
-            adjustmentModal.classList.remove('active');
-        };
-
+        window.closeAdjustment = () => adjustmentModal.classList.remove('active');
         window.saveAdjustment = () => {
             const newBalanceStr = document.getElementById('adjustmentBalanceInput').value;
             const newCapitalStr = document.getElementById('adjustmentCapitalInput').value;
             const comment = document.getElementById('adjustmentCommentInput').value.trim();
-            
             const newBalance = newBalanceStr !== '' ? parseFloat(newBalanceStr) : null;
             const newCapital = newCapitalStr !== '' ? parseFloat(newCapitalStr) : null;
+            if (newBalance === null && newCapital === null) { alert('Введите хотя бы одно значение'); return; }
+            if (newBalance !== null && (isNaN(newBalance) || newBalance < -999999999 || newBalance > 999999999)) { alert('Некорректный баланс'); return; }
+            if (newCapital !== null && (isNaN(newCapital) || newCapital < 0 || newCapital > 999999999)) { alert('Некорректный капитал'); return; }
             
-            if (newBalance === null && newCapital === null) {
-                haptic('notification', 'error');
-                alert('Введите хотя бы одно значение для корректировки');
-                return;
-            }
-            
-            if (newBalance !== null && (isNaN(newBalance) || newBalance < -999999999 || newBalance > 999999999)) {
-                alert('Некорректное значение баланса');
-                return;
-            }
-            
-            if (newCapital !== null && (isNaN(newCapital) || newCapital < 0 || newCapital > 999999999)) {
-                alert('Некорректное значение капитала');
-                return;
-            }
-            
-            // Применяем корректировку баланса
             if (newBalance !== null && newBalance !== balance) {
                 const diff = newBalance - balance;
                 balance = newBalance;
-                
-                const defaultDesc = diff >= 0 ? 'Корректировка (+)' : 'Корректировка (−)';
-                transactions.push({
-                    type: 'adjustment',
-                    amount: diff,
-                    desc: comment ? `${defaultDesc}: ${comment}` : defaultDesc,
-                    date: new Date().toISOString()
-                });
+                const desc = diff >= 0 ? 'Корректировка (+)' : 'Корректировка (−)';
+                transactions.push({ type: 'adjustment', amount: diff, desc: comment ? `${desc}: ${comment}` : desc, date: new Date().toISOString() });
             }
-            
-            // Применяем корректировку капитала
             if (newCapital !== null && newCapital !== capital) {
                 capital = newCapital;
-                
-                // Если баланс не менялся, но капитал изменился - всё равно пишем в историю
                 if (newBalance === null || newBalance === balance) {
-                    const defaultDesc = 'Корректировка капитала';
-                    transactions.push({
-                        type: 'adjustment',
-                        amount: 0,
-                        desc: comment ? `${defaultDesc}: ${comment}` : defaultDesc,
-                        date: new Date().toISOString()
-                    });
+                    transactions.push({ type: 'adjustment', amount: 0, desc: comment ? `Корректировка капитала: ${comment}` : 'Корректировка капитала', date: new Date().toISOString() });
                 }
             }
-            
             haptic('notification', 'success');
             updateUI();
             saveToServer();
@@ -1031,7 +970,6 @@
             document.getElementById('monthRevenue').textContent = formatMoney(stats.revenue);
             document.getElementById('monthIncome').textContent = formatMoney(stats.totalIncome);
             document.getElementById('monthExpense').textContent = formatMoney(stats.totalExpense);
-            
             document.getElementById('reportBalance').textContent = formatMoney(balance);
             document.getElementById('reportCapital').textContent = formatMoney(capital);
             document.getElementById('reportSiteBalance').textContent = formatMoney(capital - balance);
@@ -1040,23 +978,20 @@
             tbody.innerHTML = '';
             if (stats.days.length === 0) {
                 tbody.innerHTML = '<div class="no-data-message">📭 В этом месяце нет операций</div>';
-                return;
+            } else {
+                stats.days.forEach((day) => {
+                    const date = day.date;
+                    const row = document.createElement('div');
+                    row.className = 'days-table-row';
+                    row.innerHTML = `
+                        <div class="day-date">${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]}<div class="day-date-sub">${DAY_NAMES[date.getDay()]}</div></div>
+                        <div class="day-income">${day.income > 0 ? '+' + formatMoneyShort(day.income) : '—'}</div>
+                        <div class="day-expense">${day.expense > 0 ? '−' + formatMoneyShort(day.expense) : '—'}</div>
+                        <div class="day-revenue">${day.revenue > 0 ? formatMoneyShort(day.revenue) : '—'}</div>
+                    `;
+                    tbody.appendChild(row);
+                });
             }
-            stats.days.forEach((day) => {
-                const date = day.date;
-                const row = document.createElement('div');
-                row.className = 'days-table-row';
-                row.innerHTML = `
-                    <div class="day-date">
-                        ${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]}
-                        <div class="day-date-sub">${DAY_NAMES[date.getDay()]}</div>
-                    </div>
-                    <div class="day-income">${day.income > 0 ? '+' + formatMoneyShort(day.income) : '—'}</div>
-                    <div class="day-expense">${day.expense > 0 ? '−' + formatMoneyShort(day.expense) : '—'}</div>
-                    <div class="day-revenue">${day.revenue > 0 ? formatMoneyShort(day.revenue) : '—'}</div>
-                `;
-                tbody.appendChild(row);
-            });
             
             const todayKey = new Date().toISOString().split('T')[0];
             const savedIndicator = document.getElementById('savedIndicator');
@@ -1089,18 +1024,12 @@
         window.saveReport = () => {
             const todayKey = new Date().toISOString().split('T')[0];
             const monthStats = calculateMonthStats(reportDate.getFullYear(), reportDate.getMonth());
-            
             const reportData = {
-                turnover: monthStats.turnover,
-                revenue: monthStats.revenue,
-                income: monthStats.totalIncome,
-                expense: monthStats.totalExpense,
-                balance: balance,
-                capital: capital,
-                siteBalance: capital - balance,
+                turnover: monthStats.turnover, revenue: monthStats.revenue,
+                income: monthStats.totalIncome, expense: monthStats.totalExpense,
+                balance, capital, siteBalance: capital - balance,
                 savedAt: new Date().toISOString()
             };
-            
             if (savedReports[todayKey]) {
                 const existing = savedReports[todayKey];
                 reportData.turnover += existing.turnover;
@@ -1108,15 +1037,75 @@
                 reportData.income += existing.income;
                 reportData.expense += existing.expense;
             }
-            
             savedReports[todayKey] = reportData;
-            
             document.getElementById('savedDate').textContent = new Date().toLocaleString('ru-RU');
             document.getElementById('savedIndicator').style.display = 'block';
-            
             saveToLocal();
             saveToServer();
             haptic('notification', 'success');
+        };
+
+        // ===== НАСТРОЙКИ ОТЧЕТА =====
+        window.openReportSettings = () => {
+            renderReportsList();
+            reportSettingsModal.classList.add('active');
+            haptic('impact', 'medium');
+        };
+        window.closeReportSettings = () => reportSettingsModal.classList.remove('active');
+
+        const renderReportsList = () => {
+            const list = document.getElementById('reportsList');
+            list.innerHTML = '';
+            const keys = Object.keys(savedReports).sort().reverse();
+            
+            if (keys.length === 0) {
+                list.innerHTML = '<div class="empty-reports-message">📭 Нет сохраненных отчетов</div>';
+                return;
+            }
+            
+            keys.forEach(key => {
+                const report = savedReports[key];
+                const date = new Date(key + 'T00:00:00');
+                const dayName = DAY_NAMES[date.getDay()];
+                const dateStr = `${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]}, ${dayName}`;
+                const timeStr = new Date(report.savedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                
+                const item = document.createElement('div');
+                item.className = 'report-history-item';
+                item.innerHTML = `
+                    <div style="flex: 1;">
+                        <div class="report-history-date">${dateStr}</div>
+                        <div class="report-history-time">Сохранено в ${timeStr}</div>
+                        <div class="report-history-summary">
+                            💹 ${formatMoneyShort(report.turnover)} · 💰 ${formatMoneyShort(report.revenue)}
+                        </div>
+                    </div>
+                    <button class="delete-report-btn" onclick="deleteReport('${key}')">🗑️ Удалить</button>
+                `;
+                list.appendChild(item);
+            });
+        };
+
+        window.deleteReport = (dayKey) => {
+            const date = new Date(dayKey + 'T00:00:00');
+            const dateStr = `${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
+            
+            const doDelete = () => {
+                delete savedReports[dayKey];
+                saveToLocal();
+                saveToServer();
+                renderReportsList();
+                renderMonthReport();
+                haptic('notification', 'success');
+            };
+            
+            if (tg?.showConfirm) {
+                tg.showConfirm(`Удалить отчет за ${dateStr}?`, function(confirmed) {
+                    if (confirmed) doDelete();
+                });
+            } else {
+                if (confirm(`Удалить отчет за ${dateStr}?`)) doDelete();
+            }
         };
 
         // ===== НАСТРОЙКИ =====
@@ -1147,23 +1136,18 @@
         };
 
         // ===== EVENT LISTENERS =====
-        [indicatorsModal, reportModal, settingsModal, adjustmentModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-            });
+        [indicatorsModal, reportModal, reportSettingsModal, settingsModal, adjustmentModal].forEach(modal => {
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
         });
         window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveToServer(); });
         window.addEventListener('offline', () => { isOnline = false; updateSyncStatus('offline'); });
         amountEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTransaction('expense'); });
-        window.addEventListener('beforeunload', () => { saveToLocal(); });
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) saveToLocal();
-        });
+        window.addEventListener('beforeunload', () => saveToLocal());
+        document.addEventListener('visibilitychange', () => { if (document.hidden) saveToLocal(); });
 
         window.addTransaction = addTransaction;
         window.resetAll = resetAll;
 
-        // ===== ЗАПУСК =====
         initFirebase();
         loadFromServer();
     </script>
