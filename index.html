@@ -81,9 +81,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .close-modal-btn:active{transform:scale(0.98)}
 .accounts-selector{display:flex;gap:0.5rem;overflow-x:auto;padding:0.5rem 0;scrollbar-width:none;-ms-overflow-style:none}
 .accounts-selector::-webkit-scrollbar{display:none}
-.account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem}
 .account-chip:hover{background:rgba(255,255,255,0.8)}
 .account-chip.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
+.account-chip.active .account-delete-btn{color:rgba(255,255,255,0.7)}
+.account-chip.active .account-delete-btn:hover{color:white;background:rgba(255,255,255,0.2)}
+.account-delete-btn{padding:0.15rem 0.4rem;background:rgba(0,0,0,0.08);border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.2s;color:#718096;line-height:1}
+.account-delete-btn:hover{background:rgba(245,101,101,0.2);color:#f56565}
 .add-account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(102,126,234,0.1);border:1px dashed rgba(102,126,234,0.3);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#667eea;cursor:pointer;transition:all 0.2s}
 .add-account-chip:hover{background:rgba(102,126,234,0.2)}
 .account-details-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
@@ -245,6 +249,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="modal-title">⚙️ Настройки</div>
 <div class="adjustment-info" id="settingsAccountInfo">💼 Настройки для счета: Основной</div>
 <div class="settings-input-group">
+<label class="settings-input-label">💼 Название счета</label>
+<input type="text" id="accountNameInput" class="settings-input" placeholder="Основной" style="font-size:1rem;text-align:left">
+</div>
+<div class="settings-input-group">
 <label class="settings-input-label">💜 Капитал счета (₽)</label>
 <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
 </div>
@@ -308,9 +316,13 @@ const adjustmentModal=document.getElementById('adjustmentModal');
 const addAccountModal=document.getElementById('addAccountModal');
 const resetBtn=document.getElementById('resetBtn');
 
-const formatMoney=(num)=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(num);
+const formatMoney=(num)=>{
+if(num===null||num===undefined||isNaN(num))num=0;
+return new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(num);
+};
 const formatMoneyShort=(num)=>{
-if(num===0||isNaN(num))return '0';
+if(num===null||num===undefined||isNaN(num))num=0;
+if(num===0)return '0';
 if(Math.abs(num)>=1000000)return (num/1000000).toFixed(1).replace('.0','')+'М';
 if(Math.abs(num)>=1000)return (num/1000).toFixed(1).replace('.0','')+'К';
 return Math.round(num).toString();
@@ -326,7 +338,12 @@ const getActiveAccount=()=>accounts[activeAccountId];
 
 const calculateAccountStats=(account)=>{
 let totalIncome=0,totalExpense=0;
-account.transactions.forEach((t)=>{if(t.type==='income')totalIncome+=t.amount;else if(t.type==='expense')totalExpense+=t.amount});
+if(!account||!account.transactions)return{totalIncome:0,totalExpense:0,revenue:0,turnover:0,siteBalance:0};
+account.transactions.forEach((t)=>{
+if(!t||typeof t.amount!=='number')return;
+if(t.type==='income')totalIncome+=t.amount;
+else if(t.type==='expense')totalExpense+=t.amount;
+});
 const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
 return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense,siteBalance:(account.capital||0)-account.balance};
 };
@@ -334,10 +351,11 @@ return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense,siteBa
 const calculateAllAccountsStats=()=>{
 let totalIncome=0,totalExpense=0,totalBalance=0,totalCapital=0;
 Object.values(accounts).forEach(acc=>{
+if(!acc)return;
 const stats=calculateAccountStats(acc);
-totalIncome+=stats.totalIncome;
-totalExpense+=stats.totalExpense;
-totalBalance+=acc.balance;
+totalIncome+=stats.totalIncome||0;
+totalExpense+=stats.totalExpense||0;
+totalBalance+=acc.balance||0;
 totalCapital+=(acc.capital||0);
 });
 const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
@@ -353,12 +371,29 @@ syncStatusEl.className='sync-indicator '+s.class;
 
 const renderAccountsSelector=()=>{
 const selector=document.getElementById('accountsSelector');
+if(!selector)return;
 selector.innerHTML='';
-Object.values(accounts).forEach(acc=>{
+const accountKeys=Object.keys(accounts);
+accountKeys.forEach(accId=>{
+const acc=accounts[accId];
+if(!acc)return;
 const chip=document.createElement('div');
-chip.className='account-chip'+(acc.id===activeAccountId?' active':'');
-chip.innerHTML=`<span>${acc.name}</span>`;
-chip.onclick=()=>switchAccount(acc.id);
+chip.className='account-chip'+(accId===activeAccountId?' active':'');
+const nameSpan=document.createElement('span');
+nameSpan.textContent=acc.name;
+nameSpan.onclick=()=>switchAccount(accId);
+chip.appendChild(nameSpan);
+if(accountKeys.length>1){
+const deleteBtn=document.createElement('span');
+deleteBtn.className='account-delete-btn';
+deleteBtn.textContent='×';
+deleteBtn.title='Удалить счет';
+deleteBtn.onclick=(e)=>{
+e.stopPropagation();
+deleteAccount(accId);
+};
+chip.appendChild(deleteBtn);
+}
 selector.appendChild(chip);
 });
 const addChip=document.createElement('div');
@@ -369,6 +404,7 @@ selector.appendChild(addChip);
 };
 
 const switchAccount=(accountId)=>{
+if(!accounts[accountId])return;
 activeAccountId=accountId;
 updateUI();
 renderAccountsSelector();
@@ -378,15 +414,26 @@ haptic('impact','light');
 
 const updateUI=()=>{
 const account=getActiveAccount();
-if(!account)return;
+if(!account){
+balanceEl.textContent='0 ₽';
+totalIncomeEl.textContent='0 ₽';
+totalExpenseEl.textContent='0 ₽';
+totalRevenueEl.textContent='0 ₽';
+historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет счетов</p>';
+resetBtn.style.display='none';
+return;
+}
 balanceEl.textContent=formatMoney(account.balance);
 const stats=calculateAccountStats(account);
 totalIncomeEl.textContent=formatMoney(stats.totalIncome);
 totalExpenseEl.textContent=formatMoney(stats.totalExpense);
 totalRevenueEl.textContent=formatMoney(stats.revenue);
 historyEl.innerHTML='';
-if(account.transactions.length===0){historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>'}
-else{account.transactions.slice().reverse().forEach((t)=>{
+if(!account.transactions||account.transactions.length===0){
+historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
+}else{
+account.transactions.slice().reverse().forEach((t)=>{
+if(!t)return;
 const div=document.createElement('div');
 div.className='transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
 let colorClass,sign,desc;
@@ -395,11 +442,13 @@ const timeStr=isNaN(date.getTime())?'':date.toLocaleTimeString('ru-RU',{hour:'2-
 if(t.type==='income'){colorClass='text-emerald-600';sign='+';desc=t.desc||'Пополнение'}
 else if(t.type==='expense'){colorClass='text-rose-600';sign='−';desc=t.desc||'Списание'}
 else if(t.type==='adjustment'){colorClass='text-indigo-600';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка')}
+else{colorClass='text-zinc-600';sign='';desc=t.desc||'Операция'}
 const amountDisplay=t.type==='adjustment'?`${sign}${formatMoney(Math.abs(t.amount))}`:`${sign} ${formatMoney(t.amount)}`;
 div.innerHTML=`<div class="flex flex-col"><span class="font-light">${desc}</span><span class="text-zinc-500 text-xs">${timeStr}</span></div><span class="${colorClass} font-medium text-lg">${amountDisplay}</span>`;
 historyEl.appendChild(div);
-})}
-resetBtn.style.display=account.transactions.length===0?'none':'block';
+});
+}
+resetBtn.style.display=account.transactions&&account.transactions.length>0?'block':'none';
 saveToLocal();
 };
 
@@ -409,7 +458,7 @@ localStorage.setItem('activeAccountId',activeAccountId);
 localStorage.setItem('savedReports',JSON.stringify(savedReports));
 localStorage.setItem('incomePercent',incomePercent.toString());
 localStorage.setItem('expensePercent',expensePercent.toString());
-}catch(e){console.error(e)}};
+}catch(e){console.error('Save error:',e)}};
 
 const loadFromLocal=()=>{try{
 const accountsStr=localStorage.getItem('accounts');
@@ -432,7 +481,7 @@ savedReports=JSON.parse(localStorage.getItem('savedReports'))||{};
 incomePercent=parseFloat(localStorage.getItem('incomePercent'))||7;
 expensePercent=parseFloat(localStorage.getItem('expensePercent'))||2.5;
 return true;
-}catch(e){return false}};
+}catch(e){console.error('Load error:',e);return false}};
 
 const initFirebase=()=>{try{
 const firebaseConfig={apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
@@ -447,7 +496,7 @@ if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
 userRef=firebase.database().ref(`users/${USER_ID}`);
 useFirebase=true;
 return true;
-}catch(e){useFirebase=false;return false}};
+}catch(e){console.error('Firebase init error:',e);useFirebase=false;return false}};
 
 const saveToServer=()=>{
 if(!useFirebase||!isOnline){updateSyncStatus(useFirebase?'offline':'local');return}
@@ -460,7 +509,7 @@ try{
 const stats=calculateAllAccountsStats();
 await userRef.set({accounts,activeAccountId,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,lastUpdated:new Date().toISOString()});
 updateSyncStatus('synced');
-}catch(e){updateSyncStatus('error')}finally{isSyncing=false}
+}catch(e){console.error('Save error:',e);updateSyncStatus('error')}finally{isSyncing=false}
 },500);
 };
 
@@ -479,7 +528,7 @@ updateUI();
 renderAccountsSelector();
 updateSyncStatus('synced');
 }else{loadFromLocal();updateUI();renderAccountsSelector();if(isOnline)saveToServer()}
-}).catch(()=>{loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('offline')});
+}).catch((e)=>{console.error('Load error:',e);loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('offline')});
 };
 
 const addTransaction=(type)=>{
@@ -489,6 +538,7 @@ const amount=parseFloat(amountEl.value);
 if(!amount||amount<=0){haptic('notification','error');return}
 if(amount>999999999){alert('Слишком большая сумма');return}
 if(type==='income')account.balance+=amount;else account.balance-=amount;
+if(!account.transactions)account.transactions=[];
 account.transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});
 amountEl.value='';
 haptic('impact','light');
@@ -498,7 +548,7 @@ saveToServer();
 
 const resetAll=()=>{
 const account=getActiveAccount();
-if(!account||account.transactions.length===0){haptic('notification','warning');return}
+if(!account||!account.transactions||account.transactions.length===0){haptic('notification','warning');return}
 haptic('notification','warning');
 const doReset=()=>{
 account.balance=0;
@@ -532,10 +582,41 @@ closeAddAccount();
 haptic('notification','success');
 };
 
+// УДАЛЕНИЕ СЧЕТА
+window.deleteAccount=(accountId)=>{
+const account=accounts[accountId];
+if(!account)return;
+const accountKeys=Object.keys(accounts);
+if(accountKeys.length<=1){
+alert('Нельзя удалить единственный счет');
+return;
+}
+const doDelete=()=>{
+delete accounts[accountId];
+if(activeAccountId===accountId){
+activeAccountId=Object.keys(accounts)[0];
+}
+updateUI();
+renderAccountsSelector();
+saveToLocal();
+saveToServer();
+haptic('notification','success');
+};
+if(tg?.showConfirm){
+tg.showConfirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные этого счета будут потеряны.\n💾 Сохраненные отчеты останутся.`,function(confirmed){
+if(confirmed)doDelete();else haptic('impact','soft');
+});
+}else{
+if(confirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные этого счета будут потеряны.\n💾 Сохраненные отчеты останутся.`))doDelete();
+else haptic('impact','soft');
+}
+};
+
 // ПОКАЗАТЕЛИ
 window.openIndicators=()=>{
+try{
 const account=getActiveAccount();
-if(!account)return;
+if(!account){alert('Нет активного счета');return}
 const stats=calculateAccountStats(account);
 document.getElementById('indicatorsAccountName').textContent=`💼 Счет: ${account.name}`;
 document.getElementById('indicatorsTurnover').textContent=formatMoney(stats.turnover);
@@ -547,27 +628,42 @@ document.getElementById('indicatorsTotalIncome').textContent=formatMoney(stats.t
 document.getElementById('indicatorsTotalExpense').textContent=formatMoney(stats.totalExpense);
 indicatorsModal.classList.add('active');
 haptic('impact','medium');
+}catch(e){
+console.error('openIndicators error:',e);
+alert('Ошибка открытия показателей: '+e.message);
+}
 };
 window.closeIndicators=()=>indicatorsModal.classList.remove('active');
 
 window.saveReportFromIndicators=()=>{
+try{
 const allStats=calculateAllAccountsStats();
 const now=new Date();
 const key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);
 const accountsSnapshot={};
 Object.values(accounts).forEach(acc=>{
+if(!acc)return;
 const stats=calculateAccountStats(acc);
-accountsSnapshot[acc.id]={name:acc.name,balance:acc.balance,capital:acc.capital||0,turnover:stats.turnover,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,siteBalance:stats.siteBalance};
+accountsSnapshot[acc.id]={
+name:acc.name,
+balance:acc.balance||0,
+capital:acc.capital||0,
+turnover:stats.turnover||0,
+totalIncome:stats.totalIncome||0,
+totalExpense:stats.totalExpense||0,
+revenue:stats.revenue||0,
+siteBalance:stats.siteBalance||0
+};
 });
 savedReports[key]={
 date:now.toISOString(),
-turnover:allStats.turnover,
-income:allStats.totalIncome,
-expense:allStats.totalExpense,
-revenue:allStats.revenue,
-balance:allStats.totalBalance,
-capital:allStats.totalCapital,
-siteBalance:allStats.siteBalance,
+turnover:allStats.turnover||0,
+income:allStats.totalIncome||0,
+expense:allStats.totalExpense||0,
+revenue:allStats.revenue||0,
+balance:allStats.totalBalance||0,
+capital:allStats.totalCapital||0,
+siteBalance:allStats.siteBalance||0,
 accounts:accountsSnapshot
 };
 saveToLocal();
@@ -575,19 +671,29 @@ saveToServer();
 haptic('notification','success');
 alert('✅ Отчет сохранен!');
 closeIndicators();
+}catch(e){
+console.error('saveReportFromIndicators error:',e);
+alert('Ошибка сохранения отчета: '+e.message);
+}
 };
 
 // ОТЧЕТЫ
 window.openReport=()=>{
+try{
 renderReportsList();
 renderSummary();
 renderAccountsDetails();
 reportModal.classList.add('active');
 haptic('impact','medium');
+}catch(e){
+console.error('openReport error:',e);
+alert('Ошибка открытия отчета: '+e.message);
+}
 };
 window.closeReport=()=>reportModal.classList.remove('active');
 
 const renderSummary=()=>{
+try{
 const stats=calculateAllAccountsStats();
 document.getElementById('summaryTurnover').textContent=formatMoney(stats.turnover);
 document.getElementById('summaryRevenue').textContent=formatMoney(stats.revenue);
@@ -595,27 +701,43 @@ document.getElementById('summaryIncome').textContent=formatMoney(stats.totalInco
 document.getElementById('summaryExpense').textContent=formatMoney(stats.totalExpense);
 document.getElementById('summaryBalance').textContent=formatMoney(stats.totalBalance);
 document.getElementById('summaryCapital').textContent=formatMoney(stats.totalCapital);
+}catch(e){console.error('renderSummary error:',e)}
 };
 
 const renderAccountsDetails=()=>{
+try{
 const container=document.getElementById('accountsDetails');
+if(!container)return;
 container.innerHTML='';
-Object.values(accounts).forEach(acc=>{
+const accountValues=Object.values(accounts);
+if(accountValues.length===0){
+container.innerHTML='<div class="empty-reports-message">Нет счетов</div>';
+return;
+}
+accountValues.forEach(acc=>{
+if(!acc)return;
 const stats=calculateAccountStats(acc);
 const card=document.createElement('div');
 card.className='account-details-card';
 card.innerHTML=`<div class="account-details-header"><div class="account-details-name">💼 ${acc.name}</div></div><div class="account-details-stats"><div class="account-details-stat"><div class="account-details-stat-label">💹 Оборот</div><div class="account-details-stat-value turnover-color">${formatMoneyShort(stats.turnover)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">🟢 Доходы</div><div class="account-details-stat-value income-color">${formatMoneyShort(stats.totalIncome)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">🔴 Расходы</div><div class="account-details-stat-value expense-color">${formatMoneyShort(stats.totalExpense)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">💰 Выручка</div><div class="account-details-stat-value revenue-color">${formatMoneyShort(stats.revenue)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">⚪ Баланс</div><div class="account-details-stat-value">${formatMoneyShort(acc.balance)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">💜 Капитал</div><div class="account-details-stat-value capital-color">${formatMoneyShort(acc.capital||0)}</div></div></div>`;
 container.appendChild(card);
 });
+}catch(e){console.error('renderAccountsDetails error:',e)}
 };
 
 const renderReportsList=()=>{
+try{
 const list=document.getElementById('reportsList');
+if(!list)return;
 list.innerHTML='';
 const keys=Object.keys(savedReports).sort().reverse();
-if(keys.length===0){list.innerHTML='<div class="empty-reports-message">📭 Нет сохраненных отчетов<br><span style="font-size:0.75rem;margin-top:0.5rem;display:block">Нажмите "Показатели" → "Сохранить отчет"</span></div>';return}
+if(keys.length===0){
+list.innerHTML='<div class="empty-reports-message">📭 Нет сохраненных отчетов<br><span style="font-size:0.75rem;margin-top:0.5rem;display:block">Нажмите "Показатели" → "Сохранить отчет"</span></div>';
+return;
+}
 keys.forEach(key=>{
 const report=savedReports[key];
+if(!report)return;
 const date=new Date(report.date);
 const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
 const timeStr=date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
@@ -624,20 +746,27 @@ item.className='report-list-item';
 item.innerHTML=`<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div></div>`;
 list.appendChild(item);
 });
+}catch(e){console.error('renderReportsList error:',e)}
 };
 
 window.editReport=(key)=>{
+try{
 currentEditingReportKey=key;
 const report=savedReports[key];
+if(!report){alert('Отчет не найден');return}
 const fields=document.getElementById('editReportFields');
-fields.innerHTML=`<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital}" step="0.01"></div>`;
+if(!fields)return;
+fields.innerHTML=`<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital||0}" step="0.01"></div>`;
 editReportModal.classList.add('active');
 haptic('impact','medium');
+}catch(e){console.error('editReport error:',e);alert('Ошибка: '+e.message)}
 };
 
 window.saveEditedReport=()=>{
+try{
 if(!currentEditingReportKey)return;
 const report=savedReports[currentEditingReportKey];
+if(!report)return;
 report.turnover=parseFloat(document.getElementById('editTurnover').value)||0;
 report.revenue=parseFloat(document.getElementById('editRevenue').value)||0;
 report.income=parseFloat(document.getElementById('editIncome').value)||0;
@@ -650,12 +779,14 @@ renderReportsList();
 renderSummary();
 closeEditReport();
 haptic('notification','success');
+}catch(e){console.error('saveEditedReport error:',e);alert('Ошибка: '+e.message)}
 };
 
 window.closeEditReport=()=>{editReportModal.classList.remove('active');currentEditingReportKey=null};
 
 window.deleteReport=(key)=>{
 const report=savedReports[key];
+if(!report)return;
 const date=new Date(report.date);
 const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
 const doDelete=()=>{
@@ -673,7 +804,7 @@ else{if(confirm(`Удалить отчет за ${dateStr}?`))doDelete()}
 // КОРРЕКТИРОВКА
 window.openAdjustment=()=>{
 const account=getActiveAccount();
-if(!account)return;
+if(!account){alert('Нет активного счета');return}
 document.getElementById('adjustmentAccountInfo').textContent=`💼 Счет: ${account.name}`;
 document.getElementById('adjustmentBalanceInput').value='';
 document.getElementById('adjustmentCapitalInput').value='';
@@ -695,6 +826,7 @@ const newCapital=newCapitalStr!==''?parseFloat(newCapitalStr):null;
 if(newBalance===null&&newCapital===null){alert('Введите хотя бы одно значение');return}
 if(newBalance!==null&&(isNaN(newBalance)||newBalance<-999999999||newBalance>999999999)){alert('Некорректный баланс');return}
 if(newCapital!==null&&(isNaN(newCapital)||newCapital<0||newCapital>999999999)){alert('Некорректный капитал');return}
+if(!account.transactions)account.transactions=[];
 if(newBalance!==null&&newBalance!==account.balance){
 const diff=newBalance-account.balance;
 account.balance=newBalance;
@@ -703,7 +835,9 @@ account.transactions.push({type:'adjustment',amount:diff,desc:comment?`${desc}: 
 }
 if(newCapital!==null&&newCapital!==(account.capital||0)){
 account.capital=newCapital;
-if(newBalance===null||newBalance===account.balance){account.transactions.push({type:'adjustment',amount:0,desc:comment?`Корректировка капитала: ${comment}`:'Корректировка капитала',date:new Date().toISOString()})}
+if(newBalance===null||newBalance===account.balance){
+account.transactions.push({type:'adjustment',amount:0,desc:comment?`Корректировка капитала: ${comment}`:'Корректировка капитала',date:new Date().toISOString()});
+}
 }
 haptic('notification','success');
 updateUI();
@@ -714,8 +848,9 @@ closeAdjustment();
 // НАСТРОЙКИ
 window.openSettings=()=>{
 const account=getActiveAccount();
-if(!account)return;
+if(!account){alert('Нет активного счета');return}
 document.getElementById('settingsAccountInfo').textContent=`💼 Настройки для счета: ${account.name}`;
+document.getElementById('accountNameInput').value=account.name;
 document.getElementById('capitalInput').value=account.capital||0;
 document.getElementById('incomePercentInput').value=incomePercent;
 document.getElementById('expensePercentInput').value=expensePercent;
@@ -726,24 +861,30 @@ window.closeSettings=()=>settingsModal.classList.remove('active');
 window.saveSettings=()=>{
 const account=getActiveAccount();
 if(!account)return;
+const newName=document.getElementById('accountNameInput').value.trim();
 const newCapital=parseFloat(document.getElementById('capitalInput').value);
 const newIncomePercent=parseFloat(document.getElementById('incomePercentInput').value);
 const newExpensePercent=parseFloat(document.getElementById('expensePercentInput').value);
+if(!newName){alert('Введите название счета');return}
 if(isNaN(newCapital)||newCapital<0){alert('Некорректный капитал');return}
 if(isNaN(newIncomePercent)||newIncomePercent<0||newIncomePercent>100){alert('Некорректный % доходов');return}
 if(isNaN(newExpensePercent)||newExpensePercent<0||newExpensePercent>100){alert('Некорректный % расходов');return}
+account.name=newName;
 account.capital=newCapital;
 incomePercent=newIncomePercent;
 expensePercent=newExpensePercent;
 document.getElementById('currentIncomePercent').textContent=incomePercent;
 document.getElementById('currentExpensePercent').textContent=expensePercent;
 updateUI();
+renderAccountsSelector();
 saveToServer();
 closeSettings();
 haptic('notification','success');
 };
 
-[indicatorsModal,reportModal,editReportModal,settingsModal,adjustmentModal,addAccountModal].forEach(modal=>{modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')})});
+[indicatorsModal,reportModal,editReportModal,settingsModal,adjustmentModal,addAccountModal].forEach(modal=>{
+if(modal)modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')});
+});
 window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveToServer()});
 window.addEventListener('offline',()=>{isOnline=false;updateSyncStatus('offline')});
 amountEl.addEventListener('keypress',(e)=>{if(e.key==='Enter')addTransaction('expense')});
