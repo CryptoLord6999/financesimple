@@ -51,10 +51,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .settings-input-hint{font-size:0.7rem;color:#a0aec0;margin-top:0.35rem}
 .button-row{display:flex;gap:0.5rem;margin-top:0.75rem}
 .button-row button{flex:1;padding:0.75rem;border-radius:0.875rem;font-weight:500;font-size:0.9rem}
-.month-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;margin-bottom:0.75rem}
-.month-summary-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-.month-summary-label{font-size:0.65rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.15rem}
-.month-summary-value{font-size:1rem;font-weight:700}
 .save-report-btn{width:100%;padding:0.75rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:0.875rem;font-weight:600;margin-top:0.75rem;box-shadow:0 4px 12px rgba(102,126,234,0.3);font-size:0.9rem}
 .save-report-btn:active{transform:scale(0.98)}
 .adjustment-info{background:rgba(102,126,234,0.08);border:1px solid rgba(102,126,234,0.2);border-radius:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#4c51bf;line-height:1.4}
@@ -94,20 +90,16 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </head>
 <body class="flex flex-col h-screen p-6">
 
-<!-- ГЛАВНЫЙ ЭКРАН -->
 <div class="flex-1 flex flex-col justify-center items-center mb-6">
 <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2" id="accountNameLabel">Текущий баланс</p>
 <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
 <div id="syncStatus" class="sync-indicator">подключение...</div>
-
-<!-- 4 карточки: оборот, доход, расход, выручка -->
 <div class="stats-row">
 <div class="stat-card"><div class="stat-label">💹 Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🟢 Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🔴 Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">💰 Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
 </div>
-
 <div class="button-group">
 <button onclick="openReport()" class="px-5 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
 <button onclick="openAdjustment()" class="px-5 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
@@ -115,12 +107,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- Селектор счетов -->
 <div class="glass-card rounded-3xl p-4 mb-4">
 <div class="accounts-selector" id="accountsSelector"></div>
 </div>
 
-<!-- Ввод -->
 <div class="glass-card rounded-3xl p-6 mb-6">
 <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
 <div class="grid grid-cols-2 gap-4">
@@ -129,7 +119,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- История -->
 <div class="flex-1 overflow-y-auto">
 <div class="flex justify-between items-center mb-4">
 <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
@@ -138,12 +127,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div id="history" class="space-y-3 pb-6"></div>
 </div>
 
-<!-- ОТЧЕТ -->
 <div id="reportModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
 <div class="modal-title">📊 Отчет</div>
-
 <div class="summary-card">
 <div class="summary-title">📊 Сводка по всем счетам</div>
 <div class="summary-grid">
@@ -156,21 +143,17 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="summary-item" style="grid-column:span 2"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
 </div>
 </div>
-
 <button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
 <div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(72,187,120,0.08);border-color:rgba(72,187,120,0.3);color:#2f855a">
 ✅ Последний отчет зафиксирован: <span id="fixedDate"></span>
 </div>
-
 <div class="report-divider"></div>
 <div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">📋 Зафиксированные отчеты</div>
 <div id="reportsList"></div>
-
 <button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
 </div>
 </div>
 
-<!-- Редактирование отчета -->
 <div id="editReportModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -184,7 +167,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- Корректировка -->
 <div id="adjustmentModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -211,7 +193,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- Добавление счета -->
 <div id="addAccountModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -227,7 +208,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- Настройки -->
 <div id="settingsModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -277,7 +257,7 @@ const USER_ID=getUserId();
 
 let accounts={};
 let activeAccountId=null;
-let capital=0; // ОБЩИЙ капитал
+let capital=0;
 let savedReports={};
 let isOnline=navigator.onLine;
 let isSyncing=false;
@@ -324,7 +304,6 @@ const MONTH_NAMES_GEN=['января','февраля','марта','апрел�
 
 const getActiveAccount=()=>accounts[activeAccountId];
 
-// Статистика по ОДНОМУ счету
 const calculateAccountStats=(account)=>{
 let totalIncome=0,totalExpense=0;
 if(!account||!account.transactions)return{totalIncome:0,totalExpense:0,revenue:0,turnover:0};
@@ -337,7 +316,6 @@ const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
 return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense};
 };
 
-// Сводка по ВСЕМ счетам
 const calculateAllAccountsStats=()=>{
 let totalIncome=0,totalExpense=0,totalBalance=0;
 Object.values(accounts).forEach(acc=>{
@@ -460,7 +438,6 @@ if(accountsStr){
 accounts=JSON.parse(accountsStr);
 activeAccountId=localStorage.getItem('activeAccountId');
 if(!activeAccountId||!accounts[activeAccountId]){activeAccountId=Object.keys(accounts)[0]}
-// Миграция: убираем capital из счетов
 Object.values(accounts).forEach(acc=>{
 if(acc&&acc.capital!==undefined){
 if(capital===0&&acc.capital>0)capital=acc.capital;
@@ -528,7 +505,6 @@ capital=data.capital||0;
 savedReports=data.savedReports||{};
 incomePercent=data.incomePercent||7;
 expensePercent=data.expensePercent||2.5;
-// Миграция
 Object.values(accounts).forEach(acc=>{if(acc&&acc.capital!==undefined){if(capital===0&&acc.capital>0)capital=acc.capital;delete acc.capital}});
 updateUI();
 renderAccountsSelector();
@@ -568,7 +544,6 @@ if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и истор�
 else{if(confirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Зафиксированные отчеты останутся.`))doReset();else haptic('impact','soft')}
 };
 
-// СЧЕТА
 window.openAddAccount=()=>{
 document.getElementById('newAccountNameInput').value='';
 addAccountModal.classList.add('active');
@@ -606,7 +581,6 @@ if(tg?.showConfirm){tg.showConfirm(`Удалить счет "${account.name}"?\n
 else{if(confirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные счета будут потеряны.`))doDelete();else haptic('impact','soft')}
 };
 
-// ОТЧЕТ
 window.openReport=()=>{
 try{
 renderSummary();
@@ -746,7 +720,6 @@ if(tg?.showConfirm){tg.showConfirm(`Удалить отчет за ${dateStr}?`,
 else{if(confirm(`Удалить отчет за ${dateStr}?`))doDelete()}
 };
 
-// КОРРЕКТИРОВКА
 window.openAdjustment=()=>{
 const account=getActiveAccount();
 if(!account){alert('Нет активного счета');return}
@@ -790,7 +763,6 @@ saveToServer();
 closeAdjustment();
 };
 
-// НАСТРОЙКИ
 window.openSettings=()=>{
 const account=getActiveAccount();
 if(!account){alert('Нет активного счета');return}
@@ -827,7 +799,7 @@ closeSettings();
 haptic('notification','success');
 };
 
-[indicatorsModal,reportModal,editReportModal,settingsModal,adjustmentModal,addAccountModal].forEach(modal=>{
+[reportModal,editReportModal,settingsModal,adjustmentModal,addAccountModal].forEach(modal=>{
 if(modal)modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')});
 });
 window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveToServer()});
