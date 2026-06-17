@@ -23,10 +23,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .sync-indicator.synced{color:#48bb78}
 .sync-indicator.error{color:#f56565}
 .sync-indicator.warning{color:#ed8936}
-.stats-row{display:flex;gap:0.75rem;margin-top:1rem}
-.stat-card{flex:1;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
-.stat-label{font-size:0.65rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em}
-.stat-value{font-size:1.1rem;font-weight:600;margin-top:0.2rem}
+.stats-row{display:flex;gap:0.6rem;margin-top:0.75rem}
+.stat-card{flex:1;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.5rem 0.3rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
+.stat-label{font-size:0.6rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.03em}
+.stat-value{font-size:0.95rem;font-weight:600;margin-top:0.15rem}
 .income-color{color:#48bb78}
 .expense-color{color:#f56565}
 .revenue-color{color:#ed8936}
@@ -90,38 +90,37 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .account-delete-btn:hover{background:rgba(245,101,101,0.2);color:#f56565}
 .add-account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(102,126,234,0.1);border:1px dashed rgba(102,126,234,0.3);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#667eea;cursor:pointer;transition:all 0.2s}
 .add-account-chip:hover{background:rgba(102,126,234,0.2)}
-.account-details-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-.account-details-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid rgba(0,0,0,0.05)}
-.account-details-name{font-size:0.9rem;font-weight:600;color:#2c3e50}
-.account-details-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;font-size:0.7rem}
-.account-details-stat{text-align:center}
-.account-details-stat-label{color:#718096;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.03em}
-.account-details-stat-value{font-weight:600;margin-top:0.15rem;font-size:0.85rem}
 </style>
 </head>
 <body class="flex flex-col h-screen p-6">
 
-<div class="flex-1 flex flex-col justify-center items-center mb-8">
-<p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<div class="flex-1 flex flex-col justify-center items-center mb-6">
+<p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2" id="accountNameLabel">Текущий баланс</p>
 <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
 <div id="syncStatus" class="sync-indicator">подключение...</div>
+
+<!-- 4 карточки: оборот, доход, расход, выручка -->
 <div class="stats-row">
-<div class="stat-card"><div class="stat-label">Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
-<div class="stat-card"><div class="stat-label">Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
-<div class="stat-card"><div class="stat-label">Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">💹 Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">🟢 Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">🔴 Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">💰 Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
 </div>
+
 <div class="button-group">
-<button onclick="openIndicators()" class="px-4 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📈 Показатели</button>
-<button onclick="openReport()" class="px-4 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
-<button onclick="openAdjustment()" class="px-4 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
-<button onclick="openSettings()" class="px-4 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">⚙️ Настройки</button>
+<button onclick="openReport()" class="px-5 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
+<button onclick="openAdjustment()" class="px-5 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
+<button onclick="openSettings()" class="px-5 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">⚙️ Настройки</button>
 </div>
 </div>
 
+<!-- Селектор счетов -->
 <div class="glass-card rounded-3xl p-4 mb-4">
 <div class="accounts-selector" id="accountsSelector"></div>
 </div>
 
+<!-- Ввод -->
 <div class="glass-card rounded-3xl p-6 mb-6">
 <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
 <div class="grid grid-cols-2 gap-4">
@@ -130,6 +129,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- История -->
 <div class="flex-1 overflow-y-auto">
 <div class="flex justify-between items-center mb-4">
 <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
@@ -138,32 +138,12 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div id="history" class="space-y-3 pb-6"></div>
 </div>
 
-<!-- Показатели -->
-<div id="indicatorsModal" class="modal">
-<div class="modal-content">
-<div class="modal-close"></div>
-<div class="modal-title">📈 Показатели</div>
-<div class="adjustment-info" id="indicatorsAccountName">💼 Счет: Основной</div>
-<div class="month-summary">
-<div class="month-summary-card" style="border-color:rgba(66,153,225,0.3)"><div class="month-summary-label">💹 Оборот</div><div class="month-summary-value turnover-color" id="indicatorsTurnover">0 ₽</div></div>
-<div class="month-summary-card" style="border-color:rgba(237,137,54,0.3)"><div class="month-summary-label">💰 Выручка</div><div class="month-summary-value revenue-color" id="indicatorsRevenue">0 ₽</div></div>
-<div class="month-summary-card" style="border-color:rgba(72,187,120,0.3)"><div class="month-summary-label">🟢 Доходы</div><div class="month-summary-value income-color" id="indicatorsTotalIncome">0 ₽</div></div>
-<div class="month-summary-card" style="border-color:rgba(245,101,101,0.3)"><div class="month-summary-label">🔴 Расходы</div><div class="month-summary-value expense-color" id="indicatorsTotalExpense">0 ₽</div></div>
-</div>
-<div class="report-divider"></div>
-<div class="report-item"><div class="report-label">⚪ Текущий баланс</div><div class="report-value" id="indicatorsBalance">0 ₽</div></div>
-<div class="report-item" style="background:rgba(159,122,234,0.1);border-color:rgba(159,122,234,0.3)"><div class="report-label">💜 Капитал</div><div class="report-value capital-color" id="indicatorsCapital">0 ₽</div></div>
-<div class="report-item" style="background:rgba(102,126,234,0.1);border-color:rgba(102,126,234,0.3)"><div class="report-label">🔵 Баланс на сайте</div><div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div></div>
-<button onclick="saveReportFromIndicators()" class="save-report-btn">💾 Сохранить отчет</button>
-<button onclick="closeIndicators()" class="close-modal-btn">Закрыть</button>
-</div>
-</div>
-
-<!-- Отчеты -->
+<!-- ОТЧЕТ -->
 <div id="reportModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title">📊 Отчеты</div>
+<div class="modal-title">📊 Отчет</div>
+
 <div class="summary-card">
 <div class="summary-title">📊 Сводка по всем счетам</div>
 <div class="summary-grid">
@@ -171,16 +151,21 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-value revenue-color" id="summaryRevenue">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-value income-color" id="summaryIncome">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-value" id="summaryBalance">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">⚪ Общий баланс</div><div class="summary-value" id="summaryBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-value capital-color" id="summaryCapital">0 ₽</div></div>
+<div class="summary-item" style="grid-column:span 2"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
 </div>
 </div>
+
+<button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
+<div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(72,187,120,0.08);border-color:rgba(72,187,120,0.3);color:#2f855a">
+✅ Последний отчет зафиксирован: <span id="fixedDate"></span>
+</div>
+
 <div class="report-divider"></div>
-<div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">💼 Детализация по счетам</div>
-<div id="accountsDetails"></div>
-<div class="report-divider"></div>
-<div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">📋 Сохраненные отчеты</div>
+<div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">📋 Зафиксированные отчеты</div>
 <div id="reportsList"></div>
+
 <button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
 </div>
 </div>
@@ -206,12 +191,12 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="modal-title">✏️ Корректировка</div>
 <div class="adjustment-info" id="adjustmentAccountInfo">💼 Счет: Основной</div>
 <div class="settings-input-group">
-<label class="settings-input-label">⚪ Новый баланс (₽)</label>
+<label class="settings-input-label">⚪ Новый баланс счета (₽)</label>
 <input type="number" id="adjustmentBalanceInput" class="settings-input" placeholder="0" step="0.01">
 <div class="settings-input-hint">Текущий: <span id="currentBalanceHint">0 ₽</span></div>
 </div>
 <div class="settings-input-group">
-<label class="settings-input-label">💜 Новый капитал (₽)</label>
+<label class="settings-input-label">💜 Общий капитал (₽)</label>
 <input type="number" id="adjustmentCapitalInput" class="settings-input" placeholder="0" step="0.01">
 <div class="settings-input-hint">Текущий: <span id="currentCapitalHint">0 ₽</span></div>
 </div>
@@ -253,15 +238,16 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <input type="text" id="accountNameInput" class="settings-input" placeholder="Основной" style="font-size:1rem;text-align:left">
 </div>
 <div class="settings-input-group">
-<label class="settings-input-label">💜 Капитал счета (₽)</label>
+<label class="settings-input-label">💜 Общий капитал (₽)</label>
 <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
+<div class="settings-input-hint">Единый капитал для всех счетов</div>
 </div>
 <div class="settings-input-group">
-<label class="settings-input-label">% выручки от доходов (общий)</label>
+<label class="settings-input-label">% выручки от доходов</label>
 <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
 </div>
 <div class="settings-input-group">
-<label class="settings-input-label">% выручки от расходов (общий)</label>
+<label class="settings-input-label">% выручки от расходов</label>
 <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
 </div>
 <div class="report-divider"></div>
@@ -291,6 +277,7 @@ const USER_ID=getUserId();
 
 let accounts={};
 let activeAccountId=null;
+let capital=0; // ОБЩИЙ капитал
 let savedReports={};
 let isOnline=navigator.onLine;
 let isSyncing=false;
@@ -305,10 +292,11 @@ const balanceEl=document.getElementById('balance');
 const amountEl=document.getElementById('amount');
 const historyEl=document.getElementById('history');
 const syncStatusEl=document.getElementById('syncStatus');
+const totalTurnoverEl=document.getElementById('totalTurnover');
 const totalIncomeEl=document.getElementById('totalIncome');
 const totalExpenseEl=document.getElementById('totalExpense');
 const totalRevenueEl=document.getElementById('totalRevenue');
-const indicatorsModal=document.getElementById('indicatorsModal');
+const accountNameLabel=document.getElementById('accountNameLabel');
 const reportModal=document.getElementById('reportModal');
 const editReportModal=document.getElementById('editReportModal');
 const settingsModal=document.getElementById('settingsModal');
@@ -336,30 +324,33 @@ const MONTH_NAMES_GEN=['января','февраля','марта','апрел�
 
 const getActiveAccount=()=>accounts[activeAccountId];
 
+// Статистика по ОДНОМУ счету
 const calculateAccountStats=(account)=>{
 let totalIncome=0,totalExpense=0;
-if(!account||!account.transactions)return{totalIncome:0,totalExpense:0,revenue:0,turnover:0,siteBalance:0};
+if(!account||!account.transactions)return{totalIncome:0,totalExpense:0,revenue:0,turnover:0};
 account.transactions.forEach((t)=>{
 if(!t||typeof t.amount!=='number')return;
 if(t.type==='income')totalIncome+=t.amount;
 else if(t.type==='expense')totalExpense+=t.amount;
 });
 const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
-return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense,siteBalance:(account.capital||0)-account.balance};
+return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense};
 };
 
+// Сводка по ВСЕМ счетам
 const calculateAllAccountsStats=()=>{
-let totalIncome=0,totalExpense=0,totalBalance=0,totalCapital=0;
+let totalIncome=0,totalExpense=0,totalBalance=0;
 Object.values(accounts).forEach(acc=>{
 if(!acc)return;
 const stats=calculateAccountStats(acc);
 totalIncome+=stats.totalIncome||0;
 totalExpense+=stats.totalExpense||0;
 totalBalance+=acc.balance||0;
-totalCapital+=(acc.capital||0);
 });
 const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
-return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense,siteBalance:totalCapital-totalBalance,totalBalance,totalCapital};
+const turnover=totalIncome+totalExpense;
+const siteBalance=capital-totalBalance;
+return{totalIncome,totalExpense,revenue,turnover,totalBalance,siteBalance};
 };
 
 const updateSyncStatus=(status)=>{
@@ -388,10 +379,7 @@ const deleteBtn=document.createElement('span');
 deleteBtn.className='account-delete-btn';
 deleteBtn.textContent='×';
 deleteBtn.title='Удалить счет';
-deleteBtn.onclick=(e)=>{
-e.stopPropagation();
-deleteAccount(accId);
-};
+deleteBtn.onclick=(e)=>{e.stopPropagation();deleteAccount(accId);};
 chip.appendChild(deleteBtn);
 }
 selector.appendChild(chip);
@@ -416,18 +404,23 @@ const updateUI=()=>{
 const account=getActiveAccount();
 if(!account){
 balanceEl.textContent='0 ₽';
+totalTurnoverEl.textContent='0 ₽';
 totalIncomeEl.textContent='0 ₽';
 totalExpenseEl.textContent='0 ₽';
 totalRevenueEl.textContent='0 ₽';
+accountNameLabel.textContent='Текущий баланс';
 historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет счетов</p>';
 resetBtn.style.display='none';
 return;
 }
 balanceEl.textContent=formatMoney(account.balance);
+accountNameLabel.textContent=`💼 ${account.name}`;
 const stats=calculateAccountStats(account);
+totalTurnoverEl.textContent=formatMoney(stats.turnover);
 totalIncomeEl.textContent=formatMoney(stats.totalIncome);
 totalExpenseEl.textContent=formatMoney(stats.totalExpense);
 totalRevenueEl.textContent=formatMoney(stats.revenue);
+
 historyEl.innerHTML='';
 if(!account.transactions||account.transactions.length===0){
 historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
@@ -455,6 +448,7 @@ saveToLocal();
 const saveToLocal=()=>{try{
 localStorage.setItem('accounts',JSON.stringify(accounts));
 localStorage.setItem('activeAccountId',activeAccountId);
+localStorage.setItem('capital',capital.toString());
 localStorage.setItem('savedReports',JSON.stringify(savedReports));
 localStorage.setItem('incomePercent',incomePercent.toString());
 localStorage.setItem('expensePercent',expensePercent.toString());
@@ -466,20 +460,29 @@ if(accountsStr){
 accounts=JSON.parse(accountsStr);
 activeAccountId=localStorage.getItem('activeAccountId');
 if(!activeAccountId||!accounts[activeAccountId]){activeAccountId=Object.keys(accounts)[0]}
+// Миграция: убираем capital из счетов
+Object.values(accounts).forEach(acc=>{
+if(acc&&acc.capital!==undefined){
+if(capital===0&&acc.capital>0)capital=acc.capital;
+delete acc.capital;
+}
+});
 }else{
 const oldBalance=parseFloat(localStorage.getItem('balance'))||0;
 const oldTransactions=JSON.parse(localStorage.getItem('transactions')||'[]');
 const oldCapital=parseFloat(localStorage.getItem('capital'))||0;
 const defaultId='acc_'+Date.now();
-accounts={[defaultId]:{id:defaultId,name:'Основной',balance:oldBalance,transactions:oldTransactions,capital:oldCapital,createdAt:new Date().toISOString()}};
+accounts={[defaultId]:{id:defaultId,name:'Основной',balance:oldBalance,transactions:oldTransactions,createdAt:new Date().toISOString()}};
 activeAccountId=defaultId;
+capital=oldCapital;
 localStorage.removeItem('balance');
 localStorage.removeItem('transactions');
-localStorage.removeItem('capital');
 }
 savedReports=JSON.parse(localStorage.getItem('savedReports'))||{};
 incomePercent=parseFloat(localStorage.getItem('incomePercent'))||7;
 expensePercent=parseFloat(localStorage.getItem('expensePercent'))||2.5;
+const savedCapital=localStorage.getItem('capital');
+if(savedCapital!==null&&accountsStr)capital=parseFloat(savedCapital)||0;
 return true;
 }catch(e){console.error('Load error:',e);return false}};
 
@@ -496,7 +499,7 @@ if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
 userRef=firebase.database().ref(`users/${USER_ID}`);
 useFirebase=true;
 return true;
-}catch(e){console.error('Firebase init error:',e);useFirebase=false;return false}};
+}catch(e){useFirebase=false;return false}};
 
 const saveToServer=()=>{
 if(!useFirebase||!isOnline){updateSyncStatus(useFirebase?'offline':'local');return}
@@ -507,9 +510,9 @@ isSyncing=true;
 updateSyncStatus('syncing');
 try{
 const stats=calculateAllAccountsStats();
-await userRef.set({accounts,activeAccountId,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,lastUpdated:new Date().toISOString()});
+await userRef.set({accounts,activeAccountId,capital,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,lastUpdated:new Date().toISOString()});
 updateSyncStatus('synced');
-}catch(e){console.error('Save error:',e);updateSyncStatus('error')}finally{isSyncing=false}
+}catch(e){updateSyncStatus('error')}finally{isSyncing=false}
 },500);
 };
 
@@ -521,14 +524,17 @@ const data=snapshot.val();
 if(data&&data.accounts){
 accounts=data.accounts;
 activeAccountId=data.activeAccountId||Object.keys(accounts)[0];
+capital=data.capital||0;
 savedReports=data.savedReports||{};
 incomePercent=data.incomePercent||7;
 expensePercent=data.expensePercent||2.5;
+// Миграция
+Object.values(accounts).forEach(acc=>{if(acc&&acc.capital!==undefined){if(capital===0&&acc.capital>0)capital=acc.capital;delete acc.capital}});
 updateUI();
 renderAccountsSelector();
 updateSyncStatus('synced');
 }else{loadFromLocal();updateUI();renderAccountsSelector();if(isOnline)saveToServer()}
-}).catch((e)=>{console.error('Load error:',e);loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('offline')});
+}).catch(()=>{loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('offline')});
 };
 
 const addTransaction=(type)=>{
@@ -558,8 +564,8 @@ updateUI();
 saveToLocal();
 saveToServer();
 };
-if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Сохраненные отчеты останутся.`,function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
-else{if(confirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Сохраненные отчеты останутся.`))doReset();else haptic('impact','soft')}
+if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Зафиксированные отчеты останутся.`,function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
+else{if(confirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Зафиксированные отчеты останутся.`))doReset();else haptic('impact','soft')}
 };
 
 // СЧЕТА
@@ -573,7 +579,7 @@ window.addAccount=()=>{
 const name=document.getElementById('newAccountNameInput').value.trim();
 if(!name){alert('Введите название счета');return}
 const id='acc_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
-accounts[id]={id,name,balance:0,transactions:[],capital:0,createdAt:new Date().toISOString()};
+accounts[id]={id,name,balance:0,transactions:[],createdAt:new Date().toISOString()};
 activeAccountId=id;
 updateUI();
 renderAccountsSelector();
@@ -582,113 +588,33 @@ closeAddAccount();
 haptic('notification','success');
 };
 
-// УДАЛЕНИЕ СЧЕТА
 window.deleteAccount=(accountId)=>{
 const account=accounts[accountId];
 if(!account)return;
 const accountKeys=Object.keys(accounts);
-if(accountKeys.length<=1){
-alert('Нельзя удалить единственный счет');
-return;
-}
+if(accountKeys.length<=1){alert('Нельзя удалить единственный счет');return}
 const doDelete=()=>{
 delete accounts[accountId];
-if(activeAccountId===accountId){
-activeAccountId=Object.keys(accounts)[0];
-}
+if(activeAccountId===accountId)activeAccountId=Object.keys(accounts)[0];
 updateUI();
 renderAccountsSelector();
 saveToLocal();
 saveToServer();
 haptic('notification','success');
 };
-if(tg?.showConfirm){
-tg.showConfirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные этого счета будут потеряны.\n💾 Сохраненные отчеты останутся.`,function(confirmed){
-if(confirmed)doDelete();else haptic('impact','soft');
-});
-}else{
-if(confirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные этого счета будут потеряны.\n💾 Сохраненные отчеты останутся.`))doDelete();
-else haptic('impact','soft');
-}
+if(tg?.showConfirm){tg.showConfirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные счета будут потеряны.`,function(confirmed){if(confirmed)doDelete();else haptic('impact','soft')})}
+else{if(confirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные счета будут потеряны.`))doDelete();else haptic('impact','soft')}
 };
 
-// ПОКАЗАТЕЛИ
-window.openIndicators=()=>{
-try{
-const account=getActiveAccount();
-if(!account){alert('Нет активного счета');return}
-const stats=calculateAccountStats(account);
-document.getElementById('indicatorsAccountName').textContent=`💼 Счет: ${account.name}`;
-document.getElementById('indicatorsTurnover').textContent=formatMoney(stats.turnover);
-document.getElementById('indicatorsRevenue').textContent=formatMoney(stats.revenue);
-document.getElementById('indicatorsBalance').textContent=formatMoney(account.balance);
-document.getElementById('indicatorsCapital').textContent=formatMoney(account.capital||0);
-document.getElementById('indicatorsSiteBalance').textContent=formatMoney(stats.siteBalance);
-document.getElementById('indicatorsTotalIncome').textContent=formatMoney(stats.totalIncome);
-document.getElementById('indicatorsTotalExpense').textContent=formatMoney(stats.totalExpense);
-indicatorsModal.classList.add('active');
-haptic('impact','medium');
-}catch(e){
-console.error('openIndicators error:',e);
-alert('Ошибка открытия показателей: '+e.message);
-}
-};
-window.closeIndicators=()=>indicatorsModal.classList.remove('active');
-
-window.saveReportFromIndicators=()=>{
-try{
-const allStats=calculateAllAccountsStats();
-const now=new Date();
-const key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);
-const accountsSnapshot={};
-Object.values(accounts).forEach(acc=>{
-if(!acc)return;
-const stats=calculateAccountStats(acc);
-accountsSnapshot[acc.id]={
-name:acc.name,
-balance:acc.balance||0,
-capital:acc.capital||0,
-turnover:stats.turnover||0,
-totalIncome:stats.totalIncome||0,
-totalExpense:stats.totalExpense||0,
-revenue:stats.revenue||0,
-siteBalance:stats.siteBalance||0
-};
-});
-savedReports[key]={
-date:now.toISOString(),
-turnover:allStats.turnover||0,
-income:allStats.totalIncome||0,
-expense:allStats.totalExpense||0,
-revenue:allStats.revenue||0,
-balance:allStats.totalBalance||0,
-capital:allStats.totalCapital||0,
-siteBalance:allStats.siteBalance||0,
-accounts:accountsSnapshot
-};
-saveToLocal();
-saveToServer();
-haptic('notification','success');
-alert('✅ Отчет сохранен!');
-closeIndicators();
-}catch(e){
-console.error('saveReportFromIndicators error:',e);
-alert('Ошибка сохранения отчета: '+e.message);
-}
-};
-
-// ОТЧЕТЫ
+// ОТЧЕТ
 window.openReport=()=>{
 try{
-renderReportsList();
 renderSummary();
-renderAccountsDetails();
+renderReportsList();
+checkLastFixed();
 reportModal.classList.add('active');
 haptic('impact','medium');
-}catch(e){
-console.error('openReport error:',e);
-alert('Ошибка открытия отчета: '+e.message);
-}
+}catch(e){console.error('openReport error:',e);alert('Ошибка: '+e.message)}
 };
 window.closeReport=()=>reportModal.classList.remove('active');
 
@@ -700,29 +626,46 @@ document.getElementById('summaryRevenue').textContent=formatMoney(stats.revenue)
 document.getElementById('summaryIncome').textContent=formatMoney(stats.totalIncome);
 document.getElementById('summaryExpense').textContent=formatMoney(stats.totalExpense);
 document.getElementById('summaryBalance').textContent=formatMoney(stats.totalBalance);
-document.getElementById('summaryCapital').textContent=formatMoney(stats.totalCapital);
+document.getElementById('summaryCapital').textContent=formatMoney(capital);
+document.getElementById('summarySiteBalance').textContent=formatMoney(stats.siteBalance);
 }catch(e){console.error('renderSummary error:',e)}
 };
 
-const renderAccountsDetails=()=>{
+window.fixReport=()=>{
 try{
-const container=document.getElementById('accountsDetails');
-if(!container)return;
-container.innerHTML='';
-const accountValues=Object.values(accounts);
-if(accountValues.length===0){
-container.innerHTML='<div class="empty-reports-message">Нет счетов</div>';
-return;
+const stats=calculateAllAccountsStats();
+const now=new Date();
+const key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);
+savedReports[key]={
+date:now.toISOString(),
+turnover:stats.turnover||0,
+income:stats.totalIncome||0,
+expense:stats.totalExpense||0,
+revenue:stats.revenue||0,
+balance:stats.totalBalance||0,
+capital:capital||0,
+siteBalance:stats.siteBalance||0
+};
+saveToLocal();
+saveToServer();
+renderReportsList();
+checkLastFixed();
+haptic('notification','success');
+alert('✅ Отчет зафиксирован!');
+}catch(e){console.error('fixReport error:',e);alert('Ошибка: '+e.message)}
+};
+
+const checkLastFixed=()=>{
+const keys=Object.keys(savedReports).sort().reverse();
+const indicator=document.getElementById('fixedIndicator');
+if(keys.length>0){
+const last=savedReports[keys[0]];
+const date=new Date(last.date);
+document.getElementById('fixedDate').textContent=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}, ${date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
+indicator.style.display='block';
+}else{
+indicator.style.display='none';
 }
-accountValues.forEach(acc=>{
-if(!acc)return;
-const stats=calculateAccountStats(acc);
-const card=document.createElement('div');
-card.className='account-details-card';
-card.innerHTML=`<div class="account-details-header"><div class="account-details-name">💼 ${acc.name}</div></div><div class="account-details-stats"><div class="account-details-stat"><div class="account-details-stat-label">💹 Оборот</div><div class="account-details-stat-value turnover-color">${formatMoneyShort(stats.turnover)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">🟢 Доходы</div><div class="account-details-stat-value income-color">${formatMoneyShort(stats.totalIncome)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">🔴 Расходы</div><div class="account-details-stat-value expense-color">${formatMoneyShort(stats.totalExpense)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">💰 Выручка</div><div class="account-details-stat-value revenue-color">${formatMoneyShort(stats.revenue)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">⚪ Баланс</div><div class="account-details-stat-value">${formatMoneyShort(acc.balance)}</div></div><div class="account-details-stat"><div class="account-details-stat-label">💜 Капитал</div><div class="account-details-stat-value capital-color">${formatMoneyShort(acc.capital||0)}</div></div></div>`;
-container.appendChild(card);
-});
-}catch(e){console.error('renderAccountsDetails error:',e)}
 };
 
 const renderReportsList=()=>{
@@ -732,7 +675,7 @@ if(!list)return;
 list.innerHTML='';
 const keys=Object.keys(savedReports).sort().reverse();
 if(keys.length===0){
-list.innerHTML='<div class="empty-reports-message">📭 Нет сохраненных отчетов<br><span style="font-size:0.75rem;margin-top:0.5rem;display:block">Нажмите "Показатели" → "Сохранить отчет"</span></div>';
+list.innerHTML='<div class="empty-reports-message">📭 Нет зафиксированных отчетов<br><span style="font-size:0.75rem;margin-top:0.5rem;display:block">Нажмите "📌 Зафиксировать отчет"</span></div>';
 return;
 }
 keys.forEach(key=>{
@@ -743,7 +686,7 @@ const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getF
 const timeStr=date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
 const item=document.createElement('div');
 item.className='report-list-item';
-item.innerHTML=`<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div></div>`;
+item.innerHTML=`<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
 list.appendChild(item);
 });
 }catch(e){console.error('renderReportsList error:',e)}
@@ -756,7 +699,7 @@ const report=savedReports[key];
 if(!report){alert('Отчет не найден');return}
 const fields=document.getElementById('editReportFields');
 if(!fields)return;
-fields.innerHTML=`<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital||0}" step="0.01"></div>`;
+fields.innerHTML=`<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital||0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance||0}" step="0.01"></div>`;
 editReportModal.classList.add('active');
 haptic('impact','medium');
 }catch(e){console.error('editReport error:',e);alert('Ошибка: '+e.message)}
@@ -773,6 +716,7 @@ report.income=parseFloat(document.getElementById('editIncome').value)||0;
 report.expense=parseFloat(document.getElementById('editExpense').value)||0;
 report.balance=parseFloat(document.getElementById('editBalance').value)||0;
 report.capital=parseFloat(document.getElementById('editCapital').value)||0;
+report.siteBalance=parseFloat(document.getElementById('editSiteBalance').value)||0;
 saveToLocal();
 saveToServer();
 renderReportsList();
@@ -795,6 +739,7 @@ saveToLocal();
 saveToServer();
 renderReportsList();
 renderSummary();
+checkLastFixed();
 haptic('notification','success');
 };
 if(tg?.showConfirm){tg.showConfirm(`Удалить отчет за ${dateStr}?`,function(confirmed){if(confirmed)doDelete()})}
@@ -810,7 +755,7 @@ document.getElementById('adjustmentBalanceInput').value='';
 document.getElementById('adjustmentCapitalInput').value='';
 document.getElementById('adjustmentCommentInput').value='';
 document.getElementById('currentBalanceHint').textContent=formatMoney(account.balance);
-document.getElementById('currentCapitalHint').textContent=formatMoney(account.capital||0);
+document.getElementById('currentCapitalHint').textContent=formatMoney(capital);
 adjustmentModal.classList.add('active');
 haptic('impact','medium');
 };
@@ -830,11 +775,11 @@ if(!account.transactions)account.transactions=[];
 if(newBalance!==null&&newBalance!==account.balance){
 const diff=newBalance-account.balance;
 account.balance=newBalance;
-const desc=diff>=0?'Корректировка (+)':'Корректировка (−)';
+const desc=diff>=0?'Корректировка баланса (+)':'Корректировка баланса (−)';
 account.transactions.push({type:'adjustment',amount:diff,desc:comment?`${desc}: ${comment}`:desc,date:new Date().toISOString()});
 }
-if(newCapital!==null&&newCapital!==(account.capital||0)){
-account.capital=newCapital;
+if(newCapital!==null&&newCapital!==capital){
+capital=newCapital;
 if(newBalance===null||newBalance===account.balance){
 account.transactions.push({type:'adjustment',amount:0,desc:comment?`Корректировка капитала: ${comment}`:'Корректировка капитала',date:new Date().toISOString()});
 }
@@ -851,7 +796,7 @@ const account=getActiveAccount();
 if(!account){alert('Нет активного счета');return}
 document.getElementById('settingsAccountInfo').textContent=`💼 Настройки для счета: ${account.name}`;
 document.getElementById('accountNameInput').value=account.name;
-document.getElementById('capitalInput').value=account.capital||0;
+document.getElementById('capitalInput').value=capital;
 document.getElementById('incomePercentInput').value=incomePercent;
 document.getElementById('expensePercentInput').value=expensePercent;
 settingsModal.classList.add('active');
@@ -870,7 +815,7 @@ if(isNaN(newCapital)||newCapital<0){alert('Некорректный капита
 if(isNaN(newIncomePercent)||newIncomePercent<0||newIncomePercent>100){alert('Некорректный % доходов');return}
 if(isNaN(newExpensePercent)||newExpensePercent<0||newExpensePercent>100){alert('Некорректный % расходов');return}
 account.name=newName;
-account.capital=newCapital;
+capital=newCapital;
 incomePercent=newIncomePercent;
 expensePercent=newExpensePercent;
 document.getElementById('currentIncomePercent').textContent=incomePercent;
