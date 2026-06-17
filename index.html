@@ -125,7 +125,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 2rem 2rem 0 0;
             padding: 2rem 1.5rem 3rem;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
             animation: slideUp 0.3s ease-out;
         }
@@ -206,6 +206,144 @@
         .capital-color { color: #a855f7; }
         .turnover-color { color: #06b6d4; }
         .site-balance-color { color: #3b82f6; }
+        
+        /* Стили для месячного отчета */
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .month-nav-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-radius: 0.75rem;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+        }
+        .month-nav-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        .month-nav-btn:active {
+            transform: scale(0.95);
+        }
+        .month-nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            text-transform: capitalize;
+        }
+        .today-btn {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .today-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        .month-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .month-summary-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        .month-summary-label {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        .month-summary-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .days-table {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .days-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .days-table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .days-table-row:last-child {
+            border-bottom: none;
+        }
+        .days-table-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .day-date {
+            color: #fafafa;
+            font-weight: 500;
+        }
+        .day-date-sub {
+            font-size: 0.7rem;
+            color: #71717a;
+            font-weight: 400;
+        }
+        .day-income {
+            color: #10b981;
+            font-weight: 600;
+            text-align: right;
+        }
+        .day-expense {
+            color: #ef4444;
+            font-weight: 600;
+            text-align: right;
+        }
+        .day-revenue {
+            color: #f59e0b;
+            font-weight: 600;
+            text-align: right;
+        }
+        .no-data-message {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #71717a;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -280,14 +418,12 @@
             
             <h2 class="text-2xl font-bold text-white mb-6 text-center">📈 Финансовые показатели</h2>
             
-            <!-- Общий оборот -->
             <div class="report-item" style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
                 <div class="report-label">💹 Общий оборот</div>
                 <div class="report-value turnover-color" id="indicatorsTurnover">0 ₽</div>
                 <div class="text-xs text-zinc-500 mt-2">Сумма всех доходов и расходов</div>
             </div>
 
-            <!-- Выручка -->
             <div class="report-item">
                 <div class="report-label">💰 Выручка</div>
                 <div class="report-value revenue-color" id="indicatorsRevenue">0 ₽</div>
@@ -295,20 +431,17 @@
 
             <div class="report-divider"></div>
 
-            <!-- Текущий баланс -->
             <div class="report-item">
                 <div class="report-label">⚪ Текущий баланс</div>
                 <div class="report-value text-white" id="indicatorsBalance">0 ₽</div>
             </div>
 
-            <!-- Капитал -->
             <div class="report-item" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
                 <div class="report-label">💜 Капитал</div>
                 <div class="report-value capital-color" id="indicatorsCapital">0 ₽</div>
                 <div class="text-xs text-zinc-500 mt-2">Введенный вручную начальный капитал</div>
             </div>
 
-            <!-- Баланс на сайте -->
             <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
                 <div class="report-label">🔵 Баланс на сайте</div>
                 <div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div>
@@ -317,7 +450,6 @@
 
             <div class="report-divider"></div>
 
-            <!-- Доходы и расходы -->
             <div class="report-item">
                 <div class="report-label">🟢 Всего доходов</div>
                 <div class="report-value income-color" id="indicatorsTotalIncome">0 ₽</div>
@@ -328,75 +460,62 @@
                 <div class="report-value expense-color" id="indicatorsTotalExpense">0 ₽</div>
             </div>
 
-            <!-- Кнопка закрытия -->
             <button onclick="closeIndicators()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
         </div>
     </div>
 
-    <!-- Модальное окно отчета -->
+    <!-- Модальное окно месячного отчета -->
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
             
-            <h2 class="text-2xl font-bold text-white mb-6 text-center">Финансовый отчет</h2>
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">📊 Месячный отчет</h2>
             
-            <!-- Основные показатели -->
-            <div class="report-item">
-                <div class="report-label">Текущий баланс</div>
-                <div class="report-value text-white" id="reportBalance">0 ₽</div>
+            <!-- Навигация по месяцам -->
+            <div class="month-nav">
+                <button onclick="changeMonth(-1)" class="month-nav-btn">←</button>
+                <div style="text-align: center;">
+                    <div class="month-nav-title" id="reportMonthTitle">Январь 2025</div>
+                    <button onclick="goToCurrentMonth()" class="today-btn mt-1">Сегодня</button>
+                </div>
+                <button onclick="changeMonth(1)" class="month-nav-btn">→</button>
             </div>
 
-            <div class="report-divider"></div>
-
-            <!-- Доход -->
-            <div class="report-item">
-                <div class="report-label">Всего доходов</div>
-                <div class="report-value income-color" id="reportTotalIncome">0 ₽</div>
+            <!-- Итоги за месяц -->
+            <div class="month-summary">
+                <div class="month-summary-card" style="border-color: rgba(6, 182, 212, 0.3);">
+                    <div class="month-summary-label">💹 Оборот</div>
+                    <div class="month-summary-value turnover-color" id="monthTurnover">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(245, 158, 11, 0.3);">
+                    <div class="month-summary-label">💰 Выручка</div>
+                    <div class="month-summary-value revenue-color" id="monthRevenue">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(16, 185, 129, 0.3);">
+                    <div class="month-summary-label">🟢 Доходы</div>
+                    <div class="month-summary-value income-color" id="monthIncome">0 ₽</div>
+                </div>
+                <div class="month-summary-card" style="border-color: rgba(239, 68, 68, 0.3);">
+                    <div class="month-summary-label">🔴 Расходы</div>
+                    <div class="month-summary-value expense-color" id="monthExpense">0 ₽</div>
+                </div>
             </div>
 
-            <!-- Расход -->
-            <div class="report-item">
-                <div class="report-label">Всего расходов</div>
-                <div class="report-value expense-color" id="reportTotalExpense">0 ₽</div>
+            <!-- Таблица по дням -->
+            <div class="days-table">
+                <div class="days-table-header">
+                    <div>День</div>
+                    <div style="text-align: right;">Доход</div>
+                    <div style="text-align: right;">Расход</div>
+                    <div style="text-align: right;">Выручка</div>
+                </div>
+                <div id="daysTableBody">
+                    <!-- Сюда добавляются строки по дням -->
+                </div>
             </div>
 
-            <div class="report-divider"></div>
-
-            <!-- Выручка по формуле -->
-            <div class="report-item">
-                <div class="report-label">Выручка от доходов</div>
-                <div class="report-value revenue-color" id="reportIncomeRevenue">0 ₽</div>
-            </div>
-
-            <div class="report-item">
-                <div class="report-label">Выручка от расходов</div>
-                <div class="report-value revenue-color" id="reportExpenseRevenue">0 ₽</div>
-            </div>
-
-            <div class="report-divider"></div>
-
-            <!-- Общая выручка -->
-            <div class="report-item" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
-                <div class="report-label">Общая выручка</div>
-                <div class="report-value revenue-color" id="reportTotalRevenue">0 ₽</div>
-            </div>
-
-            <div class="report-divider"></div>
-
-            <!-- Статистика операций -->
-            <div class="report-item">
-                <div class="report-label">Количество операций</div>
-                <div class="report-value text-white" id="reportTransactionCount">0</div>
-            </div>
-
-            <div class="report-item">
-                <div class="report-label">Средняя сумма операции</div>
-                <div class="report-value text-white" id="reportAverageAmount">0 ₽</div>
-            </div>
-
-            <!-- Кнопка закрытия -->
             <button onclick="closeReport()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
@@ -410,21 +529,18 @@
             
             <h2 class="text-2xl font-bold text-white mb-6 text-center">⚙️ Настройки</h2>
             
-            <!-- Начальный капитал -->
             <div class="settings-input-group">
                 <label class="settings-input-label">💰 Начальный капитал (₽)</label>
                 <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
                 <div class="text-xs text-zinc-500 mt-2">Введите сумму начального капитала</div>
             </div>
 
-            <!-- Процент от доходов -->
             <div class="settings-input-group">
                 <label class="settings-input-label">Процент выручки от доходов (%)</label>
                 <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
                 <div class="text-xs text-zinc-500 mt-2">Пример: 7 = 7% от всех доходов</div>
             </div>
 
-            <!-- Процент от расходов -->
             <div class="settings-input-group">
                 <label class="settings-input-label">Процент выручки от расходов (%)</label>
                 <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
@@ -433,7 +549,6 @@
 
             <div class="report-divider"></div>
 
-            <!-- Информация -->
             <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
                 <div class="report-label">Текущая формула</div>
                 <div class="text-sm text-blue-400 mt-2">
@@ -441,7 +556,6 @@
                 </div>
             </div>
 
-            <!-- Кнопки -->
             <div class="button-row">
                 <button onclick="saveSettings()" class="px-4 py-3 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                     ✓ Сохранить
@@ -479,6 +593,9 @@
         let saveTimeout = null;
         let useFirebase = false;
         let userRef = null;
+        
+        // Состояние месячного отчета
+        let reportDate = new Date(); // Текущий отображаемый месяц
 
         // ===== DOM ЭЛЕМЕНТЫ =====
         const balanceEl = document.getElementById('balance');
@@ -502,6 +619,17 @@
             }).format(num);
         };
 
+        const formatMoneyShort = (num) => {
+            if (num === 0) return '0';
+            if (Math.abs(num) >= 1000000) {
+                return (num / 1000000).toFixed(1).replace('.0', '') + 'М';
+            }
+            if (Math.abs(num) >= 1000) {
+                return (num / 1000).toFixed(1).replace('.0', '') + 'К';
+            }
+            return Math.round(num).toString();
+        };
+
         const haptic = (type, style = 'light') => {
             if (tg?.HapticFeedback) {
                 try {
@@ -515,6 +643,12 @@
                 }
             }
         };
+
+        const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                             'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const MONTH_NAMES_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                                  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+        const DAY_NAMES = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
 
         const calculateStats = () => {
             let totalIncome = 0;
@@ -535,6 +669,50 @@
             const siteBalance = capital - balance;
 
             return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue, turnover, siteBalance };
+        };
+
+        // Расчет статистики за конкретный месяц
+        const calculateMonthStats = (year, month) => {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            const daysData = {}; // { 'YYYY-MM-DD': { income, expense } }
+
+            transactions.forEach((t) => {
+                const date = new Date(t.date);
+                if (isNaN(date.getTime())) return;
+                
+                if (date.getFullYear() === year && date.getMonth() === month) {
+                    const dayKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                    
+                    if (!daysData[dayKey]) {
+                        daysData[dayKey] = { date: date, income: 0, expense: 0 };
+                    }
+                    
+                    if (t.type === 'income') {
+                        totalIncome += t.amount;
+                        daysData[dayKey].income += t.amount;
+                    } else {
+                        totalExpense += t.amount;
+                        daysData[dayKey].expense += t.amount;
+                    }
+                }
+            });
+
+            const incomeRevenue = totalIncome * (incomePercent / 100);
+            const expenseRevenue = totalExpense * (expensePercent / 100);
+            const revenue = incomeRevenue + expenseRevenue;
+            const turnover = totalIncome + totalExpense;
+
+            // Рассчитываем выручку для каждого дня
+            Object.keys(daysData).forEach(key => {
+                const day = daysData[key];
+                day.revenue = day.income * (incomePercent / 100) + day.expense * (expensePercent / 100);
+            });
+
+            // Сортируем дни по дате
+            const sortedDays = Object.values(daysData).sort((a, b) => a.date - b.date);
+
+            return { totalIncome, totalExpense, revenue, turnover, days: sortedDays };
         };
 
         const updateSyncStatus = (status) => {
@@ -801,6 +979,7 @@
             }
         };
 
+        // ===== ПОКАЗАТЕЛИ =====
         window.openIndicators = () => {
             const stats = calculateStats();
 
@@ -820,21 +999,57 @@
             indicatorsModal.classList.remove('active');
         };
 
+        // ===== МЕСЯЧНЫЙ ОТЧЕТ =====
+        const renderMonthReport = () => {
+            const year = reportDate.getFullYear();
+            const month = reportDate.getMonth();
+
+            // Заголовок месяца
+            document.getElementById('reportMonthTitle').textContent = 
+                `${MONTH_NAMES[month]} ${year}`;
+
+            // Статистика за месяц
+            const stats = calculateMonthStats(year, month);
+            document.getElementById('monthTurnover').textContent = formatMoney(stats.turnover);
+            document.getElementById('monthRevenue').textContent = formatMoney(stats.revenue);
+            document.getElementById('monthIncome').textContent = formatMoney(stats.totalIncome);
+            document.getElementById('monthExpense').textContent = formatMoney(stats.totalExpense);
+
+            // Таблица по дням
+            const tbody = document.getElementById('daysTableBody');
+            tbody.innerHTML = '';
+
+            if (stats.days.length === 0) {
+                tbody.innerHTML = '<div class="no-data-message">📭 В этом месяце нет операций</div>';
+                return;
+            }
+
+            stats.days.forEach((day) => {
+                const date = day.date;
+                const dayNum = date.getDate();
+                const monthName = MONTH_NAMES_GEN[date.getMonth()];
+                const dayName = DAY_NAMES[date.getDay()];
+
+                const row = document.createElement('div');
+                row.className = 'days-table-row';
+                
+                row.innerHTML = `
+                    <div class="day-date">
+                        ${dayNum} ${monthName}
+                        <div class="day-date-sub">${dayName}</div>
+                    </div>
+                    <div class="day-income">${day.income > 0 ? '+' + formatMoneyShort(day.income) : '—'}</div>
+                    <div class="day-expense">${day.expense > 0 ? '−' + formatMoneyShort(day.expense) : '—'}</div>
+                    <div class="day-revenue">${day.revenue > 0 ? formatMoneyShort(day.revenue) : '—'}</div>
+                `;
+
+                tbody.appendChild(row);
+            });
+        };
+
         window.openReport = () => {
-            const stats = calculateStats();
-            const avgAmount = transactions.length > 0 
-                ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length 
-                : 0;
-
-            document.getElementById('reportBalance').textContent = formatMoney(balance);
-            document.getElementById('reportTotalIncome').textContent = formatMoney(stats.totalIncome);
-            document.getElementById('reportTotalExpense').textContent = formatMoney(stats.totalExpense);
-            document.getElementById('reportIncomeRevenue').textContent = formatMoney(stats.incomeRevenue);
-            document.getElementById('reportExpenseRevenue').textContent = formatMoney(stats.expenseRevenue);
-            document.getElementById('reportTotalRevenue').textContent = formatMoney(stats.revenue);
-            document.getElementById('reportTransactionCount').textContent = transactions.length;
-            document.getElementById('reportAverageAmount').textContent = formatMoney(avgAmount);
-
+            reportDate = new Date(); // Открываем текущий месяц
+            renderMonthReport();
             reportModal.classList.add('active');
             haptic('impact', 'medium');
         };
@@ -843,6 +1058,19 @@
             reportModal.classList.remove('active');
         };
 
+        window.changeMonth = (delta) => {
+            reportDate.setMonth(reportDate.getMonth() + delta);
+            renderMonthReport();
+            haptic('impact', 'light');
+        };
+
+        window.goToCurrentMonth = () => {
+            reportDate = new Date();
+            renderMonthReport();
+            haptic('impact', 'light');
+        };
+
+        // ===== НАСТРОЙКИ =====
         window.openSettings = () => {
             document.getElementById('capitalInput').value = capital;
             document.getElementById('incomePercentInput').value = incomePercent;
