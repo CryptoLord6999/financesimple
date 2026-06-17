@@ -382,6 +382,29 @@
             margin-top: 0.75rem;
         }
         .close-modal-btn:active { transform: scale(0.98); }
+        
+        /* Исправление для блока баланса/капитала/сайта */
+        .balance-capital-site {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .bcs-item {
+            text-align: center;
+        }
+        .bcs-label {
+            font-size: 0.65rem;
+            color: #718096;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+        .bcs-value {
+            font-size: 1rem;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -526,17 +549,20 @@
                 </div>
             </div>
 
+            <!-- ИСПРАВЛЕННЫЙ блок баланса/капитала/сайта -->
             <div class="report-item">
-                <div class="report-label">⚪ Баланс · 💜 Капитал · 🔵 Сайт</div>
-                <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
-                    <div style="flex: 1;">
-                        <div class="report-value" id="reportBalance" style="font-size: 1rem;">0 ₽</div>
+                <div class="balance-capital-site">
+                    <div class="bcs-item">
+                        <div class="bcs-label">⚪ Баланс</div>
+                        <div class="bcs-value" id="reportBalance">0 ₽</div>
                     </div>
-                    <div style="flex: 1;">
-                        <div class="report-value capital-color" id="reportCapital" style="font-size: 1rem;">0 ₽</div>
+                    <div class="bcs-item">
+                        <div class="bcs-label capital-color">💜 Капитал</div>
+                        <div class="bcs-value capital-color" id="reportCapital">0 ₽</div>
                     </div>
-                    <div style="flex: 1;">
-                        <div class="report-value site-balance-color" id="reportSiteBalance" style="font-size: 1rem;">0 ₽</div>
+                    <div class="bcs-item">
+                        <div class="bcs-label site-balance-color">🔵 Сайт</div>
+                        <div class="bcs-value site-balance-color" id="reportSiteBalance">0 ₽</div>
                     </div>
                 </div>
             </div>
@@ -884,24 +910,59 @@
             saveToServer();
         };
 
+        // ИСПРАВЛЕННАЯ функция обнуления - автосохранение отчета перед обнулением
         const resetAll = () => {
             if (transactions.length === 0) { haptic('notification', 'warning'); return; }
             haptic('notification', 'warning');
+            
             const doReset = () => {
+                // ⚠️ ПЕРЕД обнулением сохраняем текущий отчет за сегодня (если есть данные)
+                const todayKey = new Date().toISOString().split('T')[0];
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                const monthStats = calculateMonthStats(currentYear, currentMonth);
+                
+                // Если есть данные за текущий месяц - сохраняем отчет
+                if (monthStats.totalIncome > 0 || monthStats.totalExpense > 0) {
+                    const reportData = {
+                        turnover: monthStats.turnover,
+                        revenue: monthStats.revenue,
+                        income: monthStats.totalIncome,
+                        expense: monthStats.totalExpense,
+                        balance: balance,
+                        capital: capital,
+                        siteBalance: capital - balance,
+                        savedAt: new Date().toISOString()
+                    };
+                    
+                    // Если уже есть сохраненный отчет за сегодня - суммируем
+                    if (savedReports[todayKey]) {
+                        const existing = savedReports[todayKey];
+                        reportData.turnover += existing.turnover;
+                        reportData.revenue += existing.revenue;
+                        reportData.income += existing.income;
+                        reportData.expense += existing.expense;
+                    }
+                    
+                    savedReports[todayKey] = reportData;
+                }
+                
+                // Теперь обнуляем
                 balance = 0;
                 transactions = [];
-                // ⚠️ ВАЖНО: savedReports НЕ очищаем!
+                
                 haptic('notification', 'success');
                 updateUI();
                 saveToLocal();
                 saveToServer();
             };
+            
             if (tg?.showConfirm) {
-                tg.showConfirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.', function(confirmed) {
+                tg.showConfirm('Обнулить баланс и историю операций?\n\n💾 Текущие данные отчета будут автоматически сохранены.', function(confirmed) {
                     if (confirmed) doReset(); else haptic('impact', 'soft');
                 });
             } else {
-                if (confirm('Обнулить баланс и историю операций?\n\n💾 Сохраненные отчеты останутся.')) doReset();
+                if (confirm('Обнулить баланс и историю операций?\n\n💾 Текущие данные отчета будут автоматически сохранены.')) doReset();
                 else haptic('impact', 'soft');
             }
         };
