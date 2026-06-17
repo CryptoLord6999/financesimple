@@ -98,6 +98,11 @@
         .revenue-color {
             color: #f59e0b;
         }
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -162,6 +167,45 @@
             background: rgba(255, 255, 255, 0.08);
             margin: 1.5rem 0;
         }
+        .settings-input-group {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .settings-input-label {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .settings-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #3b82f6;
+            color: #10b981;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+            padding: 0.5rem 0;
+        }
+        .settings-input:focus {
+            border-bottom-color: #0ea5e9;
+        }
+        .button-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .button-row button {
+            flex: 1;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -188,10 +232,15 @@
             </div>
         </div>
 
-        <!-- Кнопка отчета -->
-        <button onclick="openReport()" class="mt-6 px-6 py-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
-            📊 Посмотреть отчет
-        </button>
+        <!-- Кнопки -->
+        <div class="button-group">
+            <button onclick="openReport()" class="px-6 py-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+                📊 Отчет
+            </button>
+            <button onclick="openSettings()" class="px-6 py-2 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+                ⚙️ Настройки
+            </button>
+        </div>
     </div>
 
     <!-- Ввод -->
@@ -289,6 +338,49 @@
         </div>
     </div>
 
+    <!-- Модальное окно настроек -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close"></div>
+            
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">⚙️ Настройки выручки</h2>
+            
+            <!-- Процент от доходов -->
+            <div class="settings-input-group">
+                <label class="settings-input-label">Процент выручки от доходов (%)</label>
+                <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
+                <div class="text-xs text-zinc-500 mt-2">Пример: 7 = 7% от всех доходов</div>
+            </div>
+
+            <!-- Процент от расходов -->
+            <div class="settings-input-group">
+                <label class="settings-input-label">Процент выручки от расходов (%)</label>
+                <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
+                <div class="text-xs text-zinc-500 mt-2">Пример: 2.5 = 2.5% от всех расходов</div>
+            </div>
+
+            <div class="report-divider"></div>
+
+            <!-- Информация -->
+            <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+                <div class="report-label">Текущая формула</div>
+                <div class="text-sm text-blue-400 mt-2">
+                    Выручка = (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
+                </div>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="button-row">
+                <button onclick="saveSettings()" class="px-4 py-3 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                    ✓ Сохранить
+                </button>
+                <button onclick="closeSettings()" class="px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                    ✕ Отмена
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
@@ -325,6 +417,8 @@
             let transactions = [];
             let isOnline = navigator.onLine;
             let isSyncing = false;
+            let incomePercent = 7;
+            let expensePercent = 2.5;
 
             const balanceEl = document.getElementById('balance');
             const amountEl = document.getElementById('amount');
@@ -334,6 +428,7 @@
             const totalExpenseEl = document.getElementById('totalExpense');
             const totalRevenueEl = document.getElementById('totalRevenue');
             const reportModal = document.getElementById('reportModal');
+            const settingsModal = document.getElementById('settingsModal');
 
             const formatMoney = (num) => {
                 return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
@@ -351,9 +446,8 @@
                     }
                 });
 
-                // Формула: Выручка = (доход * 0.07) + (расход * 0.025)
-                const incomeRevenue = totalIncome * 0.07;
-                const expenseRevenue = totalExpense * 0.025;
+                const incomeRevenue = totalIncome * (incomePercent / 100);
+                const expenseRevenue = totalExpense * (expensePercent / 100);
                 const revenue = incomeRevenue + expenseRevenue;
 
                 return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
@@ -409,6 +503,8 @@
                 // Сохраняем локально как бэкап
                 localStorage.setItem('balance', balance);
                 localStorage.setItem('transactions', JSON.stringify(transactions));
+                localStorage.setItem('incomePercent', incomePercent);
+                localStorage.setItem('expensePercent', expensePercent);
             };
 
             const saveToServer = async () => {
@@ -428,6 +524,8 @@
                         totalIncome: stats.totalIncome,
                         totalExpense: stats.totalExpense,
                         revenue: stats.revenue,
+                        incomePercent: incomePercent,
+                        expensePercent: expensePercent,
                         userName: userName,
                         lastUpdated: new Date().toISOString()
                     });
@@ -447,12 +545,16 @@
                     if (data && data.transactions) {
                         balance = data.balance || 0;
                         transactions = data.transactions || [];
+                        incomePercent = data.incomePercent || 7;
+                        expensePercent = data.expensePercent || 2.5;
                         updateUI();
                         updateSyncStatus('synced');
                     } else {
                         // Если нет данных на сервере, загружаем локальные
                         balance = parseFloat(localStorage.getItem('balance')) || 0;
                         transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                        incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
+                        expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
                         updateUI();
                         if (isOnline) {
                             saveToServer();
@@ -462,6 +564,8 @@
                     console.error('Ошибка загрузки:', error);
                     balance = parseFloat(localStorage.getItem('balance')) || 0;
                     transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                    incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
+                    expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
                     updateUI();
                     updateSyncStatus('offline');
                 });
@@ -535,10 +639,53 @@
                 reportModal.classList.remove('active');
             };
 
-            // Закрытие модального окна при клике на фон
+            window.openSettings = () => {
+                document.getElementById('incomePercentInput').value = incomePercent;
+                document.getElementById('expensePercentInput').value = expensePercent;
+                settingsModal.classList.add('active');
+                tg.HapticFeedback.impactOccurred('medium');
+            };
+
+            window.closeSettings = () => {
+                settingsModal.classList.remove('active');
+            };
+
+            window.saveSettings = () => {
+                const newIncomePercent = parseFloat(document.getElementById('incomePercentInput').value);
+                const newExpensePercent = parseFloat(document.getElementById('expensePercentInput').value);
+
+                if (isNaN(newIncomePercent) || newIncomePercent < 0 || newIncomePercent > 100) {
+                    alert('Некорректное значение для процента от доходов');
+                    return;
+                }
+
+                if (isNaN(newExpensePercent) || newExpensePercent < 0 || newExpensePercent > 100) {
+                    alert('Некорректное значение для процента от расходов');
+                    return;
+                }
+
+                incomePercent = newIncomePercent;
+                expensePercent = newExpensePercent;
+
+                document.getElementById('currentIncomePercent').textContent = incomePercent;
+                document.getElementById('currentExpensePercent').textContent = expensePercent;
+
+                updateUI();
+                saveToServer();
+                closeSettings();
+                tg.HapticFeedback.notificationOccurred('success');
+            };
+
+            // Закрытие модальных окон при клике на фон
             reportModal.addEventListener('click', (e) => {
                 if (e.target === reportModal) {
                     closeReport();
+                }
+            });
+
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target === settingsModal) {
+                    closeSettings();
                 }
             });
 
@@ -571,6 +718,8 @@
             // Fallback на локальное хранилище
             let balance = parseFloat(localStorage.getItem('balance')) || 0;
             let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            let incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
+            let expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
 
             const balanceEl = document.getElementById('balance');
             const amountEl = document.getElementById('amount');
@@ -580,6 +729,7 @@
             const totalExpenseEl = document.getElementById('totalExpense');
             const totalRevenueEl = document.getElementById('totalRevenue');
             const reportModal = document.getElementById('reportModal');
+            const settingsModal = document.getElementById('settingsModal');
 
             syncStatusEl.textContent = 'локальное хранилище';
             syncStatusEl.style.color = '#f97316';
@@ -600,8 +750,8 @@
                     }
                 });
 
-                const incomeRevenue = totalIncome * 0.07;
-                const expenseRevenue = totalExpense * 0.025;
+                const incomeRevenue = totalIncome * (incomePercent / 100);
+                const expenseRevenue = totalExpense * (expensePercent / 100);
                 const revenue = incomeRevenue + expenseRevenue;
                 return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
             };
@@ -643,6 +793,8 @@
 
                 localStorage.setItem('balance', balance);
                 localStorage.setItem('transactions', JSON.stringify(transactions));
+                localStorage.setItem('incomePercent', incomePercent);
+                localStorage.setItem('expensePercent', expensePercent);
             };
 
             window.addTransaction = (type) => {
@@ -710,9 +862,49 @@
                 reportModal.classList.remove('active');
             };
 
+            window.openSettings = () => {
+                document.getElementById('incomePercentInput').value = incomePercent;
+                document.getElementById('expensePercentInput').value = expensePercent;
+                settingsModal.classList.add('active');
+            };
+
+            window.closeSettings = () => {
+                settingsModal.classList.remove('active');
+            };
+
+            window.saveSettings = () => {
+                const newIncomePercent = parseFloat(document.getElementById('incomePercentInput').value);
+                const newExpensePercent = parseFloat(document.getElementById('expensePercentInput').value);
+
+                if (isNaN(newIncomePercent) || newIncomePercent < 0 || newIncomePercent > 100) {
+                    alert('Некорректное значение для процента от доходов');
+                    return;
+                }
+
+                if (isNaN(newExpensePercent) || newExpensePercent < 0 || newExpensePercent > 100) {
+                    alert('Некорректное значение для процента от расходов');
+                    return;
+                }
+
+                incomePercent = newIncomePercent;
+                expensePercent = newExpensePercent;
+
+                document.getElementById('currentIncomePercent').textContent = incomePercent;
+                document.getElementById('currentExpensePercent').textContent = expensePercent;
+
+                updateUI();
+                closeSettings();
+            };
+
             reportModal.addEventListener('click', (e) => {
                 if (e.target === reportModal) {
                     closeReport();
+                }
+            });
+
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target === settingsModal) {
+                    closeSettings();
                 }
             });
 
