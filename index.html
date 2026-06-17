@@ -74,6 +74,7 @@
         .income-color { color: #48bb78; }
         .expense-color { color: #f56565; }
         .revenue-color { color: #ed8936; }
+        .adjustment-color { color: #667eea; }
         .button-group {
             display: flex;
             gap: 0.5rem;
@@ -165,6 +166,11 @@
             outline: none;
             padding: 0.5rem 0;
         }
+        .settings-input-hint {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-top: 0.5rem;
+        }
         .button-row { display: flex; gap: 0.75rem; }
         .button-row button { flex: 1; }
         .capital-color { color: #9f7aea; }
@@ -197,7 +203,6 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: #2c3e50;
-            text-transform: capitalize;
         }
         .today-btn {
             background: rgba(72, 187, 120, 0.1);
@@ -292,6 +297,15 @@
             margin-top: 1rem;
             text-align: center;
         }
+        .adjustment-info {
+            background: rgba(102, 126, 234, 0.08);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #4c51bf;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -318,13 +332,16 @@
         </div>
 
         <div class="button-group">
-            <button onclick="openIndicators()" class="px-6 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openIndicators()" class="px-4 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 📈 Показатели
             </button>
-            <button onclick="openReport()" class="px-6 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openReport()" class="px-4 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 📊 Отчет
             </button>
-            <button onclick="openSettings()" class="px-6 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openAdjustment()" class="px-4 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+                ✏️ Корректировка
+            </button>
+            <button onclick="openSettings()" class="px-4 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 ⚙️ Настройки
             </button>
         </div>
@@ -431,7 +448,6 @@
                 </div>
             </div>
 
-            <!-- Добавленные показатели -->
             <div class="report-item">
                 <div class="report-label">⚪ Текущий баланс</div>
                 <div class="report-value" id="reportBalance">0 ₽</div>
@@ -465,6 +481,44 @@
             <button onclick="closeReport()" class="w-full mt-4 px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно корректировки -->
+    <div id="adjustmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close"></div>
+            <h2 class="text-2xl font-bold mb-4 text-center">✏️ Корректировка</h2>
+            
+            <div class="adjustment-info">
+                💡 Изменения будут записаны в историю как "Корректировка" и не повлияют на расчёт доходов/расходов.
+            </div>
+            
+            <div class="settings-input-group">
+                <label class="settings-input-label">⚪ Новый текущий баланс (₽)</label>
+                <input type="number" id="adjustmentBalanceInput" class="settings-input" placeholder="0" step="0.01">
+                <div class="settings-input-hint">Текущий: <span id="currentBalanceHint">0 ₽</span></div>
+            </div>
+            
+            <div class="settings-input-group">
+                <label class="settings-input-label">💜 Новый капитал (₽)</label>
+                <input type="number" id="adjustmentCapitalInput" class="settings-input" placeholder="0" step="0.01">
+                <div class="settings-input-hint">Текущий: <span id="currentCapitalHint">0 ₽</span></div>
+            </div>
+            
+            <div class="settings-input-group">
+                <label class="settings-input-label">📝 Комментарий (необязательно)</label>
+                <input type="text" id="adjustmentCommentInput" class="settings-input" placeholder="Например: пересчёт, инвентаризация" style="font-size: 1rem; text-align: left;">
+            </div>
+
+            <div class="button-row">
+                <button onclick="saveAdjustment()" class="px-4 py-3 bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                    ✓ Применить
+                </button>
+                <button onclick="closeAdjustment()" class="px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                    ✕ Отмена
+                </button>
+            </div>
         </div>
     </div>
 
@@ -531,7 +585,7 @@
         // ===== СОСТОЯНИЕ ПРИЛОЖЕНИЯ =====
         let balance = 0;
         let transactions = [];
-        let savedReports = {}; // { 'YYYY-MM-DD': { turnover, revenue, income, expense, balance, capital, siteBalance } }
+        let savedReports = {};
         let isOnline = navigator.onLine;
         let isSyncing = false;
         let incomePercent = 7;
@@ -553,6 +607,7 @@
         const indicatorsModal = document.getElementById('indicatorsModal');
         const reportModal = document.getElementById('reportModal');
         const settingsModal = document.getElementById('settingsModal');
+        const adjustmentModal = document.getElementById('adjustmentModal');
         const resetBtn = document.getElementById('resetBtn');
 
         // ===== УТИЛИТЫ =====
@@ -588,7 +643,8 @@
             let totalIncome = 0, totalExpense = 0;
             transactions.forEach((t) => {
                 if (t.type === 'income') totalIncome += t.amount;
-                else totalExpense += t.amount;
+                else if (t.type === 'expense') totalExpense += t.amount;
+                // Корректировки НЕ учитываются в доходах/расходах
             });
             const incomeRevenue = totalIncome * (incomePercent / 100);
             const expenseRevenue = totalExpense * (expensePercent / 100);
@@ -607,10 +663,11 @@
                 if (date.getFullYear() === year && date.getMonth() === month) {
                     const dayKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                     if (!daysData[dayKey]) daysData[dayKey] = { date: date, income: 0, expense: 0 };
+                    // Только income и expense учитываются
                     if (t.type === 'income') {
                         totalIncome += t.amount;
                         daysData[dayKey].income += t.amount;
-                    } else {
+                    } else if (t.type === 'expense') {
                         totalExpense += t.amount;
                         daysData[dayKey].expense += t.amount;
                     }
@@ -657,19 +714,37 @@
                 historyEl.innerHTML = '<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
             } else {
                 transactions.slice().reverse().forEach((t) => {
-                    const isIncome = t.type === 'income';
-                    const colorClass = isIncome ? 'text-emerald-600' : 'text-rose-600';
-                    const sign = isIncome ? '+' : '−';
                     const div = document.createElement('div');
                     div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
+                    
+                    let colorClass, sign, desc;
                     const date = new Date(t.date);
                     const timeStr = isNaN(date.getTime()) ? '' : date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    
+                    if (t.type === 'income') {
+                        colorClass = 'text-emerald-600';
+                        sign = '+';
+                        desc = t.desc || 'Пополнение';
+                    } else if (t.type === 'expense') {
+                        colorClass = 'text-rose-600';
+                        sign = '−';
+                        desc = t.desc || 'Списание';
+                    } else if (t.type === 'adjustment') {
+                        colorClass = 'text-indigo-600';
+                        sign = t.amount >= 0 ? '+' : '';
+                        desc = '✏️ ' + (t.desc || 'Корректировка');
+                    }
+
+                    const amountDisplay = t.type === 'adjustment' 
+                        ? `${sign}${formatMoney(Math.abs(t.amount))}`
+                        : `${sign} ${formatMoney(t.amount)}`;
+
                     div.innerHTML = `
                         <div class="flex flex-col">
-                            <span class="font-light">${t.desc}</span>
+                            <span class="font-light">${desc}</span>
                             <span class="text-zinc-500 text-xs">${timeStr}</span>
                         </div>
-                        <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
+                        <span class="${colorClass} font-medium text-lg">${amountDisplay}</span>
                     `;
                     historyEl.appendChild(div);
                 });
@@ -835,18 +910,100 @@
         const resetAll = () => {
             if (transactions.length === 0) { haptic('notification', 'warning'); return; }
             haptic('notification', 'warning');
-            const confirmed = tg?.showConfirm 
-                ? tg.showConfirm('Обнулить баланс и всю историю?')
-                : confirm('Обнулить баланс и всю историю?');
-            if (confirmed) {
+            
+            const doReset = () => {
                 balance = 0;
                 transactions = [];
                 haptic('notification', 'success');
                 updateUI();
+                saveToLocal();
                 saveToServer();
+            };
+            
+            if (tg?.showConfirm) {
+                tg.showConfirm('Обнулить баланс и всю историю?', function(confirmed) {
+                    if (confirmed) doReset();
+                    else haptic('impact', 'soft');
+                });
             } else {
-                haptic('impact', 'soft');
+                if (confirm('Обнулить баланс и всю историю?')) doReset();
+                else haptic('impact', 'soft');
             }
+        };
+
+        // ===== КОРРЕКТИРОВКА =====
+        window.openAdjustment = () => {
+            document.getElementById('adjustmentBalanceInput').value = '';
+            document.getElementById('adjustmentCapitalInput').value = '';
+            document.getElementById('adjustmentCommentInput').value = '';
+            document.getElementById('currentBalanceHint').textContent = formatMoney(balance);
+            document.getElementById('currentCapitalHint').textContent = formatMoney(capital);
+            adjustmentModal.classList.add('active');
+            haptic('impact', 'medium');
+        };
+
+        window.closeAdjustment = () => {
+            adjustmentModal.classList.remove('active');
+        };
+
+        window.saveAdjustment = () => {
+            const newBalanceStr = document.getElementById('adjustmentBalanceInput').value;
+            const newCapitalStr = document.getElementById('adjustmentCapitalInput').value;
+            const comment = document.getElementById('adjustmentCommentInput').value.trim();
+            
+            const newBalance = newBalanceStr !== '' ? parseFloat(newBalanceStr) : null;
+            const newCapital = newCapitalStr !== '' ? parseFloat(newCapitalStr) : null;
+            
+            if (newBalance === null && newCapital === null) {
+                haptic('notification', 'error');
+                alert('Введите хотя бы одно значение для корректировки');
+                return;
+            }
+            
+            if (newBalance !== null && (isNaN(newBalance) || newBalance < -999999999 || newBalance > 999999999)) {
+                alert('Некорректное значение баланса');
+                return;
+            }
+            
+            if (newCapital !== null && (isNaN(newCapital) || newCapital < 0 || newCapital > 999999999)) {
+                alert('Некорректное значение капитала');
+                return;
+            }
+            
+            // Применяем корректировку баланса
+            if (newBalance !== null && newBalance !== balance) {
+                const diff = newBalance - balance;
+                balance = newBalance;
+                
+                const defaultDesc = diff >= 0 ? 'Корректировка (+)' : 'Корректировка (−)';
+                transactions.push({
+                    type: 'adjustment',
+                    amount: diff,
+                    desc: comment ? `${defaultDesc}: ${comment}` : defaultDesc,
+                    date: new Date().toISOString()
+                });
+            }
+            
+            // Применяем корректировку капитала
+            if (newCapital !== null && newCapital !== capital) {
+                capital = newCapital;
+                
+                // Если баланс не менялся, но капитал изменился - всё равно пишем в историю
+                if (newBalance === null || newBalance === balance) {
+                    const defaultDesc = 'Корректировка капитала';
+                    transactions.push({
+                        type: 'adjustment',
+                        amount: 0,
+                        desc: comment ? `${defaultDesc}: ${comment}` : defaultDesc,
+                        date: new Date().toISOString()
+                    });
+                }
+            }
+            
+            haptic('notification', 'success');
+            updateUI();
+            saveToServer();
+            closeAdjustment();
         };
 
         // ===== ПОКАЗАТЕЛИ =====
@@ -875,7 +1032,6 @@
             document.getElementById('monthIncome').textContent = formatMoney(stats.totalIncome);
             document.getElementById('monthExpense').textContent = formatMoney(stats.totalExpense);
             
-            // Добавленные показатели
             document.getElementById('reportBalance').textContent = formatMoney(balance);
             document.getElementById('reportCapital').textContent = formatMoney(capital);
             document.getElementById('reportSiteBalance').textContent = formatMoney(capital - balance);
@@ -902,7 +1058,6 @@
                 tbody.appendChild(row);
             });
             
-            // Проверяем сохраненный отчет за сегодня
             const todayKey = new Date().toISOString().split('T')[0];
             const savedIndicator = document.getElementById('savedIndicator');
             if (savedReports[todayKey]) {
@@ -931,10 +1086,8 @@
             haptic('impact', 'light');
         };
         
-        // ===== СОХРАНЕНИЕ ОТЧЕТА =====
         window.saveReport = () => {
             const todayKey = new Date().toISOString().split('T')[0];
-            const stats = calculateStats();
             const monthStats = calculateMonthStats(reportDate.getFullYear(), reportDate.getMonth());
             
             const reportData = {
@@ -948,7 +1101,6 @@
                 savedAt: new Date().toISOString()
             };
             
-            // Если уже есть сохраненный отчет за сегодня - суммируем
             if (savedReports[todayKey]) {
                 const existing = savedReports[todayKey];
                 reportData.turnover += existing.turnover;
@@ -995,7 +1147,7 @@
         };
 
         // ===== EVENT LISTENERS =====
-        [indicatorsModal, reportModal, settingsModal].forEach(modal => {
+        [indicatorsModal, reportModal, settingsModal, adjustmentModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) modal.classList.remove('active');
             });
