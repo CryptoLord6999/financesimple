@@ -6,6 +6,9 @@
     <title>Finance Minimal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -49,6 +52,18 @@
         .reset-btn:hover {
             opacity: 0.7;
         }
+        .sync-indicator {
+            font-size: 0.75rem;
+            color: #71717a;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        .sync-indicator.syncing {
+            color: #3b82f6;
+        }
+        .sync-indicator.synced {
+            color: #10b981;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -57,6 +72,7 @@
     <div class="flex-1 flex flex-col justify-center items-center mb-8">
         <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
         <h1 id="balance" class="text-6xl font-extralight tracking-tight text-white">0 ₽</h1>
+        <div id="syncStatus" class="sync-indicator">подключение...</div>
     </div>
 
     <!-- Ввод -->
@@ -98,97 +114,313 @@
             document.querySelector('.input-premium').style.borderBottomColor = '#d4d4d8';
         }
 
-        let balance = parseFloat(localStorage.getItem('balance')) || 0;
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-
-        const balanceEl = document.getElementById('balance');
-        const amountEl = document.getElementById('amount');
-        const historyEl = document.getElementById('history');
-
-        const formatMoney = (num) => {
-            return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+        // ===== FIREBASE ИНИЦИАЛИЗАЦИЯ =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0vf8kHH-VqQ-H9zC7r8K5M2L1N0P9Q8R",
+            authDomain: "financesimple-db.firebaseapp.com",
+            databaseURL: "https://financesimple-db-default-rtdb.firebaseio.com",
+            projectId: "financesimple-db",
+            storageBucket: "financesimple-db.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
         };
 
-        const updateUI = () => {
-            balanceEl.textContent = formatMoney(balance);
-            historyEl.innerHTML = '';
-            
-            if (transactions.length === 0) {
-                historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
-            } else {
-                transactions.slice().reverse().forEach((t, index) => {
-                    const isIncome = t.type === 'income';
-                    const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
-                    const sign = isIncome ? '+' : '−';
-                    
-                    const div = document.createElement('div');
-                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
-                    div.innerHTML = `
-                        <span class="text-zinc-300 font-light">${t.desc}</span>
-                        <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
-                    `;
-                    historyEl.appendChild(div);
+        try {
+            const app = firebase.initializeApp(firebaseConfig);
+            const db = firebase.database(app);
+
+            // Получаем ID пользователя из Telegram
+            const userId = tg.initDataUnsafe?.user?.id || Math.random().toString(36).substr(2, 9);
+            const userName = tg.initDataUnsafe?.user?.first_name || 'User';
+            const userRef = db.ref(`users/${userId}`);
+
+            let balance = 0;
+            let transactions = [];
+            let isOnline = navigator.onLine;
+            let isSyncing = false;
+
+            const balanceEl = document.getElementById('balance');
+            const amountEl = document.getElementById('amount');
+            const historyEl = document.getElementById('history');
+            const syncStatusEl = document.getElementById('syncStatus');
+
+            const formatMoney = (num) => {
+                return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+            };
+
+            const updateSyncStatus = (status) => {
+                const statuses = {
+                    syncing: { text: 'синхронизация...', class: 'syncing' },
+                    synced: { text: 'синхронизировано', class: 'synced' },
+                    offline: { text: 'автосохранение', class: '' },
+                    error: { text: 'ошибка синхронизации', class: '' }
+                };
+                const s = statuses[status] || statuses.syncing;
+                syncStatusEl.textContent = s.text;
+                syncStatusEl.className = 'sync-indicator ' + s.class;
+            };
+
+            const updateUI = () => {
+                balanceEl.textContent = formatMoney(balance);
+                historyEl.innerHTML = '';
+                
+                if (transactions.length === 0) {
+                    historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
+                } else {
+                    transactions.slice().reverse().forEach((t) => {
+                        const isIncome = t.type === 'income';
+                        const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                        const sign = isIncome ? '+' : '−';
+                        
+                        const div = document.createElement('div');
+                        div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                        
+                        const date = new Date(t.date);
+                        const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                        
+                        div.innerHTML = `
+                            <div class="flex flex-col">
+                                <span class="text-zinc-300 font-light">${t.desc}</span>
+                                <span class="text-zinc-600 text-xs">${timeStr}</span>
+                            </div>
+                            <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
+                        `;
+                        historyEl.appendChild(div);
+                    });
+                }
+
+                // Сохраняем локально как бэкап
+                localStorage.setItem('balance', balance);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+            };
+
+            const saveToServer = async () => {
+                if (!isOnline) {
+                    updateSyncStatus('offline');
+                    return;
+                }
+
+                isSyncing = true;
+                updateSyncStatus('syncing');
+
+                try {
+                    await userRef.set({
+                        balance: balance,
+                        transactions: transactions,
+                        userName: userName,
+                        lastUpdated: new Date().toISOString()
+                    });
+                    updateSyncStatus('synced');
+                    isSyncing = false;
+                } catch (error) {
+                    console.error('Ошибка сохранения:', error);
+                    updateSyncStatus('error');
+                    isSyncing = false;
+                }
+            };
+
+            const loadFromServer = () => {
+                updateSyncStatus('syncing');
+                userRef.once('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && data.transactions) {
+                        balance = data.balance || 0;
+                        transactions = data.transactions || [];
+                        updateUI();
+                        updateSyncStatus('synced');
+                    } else {
+                        // Если нет данных на сервере, загружаем локальные
+                        balance = parseFloat(localStorage.getItem('balance')) || 0;
+                        transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                        updateUI();
+                        if (isOnline) {
+                            saveToServer();
+                        }
+                    }
+                }, (error) => {
+                    console.error('Ошибка загрузки:', error);
+                    balance = parseFloat(localStorage.getItem('balance')) || 0;
+                    transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                    updateUI();
+                    updateSyncStatus('offline');
                 });
-            }
+            };
 
-            localStorage.setItem('balance', balance);
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-        };
+            const addTransaction = (type) => {
+                const amount = parseFloat(amountEl.value);
+                if (!amount || amount <= 0) {
+                    tg.HapticFeedback.notificationOccurred('error');
+                    return;
+                }
 
-        const addTransaction = (type) => {
-            const amount = parseFloat(amountEl.value);
-            if (!amount || amount <= 0) {
-                tg.HapticFeedback.notificationOccurred('error');
-                return;
-            }
+                if (type === 'income') {
+                    balance += amount;
+                } else {
+                    balance -= amount;
+                }
 
-            if (type === 'income') {
-                balance += amount;
-            } else {
-                balance -= amount;
-            }
+                transactions.push({
+                    type: type,
+                    amount: amount,
+                    desc: type === 'income' ? 'Пополнение' : 'Списание',
+                    date: new Date().toISOString()
+                });
 
-            transactions.push({
-                type: type,
-                amount: amount,
-                desc: type === 'income' ? 'Пополнение' : 'Списание',
-                date: new Date().toISOString()
+                amountEl.value = '';
+                tg.HapticFeedback.impactOccurred('light');
+                updateUI();
+                saveToServer();
+            };
+
+            const resetAll = () => {
+                if (transactions.length === 0) {
+                    tg.HapticFeedback.notificationOccurred('warning');
+                    return;
+                }
+                
+                tg.HapticFeedback.notificationOccurred('warning');
+                
+                if (confirm('Обнулить баланс и всю историю?')) {
+                    balance = 0;
+                    transactions = [];
+                    localStorage.removeItem('balance');
+                    localStorage.removeItem('transactions');
+                    tg.HapticFeedback.notificationOccurred('success');
+                    updateUI();
+                    saveToServer();
+                } else {
+                    tg.HapticFeedback.impactOccurred('soft');
+                }
+            };
+
+            // Отслеживаем онлайн/оффлайн статус
+            window.addEventListener('online', () => {
+                isOnline = true;
+                saveToServer();
             });
 
-            amountEl.value = '';
-            tg.HapticFeedback.impactOccurred('light');
-            updateUI();
-        };
+            window.addEventListener('offline', () => {
+                isOnline = false;
+                updateSyncStatus('offline');
+            });
 
-        // 🔄 ФУНКЦИЯ СБРОСА
-        const resetAll = () => {
-            if (transactions.length === 0) {
-                tg.HapticFeedback.notificationOccurred('warning');
-                return;
-            }
-            
-            // Двойное подтверждение через вибрацию
-            tg.HapticFeedback.notificationOccurred('warning');
-            
-            if (confirm('Обнулить баланс и всю историю?')) {
-                balance = 0;
-                transactions = [];
-                localStorage.removeItem('balance');
-                localStorage.removeItem('transactions');
-                tg.HapticFeedback.notificationOccurred('success');
+            amountEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addTransaction('expense');
+                }
+            });
+
+            // Экспортируем функции в глобальный скоп
+            window.addTransaction = addTransaction;
+            window.resetAll = resetAll;
+
+            // Загружаем данные при старте
+            loadFromServer();
+
+        } catch (error) {
+            console.error('Ошибка инициализации Firebase:', error);
+            // Fallback на локальное хранилище
+            let balance = parseFloat(localStorage.getItem('balance')) || 0;
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+            const balanceEl = document.getElementById('balance');
+            const amountEl = document.getElementById('amount');
+            const historyEl = document.getElementById('history');
+            const syncStatusEl = document.getElementById('syncStatus');
+
+            syncStatusEl.textContent = 'локальное хранилище';
+            syncStatusEl.style.color = '#f97316';
+
+            const formatMoney = (num) => {
+                return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+            };
+
+            const updateUI = () => {
+                balanceEl.textContent = formatMoney(balance);
+                historyEl.innerHTML = '';
+                
+                if (transactions.length === 0) {
+                    historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
+                } else {
+                    transactions.slice().reverse().forEach((t) => {
+                        const isIncome = t.type === 'income';
+                        const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                        const sign = isIncome ? '+' : '−';
+                        
+                        const div = document.createElement('div');
+                        div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                        
+                        const date = new Date(t.date);
+                        const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                        
+                        div.innerHTML = `
+                            <div class="flex flex-col">
+                                <span class="text-zinc-300 font-light">${t.desc}</span>
+                                <span class="text-zinc-600 text-xs">${timeStr}</span>
+                            </div>
+                            <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
+                        `;
+                        historyEl.appendChild(div);
+                    });
+                }
+
+                localStorage.setItem('balance', balance);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+            };
+
+            window.addTransaction = (type) => {
+                const amount = parseFloat(amountEl.value);
+                if (!amount || amount <= 0) {
+                    tg.HapticFeedback.notificationOccurred('error');
+                    return;
+                }
+
+                if (type === 'income') {
+                    balance += amount;
+                } else {
+                    balance -= amount;
+                }
+
+                transactions.push({
+                    type: type,
+                    amount: amount,
+                    desc: type === 'income' ? 'Пополнение' : 'Списание',
+                    date: new Date().toISOString()
+                });
+
+                amountEl.value = '';
+                tg.HapticFeedback.impactOccurred('light');
                 updateUI();
-            } else {
-                tg.HapticFeedback.impactOccurred('soft');
-            }
-        };
+            };
 
-        amountEl.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addTransaction('expense');
-            }
-        });
+            window.resetAll = () => {
+                if (transactions.length === 0) {
+                    tg.HapticFeedback.notificationOccurred('warning');
+                    return;
+                }
+                
+                tg.HapticFeedback.notificationOccurred('warning');
+                
+                if (confirm('Обнулить баланс и всю историю?')) {
+                    balance = 0;
+                    transactions = [];
+                    localStorage.removeItem('balance');
+                    localStorage.removeItem('transactions');
+                    tg.HapticFeedback.notificationOccurred('success');
+                    updateUI();
+                } else {
+                    tg.HapticFeedback.impactOccurred('soft');
+                }
+            };
 
-        updateUI();
+            amountEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    window.addTransaction('expense');
+                }
+            });
+
+            updateUI();
+        }
     </script>
 </body>
 </html>
