@@ -11,27 +11,29 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #09090b;
-            color: #fafafa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: #2c3e50;
             -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
         }
         .glass-card {
-            background: rgba(24, 24, 27, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
         }
         .input-premium {
             background: transparent;
             border: none;
-            border-bottom: 1px solid #3f3f46;
-            color: white;
+            border-bottom: 2px solid #cbd5e0;
+            color: #2c3e50;
             font-size: 1.5rem;
             font-weight: 300;
             text-align: center;
             outline: none;
             transition: border-color 0.3s ease;
         }
-        .input-premium:focus { border-bottom-color: #a1a1aa; }
+        .input-premium:focus { border-bottom-color: #667eea; }
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .transaction-item { animation: slideIn 0.3s ease-out forwards; }
@@ -39,38 +41,39 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .reset-btn { opacity: 0.3; transition: opacity 0.3s ease; }
-        .reset-btn:hover { opacity: 0.7; }
+        .reset-btn { opacity: 0.4; transition: opacity 0.3s ease; }
+        .reset-btn:hover { opacity: 0.8; }
         .sync-indicator {
             font-size: 0.75rem;
-            color: #71717a;
+            color: #718096;
             margin-top: 0.5rem;
             text-align: center;
         }
-        .sync-indicator.syncing { color: #3b82f6; }
-        .sync-indicator.synced { color: #10b981; }
-        .sync-indicator.error { color: #ef4444; }
-        .sync-indicator.warning { color: #f59e0b; }
+        .sync-indicator.syncing { color: #667eea; }
+        .sync-indicator.synced { color: #48bb78; }
+        .sync-indicator.error { color: #f56565; }
+        .sync-indicator.warning { color: #ed8936; }
         .stats-row { display: flex; gap: 1rem; margin-top: 1rem; }
         .stat-card {
             flex: 1;
-            background: rgba(24, 24, 27, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             padding: 0.75rem;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .stat-label {
             font-size: 0.7rem;
-            color: #a1a1aa;
+            color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
         .stat-value { font-size: 1.25rem; font-weight: 600; margin-top: 0.25rem; }
-        .income-color { color: #10b981; }
-        .expense-color { color: #ef4444; }
-        .revenue-color { color: #f59e0b; }
+        .income-color { color: #48bb78; }
+        .expense-color { color: #f56565; }
+        .revenue-color { color: #ed8936; }
         .button-group {
             display: flex;
             gap: 0.5rem;
@@ -83,7 +86,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             animation: fadeIn 0.3s ease-out;
         }
@@ -91,13 +94,15 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-content {
             width: 100%;
-            background: rgba(24, 24, 27, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 2rem 2rem 0 0;
             padding: 2rem 1.5rem 3rem;
             max-height: 90vh;
             overflow-y: auto;
             animation: slideUp 0.3s ease-out;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
         }
         @keyframes slideUp {
             from { transform: translateY(100%); }
@@ -105,41 +110,43 @@
         }
         .modal-close {
             width: 2.5rem; height: 0.3rem;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 0.15rem;
             margin: 0 auto 1rem;
         }
         .report-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             padding: 1.25rem;
             margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .report-label {
             font-size: 0.85rem;
-            color: #a1a1aa;
+            color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 0.5rem;
         }
-        .report-value { font-size: 1.75rem; font-weight: 700; }
+        .report-value { font-size: 1.75rem; font-weight: 700; color: #2c3e50; }
         .report-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.08);
             margin: 1.5rem 0;
         }
         .settings-input-group {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             padding: 1.25rem;
             margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .settings-input-label {
             font-size: 0.85rem;
-            color: #a1a1aa;
+            color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -150,8 +157,8 @@
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 2px solid #3b82f6;
-            color: #10b981;
+            border-bottom: 2px solid #667eea;
+            color: #2c3e50;
             font-size: 1.5rem;
             font-weight: 600;
             text-align: center;
@@ -160,27 +167,28 @@
         }
         .button-row { display: flex; gap: 0.75rem; }
         .button-row button { flex: 1; }
-        .capital-color { color: #a855f7; }
-        .turnover-color { color: #06b6d4; }
-        .site-balance-color { color: #3b82f6; }
+        .capital-color { color: #9f7aea; }
+        .turnover-color { color: #4299e1; }
+        .site-balance-color { color: #667eea; }
         
         .month-nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             padding: 0.75rem;
             margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .month-nav-btn {
             width: 2.5rem; height: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
             border-radius: 0.75rem;
             font-size: 1.25rem;
         }
@@ -188,12 +196,12 @@
         .month-nav-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: white;
+            color: #2c3e50;
             text-transform: capitalize;
         }
         .today-btn {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
             padding: 0.4rem 0.75rem;
             border-radius: 0.5rem;
             font-size: 0.75rem;
@@ -206,15 +214,16 @@
             margin-bottom: 1.5rem;
         }
         .month-summary-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             padding: 1rem;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .month-summary-label {
             font-size: 0.7rem;
-            color: #a1a1aa;
+            color: #718096;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -222,20 +231,21 @@
         }
         .month-summary-value { font-size: 1.1rem; font-weight: 700; }
         .days-table {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 1rem;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
         .days-table-header {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 0.5rem;
             padding: 0.75rem 1rem;
-            background: rgba(59, 130, 246, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(102, 126, 234, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
             font-size: 0.7rem;
-            color: #a1a1aa;
+            color: #718096;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -245,41 +255,43 @@
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 0.5rem;
             padding: 0.85rem 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 0.85rem;
             align-items: center;
         }
         .days-table-row:last-child { border-bottom: none; }
-        .day-date { color: #fafafa; font-weight: 500; }
-        .day-date-sub { font-size: 0.7rem; color: #71717a; font-weight: 400; }
-        .day-income { color: #10b981; font-weight: 600; text-align: right; }
-        .day-expense { color: #ef4444; font-weight: 600; text-align: right; }
-        .day-revenue { color: #f59e0b; font-weight: 600; text-align: right; }
+        .day-date { color: #2c3e50; font-weight: 500; }
+        .day-date-sub { font-size: 0.7rem; color: #a0aec0; font-weight: 400; }
+        .day-income { color: #48bb78; font-weight: 600; text-align: right; }
+        .day-expense { color: #f56565; font-weight: 600; text-align: right; }
+        .day-revenue { color: #ed8936; font-weight: 600; text-align: right; }
         .no-data-message {
             padding: 2rem 1rem;
             text-align: center;
-            color: #71717a;
+            color: #a0aec0;
             font-size: 0.9rem;
         }
-        .warning-banner {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #f59e0b;
+        .save-report-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .save-report-btn:active { transform: scale(0.98); }
+        .saved-indicator {
+            background: rgba(72, 187, 120, 0.1);
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            color: #48bb78;
             padding: 0.75rem;
             border-radius: 1rem;
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
             text-align: center;
         }
-        .backup-btn {
-            width: 100%;
-            padding: 0.85rem;
-            border-radius: 1rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            margin-bottom: 0.5rem;
-        }
-        .backup-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -287,7 +299,7 @@
     <!-- Баланс -->
     <div class="flex-1 flex flex-col justify-center items-center mb-8">
         <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
-        <h1 id="balance" class="text-6xl font-extralight tracking-tight text-white">0 ₽</h1>
+        <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
         <div id="syncStatus" class="sync-indicator">подключение...</div>
         
         <div class="stats-row">
@@ -306,13 +318,13 @@
         </div>
 
         <div class="button-group">
-            <button onclick="openIndicators()" class="px-6 py-2 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openIndicators()" class="px-6 py-2 bg-cyan-500/10 text-cyan-600 hover:bg-cyan-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 📈 Показатели
             </button>
-            <button onclick="openReport()" class="px-6 py-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openReport()" class="px-6 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 📊 Отчет
             </button>
-            <button onclick="openSettings()" class="px-6 py-2 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            <button onclick="openSettings()" class="px-6 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
                 ⚙️ Настройки
             </button>
         </div>
@@ -323,10 +335,10 @@
         <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
         
         <div class="grid grid-cols-2 gap-4">
-            <button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
+            <button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
                 + Доход
             </button>
-            <button onclick="addTransaction('expense')" class="bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
+            <button onclick="addTransaction('expense')" class="bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
                 − Расход
             </button>
         </div>
@@ -336,7 +348,7 @@
     <div class="flex-1 overflow-y-auto">
         <div class="flex justify-between items-center mb-4">
             <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
-            <button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-600 text-xs font-medium tracking-widest uppercase hover:text-rose-400 transition-colors">
+            <button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-500 text-xs font-medium tracking-widest uppercase hover:text-rose-500 transition-colors">
                 Обнулить
             </button>
         </div>
@@ -347,9 +359,9 @@
     <div id="indicatorsModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold text-white mb-6 text-center">📈 Финансовые показатели</h2>
+            <h2 class="text-2xl font-bold mb-6 text-center">📈 Финансовые показатели</h2>
             
-            <div class="report-item" style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+            <div class="report-item" style="background: rgba(66, 153, 225, 0.1); border-color: rgba(66, 153, 225, 0.3);">
                 <div class="report-label">💹 Общий оборот</div>
                 <div class="report-value turnover-color" id="indicatorsTurnover">0 ₽</div>
             </div>
@@ -360,13 +372,13 @@
             <div class="report-divider"></div>
             <div class="report-item">
                 <div class="report-label">⚪ Текущий баланс</div>
-                <div class="report-value text-white" id="indicatorsBalance">0 ₽</div>
+                <div class="report-value" id="indicatorsBalance">0 ₽</div>
             </div>
-            <div class="report-item" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+            <div class="report-item" style="background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.3);">
                 <div class="report-label">💜 Капитал</div>
                 <div class="report-value capital-color" id="indicatorsCapital">0 ₽</div>
             </div>
-            <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
                 <div class="report-label">🔵 Баланс на сайте</div>
                 <div class="report-value site-balance-color" id="indicatorsSiteBalance">0 ₽</div>
             </div>
@@ -379,7 +391,7 @@
                 <div class="report-label">🔴 Всего расходов</div>
                 <div class="report-value expense-color" id="indicatorsTotalExpense">0 ₽</div>
             </div>
-            <button onclick="closeIndicators()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+            <button onclick="closeIndicators()" class="w-full mt-6 px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
         </div>
@@ -389,7 +401,7 @@
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold text-white mb-6 text-center">📊 Месячный отчет</h2>
+            <h2 class="text-2xl font-bold mb-6 text-center">📊 Месячный отчет</h2>
             
             <div class="month-nav">
                 <button onclick="changeMonth(-1)" class="month-nav-btn">←</button>
@@ -401,22 +413,36 @@
             </div>
 
             <div class="month-summary">
-                <div class="month-summary-card" style="border-color: rgba(6, 182, 212, 0.3);">
+                <div class="month-summary-card" style="border-color: rgba(66, 153, 225, 0.3);">
                     <div class="month-summary-label">💹 Оборот</div>
                     <div class="month-summary-value turnover-color" id="monthTurnover">0 ₽</div>
                 </div>
-                <div class="month-summary-card" style="border-color: rgba(245, 158, 11, 0.3);">
+                <div class="month-summary-card" style="border-color: rgba(237, 137, 54, 0.3);">
                     <div class="month-summary-label">💰 Выручка</div>
                     <div class="month-summary-value revenue-color" id="monthRevenue">0 ₽</div>
                 </div>
-                <div class="month-summary-card" style="border-color: rgba(16, 185, 129, 0.3);">
+                <div class="month-summary-card" style="border-color: rgba(72, 187, 120, 0.3);">
                     <div class="month-summary-label">🟢 Доходы</div>
                     <div class="month-summary-value income-color" id="monthIncome">0 ₽</div>
                 </div>
-                <div class="month-summary-card" style="border-color: rgba(239, 68, 68, 0.3);">
+                <div class="month-summary-card" style="border-color: rgba(245, 101, 101, 0.3);">
                     <div class="month-summary-label">🔴 Расходы</div>
                     <div class="month-summary-value expense-color" id="monthExpense">0 ₽</div>
                 </div>
+            </div>
+
+            <!-- Добавленные показатели -->
+            <div class="report-item">
+                <div class="report-label">⚪ Текущий баланс</div>
+                <div class="report-value" id="reportBalance">0 ₽</div>
+            </div>
+            <div class="report-item" style="background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.3);">
+                <div class="report-label">💜 Капитал</div>
+                <div class="report-value capital-color" id="reportCapital">0 ₽</div>
+            </div>
+            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
+                <div class="report-label">🔵 Баланс на сайте</div>
+                <div class="report-value site-balance-color" id="reportSiteBalance">0 ₽</div>
             </div>
 
             <div class="days-table">
@@ -429,7 +455,14 @@
                 <div id="daysTableBody"></div>
             </div>
 
-            <button onclick="closeReport()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+            <button onclick="saveReport()" class="save-report-btn">
+                💾 Сохранить отчет
+            </button>
+            <div id="savedIndicator" class="saved-indicator" style="display: none;">
+                ✅ Отчет сохранен на <span id="savedDate"></span>
+            </div>
+
+            <button onclick="closeReport()" class="w-full mt-4 px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
         </div>
@@ -439,11 +472,7 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            <h2 class="text-2xl font-bold text-white mb-6 text-center">⚙️ Настройки</h2>
-            
-            <div id="firebaseWarning" class="warning-banner" style="display: none;">
-                ⚠️ Firebase не настроен! Данные сохраняются только локально и могут пропасть.
-            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">⚙️ Настройки</h2>
             
             <div class="settings-input-group">
                 <label class="settings-input-label">💰 Начальный капитал (₽)</label>
@@ -459,24 +488,10 @@
             </div>
 
             <div class="report-divider"></div>
-            
-            <h3 class="text-lg font-bold text-white mb-3">💾 Резервное копирование</h3>
-            <p class="text-xs text-zinc-500 mb-3">Сохраняйте данные в файл, чтобы не потерять их при очистке кэша</p>
-            
-            <button onclick="exportData()" class="backup-btn bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                📥 Скачать резервную копию
-            </button>
-            
-            <button onclick="document.getElementById('importFile').click()" class="backup-btn bg-blue-500/10 text-blue-400 border border-blue-500/30">
-                📤 Восстановить из файла
-            </button>
-            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
 
-            <div class="report-divider"></div>
-
-            <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+            <div class="report-item" style="background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.3);">
                 <div class="report-label">Текущая формула</div>
-                <div class="text-sm text-blue-400 mt-2">
+                <div class="text-sm text-blue-500 mt-2">
                     Выручка = (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
                 </div>
             </div>
@@ -485,7 +500,7 @@
                 <button onclick="saveSettings()" class="px-4 py-3 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                     ✓ Сохранить
                 </button>
-                <button onclick="closeSettings()" class="px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                <button onclick="closeSettings()" class="px-4 py-3 bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                     ✕ Отмена
                 </button>
             </div>
@@ -498,19 +513,12 @@
         if (tg) {
             tg.ready();
             tg.expand();
-            if (tg.colorScheme === 'light') {
-                document.body.style.backgroundColor = '#ffffff';
-                document.body.style.color = '#18181b';
-            }
         }
 
         // ===== ПОСТОЯННЫЙ ID ПОЛЬЗОВАТЕЛЯ =====
         const getUserId = () => {
-            // Сначала пытаемся взять ID из Telegram
             const tgUserId = tg?.initDataUnsafe?.user?.id;
             if (tgUserId) return 'tg_' + tgUserId;
-            
-            // Иначе используем постоянный ID из localStorage (не рандомный!)
             let userId = localStorage.getItem('userId');
             if (!userId) {
                 userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -518,12 +526,12 @@
             }
             return userId;
         };
-        
         const USER_ID = getUserId();
 
         // ===== СОСТОЯНИЕ ПРИЛОЖЕНИЯ =====
         let balance = 0;
         let transactions = [];
+        let savedReports = {}; // { 'YYYY-MM-DD': { turnover, revenue, income, expense, balance, capital, siteBalance } }
         let isOnline = navigator.onLine;
         let isSyncing = false;
         let incomePercent = 7;
@@ -620,17 +628,16 @@
             return { totalIncome, totalExpense, revenue, turnover, days: sortedDays };
         };
 
-        const updateSyncStatus = (status, customText = null) => {
+        const updateSyncStatus = (status) => {
             const statuses = {
                 syncing: { text: '☁️ синхронизация...', class: 'syncing' },
                 synced: { text: '☁️ сохранено в облаке', class: 'synced' },
                 offline: { text: '💾 автосохранение локально', class: '' },
                 error: { text: '⚠️ ошибка синхронизации', class: 'error' },
-                local: { text: '💾 локальное хранилище', class: 'warning' },
-                nofirebase: { text: '⚠️ Firebase не настроен', class: 'warning' }
+                local: { text: '💾 локальное хранилище', class: 'warning' }
             };
             const s = statuses[status] || statuses.syncing;
-            syncStatusEl.textContent = customText || s.text;
+            syncStatusEl.textContent = s.text;
             syncStatusEl.className = 'sync-indicator ' + s.class;
         };
 
@@ -647,20 +654,20 @@
 
             historyEl.innerHTML = '';
             if (transactions.length === 0) {
-                historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
+                historyEl.innerHTML = '<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
             } else {
                 transactions.slice().reverse().forEach((t) => {
                     const isIncome = t.type === 'income';
-                    const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                    const colorClass = isIncome ? 'text-emerald-600' : 'text-rose-600';
                     const sign = isIncome ? '+' : '−';
                     const div = document.createElement('div');
-                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
                     const date = new Date(t.date);
                     const timeStr = isNaN(date.getTime()) ? '' : date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                     div.innerHTML = `
                         <div class="flex flex-col">
-                            <span class="text-zinc-300 font-light">${t.desc}</span>
-                            <span class="text-zinc-600 text-xs">${timeStr}</span>
+                            <span class="font-light">${t.desc}</span>
+                            <span class="text-zinc-500 text-xs">${timeStr}</span>
                         </div>
                         <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
                     `;
@@ -676,6 +683,7 @@
             try {
                 localStorage.setItem('balance', balance.toString());
                 localStorage.setItem('transactions', JSON.stringify(transactions));
+                localStorage.setItem('savedReports', JSON.stringify(savedReports));
                 localStorage.setItem('incomePercent', incomePercent.toString());
                 localStorage.setItem('expensePercent', expensePercent.toString());
                 localStorage.setItem('capital', capital.toString());
@@ -690,6 +698,8 @@
                 balance = parseFloat(localStorage.getItem('balance')) || 0;
                 const txStr = localStorage.getItem('transactions');
                 transactions = txStr ? JSON.parse(txStr) : [];
+                const reportsStr = localStorage.getItem('savedReports');
+                savedReports = reportsStr ? JSON.parse(reportsStr) : {};
                 incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
                 expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
                 capital = parseFloat(localStorage.getItem('capital')) || 0;
@@ -703,21 +713,18 @@
         // ===== FIREBASE =====
         const initFirebase = () => {
             try {
-                // ⚠️ ВАЖНО: Замените на СВОИ реальные ключи из Firebase Console!
                 const firebaseConfig = {
                     apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
-                    authDomain: "financesimple-7c73a.firebaseapp.com",
-                    databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
-                    projectId: "financesimple-7c73a",
-                    storageBucket: "financesimple-7c73a.firebasestorage.app",
-                    messagingSenderId: "1072812838336",
-                    appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
+  authDomain: "financesimple-7c73a.firebaseapp.com",
+  databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "financesimple-7c73a",
+  storageBucket: "financesimple-7c73a.firebasestorage.app",
+  messagingSenderId: "1072812838336",
+  appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
                 };
 
-                // Проверка на placeholder ключи
                 if (firebaseConfig.apiKey.includes('AIzaSyD0vf8kHH') || 
                     firebaseConfig.appId.includes('abcdef')) {
-                    console.warn('⚠️ Firebase настроен с placeholder ключами!');
                     useFirebase = false;
                     return false;
                 }
@@ -735,12 +742,8 @@
         };
 
         const saveToServer = () => {
-            if (!useFirebase) {
-                updateSyncStatus('nofirebase');
-                return;
-            }
-            if (!isOnline) {
-                updateSyncStatus('offline');
+            if (!useFirebase || !isOnline) {
+                updateSyncStatus(useFirebase ? 'offline' : 'local');
                 return;
             }
             if (saveTimeout) clearTimeout(saveTimeout);
@@ -754,6 +757,7 @@
                     await userRef.set({
                         balance: balance,
                         transactions: transactions,
+                        savedReports: savedReports,
                         totalIncome: stats.totalIncome,
                         totalExpense: stats.totalExpense,
                         revenue: stats.revenue,
@@ -776,7 +780,7 @@
             if (!useFirebase) {
                 loadFromLocal();
                 updateUI();
-                updateSyncStatus('nofirebase');
+                updateSyncStatus('local');
                 return;
             }
             updateSyncStatus('syncing');
@@ -786,6 +790,7 @@
                     if (data && data.transactions) {
                         balance = data.balance || 0;
                         transactions = data.transactions || [];
+                        savedReports = data.savedReports || {};
                         incomePercent = data.incomePercent || 7;
                         expensePercent = data.expensePercent || 2.5;
                         capital = data.capital || 0;
@@ -803,81 +808,6 @@
                     updateUI();
                     updateSyncStatus('offline');
                 });
-        };
-
-        // ===== ЭКСПОРТ / ИМПОРТ ДАННЫХ =====
-        window.exportData = () => {
-            try {
-                const data = {
-                    version: '1.0',
-                    exportDate: new Date().toISOString(),
-                    userId: USER_ID,
-                    balance: balance,
-                    transactions: transactions,
-                    incomePercent: incomePercent,
-                    expensePercent: expensePercent,
-                    capital: capital
-                };
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                const date = new Date().toISOString().split('T')[0];
-                a.download = `finance-backup-${date}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                haptic('notification', 'success');
-                alert('✅ Резервная копия сохранена!');
-            } catch (e) {
-                console.error('Ошибка экспорта:', e);
-                alert('❌ Ошибка при создании копии');
-            }
-        };
-
-        window.importData = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (!data.transactions || !Array.isArray(data.transactions)) {
-                        alert('❌ Неверный формат файла');
-                        return;
-                    }
-                    
-                    const confirmed = confirm(
-                        `⚠️ Восстановить данные из файла?\n\n` +
-                        `📅 Дата копии: ${new Date(data.exportDate).toLocaleString('ru-RU')}\n` +
-                        `💰 Баланс: ${formatMoney(data.balance || 0)}\n` +
-                        `📊 Операций: ${data.transactions.length}\n\n` +
-                        `Текущие данные будут ЗАМЕНЕНЫ!`
-                    );
-                    
-                    if (!confirmed) return;
-                    
-                    balance = data.balance || 0;
-                    transactions = data.transactions || [];
-                    incomePercent = data.incomePercent || 7;
-                    expensePercent = data.expensePercent || 2.5;
-                    capital = data.capital || 0;
-                    
-                    updateUI();
-                    saveToServer();
-                    closeSettings();
-                    haptic('notification', 'success');
-                    alert('✅ Данные восстановлены!');
-                } catch (err) {
-                    console.error('Ошибка импорта:', err);
-                    alert('❌ Ошибка чтения файла: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
         };
 
         // ===== ДЕЙСТВИЯ =====
@@ -906,7 +836,7 @@
             if (transactions.length === 0) { haptic('notification', 'warning'); return; }
             haptic('notification', 'warning');
             const confirmed = tg?.showConfirm 
-                ? tg.showConfirm('Обнулить баланс и всю историю?\n\n💡 Совет: сначала сделайте резервную копию в Настройках')
+                ? tg.showConfirm('Обнулить баланс и всю историю?')
                 : confirm('Обнулить баланс и всю историю?');
             if (confirmed) {
                 balance = 0;
@@ -944,6 +874,12 @@
             document.getElementById('monthRevenue').textContent = formatMoney(stats.revenue);
             document.getElementById('monthIncome').textContent = formatMoney(stats.totalIncome);
             document.getElementById('monthExpense').textContent = formatMoney(stats.totalExpense);
+            
+            // Добавленные показатели
+            document.getElementById('reportBalance').textContent = formatMoney(balance);
+            document.getElementById('reportCapital').textContent = formatMoney(capital);
+            document.getElementById('reportSiteBalance').textContent = formatMoney(capital - balance);
+            
             const tbody = document.getElementById('daysTableBody');
             tbody.innerHTML = '';
             if (stats.days.length === 0) {
@@ -965,7 +901,18 @@
                 `;
                 tbody.appendChild(row);
             });
+            
+            // Проверяем сохраненный отчет за сегодня
+            const todayKey = new Date().toISOString().split('T')[0];
+            const savedIndicator = document.getElementById('savedIndicator');
+            if (savedReports[todayKey]) {
+                document.getElementById('savedDate').textContent = new Date(savedReports[todayKey].savedAt).toLocaleString('ru-RU');
+                savedIndicator.style.display = 'block';
+            } else {
+                savedIndicator.style.display = 'none';
+            }
         };
+        
         window.openReport = () => {
             reportDate = new Date();
             renderMonthReport();
@@ -983,13 +930,48 @@
             renderMonthReport();
             haptic('impact', 'light');
         };
+        
+        // ===== СОХРАНЕНИЕ ОТЧЕТА =====
+        window.saveReport = () => {
+            const todayKey = new Date().toISOString().split('T')[0];
+            const stats = calculateStats();
+            const monthStats = calculateMonthStats(reportDate.getFullYear(), reportDate.getMonth());
+            
+            const reportData = {
+                turnover: monthStats.turnover,
+                revenue: monthStats.revenue,
+                income: monthStats.totalIncome,
+                expense: monthStats.totalExpense,
+                balance: balance,
+                capital: capital,
+                siteBalance: capital - balance,
+                savedAt: new Date().toISOString()
+            };
+            
+            // Если уже есть сохраненный отчет за сегодня - суммируем
+            if (savedReports[todayKey]) {
+                const existing = savedReports[todayKey];
+                reportData.turnover += existing.turnover;
+                reportData.revenue += existing.revenue;
+                reportData.income += existing.income;
+                reportData.expense += existing.expense;
+            }
+            
+            savedReports[todayKey] = reportData;
+            
+            document.getElementById('savedDate').textContent = new Date().toLocaleString('ru-RU');
+            document.getElementById('savedIndicator').style.display = 'block';
+            
+            saveToLocal();
+            saveToServer();
+            haptic('notification', 'success');
+        };
 
         // ===== НАСТРОЙКИ =====
         window.openSettings = () => {
             document.getElementById('capitalInput').value = capital;
             document.getElementById('incomePercentInput').value = incomePercent;
             document.getElementById('expensePercentInput').value = expensePercent;
-            document.getElementById('firebaseWarning').style.display = useFirebase ? 'none' : 'block';
             settingsModal.classList.add('active');
             haptic('impact', 'medium');
         };
@@ -1021,8 +1003,6 @@
         window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveToServer(); });
         window.addEventListener('offline', () => { isOnline = false; updateSyncStatus('offline'); });
         amountEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTransaction('expense'); });
-
-        // Сохранение перед закрытием страницы
         window.addEventListener('beforeunload', () => { saveToLocal(); });
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) saveToLocal();
