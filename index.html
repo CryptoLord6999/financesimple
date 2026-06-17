@@ -209,7 +209,6 @@
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
-
     <!-- Баланс -->
     <div class="flex-1 flex flex-col justify-center items-center mb-8">
         <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
@@ -231,7 +230,7 @@
                 <div class="stat-value revenue-color" id="totalRevenue">0 ₽</div>
             </div>
         </div>
-
+        
         <!-- Кнопки -->
         <div class="button-group">
             <button onclick="openReport()" class="px-6 py-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
@@ -242,11 +241,10 @@
             </button>
         </div>
     </div>
-
+    
     <!-- Ввод -->
     <div class="glass-card rounded-3xl p-6 mb-6">
         <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal">
-        
         <div class="grid grid-cols-2 gap-4">
             <button onclick="addTransaction('income')" class="bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl py-4 font-medium text-lg">
                 + Доход
@@ -256,7 +254,7 @@
             </button>
         </div>
     </div>
-
+    
     <!-- История -->
     <div class="flex-1 overflow-y-auto">
         <div class="flex justify-between items-center mb-4">
@@ -269,12 +267,11 @@
             <!-- Сюда добавляются транзакции -->
         </div>
     </div>
-
+    
     <!-- Модальное окно отчета -->
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            
             <h2 class="text-2xl font-bold text-white mb-6 text-center">Финансовый отчет</h2>
             
             <!-- Основные показатели -->
@@ -282,67 +279,66 @@
                 <div class="report-label">Текущий баланс</div>
                 <div class="report-value text-white" id="reportBalance">0 ₽</div>
             </div>
-
+            
             <div class="report-divider"></div>
-
+            
             <!-- Доход -->
             <div class="report-item">
                 <div class="report-label">Всего доходов</div>
                 <div class="report-value income-color" id="reportTotalIncome">0 ₽</div>
             </div>
-
+            
             <!-- Расход -->
             <div class="report-item">
                 <div class="report-label">Всего расходов</div>
                 <div class="report-value expense-color" id="reportTotalExpense">0 ₽</div>
             </div>
-
+            
             <div class="report-divider"></div>
-
+            
             <!-- Выручка по формуле -->
             <div class="report-item">
                 <div class="report-label">Выручка от доходов</div>
                 <div class="report-value revenue-color" id="reportIncomeRevenue">0 ₽</div>
             </div>
-
+            
             <div class="report-item">
                 <div class="report-label">Выручка от расходов</div>
                 <div class="report-value revenue-color" id="reportExpenseRevenue">0 ₽</div>
             </div>
-
+            
             <div class="report-divider"></div>
-
+            
             <!-- Общая выручка -->
             <div class="report-item" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
                 <div class="report-label">Общая выручка</div>
                 <div class="report-value revenue-color" id="reportTotalRevenue">0 ₽</div>
             </div>
-
+            
             <div class="report-divider"></div>
-
+            
             <!-- Статистика операций -->
             <div class="report-item">
                 <div class="report-label">Количество операций</div>
                 <div class="report-value text-white" id="reportTransactionCount">0</div>
             </div>
-
+            
             <div class="report-item">
                 <div class="report-label">Средняя сумма операции</div>
                 <div class="report-value text-white" id="reportAverageAmount">0 ₽</div>
             </div>
-
+            
             <!-- Кнопка закрытия -->
             <button onclick="closeReport()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
                 Закрыть
             </button>
         </div>
     </div>
-
+    
     <!-- Модальное окно настроек -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-close"></div>
-            
             <h2 class="text-2xl font-bold text-white mb-6 text-center">⚙️ Настройки выручки</h2>
             
             <!-- Процент от доходов -->
@@ -351,16 +347,16 @@
                 <input type="number" id="incomePercentInput" class="settings-input" placeholder="7" step="0.1" min="0" max="100">
                 <div class="text-xs text-zinc-500 mt-2">Пример: 7 = 7% от всех доходов</div>
             </div>
-
+            
             <!-- Процент от расходов -->
             <div class="settings-input-group">
                 <label class="settings-input-label">Процент выручки от расходов (%)</label>
                 <input type="number" id="expensePercentInput" class="settings-input" placeholder="2.5" step="0.1" min="0" max="100">
                 <div class="text-xs text-zinc-500 mt-2">Пример: 2.5 = 2.5% от всех расходов</div>
             </div>
-
+            
             <div class="report-divider"></div>
-
+            
             <!-- Информация -->
             <div class="report-item" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
                 <div class="report-label">Текущая формула</div>
@@ -368,7 +364,7 @@
                     Выручка = (Доход × <span id="currentIncomePercent">7</span>%) + (Расход × <span id="currentExpensePercent">2.5</span>%)
                 </div>
             </div>
-
+            
             <!-- Кнопки -->
             <div class="button-row">
                 <button onclick="saveSettings()" class="px-4 py-3 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
@@ -404,118 +400,121 @@
             appId: "1:123456789012:web:abcdef1234567890"
         };
 
+        let balance, transactions, incomePercent, expensePercent;
+        let balanceEl, amountEl, historyEl, syncStatusEl;
+        let totalIncomeEl, totalExpenseEl, totalRevenueEl;
+        let reportModal, settingsModal;
+
+        const formatMoney = (num) => {
+            return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+        };
+
+        const calculateStats = () => {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            transactions.forEach((t) => {
+                if (t.type === 'income') {
+                    totalIncome += t.amount;
+                } else {
+                    totalExpense += t.amount;
+                }
+            });
+            const incomeRevenue = totalIncome * (incomePercent / 100);
+            const expenseRevenue = totalExpense * (expensePercent / 100);
+            const revenue = incomeRevenue + expenseRevenue;
+            return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
+        };
+
+        const updateSyncStatus = (status) => {
+            const statuses = {
+                syncing: { text: 'синхронизация...', class: 'syncing' },
+                synced: { text: 'синхронизировано', class: 'synced' },
+                offline: { text: 'автосохранение', class: '' },
+                error: { text: 'ошибка синхронизации', class: '' }
+            };
+            const s = statuses[status] || statuses.syncing;
+            syncStatusEl.textContent = s.text;
+            syncStatusEl.className = 'sync-indicator ' + s.class;
+        };
+
+        const updateUI = () => {
+            balanceEl.textContent = formatMoney(balance);
+            const stats = calculateStats();
+            totalIncomeEl.textContent = formatMoney(stats.totalIncome);
+            totalExpenseEl.textContent = formatMoney(stats.totalExpense);
+            totalRevenueEl.textContent = formatMoney(stats.revenue);
+
+            historyEl.innerHTML = '';
+            if (transactions.length === 0) {
+                historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
+            } else {
+                transactions.slice().reverse().forEach((t) => {
+                    const isIncome = t.type === 'income';
+                    const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
+                    const sign = isIncome ? '+' : '−';
+                    const div = document.createElement('div');
+                    div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
+                    const date = new Date(t.date);
+                    const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    div.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="text-zinc-300 font-light">${t.desc}</span>
+                            <span class="text-zinc-600 text-xs">${timeStr}</span>
+                        </div>
+                        <span class="${colorClass} font-medium text-lg">${sign}${formatMoney(t.amount)}</span>
+                    `;
+                    historyEl.appendChild(div);
+                });
+            }
+            
+            // Сохраняем локально как бэкап
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('incomePercent', incomePercent);
+            localStorage.setItem('expensePercent', expensePercent);
+        };
+
+        const initElements = () => {
+            balanceEl = document.getElementById('balance');
+            amountEl = document.getElementById('amount');
+            historyEl = document.getElementById('history');
+            syncStatusEl = document.getElementById('syncStatus');
+            totalIncomeEl = document.getElementById('totalIncome');
+            totalExpenseEl = document.getElementById('totalExpense');
+            totalRevenueEl = document.getElementById('totalRevenue');
+            reportModal = document.getElementById('reportModal');
+            settingsModal = document.getElementById('settingsModal');
+        };
+
+        const loadFromLocalStorage = () => {
+            balance = parseFloat(localStorage.getItem('balance')) || 0;
+            transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
+            expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
+        };
+
         try {
             const app = firebase.initializeApp(firebaseConfig);
             const db = firebase.database(app);
-
+            
             // Получаем ID пользователя из Telegram
             const userId = tg.initDataUnsafe?.user?.id || Math.random().toString(36).substr(2, 9);
             const userName = tg.initDataUnsafe?.user?.first_name || 'User';
             const userRef = db.ref(`users/${userId}`);
 
-            let balance = 0;
-            let transactions = [];
             let isOnline = navigator.onLine;
             let isSyncing = false;
-            let incomePercent = 7;
-            let expensePercent = 2.5;
 
-            const balanceEl = document.getElementById('balance');
-            const amountEl = document.getElementById('amount');
-            const historyEl = document.getElementById('history');
-            const syncStatusEl = document.getElementById('syncStatus');
-            const totalIncomeEl = document.getElementById('totalIncome');
-            const totalExpenseEl = document.getElementById('totalExpense');
-            const totalRevenueEl = document.getElementById('totalRevenue');
-            const reportModal = document.getElementById('reportModal');
-            const settingsModal = document.getElementById('settingsModal');
-
-            const formatMoney = (num) => {
-                return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
-            };
-
-            const calculateStats = () => {
-                let totalIncome = 0;
-                let totalExpense = 0;
-
-                transactions.forEach((t) => {
-                    if (t.type === 'income') {
-                        totalIncome += t.amount;
-                    } else {
-                        totalExpense += t.amount;
-                    }
-                });
-
-                const incomeRevenue = totalIncome * (incomePercent / 100);
-                const expenseRevenue = totalExpense * (expensePercent / 100);
-                const revenue = incomeRevenue + expenseRevenue;
-
-                return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
-            };
-
-            const updateSyncStatus = (status) => {
-                const statuses = {
-                    syncing: { text: 'синхронизация...', class: 'syncing' },
-                    synced: { text: 'синхронизировано', class: 'synced' },
-                    offline: { text: 'автосохранение', class: '' },
-                    error: { text: 'ошибка синхронизации', class: '' }
-                };
-                const s = statuses[status] || statuses.syncing;
-                syncStatusEl.textContent = s.text;
-                syncStatusEl.className = 'sync-indicator ' + s.class;
-            };
-
-            const updateUI = () => {
-                balanceEl.textContent = formatMoney(balance);
-                
-                const stats = calculateStats();
-                totalIncomeEl.textContent = formatMoney(stats.totalIncome);
-                totalExpenseEl.textContent = formatMoney(stats.totalExpense);
-                totalRevenueEl.textContent = formatMoney(stats.revenue);
-                
-                historyEl.innerHTML = '';
-                
-                if (transactions.length === 0) {
-                    historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
-                } else {
-                    transactions.slice().reverse().forEach((t) => {
-                        const isIncome = t.type === 'income';
-                        const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
-                        const sign = isIncome ? '+' : '−';
-                        
-                        const div = document.createElement('div');
-                        div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
-                        
-                        const date = new Date(t.date);
-                        const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                        
-                        div.innerHTML = `
-                            <div class="flex flex-col">
-                                <span class="text-zinc-300 font-light">${t.desc}</span>
-                                <span class="text-zinc-600 text-xs">${timeStr}</span>
-                            </div>
-                            <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
-                        `;
-                        historyEl.appendChild(div);
-                    });
-                }
-
-                // Сохраняем локально как бэкап
-                localStorage.setItem('balance', balance);
-                localStorage.setItem('transactions', JSON.stringify(transactions));
-                localStorage.setItem('incomePercent', incomePercent);
-                localStorage.setItem('expensePercent', expensePercent);
-            };
+            loadFromLocalStorage();
+            initElements();
 
             const saveToServer = async () => {
-                if (!isOnline) {
+                if (!isOnline || isSyncing) {
                     updateSyncStatus('offline');
                     return;
                 }
-
                 isSyncing = true;
                 updateSyncStatus('syncing');
-
                 try {
                     const stats = calculateStats();
                     await userRef.set({
@@ -530,10 +529,10 @@
                         lastUpdated: new Date().toISOString()
                     });
                     updateSyncStatus('synced');
-                    isSyncing = false;
                 } catch (error) {
                     console.error('Ошибка сохранения:', error);
                     updateSyncStatus('error');
+                } finally {
                     isSyncing = false;
                 }
             };
@@ -550,22 +549,12 @@
                         updateUI();
                         updateSyncStatus('synced');
                     } else {
-                        // Если нет данных на сервере, загружаем локальные
-                        balance = parseFloat(localStorage.getItem('balance')) || 0;
-                        transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-                        incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
-                        expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
-                        updateUI();
                         if (isOnline) {
                             saveToServer();
                         }
                     }
                 }, (error) => {
                     console.error('Ошибка загрузки:', error);
-                    balance = parseFloat(localStorage.getItem('balance')) || 0;
-                    transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-                    incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
-                    expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
                     updateUI();
                     updateSyncStatus('offline');
                 });
@@ -577,20 +566,17 @@
                     tg.HapticFeedback.notificationOccurred('error');
                     return;
                 }
-
                 if (type === 'income') {
                     balance += amount;
                 } else {
                     balance -= amount;
                 }
-
                 transactions.push({
                     type: type,
                     amount: amount,
                     desc: type === 'income' ? 'Пополнение' : 'Списание',
                     date: new Date().toISOString()
                 });
-
                 amountEl.value = '';
                 tg.HapticFeedback.impactOccurred('light');
                 updateUI();
@@ -602,9 +588,7 @@
                     tg.HapticFeedback.notificationOccurred('warning');
                     return;
                 }
-                
                 tg.HapticFeedback.notificationOccurred('warning');
-                
                 if (confirm('Обнулить баланс и всю историю?')) {
                     balance = 0;
                     transactions = [];
@@ -618,10 +602,9 @@
                 }
             };
 
-            window.openReport = () => {
+            const openReport = () => {
                 const stats = calculateStats();
                 const avgAmount = transactions.length > 0 ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length : 0;
-
                 document.getElementById('reportBalance').textContent = formatMoney(balance);
                 document.getElementById('reportTotalIncome').textContent = formatMoney(stats.totalIncome);
                 document.getElementById('reportTotalExpense').textContent = formatMoney(stats.totalExpense);
@@ -630,27 +613,26 @@
                 document.getElementById('reportTotalRevenue').textContent = formatMoney(stats.revenue);
                 document.getElementById('reportTransactionCount').textContent = transactions.length;
                 document.getElementById('reportAverageAmount').textContent = formatMoney(avgAmount);
-
                 reportModal.classList.add('active');
                 tg.HapticFeedback.impactOccurred('medium');
             };
 
-            window.closeReport = () => {
+            const closeReport = () => {
                 reportModal.classList.remove('active');
             };
 
-            window.openSettings = () => {
+            const openSettings = () => {
                 document.getElementById('incomePercentInput').value = incomePercent;
                 document.getElementById('expensePercentInput').value = expensePercent;
                 settingsModal.classList.add('active');
                 tg.HapticFeedback.impactOccurred('medium');
             };
 
-            window.closeSettings = () => {
+            const closeSettings = () => {
                 settingsModal.classList.remove('active');
             };
 
-            window.saveSettings = () => {
+            const saveSettings = () => {
                 const newIncomePercent = parseFloat(document.getElementById('incomePercentInput').value);
                 const newExpensePercent = parseFloat(document.getElementById('expensePercentInput').value);
 
@@ -658,7 +640,6 @@
                     alert('Некорректное значение для процента от доходов');
                     return;
                 }
-
                 if (isNaN(newExpensePercent) || newExpensePercent < 0 || newExpensePercent > 100) {
                     alert('Некорректное значение для процента от расходов');
                     return;
@@ -666,10 +647,8 @@
 
                 incomePercent = newIncomePercent;
                 expensePercent = newExpensePercent;
-
                 document.getElementById('currentIncomePercent').textContent = incomePercent;
                 document.getElementById('currentExpensePercent').textContent = expensePercent;
-
                 updateUI();
                 saveToServer();
                 closeSettings();
@@ -682,7 +661,6 @@
                     closeReport();
                 }
             });
-
             settingsModal.addEventListener('click', (e) => {
                 if (e.target === settingsModal) {
                     closeSettings();
@@ -694,7 +672,6 @@
                 isOnline = true;
                 saveToServer();
             });
-
             window.addEventListener('offline', () => {
                 isOnline = false;
                 updateSyncStatus('offline');
@@ -706,130 +683,56 @@
                 }
             });
 
-            // Экспортируем функции в глобальный скоп
+            // Экспортируем функции в глобальный скоуп
             window.addTransaction = addTransaction;
             window.resetAll = resetAll;
+            window.openReport = openReport;
+            window.closeReport = closeReport;
+            window.openSettings = openSettings;
+            window.closeSettings = closeSettings;
+            window.saveSettings = saveSettings;
 
             // Загружаем данные при старте
             loadFromServer();
 
         } catch (error) {
             console.error('Ошибка инициализации Firebase:', error);
+            
             // Fallback на локальное хранилище
-            let balance = parseFloat(localStorage.getItem('balance')) || 0;
-            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-            let incomePercent = parseFloat(localStorage.getItem('incomePercent')) || 7;
-            let expensePercent = parseFloat(localStorage.getItem('expensePercent')) || 2.5;
-
-            const balanceEl = document.getElementById('balance');
-            const amountEl = document.getElementById('amount');
-            const historyEl = document.getElementById('history');
-            const syncStatusEl = document.getElementById('syncStatus');
-            const totalIncomeEl = document.getElementById('totalIncome');
-            const totalExpenseEl = document.getElementById('totalExpense');
-            const totalRevenueEl = document.getElementById('totalRevenue');
-            const reportModal = document.getElementById('reportModal');
-            const settingsModal = document.getElementById('settingsModal');
+            loadFromLocalStorage();
+            initElements();
 
             syncStatusEl.textContent = 'локальное хранилище';
             syncStatusEl.style.color = '#f97316';
 
-            const formatMoney = (num) => {
-                return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
-            };
-
-            const calculateStats = () => {
-                let totalIncome = 0;
-                let totalExpense = 0;
-
-                transactions.forEach((t) => {
-                    if (t.type === 'income') {
-                        totalIncome += t.amount;
-                    } else {
-                        totalExpense += t.amount;
-                    }
-                });
-
-                const incomeRevenue = totalIncome * (incomePercent / 100);
-                const expenseRevenue = totalExpense * (expensePercent / 100);
-                const revenue = incomeRevenue + expenseRevenue;
-                return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
-            };
-
-            const updateUI = () => {
-                balanceEl.textContent = formatMoney(balance);
-                
-                const stats = calculateStats();
-                totalIncomeEl.textContent = formatMoney(stats.totalIncome);
-                totalExpenseEl.textContent = formatMoney(stats.totalExpense);
-                totalRevenueEl.textContent = formatMoney(stats.revenue);
-                
-                historyEl.innerHTML = '';
-                
-                if (transactions.length === 0) {
-                    historyEl.innerHTML = '<p class="text-zinc-600 text-center text-sm font-light py-8">Нет операций</p>';
-                } else {
-                    transactions.slice().reverse().forEach((t) => {
-                        const isIncome = t.type === 'income';
-                        const colorClass = isIncome ? 'text-emerald-400' : 'text-rose-400';
-                        const sign = isIncome ? '+' : '−';
-                        
-                        const div = document.createElement('div');
-                        div.className = 'transaction-item flex justify-between items-center p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/50';
-                        
-                        const date = new Date(t.date);
-                        const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                        
-                        div.innerHTML = `
-                            <div class="flex flex-col">
-                                <span class="text-zinc-300 font-light">${t.desc}</span>
-                                <span class="text-zinc-600 text-xs">${timeStr}</span>
-                            </div>
-                            <span class="${colorClass} font-medium text-lg">${sign} ${formatMoney(t.amount)}</span>
-                        `;
-                        historyEl.appendChild(div);
-                    });
-                }
-
-                localStorage.setItem('balance', balance);
-                localStorage.setItem('transactions', JSON.stringify(transactions));
-                localStorage.setItem('incomePercent', incomePercent);
-                localStorage.setItem('expensePercent', expensePercent);
-            };
-
-            window.addTransaction = (type) => {
+            const addTransaction = (type) => {
                 const amount = parseFloat(amountEl.value);
                 if (!amount || amount <= 0) {
                     tg.HapticFeedback.notificationOccurred('error');
                     return;
                 }
-
                 if (type === 'income') {
                     balance += amount;
                 } else {
                     balance -= amount;
                 }
-
                 transactions.push({
                     type: type,
                     amount: amount,
                     desc: type === 'income' ? 'Пополнение' : 'Списание',
                     date: new Date().toISOString()
                 });
-
                 amountEl.value = '';
                 tg.HapticFeedback.impactOccurred('light');
                 updateUI();
             };
 
-            window.resetAll = () => {
+            const resetAll = () => {
                 if (transactions.length === 0) {
                     tg.HapticFeedback.notificationOccurred('warning');
                     return;
                 }
-                
                 tg.HapticFeedback.notificationOccurred('warning');
-                
                 if (confirm('Обнулить баланс и всю историю?')) {
                     balance = 0;
                     transactions = [];
@@ -842,10 +745,9 @@
                 }
             };
 
-            window.openReport = () => {
+            const openReport = () => {
                 const stats = calculateStats();
                 const avgAmount = transactions.length > 0 ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length : 0;
-
                 document.getElementById('reportBalance').textContent = formatMoney(balance);
                 document.getElementById('reportTotalIncome').textContent = formatMoney(stats.totalIncome);
                 document.getElementById('reportTotalExpense').textContent = formatMoney(stats.totalExpense);
@@ -854,25 +756,24 @@
                 document.getElementById('reportTotalRevenue').textContent = formatMoney(stats.revenue);
                 document.getElementById('reportTransactionCount').textContent = transactions.length;
                 document.getElementById('reportAverageAmount').textContent = formatMoney(avgAmount);
-
                 reportModal.classList.add('active');
             };
 
-            window.closeReport = () => {
+            const closeReport = () => {
                 reportModal.classList.remove('active');
             };
 
-            window.openSettings = () => {
+            const openSettings = () => {
                 document.getElementById('incomePercentInput').value = incomePercent;
                 document.getElementById('expensePercentInput').value = expensePercent;
                 settingsModal.classList.add('active');
             };
 
-            window.closeSettings = () => {
+            const closeSettings = () => {
                 settingsModal.classList.remove('active');
             };
 
-            window.saveSettings = () => {
+            const saveSettings = () => {
                 const newIncomePercent = parseFloat(document.getElementById('incomePercentInput').value);
                 const newExpensePercent = parseFloat(document.getElementById('expensePercentInput').value);
 
@@ -880,7 +781,6 @@
                     alert('Некорректное значение для процента от доходов');
                     return;
                 }
-
                 if (isNaN(newExpensePercent) || newExpensePercent < 0 || newExpensePercent > 100) {
                     alert('Некорректное значение для процента от расходов');
                     return;
@@ -888,10 +788,8 @@
 
                 incomePercent = newIncomePercent;
                 expensePercent = newExpensePercent;
-
                 document.getElementById('currentIncomePercent').textContent = incomePercent;
                 document.getElementById('currentExpensePercent').textContent = expensePercent;
-
                 updateUI();
                 closeSettings();
             };
@@ -901,7 +799,6 @@
                     closeReport();
                 }
             });
-
             settingsModal.addEventListener('click', (e) => {
                 if (e.target === settingsModal) {
                     closeSettings();
@@ -910,9 +807,17 @@
 
             amountEl.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    window.addTransaction('expense');
+                    addTransaction('expense');
                 }
             });
+
+            window.addTransaction = addTransaction;
+            window.resetAll = resetAll;
+            window.openReport = openReport;
+            window.closeReport = closeReport;
+            window.openSettings = openSettings;
+            window.closeSettings = closeSettings;
+            window.saveSettings = saveSettings;
 
             updateUI();
         }
