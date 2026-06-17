@@ -64,6 +64,104 @@
         .sync-indicator.synced {
             color: #10b981;
         }
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .stat-card {
+            flex: 1;
+            background: rgba(24, 24, 27, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+        .income-color {
+            color: #10b981;
+        }
+        .expense-color {
+            color: #ef4444;
+        }
+        .revenue-color {
+            color: #f59e0b;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal.active {
+            display: flex;
+            align-items: flex-end;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            width: 100%;
+            background: rgba(24, 24, 27, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem 2rem 0 0;
+            padding: 2rem 1.5rem 3rem;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-close {
+            width: 2.5rem;
+            height: 0.3rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.15rem;
+            margin: 0 auto 1rem;
+        }
+        .report-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .report-label {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .report-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .report-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 1.5rem 0;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -73,6 +171,27 @@
         <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
         <h1 id="balance" class="text-6xl font-extralight tracking-tight text-white">0 ₽</h1>
         <div id="syncStatus" class="sync-indicator">подключение...</div>
+        
+        <!-- Статистика -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">Доход</div>
+                <div class="stat-value income-color" id="totalIncome">0 ₽</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Расход</div>
+                <div class="stat-value expense-color" id="totalExpense">0 ₽</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Выручка</div>
+                <div class="stat-value revenue-color" id="totalRevenue">0 ₽</div>
+            </div>
+        </div>
+
+        <!-- Кнопка отчета -->
+        <button onclick="openReport()" class="mt-6 px-6 py-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">
+            📊 Посмотреть отчет
+        </button>
     </div>
 
     <!-- Ввод -->
@@ -99,6 +218,77 @@
         </div>
         <div id="history" class="space-y-3 pb-6">
             <!-- Сюда добавляются транзакции -->
+        </div>
+    </div>
+
+    <!-- Модальное окно отчета -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close"></div>
+            
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Финансовый отчет</h2>
+            
+            <!-- Основные показатели -->
+            <div class="report-item">
+                <div class="report-label">Текущий баланс</div>
+                <div class="report-value text-white" id="reportBalance">0 ₽</div>
+            </div>
+
+            <div class="report-divider"></div>
+
+            <!-- Доход -->
+            <div class="report-item">
+                <div class="report-label">Всего доходов</div>
+                <div class="report-value income-color" id="reportTotalIncome">0 ₽</div>
+            </div>
+
+            <!-- Расход -->
+            <div class="report-item">
+                <div class="report-label">Всего расходов</div>
+                <div class="report-value expense-color" id="reportTotalExpense">0 ₽</div>
+            </div>
+
+            <div class="report-divider"></div>
+
+            <!-- Выручка по формуле -->
+            <div class="report-item">
+                <div class="report-label">Выручка (7% от доходов)</div>
+                <div class="report-value revenue-color" id="reportIncomeRevenue">0 ₽</div>
+            </div>
+
+            <div class="report-item">
+                <div class="report-label">Выручка (2.5% от расходов)</div>
+                <div class="report-value revenue-color" id="reportExpenseRevenue">0 ₽</div>
+            </div>
+
+            <div class="report-divider"></div>
+
+            <!-- Общая выручка -->
+            <div class="report-item" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                <div class="report-label">Общая выручка</div>
+                <div class="report-value revenue-color" id="reportTotalRevenue">0 ₽</div>
+                <div class="text-xs text-zinc-400 mt-2" id="reportRevenueFormula">
+                    Формула: (Доход × 0.07) + (Расход × 0.025)
+                </div>
+            </div>
+
+            <div class="report-divider"></div>
+
+            <!-- Статистика операций -->
+            <div class="report-item">
+                <div class="report-label">Количество операций</div>
+                <div class="report-value text-white" id="reportTransactionCount">0</div>
+            </div>
+
+            <div class="report-item">
+                <div class="report-label">Средняя сумма операции</div>
+                <div class="report-value text-white" id="reportAverageAmount">0 ₽</div>
+            </div>
+
+            <!-- Кнопка закрытия -->
+            <button onclick="closeReport()" class="w-full mt-6 px-4 py-3 bg-zinc-700 text-white hover:bg-zinc-600 active:scale-95 transition-all duration-200 rounded-2xl font-medium">
+                Закрыть
+            </button>
         </div>
     </div>
 
@@ -143,9 +333,33 @@
             const amountEl = document.getElementById('amount');
             const historyEl = document.getElementById('history');
             const syncStatusEl = document.getElementById('syncStatus');
+            const totalIncomeEl = document.getElementById('totalIncome');
+            const totalExpenseEl = document.getElementById('totalExpense');
+            const totalRevenueEl = document.getElementById('totalRevenue');
+            const reportModal = document.getElementById('reportModal');
 
             const formatMoney = (num) => {
                 return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+            };
+
+            const calculateStats = () => {
+                let totalIncome = 0;
+                let totalExpense = 0;
+
+                transactions.forEach((t) => {
+                    if (t.type === 'income') {
+                        totalIncome += t.amount;
+                    } else {
+                        totalExpense += t.amount;
+                    }
+                });
+
+                // Формула: Выручка = (доход * 0.07) + (расход * 0.025)
+                const incomeRevenue = totalIncome * 0.07;
+                const expenseRevenue = totalExpense * 0.025;
+                const revenue = incomeRevenue + expenseRevenue;
+
+                return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
             };
 
             const updateSyncStatus = (status) => {
@@ -162,6 +376,12 @@
 
             const updateUI = () => {
                 balanceEl.textContent = formatMoney(balance);
+                
+                const stats = calculateStats();
+                totalIncomeEl.textContent = formatMoney(stats.totalIncome);
+                totalExpenseEl.textContent = formatMoney(stats.totalExpense);
+                totalRevenueEl.textContent = formatMoney(stats.revenue);
+                
                 historyEl.innerHTML = '';
                 
                 if (transactions.length === 0) {
@@ -204,9 +424,13 @@
                 updateSyncStatus('syncing');
 
                 try {
+                    const stats = calculateStats();
                     await userRef.set({
                         balance: balance,
                         transactions: transactions,
+                        totalIncome: stats.totalIncome,
+                        totalExpense: stats.totalExpense,
+                        revenue: stats.revenue,
                         userName: userName,
                         lastUpdated: new Date().toISOString()
                     });
@@ -293,6 +517,34 @@
                 }
             };
 
+            window.openReport = () => {
+                const stats = calculateStats();
+                const avgAmount = transactions.length > 0 ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length : 0;
+
+                document.getElementById('reportBalance').textContent = formatMoney(balance);
+                document.getElementById('reportTotalIncome').textContent = formatMoney(stats.totalIncome);
+                document.getElementById('reportTotalExpense').textContent = formatMoney(stats.totalExpense);
+                document.getElementById('reportIncomeRevenue').textContent = formatMoney(stats.incomeRevenue);
+                document.getElementById('reportExpenseRevenue').textContent = formatMoney(stats.expenseRevenue);
+                document.getElementById('reportTotalRevenue').textContent = formatMoney(stats.revenue);
+                document.getElementById('reportTransactionCount').textContent = transactions.length;
+                document.getElementById('reportAverageAmount').textContent = formatMoney(avgAmount);
+
+                reportModal.classList.add('active');
+                tg.HapticFeedback.impactOccurred('medium');
+            };
+
+            window.closeReport = () => {
+                reportModal.classList.remove('active');
+            };
+
+            // Закрытие модального окна при клике на фон
+            reportModal.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    closeReport();
+                }
+            });
+
             // Отслеживаем онлайн/оффлайн статус
             window.addEventListener('online', () => {
                 isOnline = true;
@@ -327,6 +579,10 @@
             const amountEl = document.getElementById('amount');
             const historyEl = document.getElementById('history');
             const syncStatusEl = document.getElementById('syncStatus');
+            const totalIncomeEl = document.getElementById('totalIncome');
+            const totalExpenseEl = document.getElementById('totalExpense');
+            const totalRevenueEl = document.getElementById('totalRevenue');
+            const reportModal = document.getElementById('reportModal');
 
             syncStatusEl.textContent = 'локальное хранилище';
             syncStatusEl.style.color = '#f97316';
@@ -335,8 +591,32 @@
                 return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
             };
 
+            const calculateStats = () => {
+                let totalIncome = 0;
+                let totalExpense = 0;
+
+                transactions.forEach((t) => {
+                    if (t.type === 'income') {
+                        totalIncome += t.amount;
+                    } else {
+                        totalExpense += t.amount;
+                    }
+                });
+
+                const incomeRevenue = totalIncome * 0.07;
+                const expenseRevenue = totalExpense * 0.025;
+                const revenue = incomeRevenue + expenseRevenue;
+                return { totalIncome, totalExpense, incomeRevenue, expenseRevenue, revenue };
+            };
+
             const updateUI = () => {
                 balanceEl.textContent = formatMoney(balance);
+                
+                const stats = calculateStats();
+                totalIncomeEl.textContent = formatMoney(stats.totalIncome);
+                totalExpenseEl.textContent = formatMoney(stats.totalExpense);
+                totalRevenueEl.textContent = formatMoney(stats.revenue);
+                
                 historyEl.innerHTML = '';
                 
                 if (transactions.length === 0) {
@@ -412,6 +692,32 @@
                     tg.HapticFeedback.impactOccurred('soft');
                 }
             };
+
+            window.openReport = () => {
+                const stats = calculateStats();
+                const avgAmount = transactions.length > 0 ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length : 0;
+
+                document.getElementById('reportBalance').textContent = formatMoney(balance);
+                document.getElementById('reportTotalIncome').textContent = formatMoney(stats.totalIncome);
+                document.getElementById('reportTotalExpense').textContent = formatMoney(stats.totalExpense);
+                document.getElementById('reportIncomeRevenue').textContent = formatMoney(stats.incomeRevenue);
+                document.getElementById('reportExpenseRevenue').textContent = formatMoney(stats.expenseRevenue);
+                document.getElementById('reportTotalRevenue').textContent = formatMoney(stats.revenue);
+                document.getElementById('reportTransactionCount').textContent = transactions.length;
+                document.getElementById('reportAverageAmount').textContent = formatMoney(avgAmount);
+
+                reportModal.classList.add('active');
+            };
+
+            window.closeReport = () => {
+                reportModal.classList.remove('active');
+            };
+
+            reportModal.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    closeReport();
+                }
+            });
 
             amountEl.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
