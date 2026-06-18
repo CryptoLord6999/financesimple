@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
     --ios-bg: #000000;
@@ -30,141 +30,31 @@
     --radius-ios-sm: 12px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; }
 
-html, body {
-    height: 100%;
-    overflow: hidden;
-    background: var(--ios-bg);
-    color: var(--ios-text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-#splash {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-}
+#splash { position: fixed; inset: 0; z-index: 10000; background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease, visibility 0.6s ease; }
 #splash.hide { opacity: 0; visibility: hidden; }
 #splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
-.splash-title {
-    font-family: 'Inter', -apple-system, sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1c1c1e;
-    letter-spacing: -0.03em;
-    margin-top: 1.5rem;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: titleReveal 1s ease-out 0.5s forwards;
-}
-.splash-sub {
-    font-size: 0.85rem;
-    color: #8E8E93;
-    letter-spacing: 0.08em;
-    margin-top: 0.5rem;
-    font-weight: 400;
-    opacity: 0;
-    transform: translateY(15px);
-    animation: subtitleReveal 0.8s ease-out 1s forwards;
-}
+.splash-title { font-size: 2.5rem; font-weight: 700; color: #1c1c1e; letter-spacing: -0.03em; margin-top: 1.5rem; opacity: 0; transform: translateY(20px); animation: titleReveal 1s ease-out 0.5s forwards; }
+.splash-sub { font-size: 0.85rem; color: #8E8E93; letter-spacing: 0.08em; margin-top: 0.5rem; font-weight: 400; opacity: 0; transform: translateY(15px); animation: subtitleReveal 0.8s ease-out 1s forwards; }
 @keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
 @keyframes subtitleReveal { to { opacity: 1; transform: translateY(0); } }
 
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: var(--ios-bg); }
-
 .pages { flex: 1; position: relative; overflow: hidden; background: var(--ios-bg); }
-.page {
-    position: absolute;
-    inset: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 0 100px 0;
-    opacity: 0;
-    transform: scale(0.97);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    -webkit-overflow-scrolling: touch;
-}
+.page { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0; opacity: 0; transform: scale(0.97); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; -webkit-overflow-scrolling: touch; }
 .page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
-.balance-card {
-    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
-    border-radius: var(--radius-ios);
-    padding: 24px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-}
-.balance-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
-}
-.balance-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    position: relative;
-    z-index: 2;
-}
-.balance-label {
-    font-size: 0.75rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 500;
-}
-.balance-edit-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: var(--ios-text-secondary);
-    font-size: 0.9rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-.balance-edit-btn:active {
-    transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.2);
-}
-.balance-value {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--ios-text);
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.03em;
-    position: relative;
-    z-index: 2;
-}
+.balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
+.balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
+.balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
+.balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+.balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; color: var(--ios-text-secondary); font-size: 0.9rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.balance-edit-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.2); }
+.balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; position: relative; z-index: 2; }
 
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
 .stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
@@ -173,20 +63,7 @@ html, body {
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 
-.account-chip {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 100px;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    cursor: pointer;
-    border: 1px solid var(--ios-separator);
-    transition: all 0.2s ease;
-}
+.account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.2s ease; }
 .account-chip:active { transform: scale(0.98); opacity: 0.8; }
 .account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .account-chip-arrow { color: var(--ios-blue); font-size: 1rem; }
@@ -201,33 +78,10 @@ html, body {
 .action-income { background: var(--ios-green); color: white; }
 .action-expense { background: var(--ios-red); color: white; }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 0 4px;
-}
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
 .section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; }
-.reset-btn {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    opacity: 0.7;
-}
-.reset-btn:hover {
-    opacity: 1;
-    background: rgba(255, 59, 48, 0.1);
-    color: var(--ios-red);
-}
+.reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.2s ease; opacity: 0.7; }
+.reset-btn:hover { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); }
 .reset-btn:active { transform: scale(0.95); }
 
 .tx-list { display: flex; flex-direction: column; gap: 8px; }
@@ -250,125 +104,99 @@ html, body {
 .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
 .bottom-sheet.active { transform: translateY(0); }
 .sheet-handle { width: 36px; height: 5px; background: #3a3a3c; border-radius: 3px; margin: 0 auto 16px; }
-.sheet-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
+.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .sheet-title { font-size: 1.1rem; font-weight: 600; text-align: center; flex: 1; }
 
-/* ===== HAMBURGER MENU BUTTON ===== */
-.sheet-menu-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(120, 120, 128, 0.15);
-    border: 1px solid rgba(120, 120, 128, 0.2);
+.sheet-menu-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(120, 120, 128, 0.15); border: 1px solid rgba(120, 120, 128, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
+.sheet-menu-btn:active { transform: scale(0.9); background: rgba(120, 120, 128, 0.25); }
+.hamburger-icon { display: flex; flex-direction: column; gap: 3px; align-items: center; justify-content: center; width: 18px; height: 12px; }
+.hamburger-icon span { display: block; width: 100%; height: 2px; background: var(--ios-text-secondary); border-radius: 1px; transition: all 0.2s ease; }
+.sheet-menu-btn:active .hamburger-icon span { background: var(--ios-text); }
+
+.actions-menu { background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--ios-separator); display: none; }
+.actions-menu.active { display: block; animation: slideDown 0.3s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.action-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid var(--ios-separator); }
+.action-item:last-child { border-bottom: none; }
+.action-item:active { background: rgba(120, 120, 128, 0.1); }
+.action-item-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+.action-item-text { flex: 1; font-size: 0.9rem; font-weight: 500; }
+.action-item-arrow { color: var(--ios-text-secondary); font-size: 0.9rem; }
+
+/* ===== EDIT MODE STYLES ===== */
+.edit-input { width: 100%; background: rgba(120, 120, 128, 0.1); border: 1px solid var(--ios-separator); border-radius: 8px; padding: 8px 12px; color: var(--ios-text); font-size: 0.85rem; outline: none; transition: all 0.2s ease; }
+.edit-input:focus { border-color: var(--ios-blue); background: rgba(0, 122, 255, 0.1); }
+.edit-actions { display: flex; gap: 8px; margin-top: 12px; }
+.edit-actions .btn { flex: 1; padding: 10px; font-size: 0.85rem; }
+
+/* Delete buttons in edit mode */
+.delete-btn-inline {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255, 59, 48, 0.12);
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    border-radius: 8px;
+    color: var(--ios-red);
+    font-size: 0.8rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    position: relative;
+    margin-top: 8px;
 }
-.sheet-menu-btn:active {
-    transform: scale(0.9);
-    background: rgba(120, 120, 128, 0.25);
+.delete-btn-inline:active {
+    transform: scale(0.97);
+    background: rgba(255, 59, 48, 0.2);
 }
-.hamburger-icon {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 12px;
-}
-.hamburger-icon span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--ios-text-secondary);
-    border-radius: 1px;
-    transition: all 0.2s ease;
-}
-.sheet-menu-btn:active .hamburger-icon span {
-    background: var(--ios-text);
+.delete-btn-inline .delete-icon {
+    font-size: 1rem;
 }
 
-/* ===== ACTIONS MENU ===== */
-.actions-menu {
-    background: rgba(120, 120, 128, 0.08);
-    border-radius: var(--radius-ios-sm);
-    margin-bottom: 16px;
-    overflow: hidden;
-    border: 1px solid var(--ios-separator);
-    display: none;
-}
-.actions-menu.active {
-    display: block;
-    animation: slideDown 0.3s ease;
-}
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.action-item {
+.delete-btn-account {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    border-radius: 8px;
+    color: var(--ios-red);
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    border-bottom: 1px solid var(--ios-separator);
+    margin-top: 6px;
 }
-.action-item:last-child {
-    border-bottom: none;
+.delete-btn-account:active {
+    transform: scale(0.97);
+    background: rgba(255, 59, 48, 0.18);
 }
-.action-item:active {
-    background: rgba(120, 120, 128, 0.1);
+
+.edit-row-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
 }
-.action-item-icon {
-    font-size: 1.2rem;
-    width: 28px;
-    text-align: center;
-}
-.action-item-text {
-    flex: 1;
-    font-size: 0.9rem;
+.edit-row-label {
+    font-size: 0.7rem;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     font-weight: 500;
 }
-.action-item-arrow {
+.edit-row-badge {
+    font-size: 0.6rem;
     color: var(--ios-text-secondary);
-    font-size: 0.9rem;
-}
-
-/* ===== EDIT MODE ===== */
-.edit-input {
-    width: 100%;
-    background: rgba(120, 120, 128, 0.1);
-    border: 1px solid var(--ios-separator);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: var(--ios-text);
-    font-size: 0.85rem;
-    outline: none;
-    transition: all 0.2s ease;
-}
-.edit-input:focus {
-    border-color: var(--ios-blue);
-    background: rgba(0, 122, 255, 0.1);
-}
-.edit-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-}
-.edit-actions .btn {
-    flex: 1;
-    padding: 10px;
-    font-size: 0.85rem;
+    background: rgba(120, 120, 128, 0.15);
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 500;
 }
 
 .toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
@@ -452,14 +280,12 @@ html, body {
 
 <div id="app">
     <div class="pages">
-        
         <div class="page active" id="page-home">
             <div class="page-content">
                 <div class="account-chip" onclick="openAccountSheet()">
                     <span class="account-chip-name" id="accountName">📂 Выберите счёт</span>
                     <span class="account-chip-arrow">›</span>
                 </div>
-
                 <div class="balance-card">
                     <div class="balance-header">
                         <div class="balance-label">Текущий баланс</div>
@@ -468,55 +294,28 @@ html, body {
                     <div class="balance-value" id="balanceDisplay">0 ₽</div>
                     <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
                 </div>
-
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div>
-                        <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Доход</span></div>
-                        <div class="stat-value text-green" id="statIncome">0 ₽</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Расход</span></div>
-                        <div class="stat-value text-red" id="statExpense">0 ₽</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div>
-                        <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
+                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
+                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
+                    <div class="stat-card"><div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
                 </div>
-
-                <div class="amount-input-wrap">
-                    <input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01">
-                </div>
-
+                <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
                 <div class="quick-actions">
-                    <button class="action-btn action-income" onclick="doTransaction('income')">
-                        <span>＋</span> Доход
-                    </button>
-                    <button class="action-btn action-expense" onclick="doTransaction('expense')">
-                        <span>−</span> Расход
-                    </button>
+                    <button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button>
+                    <button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button>
                 </div>
-
                 <div class="section-header">
                     <div class="section-title">История операций</div>
                     <button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button>
                 </div>
-                <div class="tx-list" id="txList">
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <div class="empty-text">Нет операций</div>
-                    </div>
-                </div>
+                <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
             </div>
         </div>
 
         <div class="page" id="page-report">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"> Отчёт</div>
                 <div class="summary-block">
                     <div class="summary-title">Сводка по всем счетам</div>
                     <div class="summary-grid">
@@ -531,9 +330,7 @@ html, body {
                 </div>
                 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
                 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
-                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
-                    ✅ Последний: <span id="lastFixedDate"></span>
-                </div>
+                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
                 <div class="section-title">Зафиксированные отчёты</div>
                 <div id="reportsList"></div>
             </div>
@@ -564,85 +361,36 @@ html, body {
         <div class="page" id="page-adjust">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
-                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
-                    💼 Счёт: Основной
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">Новый баланс (₽)</div>
-                    <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
-                    <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">💜 Капитал (₽)</div>
-                    <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
-                    <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">📝 Комментарий</div>
-                    <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
-                </div>
+                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
+                <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
+                <div class="setting-group"><div class="setting-label"> Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
+                <div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
                 <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
             </div>
         </div>
 
         <div class="page" id="page-settings">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
-                <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-                    <span style="font-size:1.1rem;">💡</span>
-                    <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">💜 Капитал (₽)</div>
-                    <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
-                    <div class="setting-hint">Общий для всех счетов</div>
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">% от доходов</div>
-                    <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
-                </div>
-                <div class="setting-group">
-                    <div class="setting-label">% от расходов</div>
-                    <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
-                </div>
-                <div class="report-card" style="background:rgba(0,122,255,0.08);">
-                    <div class="setting-label" style="margin-bottom:6px;">Формула</div>
-                    <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
-                        Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br>
-                        <span style="color:var(--ios-blue);">💜 Капитал += Выручка</span>
-                    </div>
-                </div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">️ Настройки</div>
+                <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
+                <div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
+                <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
+                <div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
+                <div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
                 <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
             </div>
         </div>
-
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" data-page="home" onclick="switchPage('home')">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Главная</span>
-        </div>
-        <div class="nav-item" data-page="report" onclick="switchPage('report')">
-            <span class="nav-icon">📊</span>
-            <span class="nav-label">Отчёт</span>
-        </div>
-        <div class="nav-item" data-page="detail" onclick="switchPage('detail')">
-            <span class="nav-icon">📈</span>
-            <span class="nav-label">Статистика</span>
-        </div>
-        <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
-            <span class="nav-icon">✏️</span>
-            <span class="nav-label">Коррекция</span>
-        </div>
-        <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Настройки</span>
-        </div>
+        <div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
+        <div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
+        <div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Статистика</span></div>
+        <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
+        <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
     </nav>
 </div>
 
-<!-- ACCOUNT SHEET -->
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
     <div class="sheet-handle"></div>
@@ -650,56 +398,26 @@ html, body {
         <div style="width:36px;"></div>
         <div class="sheet-title">Выбор счёта</div>
         <button class="sheet-menu-btn" onclick="toggleActionsMenu()" title="Меню действий">
-            <div class="hamburger-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <div class="hamburger-icon"><span></span><span></span><span></span></div>
         </button>
     </div>
-    
-    <!-- Actions Menu -->
     <div class="actions-menu" id="actionsMenu">
-        <div class="action-item" onclick="createHolder()">
-            <span class="action-item-icon">👤</span>
-            <span class="action-item-text">Создать держателя</span>
-            <span class="action-item-arrow">›</span>
-        </div>
-        <div class="action-item" onclick="createAccount()">
-            <span class="action-item-icon">💼</span>
-            <span class="action-item-text">Создать счёт</span>
-            <span class="action-item-arrow">›</span>
-        </div>
-        <div class="action-item" onclick="toggleEditMode()">
-            <span class="action-item-icon">✏️</span>
-            <span class="action-item-text">Редактировать названия</span>
-            <span class="action-item-arrow">›</span>
-        </div>
+        <div class="action-item" onclick="createHolder()"><span class="action-item-icon">👤</span><span class="action-item-text">Создать держателя</span><span class="action-item-arrow">›</span></div>
+        <div class="action-item" onclick="createAccount()"><span class="action-item-icon">💼</span><span class="action-item-text">Создать счёт</span><span class="action-item-arrow">›</span></div>
+        <div class="action-item" onclick="toggleEditMode()"><span class="action-item-icon">✏️</span><span class="action-item-text">Редактировать названия</span><span class="action-item-arrow">›</span></div>
     </div>
-
     <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
     <div id="accountTree"></div>
     <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
 
-<!-- EDIT BALANCE SHEET -->
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title">️ Редактировать баланс</div>
-    <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-        <span style="font-size:1.1rem;">💡</span>
-        <span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
-    </div>
-    <div class="setting-group">
-        <div class="setting-label">Новый баланс (₽)</div>
-        <input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
-        <div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div>
-    </div>
-    <div class="setting-group">
-        <div class="setting-label">📝 Комментарий (необязательно)</div>
-        <input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;">
-    </div>
+    <div class="sheet-title">✏️ Редактировать баланс</div>
+    <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
+    <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
+    <div class="setting-group"><div class="setting-label"> Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
     <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
     <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
 </div>
@@ -708,7 +426,6 @@ html, body {
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== SPLASH =====
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -718,80 +435,38 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(400, 400);
     renderer.setPixelRatio(window.devicePixelRatio);
-
     const geo = new THREE.BufferGeometry();
     const verts = [];
     const segs = 12;
     const topR = 0.5, midR = 1.0, topH = 0.4, botH = 1.0;
-
-    for (let i = 0; i < segs; i++) {
-        const a1 = (i / segs) * Math.PI * 2;
-        const a2 = ((i + 1) / segs) * Math.PI * 2;
-        verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR);
-    }
-    for (let i = 0; i < segs; i++) {
-        const a1 = (i / segs) * Math.PI * 2;
-        const a2 = ((i + 1) / segs) * Math.PI * 2;
-        const am = ((i + 0.5) / segs) * Math.PI * 2;
-        verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR);
-        verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR);
-        verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR);
-    }
-    for (let i = 0; i < segs; i++) {
-        const a1 = (i / segs) * Math.PI * 2;
-        const a2 = ((i + 1) / segs) * Math.PI * 2;
-        verts.push(Math.cos(a1)*midR, 0, Math.sin(a1)*midR, 0, -botH, 0, Math.cos(a2)*midR, 0, Math.sin(a2)*midR);
-    }
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR); }
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; const am = ((i + 0.5) / segs) * Math.PI * 2; verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR); verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR); verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR); }
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; verts.push(Math.cos(a1)*midR, 0, Math.sin(a1)*midR, 0, -botH, 0, Math.cos(a2)*midR, 0, Math.sin(a2)*midR); }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
-
-    const mat = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        specular: 0xffffff,
-        shininess: 150,
-        transparent: true,
-        opacity: 0.85,
-        side: THREE.DoubleSide,
-        reflectivity: 1,
-        refractionRatio: 0.98
-    });
+    const mat = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff, shininess: 150, transparent: true, opacity: 0.85, side: THREE.DoubleSide, reflectivity: 1, refractionRatio: 0.98 });
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
-
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
     const l2 = new THREE.PointLight(0xe0f7ff, 1.2, 100); l2.position.set(-5, 3, 5); scene.add(l2);
     const l3 = new THREE.PointLight(0xffffff, 1.0, 100); l3.position.set(0, 5, -5); scene.add(l3);
     const l4 = new THREE.PointLight(0xfff5e0, 0.8, 100); l4.position.set(3, -3, 3); scene.add(l4);
     const l5 = new THREE.PointLight(0xe0e0ff, 0.6, 100); l5.position.set(-3, -3, -3); scene.add(l5);
-
-    function anim() {
-        requestAnimationFrame(anim);
-        mesh.rotation.y += 0.008;
-        mesh.rotation.x = Math.sin(Date.now() * 0.0008) * 0.15;
-        renderer.render(scene, camera);
-    }
+    function anim() { requestAnimationFrame(anim); mesh.rotation.y += 0.008; mesh.rotation.x = Math.sin(Date.now() * 0.0008) * 0.15; renderer.render(scene, camera); }
     anim();
-
-    setTimeout(() => {
-        document.getElementById('splash').classList.add('hide');
-    }, 3500);
+    setTimeout(() => { document.getElementById('splash').classList.add('hide'); }, 3500);
 })();
 
-// ===== TOAST =====
 function showToast(icon, text, duration = 2500) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${text}</span>`;
     container.appendChild(toast);
-    setTimeout(() => {
-        toast.classList.add('out');
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
+    setTimeout(() => { toast.classList.add('out'); setTimeout(() => toast.remove(), 300); }, duration);
 }
 
-// ===== NAVIGATION =====
 function switchPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -803,7 +478,6 @@ function switchPage(name) {
     if (name === 'settings') refreshSettings();
 }
 
-// ===== DATA =====
 let holders = {}, activeHolderId = null, activeAccountId = null;
 let capital = 0, savedReports = {};
 let incomePercent = 7, expensePercent = 2.5;
@@ -812,710 +486,147 @@ let isOnline = navigator.onLine;
 let isEditMode = false;
 
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+const fmt = (n) => { if (n === null || n === undefined || isNaN(n)) n = 0; return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n); };
+const fmtShort = (n) => { if (!n || isNaN(n)) return '0'; if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(1).replace('.0','') + 'М'; if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(1).replace('.0','') + 'К'; return Math.round(n).toString(); };
+const haptic = (type) => { if (tg?.HapticFeedback) { try { if (type === 'success') tg.HapticFeedback.notificationOccurred('success'); else if (type === 'error') tg.HapticFeedback.notificationOccurred('error'); else tg.HapticFeedback.impactOccurred('light'); } catch(e){} } };
 
-const fmt = (n) => {
-    if (n === null || n === undefined || isNaN(n)) n = 0;
-    return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n);
-};
-const fmtShort = (n) => {
-    if (!n || isNaN(n)) return '0';
-    if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(1).replace('.0','') + 'М';
-    if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(1).replace('.0','') + 'К';
-    return Math.round(n).toString();
-};
+const saveLocal = () => { try { localStorage.setItem('fl_holders', JSON.stringify(holders)); localStorage.setItem('fl_ah', activeHolderId); localStorage.setItem('fl_aa', activeAccountId); localStorage.setItem('fl_cap', capital.toString()); localStorage.setItem('fl_reports', JSON.stringify(savedReports)); localStorage.setItem('fl_ip', incomePercent.toString()); localStorage.setItem('fl_ep', expensePercent.toString()); } catch(e){} };
+const loadLocal = () => { try { const h = localStorage.getItem('fl_holders'); if (h) { holders = JSON.parse(h); activeHolderId = localStorage.getItem('fl_ah'); activeAccountId = localStorage.getItem('fl_aa'); if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0]; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; } else { const hid = 'h_' + Date.now(); const aid = 'a_' + Date.now(); holders = { [hid]: { id: hid, name: 'Основной', accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() } }; activeHolderId = hid; activeAccountId = aid; } savedReports = JSON.parse(localStorage.getItem('fl_reports') || '{}'); incomePercent = parseFloat(localStorage.getItem('fl_ip')) || 7; expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5; const c = localStorage.getItem('fl_cap'); if (c !== null) capital = parseFloat(c) || 0; } catch(e){} };
 
-const haptic = (type) => {
-    if (tg?.HapticFeedback) {
-        try {
-            if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-            else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-            else tg.HapticFeedback.impactOccurred('light');
-        } catch(e){}
-    }
-};
-
-// ===== STORAGE =====
-const saveLocal = () => {
-    try {
-        localStorage.setItem('fl_holders', JSON.stringify(holders));
-        localStorage.setItem('fl_ah', activeHolderId);
-        localStorage.setItem('fl_aa', activeAccountId);
-        localStorage.setItem('fl_cap', capital.toString());
-        localStorage.setItem('fl_reports', JSON.stringify(savedReports));
-        localStorage.setItem('fl_ip', incomePercent.toString());
-        localStorage.setItem('fl_ep', expensePercent.toString());
-    } catch(e){}
-};
-
-const loadLocal = () => {
-    try {
-        const h = localStorage.getItem('fl_holders');
-        if (h) {
-            holders = JSON.parse(h);
-            activeHolderId = localStorage.getItem('fl_ah');
-            activeAccountId = localStorage.getItem('fl_aa');
-            if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0];
-            const hh = holders[activeHolderId];
-            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null;
-        } else {
-            const hid = 'h_' + Date.now();
-            const aid = 'a_' + Date.now();
-            holders = { [hid]: { id: hid, name: 'Основной', accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() } };
-            activeHolderId = hid;
-            activeAccountId = aid;
-        }
-        savedReports = JSON.parse(localStorage.getItem('fl_reports') || '{}');
-        incomePercent = parseFloat(localStorage.getItem('fl_ip')) || 7;
-        expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5;
-        const c = localStorage.getItem('fl_cap');
-        if (c !== null) capital = parseFloat(c) || 0;
-    } catch(e){}
-};
-
-// ===== FIREBASE =====
 let useFirebase = false, userRef = null, saveTimeout = null, isSyncing = false;
-const getUserId = () => {
-    const tid = tg?.initDataUnsafe?.user?.id;
-    if (tid) return 'tg_' + tid;
-    let id = localStorage.getItem('fl_uid');
-    if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); }
-    return id;
-};
+const getUserId = () => { const tid = tg?.initDataUnsafe?.user?.id; if (tid) return 'tg_' + tid; let id = localStorage.getItem('fl_uid'); if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); } return id; };
 const UID = getUserId();
+const initFB = () => { try { const cfg = { apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", authDomain: "financesimple-7c73a.firebaseapp.com", databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", projectId: "financesimple-7c73a", storageBucket: "financesimple-7c73a.firebasestorage.app", messagingSenderId: "1072812838336", appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" }; if (!firebase.apps.length) firebase.initializeApp(cfg); userRef = firebase.database().ref(`users/${UID}`); useFirebase = true; } catch(e){ useFirebase = false; } };
+const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
+const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; } updateSync('syncing'); userRef.once('value').then(snap => { const d = snap.val(); if (d && d.holders) { holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId; capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; renderAll(); updateSync('synced'); } else { loadLocal(); renderAll(); if (isOnline) saveServer(); } }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); }); };
+const updateSync = (s) => { const el = document.getElementById('syncBadge'); const map = { syncing: { t: '☁️ синхронизация...', c: 'syncing' }, synced: { t: '☁️ сохранено', c: 'synced' }, offline: { t: '💾 локально', c: '' }, error: { t: '⚠️ ошибка', c: '' }, local: { t: '💾 локально', c: '' } }; const m = map[s] || map.syncing; el.textContent = m.t; el.className = 'sync-badge ' + m.c; };
 
-const initFB = () => {
-    try {
-        const cfg = {
-            apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
-            authDomain: "financesimple-7c73a.firebaseapp.com",
-            databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "financesimple-7c73a",
-            storageBucket: "financesimple-7c73a.firebasestorage.app",
-            messagingSenderId: "1072812838336",
-            appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(cfg);
-        userRef = firebase.database().ref(`users/${UID}`);
-        useFirebase = true;
-    } catch(e){ useFirebase = false; }
-};
-
-const saveServer = () => {
-    if (!useFirebase || !isOnline) { updateSync('local'); return; }
-    if (saveTimeout) clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(async () => {
-        if (isSyncing) return;
-        isSyncing = true;
-        updateSync('syncing');
-        try {
-            const s = calcAll();
-            await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() });
-            updateSync('synced');
-        } catch(e){ updateSync('error'); } finally { isSyncing = false; }
-    }, 500);
-};
-
-const loadServer = () => {
-    if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; }
-    updateSync('syncing');
-    userRef.once('value').then(snap => {
-        const d = snap.val();
-        if (d && d.holders) {
-            holders = d.holders;
-            activeHolderId = d.activeHolderId || Object.keys(holders)[0];
-            activeAccountId = d.activeAccountId;
-            capital = d.capital || 0;
-            savedReports = d.savedReports || {};
-            incomePercent = d.incomePercent || 7;
-            expensePercent = d.expensePercent || 2.5;
-            const hh = holders[activeHolderId];
-            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null;
-            renderAll();
-            updateSync('synced');
-        } else {
-            loadLocal();
-            renderAll();
-            if (isOnline) saveServer();
-        }
-    }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); });
-};
-
-const updateSync = (s) => {
-    const el = document.getElementById('syncBadge');
-    const map = {
-        syncing: { t: '☁️ синхронизация...', c: 'syncing' },
-        synced: { t: '☁️ сохранено', c: 'synced' },
-        offline: { t: ' локально', c: '' },
-        error: { t: '⚠️ ошибка', c: '' },
-        local: { t: '💾 локально', c: '' }
-    };
-    const m = map[s] || map.syncing;
-    el.textContent = m.t;
-    el.className = 'sync-badge ' + m.c;
-};
-
-// ===== CALC =====
 const getHolder = () => holders[activeHolderId];
 const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
+const filterTx = (txs, period) => { if (!txs || period === 'all') return txs || []; const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let start; if (period === 'today') start = today; else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); } else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= start); };
+const calcAcc = (acc, period) => { let inc = 0, exp = 0; if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, revenue: 0, turnover: 0 }; const txs = filterTx(acc.transactions, period); txs.forEach(t => { if (!t || typeof t.amount !== 'number') return; if (t.type === 'income') inc += t.amount; else if (t.type === 'expense') exp += t.amount; }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp }; };
+const calcAll = () => { let inc = 0, exp = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; bal += a.balance || 0; }); }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
 
-const filterTx = (txs, period) => {
-    if (!txs || period === 'all') return txs || [];
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let start;
-    if (period === 'today') start = today;
-    else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); }
-    else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); }
-    else return txs;
-    return txs.filter(t => new Date(t.date) >= start);
-};
+const renderAll = () => { renderHome(); renderReport(); renderDetail(); };
+const renderHome = () => { const acc = getAccount(); const h = getHolder(); const nameEl = document.getElementById('accountName'); if (!acc || !h) { nameEl.textContent = '📂 Выберите счёт'; document.getElementById('balanceDisplay').textContent = '0 ₽'; ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽'); document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; return; } nameEl.textContent = `${h.name} → ${acc.name}`; document.getElementById('balanceDisplay').textContent = fmt(acc.balance); const s = calcAcc(acc); document.getElementById('statTurnover').textContent = fmt(s.turnover); document.getElementById('statIncome').textContent = fmt(s.totalIncome); document.getElementById('statExpense').textContent = fmt(s.totalExpense); document.getElementById('statRevenue').textContent = fmt(s.revenue); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach(t => { if (!t) return; const d = new Date(t.date); const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; list.appendChild(item); }); document.getElementById('resetBtn').style.display = 'block'; } saveLocal(); };
 
-const calcAcc = (acc, period) => {
-    let inc = 0, exp = 0;
-    if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, revenue: 0, turnover: 0 };
-    const txs = filterTx(acc.transactions, period);
-    txs.forEach(t => {
-        if (!t || typeof t.amount !== 'number') return;
-        if (t.type === 'income') inc += t.amount;
-        else if (t.type === 'expense') exp += t.amount;
-    });
-    const rev = inc * (incomePercent/100) + exp * (expensePercent/100);
-    return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp };
-};
+window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций для обнуления'); haptic('warning'); return; } haptic('warning'); const doReset = () => { acc.balance = 0; acc.transactions = []; haptic('success'); renderAll(); saveLocal(); saveServer(); showToast('✅', 'История операций обнулена'); }; if (tg?.showConfirm) { tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => { if (confirmed) doReset(); }); } else { if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) doReset(); } };
 
-const calcAll = () => {
-    let inc = 0, exp = 0, bal = 0;
-    Object.values(holders).forEach(h => {
-        if (!h?.accounts) return;
-        Object.values(h.accounts).forEach(a => {
-            if (!a) return;
-            const s = calcAcc(a);
-            inc += s.totalIncome; exp += s.totalExpense; bal += a.balance || 0;
-        });
-    });
-    const rev = inc * (incomePercent/100) + exp * (expensePercent/100);
-    return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal };
-};
+const refreshReport = () => { const s = calcAll(); document.getElementById('sumTurnover').textContent = fmt(s.turnover); document.getElementById('sumRevenue').textContent = fmt(s.revenue); document.getElementById('sumIncome').textContent = fmt(s.totalIncome); document.getElementById('sumExpense').textContent = fmt(s.totalExpense); document.getElementById('sumBalance').textContent = fmt(s.totalBalance); document.getElementById('sumCapital').textContent = fmt(capital); document.getElementById('sumSite').textContent = fmt(s.siteBalance); renderReportsList(); checkLastFixed(); };
+const renderReport = refreshReport;
+const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
+const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
+const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
+const renderDetail = refreshDetail;
+const renderDetailTree = () => { const container = document.getElementById('detailTree'); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h?.accounts) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; block.appendChild(head); const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, detailPeriod); const row = document.createElement('div'); row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; row.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🔴</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div></div>`; accs.appendChild(row); }); block.appendChild(accs); container.appendChild(block); }); };
+const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
+const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
-// ===== RENDER =====
-const renderAll = () => {
-    renderHome();
-    renderReport();
-    renderDetail();
-};
+const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
-const renderHome = () => {
-    const acc = getAccount();
-    const h = getHolder();
-    const nameEl = document.getElementById('accountName');
-    if (!acc || !h) {
-        nameEl.textContent = '📂 Выберите счёт';
-        document.getElementById('balanceDisplay').textContent = '0 ₽';
-        ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽');
-        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>';
-        document.getElementById('resetBtn').style.display = 'none';
-        return;
-    }
-    nameEl.textContent = `${h.name} → ${acc.name}`;
-    document.getElementById('balanceDisplay').textContent = fmt(acc.balance);
-    const s = calcAcc(acc);
-    document.getElementById('statTurnover').textContent = fmt(s.turnover);
-    document.getElementById('statIncome').textContent = fmt(s.totalIncome);
-    document.getElementById('statExpense').textContent = fmt(s.totalExpense);
-    document.getElementById('statRevenue').textContent = fmt(s.revenue);
+window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
+window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
+window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance < -999999999 || newBalance > 999999999) { showToast('⚠️', 'Сумма вне допустимого диапазона'); haptic('error'); return; } if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; const desc = comment || 'Корректировка баланса'; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: desc, date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс изменён на ${fmt(newBalance)}`); };
 
-    const list = document.getElementById('txList');
-    if (!acc.transactions?.length) {
-        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>';
-        document.getElementById('resetBtn').style.display = 'none';
-    } else {
-        list.innerHTML = '';
-        acc.transactions.slice().reverse().forEach(t => {
-            if (!t) return;
-            const d = new Date(t.date);
-            const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            let cls, sign, desc;
-            if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; }
-            else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; }
-            else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
-            else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
-            else { cls = ''; sign = ''; desc = t.desc || 'Операция'; }
-            const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`;
-            const item = document.createElement('div');
-            item.className = 'tx-item';
-            item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;
-            list.appendChild(item);
-        });
-        document.getElementById('resetBtn').style.display = 'block';
-    }
-    saveLocal();
-};
+const doFixReport = () => { const s = calcAll(); const now = new Date(); const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, revenue: s.revenue, balance: s.totalBalance, capital, siteBalance: s.siteBalance }; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('✅', 'Отчёт сохранён'); };
+const doShareCurrentReport = () => { const s = calcAll(); const text = ` Findr\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`; shareText(text, 'Отчёт'); };
+const doShareDetail = () => { const s = calcAll(); const text = ` Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`; shareText(text, 'Детализация'); };
+const shareText = async (text, title) => { haptic('light'); if (tg?.switchInlineQuery) { try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){} } if (navigator.share) { try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; } } try { await navigator.clipboard.writeText(text); haptic('success'); showToast('📋', 'Скопировано'); } catch(e) { prompt('Копирование:', text); } };
+window.shareReport = (key) => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n ${fmt(r.income)}\n ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`; shareText(text, 'Отчёт'); };
+window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
+window.deleteReport = (key) => { const r = savedReports[key]; if (!r) return; const confirm = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); } else { if (confirm('Удалить?')) confirm(); } };
+const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
+const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
+window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
 
-// ===== RESET ALL =====
-window.resetAll = () => {
-    const acc = getAccount();
-    const h = getHolder();
-    if (!acc || !h || !acc.transactions?.length) {
-        showToast('️', 'Нет операций для обнуления');
-        haptic('warning');
+// ===== ACCOUNT SHEET WITH DELETE IN EDIT MODE =====
+window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
+window.closeAccountSheet = () => { document.getElementById('accountOverlay').classList.remove('active'); document.getElementById('accountSheet').classList.remove('active'); isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); };
+window.toggleActionsMenu = () => { const menu = document.getElementById('actionsMenu'); menu.classList.toggle('active'); haptic('light'); };
+
+window.createHolder = () => { const name = prompt('Введите имя держателя:'); if (!name || !name.trim()) return; const hid = 'h_' + Date.now(); const aid = 'a_' + Date.now(); holders[hid] = { id: hid, name: name.trim(), accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() }; activeHolderId = hid; activeAccountId = aid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); haptic('success'); showToast('✅', 'Держатель создан'); };
+
+window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) { showToast('⚠️', 'Сначала выберите держателя'); return; } const name = prompt('Введите название счёта:'); if (!name || !name.trim()) return; const h = holders[activeHolderId]; const newAid = 'a_' + Date.now(); h.accounts[newAid] = { id: newAid, name: name.trim(), balance: 0, transactions: [], createdAt: new Date().toISOString() }; activeAccountId = newAid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); haptic('success'); showToast('✅', 'Счёт создан'); };
+
+window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); haptic('light'); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); };
+
+// ===== DELETE HOLDER =====
+window.deleteHolder = (hid) => {
+    const h = holders[hid];
+    if (!h) return;
+    
+    const holderKeys = Object.keys(holders);
+    if (holderKeys.length <= 1) {
+        showToast('⚠️', 'Нельзя удалить последнего держателя');
+        haptic('error');
         return;
     }
     
-    haptic('warning');
+    const accCount = Object.keys(h.accounts || {}).length;
+    const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`;
     
-    const doReset = () => {
-        acc.balance = 0;
-        acc.transactions = [];
-        haptic('success');
+    const doDelete = () => {
+        // If deleting active holder, switch to another
+        if (activeHolderId === hid) {
+            const otherKeys = holderKeys.filter(k => k !== hid);
+            activeHolderId = otherKeys[0];
+            const otherHolder = holders[activeHolderId];
+            activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null;
+        }
+        
+        delete holders[hid];
+        renderAccountTree();
         renderAll();
         saveLocal();
         saveServer();
-        showToast('✅', 'История операций обнулена');
+        haptic('success');
+        showToast('🗑️', `Держатель "${h.name}" удалён`);
     };
     
     if (tg?.showConfirm) {
-        tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => {
-            if (confirmed) doReset();
-        });
+        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); });
     } else {
-        if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) {
-            doReset();
+        if (confirm(message)) doDelete();
+    }
+};
+
+// ===== DELETE ACCOUNT =====
+window.deleteAccount = (hid, aid) => {
+    const h = holders[hid];
+    if (!h || !h.accounts[aid]) return;
+    
+    const acc = h.accounts[aid];
+    const accKeys = Object.keys(h.accounts);
+    
+    if (accKeys.length <= 1) {
+        showToast('⚠️', 'Нельзя удалить последний счёт держателя');
+        haptic('error');
+        return;
+    }
+    
+    const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`;
+    
+    const doDelete = () => {
+        // If deleting active account, switch to another
+        if (activeHolderId === hid && activeAccountId === aid) {
+            const otherAccKeys = accKeys.filter(k => k !== aid);
+            activeAccountId = otherAccKeys[0];
         }
-    }
-};
-
-const refreshReport = () => {
-    const s = calcAll();
-    document.getElementById('sumTurnover').textContent = fmt(s.turnover);
-    document.getElementById('sumRevenue').textContent = fmt(s.revenue);
-    document.getElementById('sumIncome').textContent = fmt(s.totalIncome);
-    document.getElementById('sumExpense').textContent = fmt(s.totalExpense);
-    document.getElementById('sumBalance').textContent = fmt(s.totalBalance);
-    document.getElementById('sumCapital').textContent = fmt(capital);
-    document.getElementById('sumSite').textContent = fmt(s.siteBalance);
-    renderReportsList();
-    checkLastFixed();
-};
-
-const renderReport = refreshReport;
-
-const renderReportsList = () => {
-    const list = document.getElementById('reportsList');
-    const keys = Object.keys(savedReports).sort().reverse();
-    if (!keys.length) {
-        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>';
-        return;
-    }
-    list.innerHTML = '';
-    keys.forEach(key => {
-        const r = savedReports[key];
-        if (!r) return;
-        const d = new Date(r.date);
-        const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-        const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-        const card = document.createElement('div');
-        card.className = 'report-card';
-        card.innerHTML = `
-            <div class="report-header">
-                <div>
-                    <div class="report-date">${dateStr}</div>
-                    <div class="report-time">${timeStr}</div>
-                </div>
-                <div class="report-actions">
-                    <button class="report-action share" onclick="shareReport('${key}')">📤</button>
-                    <button class="report-action edit" onclick="editReport('${key}')">✏️</button>
-                    <button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button>
-                </div>
-            </div>
-            <div class="report-stats">
-                <div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div>
-                <div class="report-stat"><span class="report-stat-label"></span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div>
-            </div>`;
-        list.appendChild(card);
-    });
-};
-
-const checkLastFixed = () => {
-    const keys = Object.keys(savedReports).sort().reverse();
-    const badge = document.getElementById('lastFixedBadge');
-    if (keys.length) {
-        const d = new Date(savedReports[keys[0]].date);
-        document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
-        badge.style.display = 'block';
-    } else {
-        badge.style.display = 'none';
-    }
-};
-
-const refreshDetail = () => {
-    const s = calcAll();
-    document.getElementById('detBalance').textContent = fmt(s.totalBalance);
-    document.getElementById('detCapital').textContent = fmt(capital);
-    document.getElementById('detSite').textContent = fmt(s.siteBalance);
-    renderDetailTree();
-};
-
-const renderDetail = refreshDetail;
-
-const renderDetailTree = () => {
-    const container = document.getElementById('detailTree');
-    container.innerHTML = '';
-    const keys = Object.keys(holders);
-    if (!keys.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>';
-        return;
-    }
-    keys.forEach(hid => {
-        const h = holders[hid];
-        if (!h?.accounts) return;
-        const block = document.createElement('div');
-        block.style.marginBottom = '12px';
-        const head = document.createElement('div');
-        head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;';
-        head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`;
-        block.appendChild(head);
-        const accs = document.createElement('div');
-        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';
-        Object.values(h.accounts).forEach(a => {
-            if (!a) return;
-            const s = calcAcc(a, detailPeriod);
-            const row = document.createElement('div');
-            row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';
-            row.innerHTML = `
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                    <span style="font-weight:500;">💼 ${a.name}</span>
-                    <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
-                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div>
-                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div>
-                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🔴</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div>
-                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div>
-                </div>`;
-            accs.appendChild(row);
-        });
-        block.appendChild(accs);
-        container.appendChild(block);
-    });
-};
-
-const refreshAdjust = () => {
-    const acc = getAccount();
-    const h = getHolder();
-    if (acc && h) {
-        document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`;
-        document.getElementById('adjBalanceHint').textContent = fmt(acc.balance);
-        document.getElementById('adjCapitalHint').textContent = fmt(capital);
-    }
-};
-
-const refreshSettings = () => {
-    document.getElementById('setCapital').value = capital;
-    document.getElementById('setIncPct').value = incomePercent;
-    document.getElementById('setExpPct').value = expensePercent;
-    document.getElementById('curIncPct').textContent = incomePercent;
-    document.getElementById('curExpPct').textContent = expensePercent;
-};
-
-// ===== ACTIONS =====
-const doTransaction = (type) => {
-    const acc = getAccount();
-    if (!acc) { showToast('️', 'Выберите счёт'); return; }
-    const amount = parseFloat(document.getElementById('amountInput').value);
-    if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; }
-
-    if (type === 'income') acc.balance += amount;
-    else acc.balance -= amount;
-
-    if (!acc.transactions) acc.transactions = [];
-    acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() });
-
-    let revenue = 0;
-    if (type === 'income') revenue = amount * (incomePercent/100);
-    else if (type === 'expense') revenue = amount * (expensePercent/100);
-
-    if (revenue > 0) {
-        capital += revenue;
-        acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() });
-    }
-
-    document.getElementById('amountInput').value = '';
-    haptic('success');
-    renderAll();
-    saveServer();
-
-    if (revenue > 0) {
-        setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300);
-    }
-};
-
-// ===== EDIT BALANCE =====
-window.openEditBalance = () => {
-    const acc = getAccount();
-    if (!acc) {
-        showToast('⚠️', 'Выберите счёт');
-        return;
-    }
-    document.getElementById('editBalanceInput').value = '';
-    document.getElementById('editBalanceComment').value = '';
-    document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance);
-    document.getElementById('editBalanceOverlay').classList.add('active');
-    document.getElementById('editBalanceSheet').classList.add('active');
-    haptic('light');
-    setTimeout(() => document.getElementById('editBalanceInput').focus(), 400);
-};
-
-window.closeEditBalance = () => {
-    document.getElementById('editBalanceOverlay').classList.remove('active');
-    document.getElementById('editBalanceSheet').classList.remove('active');
-};
-
-window.saveEditBalance = () => {
-    const acc = getAccount();
-    if (!acc) {
-        showToast('⚠️', 'Выберите счёт');
-        closeEditBalance();
-        return;
-    }
-    const newBalanceStr = document.getElementById('editBalanceInput').value;
-    if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) {
-        showToast('⚠️', 'Введите корректную сумму');
-        haptic('error');
-        return;
-    }
-    const newBalance = parseFloat(newBalanceStr);
-    if (newBalance < -999999999 || newBalance > 999999999) {
-        showToast('⚠️', 'Сумма вне допустимого диапазона');
-        haptic('error');
-        return;
-    }
-    if (newBalance === acc.balance) {
-        showToast('️', 'Баланс не изменился');
-        closeEditBalance();
-        return;
-    }
-
-    const comment = document.getElementById('editBalanceComment').value.trim();
-    const diff = newBalance - acc.balance;
-    const desc = comment || 'Корректировка баланса';
-
-    if (!acc.transactions) acc.transactions = [];
-    acc.transactions.push({
-        type: 'adjustment',
-        amount: diff,
-        desc: desc,
-        date: new Date().toISOString()
-    });
-    acc.balance = newBalance;
-
-    haptic('success');
-    renderAll();
-    saveServer();
-    closeEditBalance();
-    showToast('✅', `Баланс изменён на ${fmt(newBalance)}`);
-};
-
-const doFixReport = () => {
-    const s = calcAll();
-    const now = new Date();
-    const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19);
-    savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, revenue: s.revenue, balance: s.totalBalance, capital, siteBalance: s.siteBalance };
-    saveLocal();
-    saveServer();
-    renderReportsList();
-    checkLastFixed();
-    haptic('success');
-    showToast('✅', 'Отчёт сохранён');
-};
-
-const doShareCurrentReport = () => {
-    const s = calcAll();
-    const text = `📊 Findr\n\n ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
-    shareText(text, 'Отчёт');
-};
-
-const doShareDetail = () => {
-    const s = calcAll();
-    const text = `📈 Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`;
-    shareText(text, 'Детализация');
-};
-
-const shareText = async (text, title) => {
-    haptic('light');
-    if (tg?.switchInlineQuery) {
-        try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){}
-    }
-    if (navigator.share) {
-        try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; }
-    }
-    try {
-        await navigator.clipboard.writeText(text);
-        haptic('success');
-        showToast('📋', 'Скопировано');
-    } catch(e) { prompt('Копирование:', text); }
-};
-
-window.shareReport = (key) => {
-    const r = savedReports[key];
-    if (!r) return;
-    const d = new Date(r.date);
-    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n ${fmt(r.income)}\n ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
-    shareText(text, 'Отчёт');
-};
-
-window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
-
-window.deleteReport = (key) => {
-    const r = savedReports[key];
-    if (!r) return;
-    const confirm = () => {
-        delete savedReports[key];
+        
+        delete h.accounts[aid];
+        renderAccountTree();
+        renderAll();
         saveLocal();
         saveServer();
-        renderReportsList();
-        checkLastFixed();
         haptic('success');
-        showToast('🗑️', 'Удалено');
+        showToast('🗑️', `Счёт "${acc.name}" удалён`);
     };
-    if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); }
-    else { if (confirm('Удалить?')) confirm(); }
-};
-
-const doSaveAdjust = () => {
-    const acc = getAccount();
-    if (!acc) { showToast('️', 'Выберите счёт'); return; }
-    const bStr = document.getElementById('adjBalance').value;
-    const cStr = document.getElementById('adjCapital').value;
-    const comment = document.getElementById('adjComment').value.trim();
-    const newB = bStr !== '' ? parseFloat(bStr) : null;
-    const newC = cStr !== '' ? parseFloat(cStr) : null;
-    if (newB === null && newC === null) { showToast('️', 'Введите значение'); return; }
-    if (!acc.transactions) acc.transactions = [];
-    if (newB !== null && newB !== acc.balance) {
-        acc.balance = newB;
-        acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() });
+    
+    if (tg?.showConfirm) {
+        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); });
+    } else {
+        if (confirm(message)) doDelete();
     }
-    if (newC !== null) capital = newC;
-    haptic('success');
-    renderAll();
-    saveServer();
-    showToast('✅', 'Применено');
-    document.getElementById('adjBalance').value = '';
-    document.getElementById('adjCapital').value = '';
-    document.getElementById('adjComment').value = '';
-};
-
-const doSaveSettings = () => {
-    const newCap = parseFloat(document.getElementById('setCapital').value);
-    const newInc = parseFloat(document.getElementById('setIncPct').value);
-    const newExp = parseFloat(document.getElementById('setExpPct').value);
-    if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; }
-    capital = newCap;
-    incomePercent = newInc;
-    expensePercent = newExp;
-    document.getElementById('curIncPct').textContent = incomePercent;
-    document.getElementById('curExpPct').textContent = expensePercent;
-    renderAll();
-    saveServer();
-    haptic('success');
-    showToast('✅', 'Сохранено');
-};
-
-window.setPeriod = (p) => {
-    detailPeriod = p;
-    document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p));
-    renderDetailTree();
-    haptic('light');
-};
-
-// ===== ACCOUNT SHEET WITH HAMBURGER MENU =====
-window.openAccountSheet = () => {
-    document.getElementById('accountSearch').value = '';
-    isEditMode = false;
-    document.getElementById('actionsMenu').classList.remove('active');
-    renderAccountTree();
-    document.getElementById('accountOverlay').classList.add('active');
-    document.getElementById('accountSheet').classList.add('active');
-    haptic('light');
-};
-window.closeAccountSheet = () => {
-    document.getElementById('accountOverlay').classList.remove('active');
-    document.getElementById('accountSheet').classList.remove('active');
-    isEditMode = false;
-    document.getElementById('actionsMenu').classList.remove('active');
-};
-
-window.toggleActionsMenu = () => {
-    const menu = document.getElementById('actionsMenu');
-    menu.classList.toggle('active');
-    haptic('light');
-};
-
-window.createHolder = () => {
-    const name = prompt('Введите имя держателя:');
-    if (!name || !name.trim()) return;
-    
-    const hid = 'h_' + Date.now();
-    const aid = 'a_' + Date.now();
-    holders[hid] = {
-        id: hid,
-        name: name.trim(),
-        accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } },
-        createdAt: new Date().toISOString()
-    };
-    
-    activeHolderId = hid;
-    activeAccountId = aid;
-    
-    renderAccountTree();
-    renderAll();
-    saveLocal();
-    saveServer();
-    
-    document.getElementById('actionsMenu').classList.remove('active');
-    haptic('success');
-    showToast('✅', 'Держатель создан');
-};
-
-window.createAccount = () => {
-    if (!activeHolderId || !holders[activeHolderId]) {
-        showToast('️', 'Сначала выберите держателя');
-        return;
-    }
-    
-    const name = prompt('Введите название счёта:');
-    if (!name || !name.trim()) return;
-    
-    const h = holders[activeHolderId];
-    const newAid = 'a_' + Date.now();
-    h.accounts[newAid] = {
-        id: newAid,
-        name: name.trim(),
-        balance: 0,
-        transactions: [],
-        createdAt: new Date().toISOString()
-    };
-    
-    activeAccountId = newAid;
-    
-    renderAccountTree();
-    renderAll();
-    saveLocal();
-    saveServer();
-    
-    document.getElementById('actionsMenu').classList.remove('active');
-    haptic('success');
-    showToast('✅', 'Счёт создан');
-};
-
-window.toggleEditMode = () => {
-    isEditMode = !isEditMode;
-    document.getElementById('actionsMenu').classList.remove('active');
-    renderAccountTree();
-    haptic('light');
-    showToast(isEditMode ? '️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено');
 };
 
 const renderAccountTree = () => {
@@ -1534,11 +645,19 @@ const renderAccountTree = () => {
         block.style.marginBottom = '12px';
         
         if (isEditMode) {
+            // Edit mode - show inputs and delete button
             const head = document.createElement('div');
             head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;';
             head.innerHTML = `
-                <div style="font-size:0.7rem;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;font-weight:500;margin-bottom:8px;">Держатель</div>
-                <input type="text" class="edit-input" value="${h.name}" id="editHolderName_${hid}" placeholder="Имя держателя">
+                <div class="edit-row-header">
+                    <span class="edit-row-label">Держатель</span>
+                    <span class="edit-row-badge">👤</span>
+                </div>
+                <input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя">
+                <button class="delete-btn-inline" onclick="deleteHolder('${hid}')">
+                    <span class="delete-icon">🗑️</span>
+                    <span>Удалить держателя</span>
+                </button>
             `;
             block.appendChild(head);
         } else {
@@ -1559,8 +678,15 @@ const renderAccountTree = () => {
                 const row = document.createElement('div');
                 row.style.cssText = 'margin-bottom:8px;';
                 row.innerHTML = `
-                    <div style="font-size:0.7rem;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;font-weight:500;margin-bottom:6px;">Счёт</div>
-                    <input type="text" class="edit-input" value="${a.name}" id="editAccountName_${a.id}" placeholder="Название счёта">
+                    <div class="edit-row-header">
+                        <span class="edit-row-label">Счёт</span>
+                        <span class="edit-row-badge"></span>
+                    </div>
+                    <input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта">
+                    <button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')">
+                        <span>🗑️</span>
+                        <span>Удалить счёт</span>
+                    </button>
                 `;
                 accs.appendChild(row);
             } else {
@@ -1587,7 +713,7 @@ const renderAccountTree = () => {
             editActions.className = 'edit-actions';
             editActions.innerHTML = `
                 <button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button>
-                <button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>
+                <button class="btn btn-secondary" onclick="cancelEditMode()"> Отмена</button>
             `;
             block.appendChild(editActions);
         }
@@ -1599,22 +725,9 @@ const renderAccountTree = () => {
 window.saveHolderEdits = (hid) => {
     const h = holders[hid];
     if (!h) return;
-    
     const newNameInput = document.getElementById(`editHolderName_${hid}`);
-    if (newNameInput) {
-        const newName = newNameInput.value.trim();
-        if (newName) h.name = newName;
-    }
-    
-    Object.values(h.accounts||{}).forEach(a => {
-        if (!a) return;
-        const newNameInput = document.getElementById(`editAccountName_${a.id}`);
-        if (newNameInput) {
-            const newName = newNameInput.value.trim();
-            if (newName) a.name = newName;
-        }
-    });
-    
+    if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) h.name = newName; }
+    Object.values(h.accounts||{}).forEach(a => { if (!a) return; const newNameInput = document.getElementById(`editAccountName_${a.id}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) a.name = newName; } });
     isEditMode = false;
     renderAccountTree();
     renderAll();
@@ -1624,14 +737,8 @@ window.saveHolderEdits = (hid) => {
     showToast('✅', 'Названия обновлены');
 };
 
-window.cancelEditMode = () => {
-    isEditMode = false;
-    renderAccountTree();
-    haptic('light');
-    showToast('ℹ️', 'Изменения отменены');
-};
+window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); haptic('light'); showToast('ℹ️', 'Изменения отменены'); };
 
-// ===== INIT =====
 window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveServer(); });
 window.addEventListener('offline', () => { isOnline = false; updateSync('offline'); });
 document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') doTransaction('expense'); });
