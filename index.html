@@ -1848,31 +1848,59 @@ window.shareDetail = () => {
     const periodNames = { today: 'Сегодня', week: '7 дней', month: 'Месяц', all: 'Всё время' };
     const periodName = periodNames[detailPeriod] || 'Период';
     const dateStr = `${now.getDate()} ${MONTH_NAMES_GEN[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
-    let text = `🔍 Детализация\n📅 ${dateStr} | Период: ${periodName}\n\n`;
-    text += `💎 Общие показатели:\n`;
-    text += `⚪ Баланс: ${formatMoney(stats.totalBalance)}\n`;
-    text += `💜 Капитал: ${formatMoney(capital)}\n`;
-    text += `🔵 На сайте: ${formatMoney(stats.siteBalance)}\n\n`;
+    let text = `═══════════════════════════════\n`;
+    text += `   ДЕТАЛИЗАЦИЯ ФИНАНСОВ\n`;
+    text += `═══════════════════════════════\n\n`;
+    text += `📅 Дата: ${dateStr}, ${timeStr}\n`;
+    text += `📊 Период: ${periodName}\n\n`;
+    
+    text += `───────────────────────────────\n`;
+    text += `💎 ОБЩИЕ ПОКАЗАТЕЛИ\n`;
+    text += `───────────────────────────────\n`;
+    text += `Общий баланс:      ${formatMoney(stats.totalBalance)}\n`;
+    text += `Капитал:           ${formatMoney(capital)}\n`;
+    text += `Баланс на сайте:   ${formatMoney(stats.siteBalance)}\n\n`;
 
     let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
+    let holderCount = 0;
+    let accountCount = 0;
 
     Object.values(holders).forEach(h => {
         if (!h || !h.accounts) return;
-        text += `👤 ${h.name}:\n`;
+        holderCount++;
+        
+        text += `═══════════════════════════════\n`;
+        text += `👤 ДЕРЖАТЕЛЬ: ${h.name}\n`;
+        text += `═══════════════════════════════\n\n`;
+        
         let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
 
         Object.values(h.accounts).forEach(acc => {
             if (!acc) return;
+            accountCount++;
             const accStats = calculateAccountStats(acc, detailPeriod);
             holderTotal.income += accStats.totalIncome;
             holderTotal.expense += accStats.totalExpense;
             holderTotal.turnover += accStats.turnover;
             holderTotal.revenue += accStats.revenue;
-            text += `  💼 ${acc.name}: 💹${formatMoneyShort(accStats.turnover)} 🟢${formatMoneyShort(accStats.totalIncome)} 🔴${formatMoneyShort(accStats.totalExpense)} 💰${formatMoneyShort(accStats.revenue)}\n`;
+            
+            text += `💼 СЧЁТ: ${acc.name}\n`;
+            text += `───────────────────────────────\n`;
+            text += `Текущий баланс:    ${formatMoney(acc.balance)}\n`;
+            text += `Оборот:            ${formatMoney(accStats.turnover)}\n`;
+            text += `Доходы:            ${formatMoney(accStats.totalIncome)}\n`;
+            text += `Расходы:           ${formatMoney(accStats.totalExpense)}\n`;
+            text += `Выручка:           ${formatMoney(accStats.revenue)}\n\n`;
         });
 
-        text += `  📊 Итого: 💹${formatMoneyShort(holderTotal.turnover)} 🟢${formatMoneyShort(holderTotal.income)} 🔴${formatMoneyShort(holderTotal.expense)} 💰${formatMoneyShort(holderTotal.revenue)}\n\n`;
+        text += `📊 ИТОГО ПО ДЕРЖАТЕЛЮ:\n`;
+        text += `───────────────────────────────\n`;
+        text += `Оборот:            ${formatMoney(holderTotal.turnover)}\n`;
+        text += `Доходы:            ${formatMoney(holderTotal.income)}\n`;
+        text += `Расходы:           ${formatMoney(holderTotal.expense)}\n`;
+        text += `Выручка:           ${formatMoney(holderTotal.revenue)}\n\n`;
 
         grandTotal.income += holderTotal.income;
         grandTotal.expense += holderTotal.expense;
@@ -1880,7 +1908,19 @@ window.shareDetail = () => {
         grandTotal.revenue += holderTotal.revenue;
     });
 
-    text += `🏆 Общий итог:\n💹 Оборот: ${formatMoney(grandTotal.turnover)}\n🟢 Доход: ${formatMoney(grandTotal.income)}\n🔴 Расход: ${formatMoney(grandTotal.expense)}\n💰 Выручка: ${formatMoney(grandTotal.revenue)}\n\n— Finance Luxe`;
+    text += `═══════════════════════════════\n`;
+    text += `🏆 ОБЩИЙ ИТОГ ЗА ПЕРИОД\n`;
+    text += `═══════════════════════════════\n`;
+    text += `Всего держателей:  ${holderCount}\n`;
+    text += `Всего счетов:      ${accountCount}\n\n`;
+    text += `Общий оборот:      ${formatMoney(grandTotal.turnover)}\n`;
+    text += `Общие доходы:      ${formatMoney(grandTotal.income)}\n`;
+    text += `Общие расходы:     ${formatMoney(grandTotal.expense)}\n`;
+    text += `Общая выручка:     ${formatMoney(grandTotal.revenue)}\n\n`;
+    
+    text += `───────────────────────────────\n`;
+    text += `Создано в Finance Luxe\n`;
+    text += `═══════════════════════════════`;
 
     shareText(text, 'Детализация — ' + periodName);
 };
