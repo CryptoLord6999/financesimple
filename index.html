@@ -8,18 +8,21 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ===== ЗАГРУЗОЧНЫЙ ЭКРАН ===== */
 #splashScreen {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #fefef8 0%, #f8f4e8 20%, #e8d5a0 40%, #d4af37 60%, #f8f4e8 80%, #fefef8 100%);
+    background: linear-gradient(135deg, #fefef8 0%, #f8f4e8 25%, #e8d5a0 50%, #d4af37 75%, #fefef8 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    transition: opacity 1s ease, visibility 1s ease;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
     overflow: hidden;
 }
 #splashScreen::before {
@@ -27,9 +30,9 @@
     position: absolute;
     width: 200%; height: 200%;
     top: -50%; left: -50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(212,175,55,0.3) 0%, transparent 50%);
-    animation: shimmer 8s ease-in-out infinite;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(212,175,55,0.4) 0%, transparent 50%);
+    animation: shimmer 10s ease-in-out infinite;
 }
 @keyframes shimmer {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -40,62 +43,154 @@
     visibility: hidden;
 }
 
+/* 3D Бриллиант */
 .diamond-container {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
+    perspective: 1000px;
+    margin-bottom: 3rem;
     position: relative;
-    margin-bottom: 2.5rem;
-    filter: drop-shadow(0 20px 40px rgba(212,175,55,0.4));
+    z-index: 1;
 }
 
-.diamond-svg {
+.diamond-3d {
     width: 100%;
     height: 100%;
-    animation: rotateDiamond 6s linear infinite;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateDiamond3D 8s linear infinite;
+}
+
+@keyframes rotateDiamond3D {
+    0% { transform: rotateY(0deg) rotateX(10deg); }
+    100% { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+.diamond-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+/* Верхняя корона */
+.diamond-top {
+    width: 120px;
+    height: 120px;
+    top: 10px;
+    left: 40px;
     transform-style: preserve-3d;
 }
 
-@keyframes rotateDiamond {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(360deg); }
+.diamond-top-face {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 80px solid rgba(255, 255, 255, 0.9);
+    transform-origin: center bottom;
 }
 
-.diamond-sparkle {
-    position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-    pointer-events: none;
+.diamond-top-face:nth-child(1) {
+    transform: rotateY(0deg) translateZ(30px) rotateX(-30deg);
+    border-bottom-color: rgba(224, 247, 250, 0.95);
+    filter: brightness(1.1);
 }
 
-.sparkle {
+.diamond-top-face:nth-child(2) {
+    transform: rotateY(90deg) translateZ(30px) rotateX(-30deg);
+    border-bottom-color: rgba(179, 229, 252, 0.9);
+    filter: brightness(1.05);
+}
+
+.diamond-top-face:nth-child(3) {
+    transform: rotateY(180deg) translateZ(30px) rotateX(-30deg);
+    border-bottom-color: rgba(129, 212, 250, 0.85);
+    filter: brightness(1);
+}
+
+.diamond-top-face:nth-child(4) {
+    transform: rotateY(270deg) translateZ(30px) rotateX(-30deg);
+    border-bottom-color: rgba(79, 195, 247, 0.9);
+    filter: brightness(0.95);
+}
+
+/* Нижняя пирамида */
+.diamond-bottom {
+    width: 120px;
+    height: 120px;
+    top: 70px;
+    left: 40px;
+    transform-style: preserve-3d;
+}
+
+.diamond-bottom-face {
     position: absolute;
-    width: 4px; height: 4px;
-    background: white;
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-top: 100px solid rgba(2, 136, 209, 0.9);
+    transform-origin: center top;
+}
+
+.diamond-bottom-face:nth-child(1) {
+    transform: rotateY(0deg) translateZ(30px) rotateX(30deg);
+    border-top-color: rgba(79, 195, 247, 0.95);
+    filter: brightness(1.1);
+}
+
+.diamond-bottom-face:nth-child(2) {
+    transform: rotateY(90deg) translateZ(30px) rotateX(30deg);
+    border-top-color: rgba(41, 182, 246, 0.9);
+    filter: brightness(1.05);
+}
+
+.diamond-bottom-face:nth-child(3) {
+    transform: rotateY(180deg) translateZ(30px) rotateX(30deg);
+    border-top-color: rgba(3, 155, 229, 0.85);
+    filter: brightness(1);
+}
+
+.diamond-bottom-face:nth-child(4) {
+    transform: rotateY(270deg) translateZ(30px) rotateX(30deg);
+    border-top-color: rgba(2, 136, 209, 0.9);
+    filter: brightness(0.95);
+}
+
+/* Блик */
+.diamond-highlight {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 30px;
+    left: 50px;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
     border-radius: 50%;
-    box-shadow: 0 0 10px 2px rgba(255,255,255,0.8), 0 0 20px 4px rgba(212,175,55,0.6);
-    animation: sparkleAnim 2s ease-in-out infinite;
+    transform: translateZ(50px);
+    animation: highlightMove 4s ease-in-out infinite;
 }
 
-.sparkle:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
-.sparkle:nth-child(2) { top: 40%; left: 70%; animation-delay: 0.5s; }
-.sparkle:nth-child(3) { top: 60%; left: 25%; animation-delay: 1s; }
-.sparkle:nth-child(4) { top: 30%; left: 60%; animation-delay: 1.5s; }
-.sparkle:nth-child(5) { top: 50%; left: 40%; animation-delay: 0.8s; }
-
-@keyframes sparkleAnim {
-    0%, 100% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1.5); }
+@keyframes highlightMove {
+    0%, 100% { transform: translateZ(50px) translate(0, 0); opacity: 0.8; }
+    50% { transform: translateZ(50px) translate(10px, -10px); opacity: 1; }
 }
 
+/* Свечение */
 .diamond-glow {
     position: absolute;
-    width: 300px; height: 300px;
-    top: 50%; left: 50%;
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(212,175,55,0.3) 30%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(212,175,55,0.4) 30%, transparent 70%);
     border-radius: 50%;
     animation: pulseGlow 3s ease-in-out infinite;
     pointer-events: none;
+    z-index: 0;
 }
 
 @keyframes pulseGlow {
@@ -103,41 +198,103 @@
     50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
 }
 
+/* Блёстки */
+.sparkles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px 3px rgba(255,255,255,0.9), 0 0 30px 6px rgba(212,175,55,0.7);
+    animation: sparkleAnim 2.5s ease-in-out infinite;
+}
+
+.sparkle:nth-child(1) { top: 15%; left: 25%; animation-delay: 0s; }
+.sparkle:nth-child(2) { top: 35%; left: 75%; animation-delay: 0.6s; }
+.sparkle:nth-child(3) { top: 65%; left: 20%; animation-delay: 1.2s; }
+.sparkle:nth-child(4) { top: 25%; left: 65%; animation-delay: 1.8s; }
+.sparkle:nth-child(5) { top: 55%; left: 45%; animation-delay: 0.9s; }
+.sparkle:nth-child(6) { top: 45%; left: 30%; animation-delay: 1.5s; }
+
+@keyframes sparkleAnim {
+    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+}
+
+/* Типографика */
 .splash-title {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 2.2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
     font-weight: 300;
-    color: #8b6914;
-    letter-spacing: 0.4em;
+    color: #6b5410;
+    letter-spacing: 0.5em;
     text-transform: uppercase;
-    text-shadow: 0 2px 20px rgba(212,175,55,0.5), 0 0 40px rgba(255,215,0,0.3);
-    margin-top: 1rem;
+    text-shadow: 0 3px 25px rgba(212,175,55,0.6), 0 0 50px rgba(255,215,0,0.4);
+    margin-top: 0;
     position: relative;
     z-index: 1;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .splash-subtitle {
-    font-family: 'Georgia', serif;
-    font-size: 0.95rem;
-    color: #b8860b;
-    letter-spacing: 0.2em;
-    margin-top: 0.8rem;
-    opacity: 0.9;
-    font-style: italic;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: #8b6914;
+    letter-spacing: 0.35em;
+    margin-top: 1.2rem;
+    opacity: 0.85;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.splash-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 200;
+    color: #a0750a;
+    letter-spacing: 0.4em;
+    margin-top: 2rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+/* Декоративная линия */
+.splash-divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 1.5rem auto;
     position: relative;
     z-index: 1;
 }
 
-.splash-tagline {
-    font-family: 'Georgia', serif;
-    font-size: 0.85rem;
-    color: #a0750a;
-    letter-spacing: 0.15em;
-    margin-top: 1.5rem;
-    opacity: 0.7;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 1;
+.splash-divider::before {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #d4af37;
+    font-size: 0.6rem;
+    background: #fefef8;
+    padding: 0 0.5rem;
 }
 
 /* ===== ОСНОВНОЙ ФОН — РОСКОШЬ ===== */
@@ -685,60 +842,23 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="splashScreen">
     <div class="diamond-glow"></div>
     <div class="diamond-container">
-        <svg class="diamond-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="diamondGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-                    <stop offset="25%" style="stop-color:#e0f7fa;stop-opacity:0.9" />
-                    <stop offset="50%" style="stop-color:#b3e5fc;stop-opacity:0.8" />
-                    <stop offset="75%" style="stop-color:#81d4fa;stop-opacity:0.9" />
-                    <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
-                </linearGradient>
-                <linearGradient id="diamondGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#4fc3f7;stop-opacity:0.9" />
-                    <stop offset="50%" style="stop-color:#29b6f6;stop-opacity:0.8" />
-                    <stop offset="100%" style="stop-color:#0288d1;stop-opacity:0.9" />
-                </linearGradient>
-                <linearGradient id="diamondGradient3" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#b3e5fc;stop-opacity:0.9" />
-                    <stop offset="50%" style="stop-color:#4fc3f7;stop-opacity:0.8" />
-                    <stop offset="100%" style="stop-color:#0277bd;stop-opacity:0.9" />
-                </linearGradient>
-                <filter id="diamondGlow">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            
-            <!-- Верхняя грань (корона) -->
-            <polygon points="100,20 140,50 120,70 80,70 60,50" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="1" opacity="0.95" filter="url(#diamondGlow)"/>
-            
-            <!-- Левая верхняя грань -->
-            <polygon points="60,50 80,70 70,100 40,80" fill="url(#diamondGradient2)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
-            
-            <!-- Правая верхняя грань -->
-            <polygon points="140,50 120,70 130,100 160,80" fill="url(#diamondGradient3)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
-            
-            <!-- Центральная верхняя грань -->
-            <polygon points="80,70 120,70 130,100 70,100" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
-            
-            <!-- Левая нижняя грань -->
-            <polygon points="40,80 70,100 100,180" fill="url(#diamondGradient2)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
-            
-            <!-- Центральная нижняя грань -->
-            <polygon points="70,100 130,100 100,180" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
-            
-            <!-- Правая нижняя грань -->
-            <polygon points="160,80 130,100 100,180" fill="url(#diamondGradient3)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
-            
-            <!-- Блики -->
-            <ellipse cx="90" cy="45" rx="15" ry="8" fill="white" opacity="0.6"/>
-            <ellipse cx="110" cy="60" rx="8" ry="5" fill="white" opacity="0.4"/>
-        </svg>
-        <div class="diamond-sparkle">
+        <div class="diamond-3d">
+            <div class="diamond-face diamond-top">
+                <div class="diamond-top-face"></div>
+                <div class="diamond-top-face"></div>
+                <div class="diamond-top-face"></div>
+                <div class="diamond-top-face"></div>
+            </div>
+            <div class="diamond-face diamond-bottom">
+                <div class="diamond-bottom-face"></div>
+                <div class="diamond-bottom-face"></div>
+                <div class="diamond-bottom-face"></div>
+                <div class="diamond-bottom-face"></div>
+            </div>
+            <div class="diamond-highlight"></div>
+        </div>
+        <div class="sparkles">
+            <div class="sparkle"></div>
             <div class="sparkle"></div>
             <div class="sparkle"></div>
             <div class="sparkle"></div>
@@ -747,6 +867,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         </div>
     </div>
     <div class="splash-title">Finance Luxe</div>
+    <div class="splash-divider"></div>
     <div class="splash-subtitle">Премиум управление финансами</div>
     <div class="splash-tagline">Решения для бизнеса</div>
 </div>
@@ -997,7 +1118,7 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         if (splash) splash.classList.add('hidden');
-    }, 3500);
+    }, 4000);
 });
 
 const getUserId = () => {
