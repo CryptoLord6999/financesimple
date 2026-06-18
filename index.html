@@ -154,8 +154,6 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .inline-edit-cancel{background:rgba(226,232,240,0.8);color:#4a5568}
 .linked-fields-info{background:rgba(237,137,54,0.08);border:1px solid rgba(237,137,54,0.2);border-radius:0.65rem;padding:0.5rem 0.75rem;margin-bottom:0.5rem;font-size:0.7rem;color:#c05621;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
 .revenue-capital-info{background:linear-gradient(135deg,rgba(237,137,54,0.08) 0%,rgba(159,122,234,0.08) 100%);border:1px solid rgba(237,137,54,0.2);border-radius:0.75rem;padding:0.6rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#744210;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
-
-/* НОВЫЕ СТИЛИ: Динамика и графики */
 .chart-tabs{display:flex;gap:0.3rem;margin-bottom:0.75rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding:0.25rem 0}
 .chart-tabs::-webkit-scrollbar{display:none}
 .chart-tab{flex-shrink:0;padding:0.45rem 0.85rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.78rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap}
@@ -255,7 +253,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
-<!-- НОВОЕ: ДИНАМИКА -->
+<!-- ДИНАМИКА -->
 <div id="dynamicsModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -772,6 +770,247 @@ if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и истор�
 else{if(confirm(`Обнулить баланс и историю счета "${account.name}" (${holder.name})?\n\n💾 Зафиксированные отчеты и капитал останутся.`))doReset();else haptic('impact','soft')}
 };
 
+// ===== ДИНАМИКА (ИСПРАВЛЕНО) =====
+window.openDynamics=()=>{
+try{
+console.log('🔍 openDynamics вызвана');
+currentChartType='capital';
+document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart==='capital'));
+renderDynamics();
+dynamicsModal.classList.add('active');
+haptic('impact','medium');
+console.log('✅ Динамика открыта');
+}catch(e){
+console.error('❌ openDynamics error:',e);
+alert('Ошибка открытия Динамики: '+e.message);
+}
+};
+
+window.closeDynamics=()=>{
+dynamicsModal.classList.remove('active');
+};
+
+window.switchChart=(type)=>{
+currentChartType=type;
+document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart===type));
+drawChart();
+haptic('impact','light');
+};
+
+// ИСПРАВЛЕНИЕ: добавлена функция renderDynamics
+const renderDynamics=()=>{
+console.log('📊 renderDynamics вызвана');
+drawChart();
+};
+
+const getChartData=()=>{
+const reports=Object.entries(savedReports)
+.map(([key,r])=>({key,date:new Date(r.date),...r}))
+.sort((a,b)=>a.date-b.date);
+return reports;
+};
+
+const drawChart=()=>{
+console.log('🎨 drawChart вызвана, тип:',currentChartType);
+const canvas=document.getElementById('mainChart');
+if(!canvas){console.error('❌ Canvas не найден');return}
+const ctx=canvas.getContext('2d');
+const dpr=window.devicePixelRatio||1;
+const rect=canvas.getBoundingClientRect();
+canvas.width=rect.width*dpr;
+canvas.height=rect.height*dpr;
+ctx.scale(dpr,dpr);
+const W=rect.width;
+const H=rect.height;
+ctx.clearRect(0,0,W,H);
+
+const reports=getChartData();
+const info=document.getElementById('dynamicsInfo');
+console.log('📈 Отчетов:',reports.length);
+
+if(reports.length===0){
+if(info)info.style.display='block';
+ctx.fillStyle='#a0aec0';
+ctx.font='14px -apple-system, sans-serif';
+ctx.textAlign='center';
+ctx.fillText('📭 Нет зафиксированных отчетов',W/2,H/2-10);
+ctx.font='11px -apple-system, sans-serif';
+ctx.fillText('Зафиксируйте отчет в разделе "📊 Отчет"',W/2,H/2+15);
+const trendContainer=document.getElementById('trendCards');
+if(trendContainer)trendContainer.innerHTML='';
+return;
+}
+if(info)info.style.display='none';
+
+const chartConfig={
+capital:{label:'💜 Капитал',color:'#9f7aea',key:'capital'},
+balance:{label:'⚪ Общий баланс',color:'#2c3e50',key:'balance'},
+siteBalance:{label:'🔵 Баланс на сайте',color:'#667eea',key:'siteBalance'},
+turnover:{label:'💹 Оборот',color:'#4299e1',key:'turnover'},
+revenue:{label:'💰 Выручка',color:'#ed8936',key:'revenue'}
+};
+const cfg=chartConfig[currentChartType];
+const values=reports.map(r=>r[cfg.key]||0);
+const dates=reports.map(r=>r.date);
+
+const padding={top:25,right:15,bottom:35,left:55};
+const chartW=W-padding.left-padding.right;
+const chartH=H-padding.top-padding.bottom;
+
+const maxVal=Math.max(...values)*1.1||1;
+const minVal=Math.min(0,Math.min(...values)*0.9);
+const range=maxVal-minVal||1;
+
+ctx.strokeStyle='rgba(0,0,0,0.05)';
+ctx.lineWidth=1;
+ctx.setLineDash([2,3]);
+for(let i=0;i<=4;i++){
+const y=padding.top+(chartH/4)*i;
+ctx.beginPath();
+ctx.moveTo(padding.left,y);
+ctx.lineTo(W-padding.right,y);
+ctx.stroke();
+}
+ctx.setLineDash([]);
+
+ctx.fillStyle='#718096';
+ctx.font='10px -apple-system, sans-serif';
+ctx.textAlign='right';
+for(let i=0;i<=4;i++){
+const y=padding.top+(chartH/4)*i;
+const val=maxVal-(range/4)*i;
+ctx.fillText(formatMoneyShort(val),padding.left-6,y+3);
+}
+
+ctx.textAlign='center';
+const step=Math.max(1,Math.floor(dates.length/5));
+dates.forEach((d,i)=>{
+if(i%step===0||i===dates.length-1){
+const x=padding.left+(chartW/(Math.max(dates.length-1,1)))*i;
+const label=`${d.getDate()} ${MONTH_NAMES[d.getMonth()].slice(0,3)}`;
+ctx.fillText(label,x,H-padding.bottom+15);
+}
+});
+
+const points=values.map((v,i)=>{
+const x=padding.left+(chartW/(Math.max(values.length-1,1)))*i;
+const y=padding.top+chartH-((v-minVal)/range)*chartH;
+return{x,y,value:v};
+});
+
+const gradient=ctx.createLinearGradient(0,padding.top,0,padding.top+chartH);
+gradient.addColorStop(0,cfg.color+'40');
+gradient.addColorStop(1,cfg.color+'05');
+ctx.fillStyle=gradient;
+ctx.beginPath();
+ctx.moveTo(points[0].x,padding.top+chartH);
+points.forEach(p=>ctx.lineTo(p.x,p.y));
+ctx.lineTo(points[points.length-1].x,padding.top+chartH);
+ctx.closePath();
+ctx.fill();
+
+ctx.strokeStyle=cfg.color;
+ctx.lineWidth=2.5;
+ctx.lineJoin='round';
+ctx.beginPath();
+points.forEach((p,i)=>{
+if(i===0)ctx.moveTo(p.x,p.y);
+else ctx.lineTo(p.x,p.y);
+});
+ctx.stroke();
+
+points.forEach((p)=>{
+ctx.fillStyle='white';
+ctx.beginPath();
+ctx.arc(p.x,p.y,4,0,Math.PI*2);
+ctx.fill();
+ctx.strokeStyle=cfg.color;
+ctx.lineWidth=2;
+ctx.stroke();
+});
+
+ctx.fillStyle=cfg.color;
+ctx.font='bold 12px -apple-system, sans-serif';
+ctx.textAlign='left';
+ctx.fillText(cfg.label,padding.left,15);
+
+const last=points[points.length-1];
+ctx.fillStyle=cfg.color;
+ctx.font='bold 13px -apple-system, sans-serif';
+ctx.textAlign='right';
+ctx.fillText(formatMoney(last.value),W-padding.right,15);
+
+renderTrendCards(reports,cfg);
+};
+
+const renderTrendCards=(reports,cfg)=>{
+const container=document.getElementById('trendCards');
+if(!container)return;
+container.innerHTML='';
+
+if(reports.length<2){
+container.innerHTML='<div class="chart-empty">📊 Нужно минимум 2 отчета для анализа тренда</div>';
+return;
+}
+
+const values=reports.map(r=>r[cfg.key]||0);
+const first=values[0];
+const last=values[values.length-1];
+const change=last-first;
+const changePercent=first!==0?(change/first)*100:0;
+const max=Math.max(...values);
+const min=Math.min(...values);
+const avg=values.reduce((a,b)=>a+b,0)/values.length;
+
+const isUp=change>0;
+const isDown=change<0;
+const trendClass=isUp?'trend-up':(isDown?'trend-down':'trend-neutral');
+const arrow=isUp?'📈':(isDown?'📉':'➡️');
+const barWidth=Math.min(100,Math.abs(changePercent));
+
+const totalCard=document.createElement('div');
+totalCard.className='trend-card';
+totalCard.innerHTML=`
+<div class="trend-header">
+<div class="trend-title">${arrow} Изменение за период</div>
+<div class="trend-value ${trendClass}">${isUp?'+':''}${formatMoney(change)}</div>
+</div>
+<div style="font-size:0.75rem;color:#718096">
+От ${formatMoney(first)} → ${formatMoney(last)} (${isUp?'+':''}${changePercent.toFixed(1)}%)
+</div>
+<div class="trend-bar">
+<div class="trend-bar-fill" style="width:${barWidth}%;background:${isUp?'#48bb78':(isDown?'#f56565':'#718096')}"></div>
+</div>
+`;
+container.appendChild(totalCard);
+
+const statsCard=document.createElement('div');
+statsCard.className='trend-card';
+statsCard.innerHTML=`
+<div class="trend-header">
+<div class="trend-title">📊 Статистика</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.3rem">
+<div style="text-align:center">
+<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Минимум</div>
+<div style="font-size:0.95rem;font-weight:700;color:#f56565">${formatMoneyShort(min)}</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Среднее</div>
+<div style="font-size:0.95rem;font-weight:700;color:#4a5568">${formatMoneyShort(avg)}</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Максимум</div>
+<div style="font-size:0.95rem;font-weight:700;color:#48bb78">${formatMoneyShort(max)}</div>
+</div>
+</div>
+<div style="font-size:0.7rem;color:#718096;margin-top:0.4rem;text-align:center">
+📅 Всего отчетов: ${values.length}
+</div>
+`;
+container.appendChild(statsCard);
+};
+
 // ===== ВЫБОР СЧЕТА =====
 window.openSelectAccount=()=>{
 document.getElementById('searchInput').value='';
@@ -1031,240 +1270,6 @@ container.insertBefore(noResults,addHolderBtn);
 }
 };
 
-// ===== ДИНАМИКА =====
-window.openDynamics=()=>{
-currentChartType='capital';
-document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart==='capital'));
-renderDynamics();
-dynamicsModal.classList.add('active');
-haptic('impact','medium');
-};
-window.closeDynamics=()=>dynamicsModal.classList.remove('active');
-
-window.switchChart=(type)=>{
-currentChartType=type;
-document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart===type));
-drawChart();
-haptic('impact','light');
-};
-
-const getChartData=()=>{
-const reports=Object.entries(savedReports)
-.map(([key,r])=>({key,date:new Date(r.date),...r}))
-.sort((a,b)=>a.date-b.date);
-return reports;
-};
-
-const drawChart=()=>{
-const canvas=document.getElementById('mainChart');
-if(!canvas)return;
-const ctx=canvas.getContext('2d');
-const dpr=window.devicePixelRatio||1;
-const rect=canvas.getBoundingClientRect();
-canvas.width=rect.width*dpr;
-canvas.height=rect.height*dpr;
-ctx.scale(dpr,dpr);
-const W=rect.width;
-const H=rect.height;
-ctx.clearRect(0,0,W,H);
-
-const reports=getChartData();
-const info=document.getElementById('dynamicsInfo');
-
-if(reports.length===0){
-info.style.display='block';
-ctx.fillStyle='#a0aec0';
-ctx.font='14px -apple-system, sans-serif';
-ctx.textAlign='center';
-ctx.fillText('📭 Нет зафиксированных отчетов',W/2,H/2-10);
-ctx.font='11px -apple-system, sans-serif';
-ctx.fillText('Зафиксируйте отчет в разделе "📊 Отчет"',W/2,H/2+15);
-document.getElementById('trendCards').innerHTML='';
-return;
-}
-info.style.display='none';
-
-const chartConfig={
-capital:{label:'💜 Капитал',color:'#9f7aea',key:'capital'},
-balance:{label:'⚪ Общий баланс',color:'#2c3e50',key:'balance'},
-siteBalance:{label:'🔵 Баланс на сайте',color:'#667eea',key:'siteBalance'},
-turnover:{label:'💹 Оборот',color:'#4299e1',key:'turnover'},
-revenue:{label:'💰 Выручка',color:'#ed8936',key:'revenue'}
-};
-const cfg=chartConfig[currentChartType];
-const values=reports.map(r=>r[cfg.key]||0);
-const dates=reports.map(r=>r.date);
-
-const padding={top:25,right:15,bottom:35,left:55};
-const chartW=W-padding.left-padding.right;
-const chartH=H-padding.top-padding.bottom;
-
-const maxVal=Math.max(...values)*1.1||1;
-const minVal=Math.min(0,Math.min(...values)*0.9);
-const range=maxVal-minVal;
-
-// Сетка
-ctx.strokeStyle='rgba(0,0,0,0.05)';
-ctx.lineWidth=1;
-ctx.setLineDash([2,3]);
-for(let i=0;i<=4;i++){
-const y=padding.top+(chartH/4)*i;
-ctx.beginPath();
-ctx.moveTo(padding.left,y);
-ctx.lineTo(W-padding.right,y);
-ctx.stroke();
-}
-ctx.setLineDash([]);
-
-// Подписи Y
-ctx.fillStyle='#718096';
-ctx.font='10px -apple-system, sans-serif';
-ctx.textAlign='right';
-for(let i=0;i<=4;i++){
-const y=padding.top+(chartH/4)*i;
-const val=maxVal-(range/4)*i;
-ctx.fillText(formatMoneyShort(val),padding.left-6,y+3);
-}
-
-// Подписи X (даты)
-ctx.textAlign='center';
-const step=Math.max(1,Math.floor(dates.length/5));
-dates.forEach((d,i)=>{
-if(i%step===0||i===dates.length-1){
-const x=padding.left+(chartW/(Math.max(dates.length-1,1)))*i;
-const label=`${d.getDate()} ${MONTH_NAMES[d.getMonth()].slice(0,3)}`;
-ctx.fillText(label,x,H-padding.bottom+15);
-}
-});
-
-// Точки и линия
-const points=values.map((v,i)=>{
-const x=padding.left+(chartW/(Math.max(values.length-1,1)))*i;
-const y=padding.top+chartH-((v-minVal)/range)*chartH;
-return{x,y,value:v};
-});
-
-// Градиент под линией
-const gradient=ctx.createLinearGradient(0,padding.top,0,padding.top+chartH);
-gradient.addColorStop(0,cfg.color+'40');
-gradient.addColorStop(1,cfg.color+'05');
-ctx.fillStyle=gradient;
-ctx.beginPath();
-ctx.moveTo(points[0].x,padding.top+chartH);
-points.forEach(p=>ctx.lineTo(p.x,p.y));
-ctx.lineTo(points[points.length-1].x,padding.top+chartH);
-ctx.closePath();
-ctx.fill();
-
-// Линия
-ctx.strokeStyle=cfg.color;
-ctx.lineWidth=2.5;
-ctx.lineJoin='round';
-ctx.beginPath();
-points.forEach((p,i)=>{
-if(i===0)ctx.moveTo(p.x,p.y);
-else ctx.lineTo(p.x,p.y);
-});
-ctx.stroke();
-
-// Точки
-points.forEach((p,i)=>{
-ctx.fillStyle='white';
-ctx.beginPath();
-ctx.arc(p.x,p.y,4,0,Math.PI*2);
-ctx.fill();
-ctx.strokeStyle=cfg.color;
-ctx.lineWidth=2;
-ctx.stroke();
-});
-
-// Заголовок
-ctx.fillStyle=cfg.color;
-ctx.font='bold 12px -apple-system, sans-serif';
-ctx.textAlign='left';
-ctx.fillText(cfg.label,padding.left,15);
-
-// Последнее значение
-const last=points[points.length-1];
-ctx.fillStyle=cfg.color;
-ctx.font='bold 13px -apple-system, sans-serif';
-ctx.textAlign='right';
-ctx.fillText(formatMoney(last.value),W-padding.right,15);
-
-// Тренды
-renderTrendCards(reports,cfg);
-};
-
-const renderTrendCards=(reports,cfg)=>{
-const container=document.getElementById('trendCards');
-if(!container)return;
-container.innerHTML='';
-
-if(reports.length<2){
-container.innerHTML='<div class="chart-empty">📊 Нужно минимум 2 отчета для анализа тренда</div>';
-return;
-}
-
-const values=reports.map(r=>r[cfg.key]||0);
-const first=values[0];
-const last=values[values.length-1];
-const change=last-first;
-const changePercent=first!==0?(change/first)*100:0;
-const max=Math.max(...values);
-const min=Math.min(...values);
-const avg=values.reduce((a,b)=>a+b,0)/values.length;
-
-const isUp=change>0;
-const isDown=change<0;
-const trendClass=isUp?'trend-up':(isDown?'trend-down':'trend-neutral');
-const arrow=isUp?'📈':(isDown?'📉':'➡️');
-const barWidth=Math.min(100,Math.abs(changePercent));
-
-// Общая динамика
-const totalCard=document.createElement('div');
-totalCard.className='trend-card';
-totalCard.innerHTML=`
-<div class="trend-header">
-<div class="trend-title">${arrow} Изменение за период</div>
-<div class="trend-value ${trendClass}">${isUp?'+':''}${formatMoney(change)}</div>
-</div>
-<div style="font-size:0.75rem;color:#718096">
-От ${formatMoney(first)} → ${formatMoney(last)} (${isUp?'+':''}${changePercent.toFixed(1)}%)
-</div>
-<div class="trend-bar">
-<div class="trend-bar-fill" style="width:${barWidth}%;background:${isUp?'#48bb78':(isDown?'#f56565':'#718096')}"></div>
-</div>
-`;
-container.appendChild(totalCard);
-
-// Статистика
-const statsCard=document.createElement('div');
-statsCard.className='trend-card';
-statsCard.innerHTML=`
-<div class="trend-header">
-<div class="trend-title">📊 Статистика</div>
-</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.3rem">
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Минимум</div>
-<div style="font-size:0.95rem;font-weight:700;color:#f56565">${formatMoneyShort(min)}</div>
-</div>
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Среднее</div>
-<div style="font-size:0.95rem;font-weight:700;color:#4a5568">${formatMoneyShort(avg)}</div>
-</div>
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Максимум</div>
-<div style="font-size:0.95rem;font-weight:700;color:#48bb78">${formatMoneyShort(max)}</div>
-</div>
-</div>
-<div style="font-size:0.7rem;color:#718096;margin-top:0.4rem;text-align:center">
-📅 Всего отчетов: ${values.length}
-</div>
-`;
-container.appendChild(statsCard);
-};
-
 // ===== ОТЧЕТ =====
 window.openReport=()=>{
 try{renderSummary();renderReportsList();checkLastFixed();reportModal.classList.add('active');haptic('impact','medium')}
@@ -1356,7 +1361,7 @@ list.appendChild(item);
 }catch(e){console.error('renderReportsList error:',e)}
 };
 
-// ===== ЭКСПОРТ ОТЧЕТА В ТЕКСТ =====
+// ===== ЭКСПОРТ В ТЕКСТ =====
 window.shareReportText=(key)=>{
 const report=savedReports[key];
 if(!report){alert('Отчет не найден');return}
@@ -1364,27 +1369,10 @@ const date=new Date(report.date);
 const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
 const timeStr=date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
 
-const text=`📊 ФИНАНСОВЫЙ ОТЧЕТ
-━━━━━━━━━━━━━━━━━━━━
-📅 ${dateStr}, ${timeStr}
-
-💹 Оборот: ${formatMoney(report.turnover)}
-💰 Выручка: ${formatMoney(report.revenue)}
-🟢 Доходы: ${formatMoney(report.income)}
-🔴 Расходы: ${formatMoney(report.expense)}
-
-━━━━━━━━━━━━━━━━━━━━
-⚪ Общий баланс: ${formatMoney(report.balance)}
-💜 Капитал: ${formatMoney(report.capital)}
-🔵 Баланс на сайте: ${formatMoney(report.siteBalance)}
-
-━━━━━━━━━━━━━━━━━━━━
-💡 Создано в Finance Minimal`;
+const text=`📊 ФИНАНСОВЫЙ ОТЧЕТ\n━━━━━━━━━━━━━━━━━━━━\n📅 ${dateStr}, ${timeStr}\n\n💹 Оборот: ${formatMoney(report.turnover)}\n💰 Выручка: ${formatMoney(report.revenue)}\n🟢 Доходы: ${formatMoney(report.income)}\n🔴 Расходы: ${formatMoney(report.expense)}\n\n━━━━━━━━━━━━━━━━━━━━\n⚪ Общий баланс: ${formatMoney(report.balance)}\n💜 Капитал: ${formatMoney(report.capital)}\n🔵 Баланс на сайте: ${formatMoney(report.siteBalance)}\n\n━━━━━━━━━━━━━━━━━━━━\n💡 Создано в Finance Minimal`;
 
 if(navigator.share){
-navigator.share({title:'Финансовый отчет',text:text}).catch(()=>{
-copyToClipboard(text);
-});
+navigator.share({title:'Финансовый отчет',text:text}).catch(()=>{copyToClipboard(text)});
 }else{
 copyToClipboard(text);
 }
@@ -1394,8 +1382,8 @@ haptic('notification','success');
 const copyToClipboard=(text)=>{
 if(navigator.clipboard&&window.isSecureContext){
 navigator.clipboard.writeText(text).then(()=>{
-if(tg?.showAlert){tg.showAlert('✅ Текст скопирован в буфер обмена!')}
-else{alert('✅ Текст скопирован в буфер обмена!')}
+if(tg?.showAlert){tg.showAlert('✅ Текст скопирован!')}
+else{alert('✅ Текст скопирован!')}
 }).catch(()=>{fallbackCopy(text)});
 }else{
 fallbackCopy(text);
@@ -1419,11 +1407,12 @@ alert('Не удалось скопировать. Текст:\n\n'+text);
 document.body.removeChild(ta);
 };
 
-// ===== ЭКСПОРТ ОТЧЕТА В PDF =====
+// ===== ЭКСПОРТ В PDF =====
 window.shareReportPDF=(key)=>{
 try{
 const report=savedReports[key];
 if(!report){alert('Отчет не найден');return}
+if(!window.jspdf){alert('❌ PDF-библиотека не загрузилась. Проверьте интернет.');return}
 const date=new Date(report.date);
 const dateStr=`${date.getDate()} ${MONTH_NAMES_GEN[date.getMonth()]} ${date.getFullYear()}`;
 const timeStr=date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
@@ -1433,7 +1422,6 @@ const doc=new jsPDF({unit:'mm',format:'a4'});
 const pageW=doc.internal.pageSize.getWidth();
 const pageH=doc.internal.pageSize.getHeight();
 
-// Градиентный фон (через прямоугольники)
 const steps=30;
 for(let i=0;i<steps;i++){
 const ratio=i/steps;
@@ -1444,7 +1432,6 @@ doc.setFillColor(r,g,b);
 doc.rect(0,(pageH/steps)*i,pageW,pageH/steps+1,'F');
 }
 
-// Заголовок
 doc.setFillColor(102,126,234);
 doc.roundedRect(15,15,pageW-30,28,4,4,'F');
 doc.setTextColor(255,255,255);
@@ -1455,7 +1442,6 @@ doc.setFontSize(10);
 doc.setFont('helvetica','normal');
 doc.text(`${dateStr}, ${timeStr}`,pageW/2,37,{align:'center'});
 
-// Блок "Основные показатели"
 let y=55;
 doc.setFillColor(255,255,255);
 doc.roundedRect(15,y,pageW-30,75,3,3,'F');
@@ -1494,7 +1480,6 @@ doc.text(row[1],pageW-25,rowY+2,{align:'right'});
 rowY+=10;
 });
 
-// Блок "Капитал и балансы"
 y=140;
 doc.setFillColor(255,255,255);
 doc.roundedRect(15,y,pageW-30,60,3,3,'F');
@@ -1531,7 +1516,6 @@ doc.text(row[1],pageW-25,rowY+2,{align:'right'});
 rowY+=10;
 });
 
-// Подвал
 doc.setFillColor(102,126,234);
 doc.roundedRect(15,pageH-25,pageW-30,15,3,3,'F');
 doc.setTextColor(255,255,255);
