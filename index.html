@@ -11,24 +11,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --gold: #d4af37;
-    --gold-light: #f5e6c8;
-    --gold-dark: #8b6914;
-    --bg-primary: #0a0a0f;
-    --bg-secondary: #1a1a2e;
-    --bg-card: rgba(26, 26, 46, 0.6);
-    --text-primary: #f5e6c8;
-    --text-secondary: #b8860b;
-    --green: #4ade80;
-    --red: #fb7185;
-    --blue: #60a5fa;
-    --purple: #c084fc;
-    --radius: 16px;
-    --radius-sm: 12px;
-    --radius-lg: 24px;
+    --ios-bg: #000000;
+    --ios-card: rgba(28, 28, 30, 0.6);
+    --ios-card-solid: #1c1c1e;
+    --ios-blue: #007AFF;
+    --ios-green: #34C759;
+    --ios-red: #FF3B30;
+    --ios-orange: #FF9500;
+    --ios-gray: #8E8E93;
+    --ios-light-gray: #C7C7CC;
+    --ios-separator: rgba(120, 120, 128, 0.2);
+    --ios-text: #FFFFFF;
+    --ios-text-secondary: rgba(255, 255, 255, 0.6);
+    --radius-ios: 20px;
+    --radius-ios-sm: 12px;
 }
 
 * {
@@ -36,15 +35,16 @@
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 html, body {
     height: 100%;
     overflow: hidden;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    background: var(--ios-bg);
+    color: var(--ios-text);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ===== SPLASH SCREEN ===== */
@@ -52,37 +52,36 @@ html, body {
     position: fixed;
     inset: 0;
     z-index: 10000;
-    background: linear-gradient(135deg, #fefef8 0%, #f5e6c8 50%, #d4af37 100%);
+    background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.8s ease, visibility 0.8s ease;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 #splash.hide {
     opacity: 0;
     visibility: hidden;
 }
 #splashCanvas {
-    width: 200px;
-    height: 200px;
-    filter: drop-shadow(0 20px 60px rgba(139, 105, 20, 0.4));
+    width: 180px;
+    height: 180px;
+    filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15));
 }
 .splash-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 1.75rem;
     font-weight: 600;
-    color: #6b5410;
-    letter-spacing: 0.3em;
+    color: #1c1c1e;
+    letter-spacing: -0.02em;
     margin-top: 1.5rem;
 }
 .splash-sub {
-    font-size: 0.75rem;
-    color: #8b6914;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-    opacity: 0.7;
+    font-size: 0.8rem;
+    color: #8E8E93;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+    font-weight: 400;
 }
 
 /* ===== APP LAYOUT ===== */
@@ -91,8 +90,7 @@ html, body {
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow: hidden;
+    background: var(--ios-bg);
 }
 
 /* ===== PAGES ===== */
@@ -100,6 +98,7 @@ html, body {
     flex: 1;
     position: relative;
     overflow: hidden;
+    background: var(--ios-bg);
 }
 .page {
     position: absolute;
@@ -108,95 +107,32 @@ html, body {
     overflow-x: hidden;
     padding: 0 0 100px 0;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: scale(0.97);
+    transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
     -webkit-overflow-scrolling: touch;
 }
 .page.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
     pointer-events: auto;
 }
 .page::-webkit-scrollbar { display: none; }
 
 .page-content {
-    padding: 16px;
-    padding-top: max(16px, env(safe-area-inset-top));
+    padding: 12px 16px;
+    padding-top: max(12px, env(safe-area-inset-top));
     min-height: 100%;
-}
-
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(10, 10, 15, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(212, 175, 55, 0.15);
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-    z-index: 1000;
-}
-.nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-}
-.nav-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    width: 24px;
-    height: 2px;
-    background: var(--gold);
-    border-radius: 1px;
-    transition: transform 0.3s ease;
-}
-.nav-item.active::before {
-    transform: translateX(-50%) scaleX(1);
-}
-.nav-icon {
-    font-size: 1.3rem;
-    transition: transform 0.3s ease;
-    filter: grayscale(1) opacity(0.5);
-}
-.nav-item.active .nav-icon {
-    filter: grayscale(0) opacity(1);
-    transform: scale(1.1);
-}
-.nav-label {
-    font-size: 0.6rem;
-    font-weight: 500;
-    color: rgba(184, 134, 11, 0.5);
-    letter-spacing: 0.05em;
-    transition: color 0.3s ease;
-}
-.nav-item.active .nav-label {
-    color: var(--gold);
 }
 
 /* ===== BALANCE CARD ===== */
 .balance-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 50%, #1a1a2e 100%);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    border-radius: var(--radius-ios);
     padding: 24px;
+    margin-bottom: 16px;
     position: relative;
     overflow: hidden;
-    margin-bottom: 20px;
 }
 .balance-card::before {
     content: '';
@@ -205,35 +141,27 @@ html, body {
     right: -50%;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-    pointer-events: none;
-}
-.balance-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+    background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
 }
 .balance-label {
     font-size: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.05em;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 .balance-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--ios-text);
     line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
 }
 .balance-sub {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
     margin-top: 8px;
     display: flex;
     align-items: center;
@@ -244,46 +172,109 @@ html, body {
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 16px;
 }
 .stat-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    border-radius: var(--radius);
-    padding: 16px;
-    backdrop-filter: blur(10px);
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios-sm);
+    padding: 14px;
+    border: 1px solid var(--ios-separator);
 }
 .stat-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 6px;
 }
 .stat-icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 .stat-name {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
+    font-size: 0.65rem;
+    color: var(--ios-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.03em;
+    font-weight: 500;
 }
 .stat-value {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+/* ===== ACCOUNT SELECTOR ===== */
+.account-chip {
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 100px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    border: 1px solid var(--ios-separator);
+    transition: all 0.2s ease;
+}
+.account-chip:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+.account-chip-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.account-chip-arrow {
+    color: var(--ios-blue);
+    font-size: 1rem;
+}
+
+/* ===== INPUT ===== */
+.amount-input-wrap {
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios-sm);
+    padding: 4px;
+    margin-bottom: 12px;
+    border: 1px solid var(--ios-separator);
+}
+.amount-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--ios-text);
+    font-size: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 14px;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+.amount-input::placeholder {
+    color: var(--ios-text-secondary);
 }
 
 /* ===== QUICK ACTIONS ===== */
 .quick-actions {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 20px;
 }
 .action-btn {
-    padding: 16px;
-    border-radius: var(--radius);
+    padding: 14px;
+    border-radius: var(--radius-ios-sm);
     border: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -292,58 +283,30 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    -webkit-tap-highlight-color: transparent;
+    gap: 6px;
 }
 .action-btn:active {
     transform: scale(0.96);
+    opacity: 0.9;
 }
 .action-income {
-    background: rgba(74, 222, 128, 0.15);
-    color: var(--green);
-    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: var(--ios-green);
+    color: white;
 }
 .action-expense {
-    background: rgba(251, 113, 133, 0.15);
-    color: var(--red);
-    border: 1px solid rgba(251, 113, 133, 0.3);
-}
-
-/* ===== INPUT ===== */
-.amount-input-wrap {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    border-radius: var(--radius);
-    padding: 4px;
-    margin-bottom: 16px;
-    backdrop-filter: blur(10px);
-}
-.amount-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    font-weight: 300;
-    text-align: center;
-    padding: 16px;
-    outline: none;
-    font-family: 'Playfair Display', serif;
-}
-.amount-input::placeholder {
-    color: rgba(184, 134, 11, 0.4);
+    background: var(--ios-red);
+    color: white;
 }
 
 /* ===== SECTION ===== */
 .section-title {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+    font-size: 0.7rem;
+    color: var(--ios-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    font-weight: 600;
+    padding: 0 4px;
 }
 
 /* ===== TRANSACTION LIST ===== */
@@ -353,14 +316,15 @@ html, body {
     gap: 8px;
 }
 .tx-item {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios-sm);
+    padding: 12px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--ios-separator);
     animation: slideUp 0.3s ease;
 }
 @keyframes slideUp {
@@ -381,66 +345,67 @@ html, body {
 }
 .tx-time {
     font-size: 0.7rem;
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
 }
 .tx-amount {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     white-space: nowrap;
     margin-left: 12px;
+    font-variant-numeric: tabular-nums;
 }
 
-/* ===== EMPTY STATE ===== */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-secondary);
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(28, 28, 30, 0.85);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-top: 1px solid var(--ios-separator);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    z-index: 1000;
 }
-.empty-icon {
-    font-size: 3rem;
-    margin-bottom: 12px;
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+.nav-icon {
+    font-size: 1.4rem;
+    transition: all 0.2s ease;
     opacity: 0.5;
 }
-.empty-text {
-    font-size: 0.9rem;
-    opacity: 0.7;
+.nav-item.active .nav-icon {
+    opacity: 1;
+    transform: scale(1.1);
 }
-
-/* ===== ACCOUNT SELECTOR ===== */
-.account-chip {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 100px;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
-}
-.account-chip:active {
-    transform: scale(0.98);
-}
-.account-chip-name {
-    font-size: 0.85rem;
+.nav-label {
+    font-size: 0.6rem;
     font-weight: 500;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--ios-text-secondary);
+    transition: color 0.2s ease;
+    letter-spacing: 0.02em;
 }
-.account-chip-arrow {
-    color: var(--gold);
-    font-size: 1rem;
+.nav-item.active .nav-label {
+    color: var(--ios-blue);
 }
 
 /* ===== BOTTOM SHEET ===== */
 .sheet-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     z-index: 2000;
     opacity: 0;
@@ -456,9 +421,8 @@ html, body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
-    border-radius: 24px 24px 0 0;
-    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    background: #1c1c1e;
+    border-radius: 20px 20px 0 0;
     padding: 12px 16px max(16px, env(safe-area-inset-bottom));
     z-index: 2001;
     transform: translateY(100%);
@@ -471,17 +435,16 @@ html, body {
 }
 .sheet-handle {
     width: 36px;
-    height: 4px;
-    background: rgba(212, 175, 55, 0.3);
-    border-radius: 2px;
+    height: 5px;
+    background: #3a3a3c;
+    border-radius: 3px;
     margin: 0 auto 16px;
 }
 .sheet-title {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: 20px;
-    color: var(--gold);
+    margin-bottom: 16px;
 }
 
 /* ===== TOAST ===== */
@@ -497,15 +460,14 @@ html, body {
     pointer-events: none;
 }
 .toast {
-    background: rgba(26, 26, 46, 0.95);
+    background: rgba(28, 28, 30, 0.95);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: var(--radius);
-    padding: 14px 18px;
+    border-radius: 12px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    animation: toastIn 0.4s ease;
+    gap: 10px;
+    animation: toastIn 0.3s ease;
     pointer-events: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
@@ -513,25 +475,26 @@ html, body {
     animation: toastOut 0.3s ease forwards;
 }
 @keyframes toastIn {
-    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 @keyframes toastOut {
-    to { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 0; transform: translateY(-20px); }
 }
 .toast-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
 }
 .toast-text {
     font-size: 0.85rem;
     flex: 1;
+    font-weight: 500;
 }
 
 /* ===== BUTTONS ===== */
 .btn {
-    padding: 14px 20px;
-    border-radius: var(--radius);
+    padding: 13px 20px;
+    border-radius: var(--radius-ios-sm);
     border: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -541,49 +504,43 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    -webkit-tap-highlight-color: transparent;
+    gap: 6px;
 }
 .btn:active {
     transform: scale(0.97);
+    opacity: 0.9;
 }
 .btn-primary {
-    background: linear-gradient(135deg, var(--gold) 0%, #b8860b 100%);
-    color: #0a0a0f;
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+    background: var(--ios-blue);
+    color: white;
 }
 .btn-secondary {
-    background: rgba(26, 26, 46, 0.8);
-    color: var(--gold);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-}
-.btn-blue {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: white;
+    background: rgba(120, 120, 128, 0.12);
+    color: var(--ios-blue);
 }
 
 /* ===== REPORT CARD ===== */
 .report-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 12px;
-    backdrop-filter: blur(10px);
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios-sm);
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid var(--ios-separator);
 }
 .report-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 .report-date {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 .report-time {
     font-size: 0.7rem;
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
     margin-top: 2px;
 }
 .report-actions {
@@ -591,38 +548,82 @@ html, body {
     gap: 6px;
 }
 .report-action {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .report-action:active { transform: scale(0.9); }
-.report-action.share { background: rgba(96, 165, 250, 0.15); }
-.report-action.edit { background: rgba(212, 175, 55, 0.15); }
-.report-action.delete { background: rgba(251, 113, 133, 0.15); }
+.report-action.share { background: rgba(0, 122, 255, 0.15); }
+.report-action.edit { background: rgba(255, 149, 0, 0.15); }
+.report-action.delete { background: rgba(255, 59, 48, 0.15); }
 
 .report-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 6px;
 }
 .report-stat {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    font-size: 0.8rem;
+    padding: 5px 0;
+    font-size: 0.75rem;
 }
 .report-stat-label {
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
 }
 .report-stat-value {
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ===== SUMMARY CARD ===== */
+.summary-block {
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios);
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--ios-separator);
+}
+.summary-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 12px;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+.summary-item {
+    text-align: center;
+    padding: 10px 8px;
+    background: rgba(120, 120, 128, 0.08);
+    border-radius: var(--radius-ios-sm);
+}
+.summary-label {
+    font-size: 0.6rem;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+}
+.summary-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ===== PERIOD CHIPS ===== */
@@ -636,177 +637,102 @@ html, body {
 }
 .period-row::-webkit-scrollbar { display: none; }
 .period-chip {
-    padding: 8px 16px;
+    padding: 7px 14px;
     border-radius: 100px;
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    background: var(--ios-card);
+    border: 1px solid var(--ios-separator);
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--ios-text-secondary);
     white-space: nowrap;
     cursor: pointer;
     transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
 }
 .period-chip.active {
-    background: linear-gradient(135deg, var(--gold), #b8860b);
-    color: #0a0a0f;
-    border-color: transparent;
-}
-
-/* ===== HOLDER GROUP ===== */
-.holder-block {
-    margin-bottom: 16px;
-}
-.holder-head {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(184, 134, 14, 0.05));
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-}
-.holder-name {
-    font-weight: 600;
-    color: var(--gold);
-    font-size: 0.9rem;
-}
-.holder-accs {
-    margin-left: 12px;
-    padding-left: 12px;
-    border-left: 2px solid rgba(212, 175, 55, 0.2);
-    margin-top: 8px;
-}
-.acc-row {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    border-radius: var(--radius-sm);
-    padding: 12px;
-    margin-bottom: 8px;
-}
-.acc-name-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-.acc-name {
-    font-weight: 500;
-    font-size: 0.9rem;
-    flex: 1;
-}
-.acc-balance {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-.acc-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-}
-.acc-stat {
-    text-align: center;
-    padding: 6px 4px;
-    background: rgba(212, 175, 55, 0.05);
-    border-radius: 8px;
-}
-.acc-stat-label {
-    font-size: 0.55rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-.acc-stat-val {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-top: 2px;
+    background: var(--ios-blue);
+    color: white;
+    border-color: var(--ios-blue);
 }
 
 /* ===== SETTINGS ===== */
 .setting-group {
-    background: var(--bg-card);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 12px;
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-ios-sm);
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid var(--ios-separator);
 }
 .setting-label {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
+    font-size: 0.65rem;
+    color: var(--ios-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+    font-weight: 500;
 }
 .setting-input {
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(212, 175, 55, 0.4);
-    color: var(--text-primary);
-    font-size: 1.2rem;
+    border-bottom: 1px solid var(--ios-separator);
+    color: var(--ios-text);
+    font-size: 1.1rem;
     font-weight: 600;
-    padding: 8px 0;
+    padding: 6px 0;
     outline: none;
     text-align: center;
+    font-variant-numeric: tabular-nums;
 }
 .setting-input:focus {
-    border-bottom-color: var(--gold);
+    border-bottom-color: var(--ios-blue);
 }
 .setting-hint {
-    font-size: 0.7rem;
-    color: rgba(184, 134, 11, 0.6);
-    margin-top: 6px;
-}
-
-/* ===== SUMMARY CARD ===== */
-.summary-block {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(184, 134, 14, 0.05));
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 16px;
-}
-.summary-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--gold);
-    text-align: center;
-    margin-bottom: 12px;
-}
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-.summary-item {
-    text-align: center;
-    padding: 10px 8px;
-    background: rgba(26, 26, 46, 0.5);
-    border-radius: var(--radius-sm);
-}
-.summary-label {
-    font-size: 0.6rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-.summary-val {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 0.65rem;
+    color: var(--ios-text-secondary);
     margin-top: 4px;
 }
 
-/* ===== UTILS ===== */
-.text-green { color: var(--green); }
-.text-red { color: var(--red); }
-.text-blue { color: var(--blue); }
-.text-purple { color: var(--purple); }
-.text-gold { color: var(--gold); }
-.text-yellow { color: #fbbf24; }
+/* ===== SYNC BADGE ===== */
+.sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.65rem;
+    color: var(--ios-text-secondary);
+    padding: 4px 10px;
+    background: rgba(120, 120, 128, 0.12);
+    border-radius: 100px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+.sync-badge.syncing { color: var(--ios-orange); }
+.sync-badge.synced { color: var(--ios-green); }
 
-.gap-12 { gap: 12px; }
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--ios-text-secondary);
+}
+.empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+.empty-text {
+    font-size: 0.85rem;
+}
+
+/* ===== COLORS ===== */
+.text-green { color: var(--ios-green); }
+.text-red { color: var(--ios-red); }
+.text-blue { color: var(--ios-blue); }
+.text-orange { color: var(--ios-orange); }
+
+/* ===== UTILS ===== */
+.mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
@@ -814,22 +740,7 @@ html, body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 2px; }
-
-/* Sync indicator */
-.sync-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    padding: 4px 10px;
-    background: rgba(26, 26, 46, 0.6);
-    border-radius: 100px;
-    margin-top: 8px;
-}
-.sync-badge.syncing { color: var(--gold); }
-.sync-badge.synced { color: #c9a227; }
+::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -841,14 +752,14 @@ html, body {
     <div class="splash-sub">Решения для бизнеса</div>
 </div>
 
-<!-- TOAST CONTAINER -->
+<!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- APP -->
 <div id="app">
     <div class="pages">
         
-        <!-- PAGE: HOME -->
+        <!-- HOME -->
         <div class="page active" id="page-home">
             <div class="page-content">
                 <div class="account-chip" onclick="openAccountSheet()">
@@ -879,7 +790,7 @@ html, body {
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-icon"></span>
+                            <span class="stat-icon">🔴</span>
                             <span class="stat-name">Расход</span>
                         </div>
                         <div class="stat-value text-red" id="statExpense">0 ₽</div>
@@ -889,7 +800,7 @@ html, body {
                             <span class="stat-icon">💰</span>
                             <span class="stat-name">Выручка</span>
                         </div>
-                        <div class="stat-value text-yellow" id="statRevenue">0 ₽</div>
+                        <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
                     </div>
                 </div>
 
@@ -906,10 +817,7 @@ html, body {
                     </button>
                 </div>
 
-                <div class="section-title">
-                    <span>История операций</span>
-                    <button id="resetBtn" onclick="doReset()" style="background:none;border:none;color:var(--text-secondary);font-size:0.75rem;cursor:pointer;opacity:0.6;">Сбросить</button>
-                </div>
+                <div class="section-title">История операций</div>
                 <div class="tx-list" id="txList">
                     <div class="empty-state">
                         <div class="empty-icon">📭</div>
@@ -919,13 +827,13 @@ html, body {
             </div>
         </div>
 
-        <!-- PAGE: REPORT -->
+        <!-- REPORT -->
         <div class="page" id="page-report">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;color:var(--gold);text-transform:none;letter-spacing:0;">📊 Отчёт</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
                 
                 <div class="summary-block">
-                    <div class="summary-title">Сводка по всем держателям и счетам</div>
+                    <div class="summary-title">Сводка по всем счетам</div>
                     <div class="summary-grid">
                         <div class="summary-item">
                             <div class="summary-label">💹 Оборот</div>
@@ -933,10 +841,10 @@ html, body {
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">💰 Выручка</div>
-                            <div class="summary-val text-yellow" id="sumRevenue">0 ₽</div>
+                            <div class="summary-val text-orange" id="sumRevenue">0 ₽</div>
                         </div>
                         <div class="summary-item">
-                            <div class="summary-label"> Доходы</div>
+                            <div class="summary-label">🟢 Доходы</div>
                             <div class="summary-val text-green" id="sumIncome">0 ₽</div>
                         </div>
                         <div class="summary-item">
@@ -948,35 +856,35 @@ html, body {
                             <div class="summary-val" id="sumBalance">0 ₽</div>
                         </div>
                         <div class="summary-item">
-                            <div class="summary-label"> Капитал</div>
-                            <div class="summary-val text-purple" id="sumCapital">0 ₽</div>
+                            <div class="summary-label">💜 Капитал</div>
+                            <div class="summary-val text-blue" id="sumCapital">0 ₽</div>
                         </div>
                         <div class="summary-item" style="grid-column:span 2;">
-                            <div class="summary-label">🔵 Баланс на сайте</div>
-                            <div class="summary-val text-gold" id="sumSite">0 ₽</div>
+                            <div class="summary-label">🔵 На сайте</div>
+                            <div class="summary-val text-orange" id="sumSite">0 ₽</div>
                         </div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary mb-12" onclick="doFixReport()"> Зафиксировать отчёт</button>
-                <button class="btn btn-blue mb-20" onclick="doShareCurrentReport()">📤 Поделиться текущим отчётом</button>
+                <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
+                <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
 
-                <div id="lastFixedBadge" style="display:none;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:#4ade80;">
-                    ✅ Последний отчёт: <span id="lastFixedDate"></span>
+                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
+                    ✅ Последний: <span id="lastFixedDate"></span>
                 </div>
 
-                <div class="section-title">📋 Зафиксированные отчёты</div>
+                <div class="section-title">Зафиксированные отчёты</div>
                 <div id="reportsList"></div>
             </div>
         </div>
 
-        <!-- PAGE: DETAIL -->
+        <!-- DETAIL -->
         <div class="page" id="page-detail">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;color:var(--gold);text-transform:none;letter-spacing:0;">🔍 Детализация</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
 
                 <div class="summary-block">
-                    <div class="summary-title">💎 Общие показатели</div>
+                    <div class="summary-title">Общие показатели</div>
                     <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
                         <div class="summary-item">
                             <div class="summary-label">⚪ Баланс</div>
@@ -984,11 +892,11 @@ html, body {
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">💜 Капитал</div>
-                            <div class="summary-val text-purple" id="detCapital">0 ₽</div>
+                            <div class="summary-val text-blue" id="detCapital">0 ₽</div>
                         </div>
                         <div class="summary-item">
-                            <div class="summary-label"> Сайт</div>
-                            <div class="summary-val text-gold" id="detSite">0 ₽</div>
+                            <div class="summary-label">🔵 Сайт</div>
+                            <div class="summary-val text-orange" id="detSite">0 ₽</div>
                         </div>
                     </div>
                 </div>
@@ -997,80 +905,80 @@ html, body {
                     <div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
                     <div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
                     <div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
-                    <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё время</div>
+                    <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
                 </div>
 
                 <div id="detailTree"></div>
 
-                <button class="btn btn-blue" onclick="doShareDetail()" style="margin-top:16px;"> Поделиться детализацией</button>
+                <button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">📤 Поделиться</button>
             </div>
         </div>
 
-        <!-- PAGE: ADJUST -->
+        <!-- ADJUST -->
         <div class="page" id="page-adjust">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;color:var(--gold);text-transform:none;letter-spacing:0;">✏️ Корректировка</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
                 
-                <div id="adjustInfo" style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;color:var(--gold);">
+                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
                     💼 Счёт: Основной
                 </div>
 
                 <div class="setting-group">
-                    <div class="setting-label"> Новый баланс счёта (₽)</div>
+                    <div class="setting-label">Новый баланс (₽)</div>
                     <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
                 </div>
 
                 <div class="setting-group">
-                    <div class="setting-label">💜 Общий капитал (₽)</div>
+                    <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
                 </div>
 
                 <div class="setting-group">
                     <div class="setting-label">📝 Комментарий</div>
-                    <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="font-size:0.95rem;text-align:left;">
+                    <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
                 </div>
 
                 <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
             </div>
         </div>
 
-        <!-- PAGE: SETTINGS -->
+        <!-- SETTINGS -->
         <div class="page" id="page-settings">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;color:var(--gold);text-transform:none;letter-spacing:0;">⚙️ Настройки</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
 
-                <div style="background:linear-gradient(135deg,rgba(251,191,36,0.08),rgba(192,132,252,0.08));border:1px solid rgba(251,191,36,0.2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:#fbbf24;display:flex;gap:10px;align-items:flex-start;">
+                <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
                     <span style="font-size:1.1rem;">💡</span>
-                    <span><b>Автоматическая капитализация:</b> после каждой транзакции выручка автоматически прибавляется к общему капиталу.</span>
+                    <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
                 </div>
 
                 <div class="setting-group">
-                    <div class="setting-label">💜 Общий капитал (₽)</div>
+                    <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
-                    <div class="setting-hint">Единый капитал для всех держателей и счетов</div>
+                    <div class="setting-hint">Общий для всех счетов</div>
                 </div>
 
                 <div class="setting-group">
-                    <div class="setting-label">% выручки от доходов</div>
+                    <div class="setting-label">% от доходов</div>
                     <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
                 </div>
 
                 <div class="setting-group">
-                    <div class="setting-label">% выручки от расходов</div>
+                    <div class="setting-label">% от расходов</div>
                     <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
                 </div>
 
-                <div class="report-card" style="background:rgba(212,175,55,0.1);border-color:rgba(212,175,55,0.3);">
-                    <div class="setting-label" style="margin-bottom:8px;">Формула выручки и капитализации</div>
-                    <div style="font-size:0.8rem;color:var(--gold);line-height:1.6;">
+                <div class="report-card" style="background:rgba(0,122,255,0.08);">
+                    <div class="setting-label" style="margin-bottom:6px;">Формула</div>
+                    <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
                         Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br>
-                        <span style="color:var(--purple);">💜 Капитал += Выручка (после каждой операции)</span>
+                        <span style="color:var(--ios-blue);">💜 Капитал += Выручка</span>
                     </div>
                 </div>
 
-                <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:linear-gradient(135deg,#4ade80,#22c55e);">✓ Сохранить</button>
+                <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
             </div>
         </div>
 
@@ -1087,16 +995,16 @@ html, body {
             <span class="nav-label">Отчёт</span>
         </div>
         <div class="nav-item" data-page="detail" onclick="switchPage('detail')">
-            <span class="nav-icon">🔍</span>
-            <span class="nav-label">Детали</span>
+            <span class="nav-icon"></span>
+            <span class="nav-label">Статистика</span>
         </div>
         <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
             <span class="nav-icon">✏️</span>
-            <span class="nav-label">Корр.</span>
+            <span class="nav-label">Коррекция</span>
         </div>
         <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
-            <span class="nav-icon">️</span>
-            <span class="nav-label">Настр.</span>
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Настройки</span>
         </div>
     </nav>
 </div>
@@ -1105,8 +1013,8 @@ html, body {
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title"> Выбор счёта</div>
-    <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:10px 14px;" oninput="renderAccountTree()">
+    <div class="sheet-title">Выбор счёта</div>
+    <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
     <div id="accountTree"></div>
     <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
@@ -1116,7 +1024,7 @@ html, body {
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== SPLASH =====
+// ===== SPLASH WITH REALISTIC DIAMOND =====
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -1127,16 +1035,19 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     renderer.setSize(400, 400);
     renderer.setPixelRatio(window.devicePixelRatio);
 
+    // Realistic diamond geometry
     const geo = new THREE.BufferGeometry();
     const verts = [];
     const segs = 12;
     const topR = 0.5, midR = 1.0, topH = 0.4, botH = 1.0;
 
+    // Table (top flat)
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
         verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR);
     }
+    // Crown
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1145,6 +1056,7 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
         verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR);
         verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR);
     }
+    // Pavilion
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1153,17 +1065,29 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
 
-    const mat = new THREE.MeshPhongMaterial({
-        color: 0xffffff, specular: 0xffffff, shininess: 150,
-        transparent: true, opacity: 0.85, side: THREE.DoubleSide
+    // Realistic diamond material - clear with slight blue tint
+    const mat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0,
+        roughness: 0,
+        transmission: 0.95,
+        thickness: 0.5,
+        ior: 2.417,
+        transparent: true,
+        opacity: 1,
+        side: THREE.DoubleSide,
+        clearcoat: 1,
+        clearcoatRoughness: 0
     });
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const l1 = new THREE.PointLight(0xffffff, 1.2, 100); l1.position.set(5, 5, 5); scene.add(l1);
-    const l2 = new THREE.PointLight(0xffd700, 0.8, 100); l2.position.set(-5, -3, 5); scene.add(l2);
-    const l3 = new THREE.PointLight(0xffffff, 0.7, 100); l3.position.set(0, 5, -5); scene.add(l3);
+    // Lighting for realistic diamond
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+    const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
+    const l2 = new THREE.PointLight(0xe0f7ff, 1.0, 100); l2.position.set(-5, 3, 5); scene.add(l2);
+    const l3 = new THREE.PointLight(0xffffff, 0.8, 100); l3.position.set(0, 5, -5); scene.add(l3);
+    const l4 = new THREE.PointLight(0xffffff, 0.6, 100); l4.position.set(3, -3, 3); scene.add(l4);
 
     function anim() {
         requestAnimationFrame(anim);
@@ -1175,11 +1099,11 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
     setTimeout(() => {
         document.getElementById('splash').classList.add('hide');
-    }, 3500);
+    }, 3000);
 })();
 
 // ===== TOAST =====
-function showToast(icon, text, duration = 3000) {
+function showToast(icon, text, duration = 2500) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -1198,13 +1122,10 @@ function switchPage(name) {
     document.getElementById('page-' + name).classList.add('active');
     document.querySelector(`.nav-item[data-page="${name}"]`).classList.add('active');
     
-    // Refresh content
     if (name === 'report') refreshReport();
     if (name === 'detail') refreshDetail();
     if (name === 'adjust') refreshAdjust();
     if (name === 'settings') refreshSettings();
-    
-    haptic('light');
 }
 
 // ===== DATA =====
@@ -1214,7 +1135,7 @@ let incomePercent = 7, expensePercent = 2.5;
 let detailPeriod = 'today';
 let isOnline = navigator.onLine;
 
-const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
 const fmt = (n) => {
     if (n === null || n === undefined || isNaN(n)) n = 0;
@@ -1232,7 +1153,6 @@ const haptic = (type) => {
         try {
             if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
             else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-            else if (type === 'warning') tg.HapticFeedback.notificationOccurred('warning');
             else tg.HapticFeedback.impactOccurred('light');
         } catch(e){}
     }
@@ -1417,10 +1337,9 @@ const renderHome = () => {
         document.getElementById('balanceDisplay').textContent = '0 ₽';
         ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽');
         document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>';
-        document.getElementById('resetBtn').style.display = 'none';
         return;
     }
-    nameEl.textContent = `👤 ${h.name} → 💼 ${acc.name}`;
+    nameEl.textContent = `${h.name} → ${acc.name}`;
     document.getElementById('balanceDisplay').textContent = fmt(acc.balance);
     const s = calcAcc(acc);
     document.getElementById('statTurnover').textContent = fmt(s.turnover);
@@ -1441,7 +1360,7 @@ const renderHome = () => {
             if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; }
             else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; }
             else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
-            else if (t.type === 'revenue') { cls = 'text-yellow'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
+            else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
             else { cls = ''; sign = ''; desc = t.desc || 'Операция'; }
             const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`;
             const item = document.createElement('div');
@@ -1450,7 +1369,6 @@ const renderHome = () => {
             list.appendChild(item);
         });
     }
-    document.getElementById('resetBtn').style.display = acc.transactions?.length ? 'block' : 'none';
     saveLocal();
 };
 
@@ -1473,7 +1391,7 @@ const renderReportsList = () => {
     const list = document.getElementById('reportsList');
     const keys = Object.keys(savedReports).sort().reverse();
     if (!keys.length) {
-        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет зафиксированных отчётов</div></div>';
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>';
         return;
     }
     list.innerHTML = '';
@@ -1498,12 +1416,10 @@ const renderReportsList = () => {
                 </div>
             </div>
             <div class="report-stats">
-                <div class="report-stat"><span class="report-stat-label">💹 Оборот</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">💰 Выручка</span><span class="report-stat-value text-yellow">${fmtShort(r.revenue)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">🟢 Доходы</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">🔴 Расходы</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">⚪ Баланс</span><span class="report-stat-value">${fmtShort(r.balance)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">💜 Капитал</span><span class="report-stat-value text-purple">${fmtShort(r.capital)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div>
             </div>`;
         list.appendChild(card);
     });
@@ -1546,68 +1462,45 @@ const renderDetailTree = () => {
         let ht = { income: 0, expense: 0, turnover: 0, revenue: 0 };
         const block = document.createElement('div');
         block.className = 'holder-block';
+        block.style.marginBottom = '12px';
         const head = document.createElement('div');
         head.className = 'holder-head';
-        head.innerHTML = `<span class="holder-name">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--text-secondary);">${Object.keys(h.accounts).length} сч.</span>`;
+        head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;';
+        head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`;
         block.appendChild(head);
         const accs = document.createElement('div');
-        accs.className = 'holder-accs';
+        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';
         Object.values(h.accounts).forEach(a => {
             if (!a) return;
             const s = calcAcc(a, detailPeriod);
             ht.income += s.totalIncome; ht.expense += s.totalExpense; ht.turnover += s.turnover; ht.revenue += s.revenue;
             const row = document.createElement('div');
             row.className = 'acc-row';
+            row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';
             row.innerHTML = `
-                <div class="acc-name-row">
-                    <span class="acc-name">💼 ${a.name}</span>
-                    <span class="acc-balance">${fmtShort(a.balance)}</span>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-weight:500;">💼 ${a.name}</span>
+                    <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span>
                 </div>
-                <div class="acc-stats">
-                    <div class="acc-stat"><div class="acc-stat-label">💹</div><div class="acc-stat-val text-blue">${fmtShort(s.turnover)}</div></div>
-                    <div class="acc-stat"><div class="acc-stat-label"></div><div class="acc-stat-val text-green">${fmtShort(s.totalIncome)}</div></div>
-                    <div class="acc-stat"><div class="acc-stat-label">🔴</div><div class="acc-stat-val text-red">${fmtShort(s.totalExpense)}</div></div>
-                    <div class="acc-stat"><div class="acc-stat-label">💰</div><div class="acc-stat-val text-yellow">${fmtShort(s.revenue)}</div></div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div>
+                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div>
+                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🔴</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div>
+                    <div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div>
                 </div>`;
             accs.appendChild(row);
         });
-        const total = document.createElement('div');
-        total.className = 'acc-row';
-        total.style.background = 'linear-gradient(135deg,rgba(212,175,55,0.1),rgba(184,134,14,0.05))';
-        total.style.borderColor = 'rgba(212,175,55,0.3)';
-        total.innerHTML = `
-            <div class="acc-name-row"><span class="acc-name" style="color:var(--gold);font-weight:600;">📊 Итого</span></div>
-            <div class="acc-stats">
-                <div class="acc-stat"><div class="acc-stat-label">💹</div><div class="acc-stat-val text-blue">${fmtShort(ht.turnover)}</div></div>
-                <div class="acc-stat"><div class="acc-stat-label">🟢</div><div class="acc-stat-val text-green">${fmtShort(ht.income)}</div></div>
-                <div class="acc-stat"><div class="acc-stat-label">🔴</div><div class="acc-stat-val text-red">${fmtShort(ht.expense)}</div></div>
-                <div class="acc-stat"><div class="acc-stat-label">💰</div><div class="acc-stat-val text-yellow">${fmtShort(ht.revenue)}</div></div>
-            </div>`;
-        accs.appendChild(total);
         block.appendChild(accs);
         container.appendChild(block);
         grand.income += ht.income; grand.expense += ht.expense; grand.turnover += ht.turnover; grand.revenue += ht.revenue;
     });
-    const grandCard = document.createElement('div');
-    grandCard.className = 'acc-row';
-    grandCard.style.background = 'linear-gradient(135deg,rgba(212,175,55,0.15),rgba(184,134,14,0.1))';
-    grandCard.style.borderColor = 'rgba(212,175,55,0.4)';
-    grandCard.innerHTML = `
-        <div class="acc-name-row"><span class="acc-name" style="color:var(--gold);font-weight:700;">🏆 Общий итог</span></div>
-        <div class="acc-stats">
-            <div class="acc-stat"><div class="acc-stat-label">💹</div><div class="acc-stat-val text-blue">${fmtShort(grand.turnover)}</div></div>
-            <div class="acc-stat"><div class="acc-stat-label"></div><div class="acc-stat-val text-green">${fmtShort(grand.income)}</div></div>
-            <div class="acc-stat"><div class="acc-stat-label">🔴</div><div class="acc-stat-val text-red">${fmtShort(grand.expense)}</div></div>
-            <div class="acc-stat"><div class="acc-stat-label">💰</div><div class="acc-stat-val text-yellow">${fmtShort(grand.revenue)}</div></div>
-        </div>`;
-    container.appendChild(grandCard);
 };
 
 const refreshAdjust = () => {
     const acc = getAccount();
     const h = getHolder();
     if (acc && h) {
-        document.getElementById('adjustInfo').textContent = `👤 ${h.name} · 💼 ${acc.name}`;
+        document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`;
         document.getElementById('adjBalanceHint').textContent = fmt(acc.balance);
         document.getElementById('adjCapitalHint').textContent = fmt(capital);
     }
@@ -1624,10 +1517,9 @@ const refreshSettings = () => {
 // ===== ACTIONS =====
 const doTransaction = (type) => {
     const acc = getAccount();
-    if (!acc) { showToast('️', 'Выберите счёт'); return; }
+    if (!acc) { showToast('⚠️', 'Выберите счёт'); return; }
     const amount = parseFloat(document.getElementById('amountInput').value);
-    if (!amount || amount <= 0) { showToast('️', 'Введите сумму'); haptic('error'); return; }
-    if (amount > 999999999) { showToast('⚠️', 'Слишком большая сумма'); return; }
+    if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; }
 
     if (type === 'income') acc.balance += amount;
     else acc.balance -= amount;
@@ -1641,7 +1533,7 @@ const doTransaction = (type) => {
 
     if (revenue > 0) {
         capital += revenue;
-        acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация (${type==='income'?incomePercent:expensePercent}%)`, date: new Date().toISOString() });
+        acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() });
     }
 
     document.getElementById('amountInput').value = '';
@@ -1650,28 +1542,7 @@ const doTransaction = (type) => {
     saveServer();
 
     if (revenue > 0) {
-        setTimeout(() => showToast('💰', `Выручка ${fmt(revenue)} добавлена к капиталу`), 300);
-    }
-};
-
-const doReset = () => {
-    const acc = getAccount();
-    const h = getHolder();
-    if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций'); haptic('warning'); return; }
-    haptic('warning');
-    const confirm = () => {
-        acc.balance = 0;
-        acc.transactions = [];
-        haptic('success');
-        renderAll();
-        saveLocal();
-        saveServer();
-        showToast('✅', 'Счёт обнулён');
-    };
-    if (tg?.showConfirm) {
-        tg.showConfirm(`Обнулить счёт "${acc.name}"?`, c => { if (c) confirm(); });
-    } else {
-        if (confirm(`Обнулить счёт "${acc.name}"?`)) confirm();
+        setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300);
     }
 };
 
@@ -1685,93 +1556,20 @@ const doFixReport = () => {
     renderReportsList();
     checkLastFixed();
     haptic('success');
-    showToast('✅', 'Отчёт зафиксирован!');
+    showToast('✅', 'Отчёт сохранён');
 };
 
 const doShareCurrentReport = () => {
     const s = calcAll();
     const now = new Date();
-    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()} ${now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
-    const text = ` Текущий финансовый отчёт\n ${dateStr}\n\n💹 Оборот: ${fmt(s.turnover)}\n💰 Выручка: ${fmt(s.revenue)}\n🟢 Доходы: ${fmt(s.totalIncome)}\n🔴 Расходы: ${fmt(s.totalExpense)}\n⚪ Баланс: ${fmt(s.totalBalance)}\n💜 Капитал: ${fmt(capital)}\n Баланс на сайте: ${fmt(s.siteBalance)}\n\n— Finance Luxe`;
-    shareText(text, 'Текущий отчёт');
+    const text = `📊 Finance Luxe\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
+    shareText(text, 'Отчёт');
 };
 
 const doShareDetail = () => {
     const s = calcAll();
-    const now = new Date();
-    const periodNames = { today: 'Сегодня', week: '7 дней', month: 'Месяц', all: 'Всё время' };
-    const periodName = periodNames[detailPeriod] || 'Период';
-    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-
-    let text = `═══════════════════════════════\n`;
-    text += `   ДЕТАЛИЗАЦИЯ ФИНАНСОВ\n`;
-    text += `═══════════════════════════════\n\n`;
-    text += `📅 Дата: ${dateStr}, ${timeStr}\n`;
-    text += `📊 Период: ${periodName}\n\n`;
-    text += `───────────────────────────────\n`;
-    text += `💎 ОБЩИЕ ПОКАЗАТЕЛИ\n`;
-    text += `───────────────────────────────\n`;
-    text += `Общий баланс:      ${fmt(s.totalBalance)}\n`;
-    text += `Капитал:           ${fmt(capital)}\n`;
-    text += `Баланс на сайте:   ${fmt(s.siteBalance)}\n\n`;
-
-    let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
-    let holderCount = 0;
-    let accountCount = 0;
-
-    Object.values(holders).forEach(h => {
-        if (!h || !h.accounts) return;
-        holderCount++;
-        text += `═══════════════════════════════\n`;
-        text += `👤 ДЕРЖАТЕЛЬ: ${h.name}\n`;
-        text += `═══════════════════════════════\n\n`;
-        let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
-
-        Object.values(h.accounts).forEach(acc => {
-            if (!acc) return;
-            accountCount++;
-            const accStats = calcAcc(acc, detailPeriod);
-            holderTotal.income += accStats.totalIncome;
-            holderTotal.expense += accStats.totalExpense;
-            holderTotal.turnover += accStats.turnover;
-            holderTotal.revenue += accStats.revenue;
-            text += ` СЧЁТ: ${acc.name}\n`;
-            text += `───────────────────────────────\n`;
-            text += `Текущий баланс:    ${fmt(acc.balance)}\n`;
-            text += `Оборот:            ${fmt(accStats.turnover)}\n`;
-            text += `Доходы:            ${fmt(accStats.totalIncome)}\n`;
-            text += `Расходы:           ${fmt(accStats.totalExpense)}\n`;
-            text += `Выручка:           ${fmt(accStats.revenue)}\n\n`;
-        });
-
-        text += `📊 ИТОГО ПО ДЕРЖАТЕЛЮ:\n`;
-        text += `───────────────────────────────\n`;
-        text += `Оборот:            ${fmt(holderTotal.turnover)}\n`;
-        text += `Доходы:            ${fmt(holderTotal.income)}\n`;
-        text += `Расходы:           ${fmt(holderTotal.expense)}\n`;
-        text += `Выручка:           ${fmt(holderTotal.revenue)}\n\n`;
-
-        grandTotal.income += holderTotal.income;
-        grandTotal.expense += holderTotal.expense;
-        grandTotal.turnover += holderTotal.turnover;
-        grandTotal.revenue += holderTotal.revenue;
-    });
-
-    text += `═══════════════════════════════\n`;
-    text += `🏆 ОБЩИЙ ИТОГ ЗА ПЕРИОД\n`;
-    text += `═══════════════════════════════\n`;
-    text += `Всего держателей:  ${holderCount}\n`;
-    text += `Всего счетов:      ${accountCount}\n\n`;
-    text += `Общий оборот:      ${fmt(grandTotal.turnover)}\n`;
-    text += `Общие доходы:      ${fmt(grandTotal.income)}\n`;
-    text += `Общие расходы:     ${fmt(grandTotal.expense)}\n`;
-    text += `Общая выручка:     ${fmt(grandTotal.revenue)}\n\n`;
-    text += `───────────────────────────────\n`;
-    text += `Создано в Finance Luxe\n`;
-    text += `═══════════════════════════════`;
-
-    shareText(text, 'Детализация — ' + periodName);
+    const text = `📈 Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`;
+    shareText(text, 'Детализация');
 };
 
 const shareText = async (text, title) => {
@@ -1780,37 +1578,28 @@ const shareText = async (text, title) => {
         try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){}
     }
     if (navigator.share) {
-        try { await navigator.share({ title: title || 'Finance Luxe', text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; }
+        try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; }
     }
     try {
         await navigator.clipboard.writeText(text);
         haptic('success');
-        showToast('📋', 'Скопировано в буфер обмена!');
-    } catch(e) {
-        prompt('Скопируйте текст:', text);
-    }
+        showToast('📋', 'Скопировано');
+    } catch(e) { prompt('Копирование:', text); }
 };
 
 window.shareReport = (key) => {
     const r = savedReports[key];
     if (!r) return;
     const d = new Date(r.date);
-    const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`;
-    const text = ` Финансовый отчёт\n📅 ${dateStr}\n\n💹 Оборот: ${fmt(r.turnover)}\n💰 Выручка: ${fmt(r.revenue)}\n Доходы: ${fmt(r.income)}\n🔴 Расходы: ${fmt(r.expense)}\n⚪ Баланс: ${fmt(r.balance)}\n💜 Капитал: ${fmt(r.capital)}\n🔵 Баланс на сайте: ${fmt(r.siteBalance)}\n\n— Finance Luxe`;
-    shareText(text, 'Отчёт за ' + dateStr);
+    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n🟢 ${fmt(r.income)}\n🔴 ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
+    shareText(text, 'Отчёт');
 };
 
-window.editReport = (key) => {
-    const r = savedReports[key];
-    if (!r) return;
-    showToast('✏️', 'Редактирование отчёта (в разработке)');
-};
+window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
 
 window.deleteReport = (key) => {
     const r = savedReports[key];
     if (!r) return;
-    const d = new Date(r.date);
-    const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     const confirm = () => {
         delete savedReports[key];
         saveLocal();
@@ -1818,10 +1607,10 @@ window.deleteReport = (key) => {
         renderReportsList();
         checkLastFixed();
         haptic('success');
-        showToast('🗑️', 'Отчёт удалён');
+        showToast('🗑️', 'Удалено');
     };
-    if (tg?.showConfirm) { tg.showConfirm(`Удалить отчёт за ${dateStr}?`, c => { if (c) confirm(); }); }
-    else { if (confirm(`Удалить отчёт за ${dateStr}?`)) confirm(); }
+    if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); }
+    else { if (confirm('Удалить?')) confirm(); }
 };
 
 const doSaveAdjust = () => {
@@ -1832,24 +1621,17 @@ const doSaveAdjust = () => {
     const comment = document.getElementById('adjComment').value.trim();
     const newB = bStr !== '' ? parseFloat(bStr) : null;
     const newC = cStr !== '' ? parseFloat(cStr) : null;
-    if (newB === null && newC === null) { showToast('️', 'Введите хотя бы одно значение'); return; }
-    if (newB !== null && (isNaN(newB) || newB < -999999999 || newB > 999999999)) { showToast('⚠️', 'Некорректный баланс'); return; }
-    if (newC !== null && (isNaN(newC) || newC < 0 || newC > 999999999)) { showToast('⚠️', 'Некорректный капитал'); return; }
+    if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; }
     if (!acc.transactions) acc.transactions = [];
     if (newB !== null && newB !== acc.balance) {
-        const diff = newB - acc.balance;
         acc.balance = newB;
-        const desc = diff >= 0 ? 'Корректировка баланса (+)' : 'Корректировка баланса (−)';
-        acc.transactions.push({ type: 'adjustment', amount: diff, desc: comment ? `${desc}: ${comment}` : desc, date: new Date().toISOString() });
+        acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() });
     }
-    if (newC !== null && newC !== capital) {
-        capital = newC;
-        if (newB === null || newB === acc.balance) { acc.transactions.push({ type: 'adjustment', amount: 0, desc: comment ? `Корректировка капитала: ${comment}` : 'Корректировка капитала', date: new Date().toISOString() }); }
-    }
+    if (newC !== null) capital = newC;
     haptic('success');
     renderAll();
     saveServer();
-    showToast('✅', 'Корректировка применена');
+    showToast('✅', 'Применено');
     document.getElementById('adjBalance').value = '';
     document.getElementById('adjCapital').value = '';
     document.getElementById('adjComment').value = '';
@@ -1859,9 +1641,7 @@ const doSaveSettings = () => {
     const newCap = parseFloat(document.getElementById('setCapital').value);
     const newInc = parseFloat(document.getElementById('setIncPct').value);
     const newExp = parseFloat(document.getElementById('setExpPct').value);
-    if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Некорректный капитал'); return; }
-    if (isNaN(newInc) || newInc < 0 || newInc > 100) { showToast('⚠️', 'Некорректный % доходов'); return; }
-    if (isNaN(newExp) || newExp < 0 || newExp > 100) { showToast('⚠️', 'Некорректный % расходов'); return; }
+    if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; }
     capital = newCap;
     incomePercent = newInc;
     expensePercent = newExp;
@@ -1870,7 +1650,7 @@ const doSaveSettings = () => {
     renderAll();
     saveServer();
     haptic('success');
-    showToast('✅', 'Настройки сохранены');
+    showToast('✅', 'Сохранено');
 };
 
 window.setPeriod = (p) => {
@@ -1906,22 +1686,17 @@ const renderAccountTree = () => {
         const h = holders[hid];
         if (!h) return;
         const block = document.createElement('div');
-        block.className = 'holder-block';
+        block.style.marginBottom = '12px';
         const head = document.createElement('div');
-        head.className = 'holder-head';
-        head.innerHTML = `<span class="holder-name"> ${h.name}</span><span style="font-size:0.75rem;color:var(--text-secondary);">${Object.keys(h.accounts||{}).length} сч.</span>`;
+        head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;';
+        head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`;
         block.appendChild(head);
-        const accs = document.createElement('div');
-        accs.className = 'holder-accs';
         Object.values(h.accounts||{}).forEach(a => {
             if (!a) return;
-            if (search && !a.name.toLowerCase().includes(search) && !h.name.toLowerCase().includes(search)) return;
+            if (search && !a.name.toLowerCase().includes(search)) return;
             const isActive = hid === activeHolderId && a.id === activeAccountId;
             const row = document.createElement('div');
-            row.className = 'acc-row';
-            row.style.cursor = 'pointer';
-            row.style.background = isActive ? 'linear-gradient(135deg,var(--gold),#b8860b)' : '';
-            row.style.color = isActive ? '#0a0a0f' : '';
+            row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;
             row.onclick = () => {
                 activeHolderId = hid;
                 activeAccountId = a.id;
@@ -1932,10 +1707,9 @@ const renderAccountTree = () => {
                 haptic('success');
                 showToast('✅', `Выбран: ${a.name}`);
             };
-            row.innerHTML = `<div class="acc-name-row"><span class="acc-name" style="${isActive?'color:#0a0a0f;font-weight:600;':''}">💼 ${a.name}</span><span class="acc-balance" style="${isActive?'color:rgba(10,10,15,0.7);':''}">${fmtShort(a.balance)}</span></div>`;
-            accs.appendChild(row);
+            row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`;
+            block.appendChild(row);
         });
-        block.appendChild(accs);
         container.appendChild(block);
     });
 };
