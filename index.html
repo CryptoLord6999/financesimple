@@ -29,10 +29,8 @@
     --radius-ios: 20px;
     --radius-ios-sm: 12px;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; }
-
 #splash { position: fixed; inset: 0; z-index: 10000; background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease, visibility 0.6s ease; }
 #splash.hide { opacity: 0; visibility: hidden; }
 #splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
@@ -40,14 +38,12 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .splash-sub { font-size: 0.85rem; color: #8E8E93; letter-spacing: 0.08em; margin-top: 0.5rem; font-weight: 400; opacity: 0; transform: translateY(15px); animation: subtitleReveal 0.8s ease-out 1s forwards; }
 @keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
 @keyframes subtitleReveal { to { opacity: 1; transform: translateY(0); } }
-
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: var(--ios-bg); }
 .pages { flex: 1; position: relative; overflow: hidden; background: var(--ios-bg); }
 .page { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0; opacity: 0; transform: scale(0.97); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; -webkit-overflow-scrolling: touch; }
 .page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
-
 .balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
@@ -55,35 +51,29 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; color: var(--ios-text-secondary); font-size: 0.9rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .balance-edit-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.2); }
 .balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; position: relative; z-index: 2; }
-
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
 .stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
 .stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .stat-icon { font-size: 0.9rem; }
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-
 .account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.2s ease; }
 .account-chip:active { transform: scale(0.98); opacity: 0.8; }
 .account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .account-chip-arrow { color: var(--ios-blue); font-size: 1rem; }
-
 .amount-input-wrap { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 4px; margin-bottom: 12px; border: 1px solid var(--ios-separator); }
 .amount-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 1.75rem; font-weight: 600; text-align: center; padding: 14px; outline: none; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 .amount-input::placeholder { color: var(--ios-text-secondary); }
-
 .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
 .action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .action-btn:active { transform: scale(0.96); opacity: 0.9; }
 .action-income { background: var(--ios-green); color: white; }
 .action-expense { background: var(--ios-red); color: white; }
-
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
 .section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; }
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.2s ease; opacity: 0.7; }
 .reset-btn:hover { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); }
 .reset-btn:active { transform: scale(0.95); }
-
 .tx-list { display: flex; flex-direction: column; gap: 8px; }
 .tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.3s ease; }
 @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -91,14 +81,12 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
-
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; cursor: pointer; transition: all 0.2s ease; }
 .nav-icon { font-size: 1.4rem; transition: all 0.2s ease; opacity: 0.5; }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.1); }
 .nav-label { font-size: 0.6rem; font-weight: 500; color: var(--ios-text-secondary); transition: color 0.2s ease; letter-spacing: 0.02em; }
 .nav-item.active .nav-label { color: var(--ios-blue); }
-
 .sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
 .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
@@ -106,13 +94,11 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .sheet-handle { width: 36px; height: 5px; background: #3a3a3c; border-radius: 3px; margin: 0 auto 16px; }
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .sheet-title { font-size: 1.1rem; font-weight: 600; text-align: center; flex: 1; }
-
 .sheet-menu-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(120, 120, 128, 0.15); border: 1px solid rgba(120, 120, 128, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
 .sheet-menu-btn:active { transform: scale(0.9); background: rgba(120, 120, 128, 0.25); }
 .hamburger-icon { display: flex; flex-direction: column; gap: 3px; align-items: center; justify-content: center; width: 18px; height: 12px; }
 .hamburger-icon span { display: block; width: 100%; height: 2px; background: var(--ios-text-secondary); border-radius: 1px; transition: all 0.2s ease; }
 .sheet-menu-btn:active .hamburger-icon span { background: var(--ios-text); }
-
 .actions-menu { background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--ios-separator); display: none; }
 .actions-menu.active { display: block; animation: slideDown 0.3s ease; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -122,83 +108,17 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .action-item-icon { font-size: 1.2rem; width: 28px; text-align: center; }
 .action-item-text { flex: 1; font-size: 0.9rem; font-weight: 500; }
 .action-item-arrow { color: var(--ios-text-secondary); font-size: 0.9rem; }
-
-/* ===== EDIT MODE STYLES ===== */
 .edit-input { width: 100%; background: rgba(120, 120, 128, 0.1); border: 1px solid var(--ios-separator); border-radius: 8px; padding: 8px 12px; color: var(--ios-text); font-size: 0.85rem; outline: none; transition: all 0.2s ease; }
 .edit-input:focus { border-color: var(--ios-blue); background: rgba(0, 122, 255, 0.1); }
 .edit-actions { display: flex; gap: 8px; margin-top: 12px; }
 .edit-actions .btn { flex: 1; padding: 10px; font-size: 0.85rem; }
-
-/* Delete buttons in edit mode */
-.delete-btn-inline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 10px 14px;
-    background: rgba(255, 59, 48, 0.12);
-    border: 1px solid rgba(255, 59, 48, 0.25);
-    border-radius: 8px;
-    color: var(--ios-red);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 8px;
-}
-.delete-btn-inline:active {
-    transform: scale(0.97);
-    background: rgba(255, 59, 48, 0.2);
-}
-.delete-btn-inline .delete-icon {
-    font-size: 1rem;
-}
-
-.delete-btn-account {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 8px 12px;
-    background: rgba(255, 59, 48, 0.1);
-    border: 1px solid rgba(255, 59, 48, 0.2);
-    border-radius: 8px;
-    color: var(--ios-red);
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 6px;
-}
-.delete-btn-account:active {
-    transform: scale(0.97);
-    background: rgba(255, 59, 48, 0.18);
-}
-
-.edit-row-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-.edit-row-label {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 500;
-}
-.edit-row-badge {
-    font-size: 0.6rem;
-    color: var(--ios-text-secondary);
-    background: rgba(120, 120, 128, 0.15);
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-weight: 500;
-}
-
+.delete-btn-inline { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px 14px; background: rgba(255, 59, 48, 0.12); border: 1px solid rgba(255, 59, 48, 0.25); border-radius: 8px; color: var(--ios-red); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 8px; }
+.delete-btn-inline:active { transform: scale(0.97); background: rgba(255, 59, 48, 0.2); }
+.delete-btn-account { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px 12px; background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); border-radius: 8px; color: var(--ios-red); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 6px; }
+.delete-btn-account:active { transform: scale(0.97); background: rgba(255, 59, 48, 0.18); }
+.edit-row-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.edit-row-label { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+.edit-row-badge { font-size: 0.6rem; color: var(--ios-text-secondary); background: rgba(120, 120, 128, 0.15); padding: 2px 8px; border-radius: 100px; font-weight: 500; }
 .toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 .toast { background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; animation: toastIn 0.3s ease; pointer-events: auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
 .toast.out { animation: toastOut 0.3s ease forwards; }
@@ -206,12 +126,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 @keyframes toastOut { to { opacity: 0; transform: translateY(-20px); } }
 .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
 .toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
-
 .btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .btn:active { transform: scale(0.97); opacity: 0.9; }
 .btn-primary { background: var(--ios-blue); color: white; }
 .btn-secondary { background: rgba(120, 120, 128, 0.12); color: var(--ios-blue); }
-
 .report-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
 .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .report-date { font-size: 0.9rem; font-weight: 600; }
@@ -226,200 +144,140 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .report-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.75rem; }
 .report-stat-label { color: var(--ios-text-secondary); }
 .report-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
-
 .summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
 .summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
 .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); }
 .summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
-
 .period-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
 .period-row::-webkit-scrollbar { display: none; }
 .period-chip { padding: 7px 14px; border-radius: 100px; background: var(--ios-card); border: 1px solid var(--ios-separator); font-size: 0.8rem; font-weight: 500; color: var(--ios-text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(10px); }
 .period-chip.active { background: var(--ios-blue); color: white; border-color: var(--ios-blue); }
-
 .setting-group { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
 .setting-label { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; font-weight: 500; }
 .setting-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--ios-separator); color: var(--ios-text); font-size: 1.1rem; font-weight: 600; padding: 6px 0; outline: none; text-align: center; font-variant-numeric: tabular-nums; }
 .setting-input:focus { border-bottom-color: var(--ios-blue); }
 .setting-hint { font-size: 0.65rem; color: var(--ios-text-secondary); margin-top: 4px; }
-
 .sync-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; color: var(--ios-text-secondary); padding: 4px 10px; background: rgba(120, 120, 128, 0.12); border-radius: 100px; margin-top: 8px; font-weight: 500; }
 .sync-badge.syncing { color: var(--ios-orange); }
 .sync-badge.synced { color: var(--ios-green); }
-
 .empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
 .empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5; }
 .empty-text { font-size: 0.85rem; }
-
 .text-green { color: var(--ios-green); }
 .text-red { color: var(--ios-red); }
 .text-blue { color: var(--ios-blue); }
 .text-orange { color: var(--ios-orange); }
-
 .mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
-
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
 <body>
-
-<div id="splash">
-    <canvas id="splashCanvas"></canvas>
-    <div class="splash-title">Findr</div>
-    <div class="splash-sub">Решения для бизнеса</div>
-</div>
-
+<div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
 <div class="toast-container" id="toastContainer"></div>
-
 <div id="app">
-    <div class="pages">
-        <div class="page active" id="page-home">
-            <div class="page-content">
-                <div class="account-chip" onclick="openAccountSheet()">
-                    <span class="account-chip-name" id="accountName">📂 Выберите счёт</span>
-                    <span class="account-chip-arrow">›</span>
-                </div>
-                <div class="balance-card">
-                    <div class="balance-header">
-                        <div class="balance-label">Текущий баланс</div>
-                        <button class="balance-edit-btn" onclick="openEditBalance()" title="Редактировать баланс">✏️</button>
-                    </div>
-                    <div class="balance-value" id="balanceDisplay">0 ₽</div>
-                    <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
-                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
-                    <div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
-                    <div class="stat-card"><div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
-                </div>
-                <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
-                <div class="quick-actions">
-                    <button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button>
-                    <button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button>
-                </div>
-                <div class="section-header">
-                    <div class="section-title">История операций</div>
-                    <button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button>
-                </div>
-                <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
-            </div>
-        </div>
-
-        <div class="page" id="page-report">
-            <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"> Отчёт</div>
-                <div class="summary-block">
-                    <div class="summary-title">Сводка по всем счетам</div>
-                    <div class="summary-grid">
-                        <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
-                        <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
-                    </div>
-                </div>
-                <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
-                <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
-                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
-                <div class="section-title">Зафиксированные отчёты</div>
-                <div id="reportsList"></div>
-            </div>
-        </div>
-
-        <div class="page" id="page-detail">
-            <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
-                <div class="summary-block">
-                    <div class="summary-title">Общие показатели</div>
-                    <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
-                        <div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
-                    </div>
-                </div>
-                <div class="period-row" id="periodRow">
-                    <div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
-                    <div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
-                    <div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
-                    <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
-                </div>
-                <div id="detailTree"></div>
-                <button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">📤 Поделиться</button>
-            </div>
-        </div>
-
-        <div class="page" id="page-adjust">
-            <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
-                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
-                <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
-                <div class="setting-group"><div class="setting-label"> Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
-                <div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
-                <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
-            </div>
-        </div>
-
-        <div class="page" id="page-settings">
-            <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">️ Настройки</div>
-                <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
-                <div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
-                <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
-                <div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
-                <div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
-                <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
-        <div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
-        <div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Статистика</span></div>
-        <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
-        <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
-    </nav>
+<div class="pages">
+<div class="page active" id="page-home"><div class="page-content">
+<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
+<div class="balance-card"><div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div><div class="balance-value" id="balanceDisplay">0 ₽</div><div class="sync-badge" id="syncBadge">☁️ подключение...</div></div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
-
+<div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
+<div class="quick-actions"><button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button><button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button></div>
+<div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
+<div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
+</div></div>
+<div class="page" id="page-report"><div class="page-content">
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"> Отчёт</div>
+<div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
+<div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label"> Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
+<div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
+</div></div>
+<button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
+<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
+<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
+<div class="section-title">Зафиксированные отчёты</div>
+<div id="reportsList"></div>
+</div></div>
+<div class="page" id="page-detail"><div class="page-content">
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
+<div class="summary-block"><div class="summary-title">Общие показатели</div><div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
+<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label"> Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
+</div></div>
+<div class="period-row" id="periodRow">
+<div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
+<div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
+<div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
+<div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
+</div>
+<div id="detailTree"></div>
+<button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">📤 Поделиться</button>
+</div></div>
+<div class="page" id="page-adjust"><div class="page-content">
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
+<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
+<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
+<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
+</div></div>
+<div class="page" id="page-settings"><div class="page-content">
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
+<div class="setting-group"><div class="setting-label"> Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
+<div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
+<div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
+<div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
+<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
+</div></div>
+</div>
+<nav class="bottom-nav">
+<div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon"></span><span class="nav-label">Главная</span></div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Статистика</span></div>
+<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
+<div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
+</nav>
+</div>
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <div style="width:36px;"></div>
-        <div class="sheet-title">Выбор счёта</div>
-        <button class="sheet-menu-btn" onclick="toggleActionsMenu()" title="Меню действий">
-            <div class="hamburger-icon"><span></span><span></span><span></span></div>
-        </button>
-    </div>
-    <div class="actions-menu" id="actionsMenu">
-        <div class="action-item" onclick="createHolder()"><span class="action-item-icon">👤</span><span class="action-item-text">Создать держателя</span><span class="action-item-arrow">›</span></div>
-        <div class="action-item" onclick="createAccount()"><span class="action-item-icon">💼</span><span class="action-item-text">Создать счёт</span><span class="action-item-arrow">›</span></div>
-        <div class="action-item" onclick="toggleEditMode()"><span class="action-item-icon">✏️</span><span class="action-item-text">Редактировать названия</span><span class="action-item-arrow">›</span></div>
-    </div>
-    <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
-    <div id="accountTree"></div>
-    <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
+<div class="sheet-handle"></div>
+<div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title">Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div>
+<div class="actions-menu" id="actionsMenu">
+<div class="action-item" onclick="createHolder()"><span class="action-item-icon">👤</span><span class="action-item-text">Создать держателя</span><span class="action-item-arrow">›</span></div>
+<div class="action-item" onclick="createAccount()"><span class="action-item-icon">💼</span><span class="action-item-text">Создать счёт</span><span class="action-item-arrow">›</span></div>
+<div class="action-item" onclick="toggleEditMode()"><span class="action-item-icon">✏️</span><span class="action-item-text">Редактировать названия</span><span class="action-item-arrow">›</span></div>
 </div>
-
+<input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
+<div id="accountTree"></div>
+<button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
+</div>
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">✏️ Редактировать баланс</div>
-    <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
-    <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
-    <div class="setting-group"><div class="setting-label"> Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
-    <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
-    <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
+<div class="sheet-handle"></div>
+<div class="sheet-title">✏️ Редактировать баланс</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
+<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label"> Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
+<button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
+<button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
 </div>
 
 <script>
@@ -508,7 +366,7 @@ const calcAcc = (acc, period) => { let inc = 0, exp = 0; if (!acc?.transactions)
 const calcAll = () => { let inc = 0, exp = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; bal += a.balance || 0; }); }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
 
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); };
-const renderHome = () => { const acc = getAccount(); const h = getHolder(); const nameEl = document.getElementById('accountName'); if (!acc || !h) { nameEl.textContent = '📂 Выберите счёт'; document.getElementById('balanceDisplay').textContent = '0 ₽'; ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽'); document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; return; } nameEl.textContent = `${h.name} → ${acc.name}`; document.getElementById('balanceDisplay').textContent = fmt(acc.balance); const s = calcAcc(acc); document.getElementById('statTurnover').textContent = fmt(s.turnover); document.getElementById('statIncome').textContent = fmt(s.totalIncome); document.getElementById('statExpense').textContent = fmt(s.totalExpense); document.getElementById('statRevenue').textContent = fmt(s.revenue); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach(t => { if (!t) return; const d = new Date(t.date); const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; list.appendChild(item); }); document.getElementById('resetBtn').style.display = 'block'; } saveLocal(); };
+const renderHome = () => { const acc = getAccount(); const h = getHolder(); const nameEl = document.getElementById('accountName'); if (!acc || !h) { nameEl.textContent = '📂 Выберите счёт'; document.getElementById('balanceDisplay').textContent = '0 ₽'; ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽'); document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; return; } nameEl.textContent = `${h.name} → ${acc.name}`; document.getElementById('balanceDisplay').textContent = fmt(acc.balance); const s = calcAcc(acc); document.getElementById('statTurnover').textContent = fmt(s.turnover); document.getElementById('statIncome').textContent = fmt(s.totalIncome); document.getElementById('statExpense').textContent = fmt(s.totalExpense); document.getElementById('statRevenue').textContent = fmt(s.revenue); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach(t => { if (!t) return; const d = new Date(t.date); const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; list.appendChild(item); }); document.getElementById('resetBtn').style.display = 'block'; } saveLocal(); };
 
 window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций для обнуления'); haptic('warning'); return; } haptic('warning'); const doReset = () => { acc.balance = 0; acc.transactions = []; haptic('success'); renderAll(); saveLocal(); saveServer(); showToast('✅', 'История операций обнулена'); }; if (tg?.showConfirm) { tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => { if (confirmed) doReset(); }); } else { if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) doReset(); } };
 
@@ -518,28 +376,259 @@ const renderReportsList = () => { const list = document.getElementById('reportsL
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
 const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
 const renderDetail = refreshDetail;
-const renderDetailTree = () => { const container = document.getElementById('detailTree'); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h?.accounts) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; block.appendChild(head); const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, detailPeriod); const row = document.createElement('div'); row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; row.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🔴</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div></div>`; accs.appendChild(row); }); block.appendChild(accs); container.appendChild(block); }); };
+const renderDetailTree = () => { const container = document.getElementById('detailTree'); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h?.accounts) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; block.appendChild(head); const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, detailPeriod); const row = document.createElement('div'); row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; row.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);"></div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div></div>`; accs.appendChild(row); }); block.appendChild(accs); container.appendChild(block); }); };
 const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
 const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
-const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
+const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
 window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
 window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
 window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance < -999999999 || newBalance > 999999999) { showToast('⚠️', 'Сумма вне допустимого диапазона'); haptic('error'); return; } if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; const desc = comment || 'Корректировка баланса'; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: desc, date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс изменён на ${fmt(newBalance)}`); };
 
 const doFixReport = () => { const s = calcAll(); const now = new Date(); const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, revenue: s.revenue, balance: s.totalBalance, capital, siteBalance: s.siteBalance }; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('✅', 'Отчёт сохранён'); };
-const doShareCurrentReport = () => { const s = calcAll(); const text = ` Findr\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`; shareText(text, 'Отчёт'); };
-const doShareDetail = () => { const s = calcAll(); const text = ` Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`; shareText(text, 'Детализация'); };
-const shareText = async (text, title) => { haptic('light'); if (tg?.switchInlineQuery) { try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){} } if (navigator.share) { try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; } } try { await navigator.clipboard.writeText(text); haptic('success'); showToast('📋', 'Скопировано'); } catch(e) { prompt('Копирование:', text); } };
-window.shareReport = (key) => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n ${fmt(r.income)}\n ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`; shareText(text, 'Отчёт'); };
+
+// ===== НОВЫЕ ФУНКЦИИ ФОРМИРОВАНИЯ ОТЧЁТОВ С ПОЯСНЕНИЯМИ =====
+
+function buildDetailedReport(s, now, title) {
+    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    const holderCount = Object.keys(holders).length;
+    let accountCount = 0;
+    Object.values(holders).forEach(h => { if (h?.accounts) accountCount += Object.keys(h.accounts).length; });
+    
+    let lines = [];
+    lines.push('═══════════════════════════════');
+    lines.push('       ФИНАНСОВЫЙ ОТЧЁТ');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(` ${title}`);
+    lines.push(` Дата: ${dateStr}, ${timeStr}`);
+    lines.push(`👥 Держателей: ${holderCount} | Счетов: ${accountCount}`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   ОСНОВНЫЕ ПОКАЗАТЕЛИ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(`💹 Общий оборот: ${fmt(s.turnover)}`);
+    lines.push('   (сумма всех доходов и расходов)');
+    lines.push('');
+    lines.push(`🟢 Доходы: ${fmt(s.totalIncome)}`);
+    lines.push('   (все поступления на счета)');
+    lines.push('');
+    lines.push(`🔴 Расходы: ${fmt(s.totalExpense)}`);
+    lines.push('   (все списания со счетов)');
+    lines.push('');
+    lines.push(`💰 Выручка: ${fmt(s.revenue)}`);
+    lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   БАЛАНСЫ И КАПИТАЛ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
+    lines.push('   (сумма всех активных счетов)');
+    lines.push('');
+    lines.push(`💜 Общий капитал: ${fmt(capital)}`);
+    lines.push('   (включая накопленную выручку)');
+    lines.push('');
+    lines.push(`🔵 Баланс на сайте: ${fmt(s.siteBalance)}`);
+    lines.push('   (капитал − баланс на счетах)');
+    lines.push('');
+    lines.push('═══════════════════════════════');
+    lines.push('        Findr • Решения для бизнеса');
+    lines.push('═══════════════════════════════');
+    
+    return lines.join('\n');
+}
+
+function buildDetailedReportForSaved(r, now) {
+    const d = new Date(r.date);
+    const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    let lines = [];
+    lines.push('═══════════════════════════════');
+    lines.push('   ЗАФИКСИРОВАННЫЙ ОТЧЁТ');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(`📅 Дата отчёта: ${dateStr}, ${timeStr}`);
+    lines.push(`📤 Сформирован: ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   ОСНОВНЫЕ ПОКАЗАТЕЛИ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(`💹 Общий оборот: ${fmt(r.turnover)}`);
+    lines.push('   (сумма всех доходов и расходов)');
+    lines.push('');
+    lines.push(`🟢 Доходы: ${fmt(r.income)}`);
+    lines.push('   (все поступления на счета)');
+    lines.push('');
+    lines.push(`🔴 Расходы: ${fmt(r.expense)}`);
+    lines.push('   (все списания со счетов)');
+    lines.push('');
+    lines.push(`💰 Выручка: ${fmt(r.revenue)}`);
+    lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   БАЛАНСЫ И КАПИТАЛ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(` Баланс на счетах: ${fmt(r.balance)}`);
+    lines.push('   (сумма всех активных счетов)');
+    lines.push('');
+    lines.push(`💜 Общий капитал: ${fmt(r.capital)}`);
+    lines.push('   (включая накопленную выручку)');
+    lines.push('');
+    lines.push(` Баланс на сайте: ${fmt(r.siteBalance)}`);
+    lines.push('   (капитал − баланс на счетах)');
+    lines.push('');
+    lines.push('═══════════════════════════════');
+    lines.push('        Findr • Решения для бизнеса');
+    lines.push('═══════════════════════════════');
+    
+    return lines.join('\n');
+}
+
+function buildDetailedDetailReport(now) {
+    const periodNames = { today: 'Сегодня', week: 'Последние 7 дней', month: 'Последний месяц', all: 'Всё время' };
+    const periodName = periodNames[detailPeriod] || 'Период';
+    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    const s = calcAll();
+    const holderCount = Object.keys(holders).length;
+    let accountCount = 0;
+    Object.values(holders).forEach(h => { if (h?.accounts) accountCount += Object.keys(h.accounts).length; });
+    
+    let lines = [];
+    lines.push('═══════════════════════════════');
+    lines.push('      ДЕТАЛИЗАЦИЯ ФИНАНСОВ');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(`📅 Дата: ${dateStr}, ${timeStr}`);
+    lines.push(`📊 Период: ${periodName}`);
+    lines.push(`👥 Держателей: ${holderCount} | Счетов: ${accountCount}`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   ОБЩИЕ ПОКАЗАТЕЛИ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
+    lines.push('   (сумма всех активных счетов)');
+    lines.push('');
+    lines.push(`💜 Общий капитал: ${fmt(capital)}`);
+    lines.push('   (включая накопленную выручку)');
+    lines.push('');
+    lines.push(`🔵 Баланс на сайте: ${fmt(s.siteBalance)}`);
+    lines.push('   (капитал − баланс на счетах)');
+    lines.push('');
+    
+    let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
+    
+    Object.values(holders).forEach(h => {
+        if (!h || !h.accounts) return;
+        lines.push('═══════════════════════════════');
+        lines.push(`👤 ДЕРЖАТЕЛЬ: ${h.name}`);
+        lines.push('═══════════════════════════════');
+        lines.push('');
+        
+        let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
+        
+        Object.values(h.accounts).forEach(acc => {
+            if (!acc) return;
+            accountCount++;
+            const accStats = calcAcc(acc, detailPeriod);
+            holderTotal.income += accStats.totalIncome;
+            holderTotal.expense += accStats.totalExpense;
+            holderTotal.turnover += accStats.turnover;
+            holderTotal.revenue += accStats.revenue;
+            
+            lines.push(`💼 Счёт: ${acc.name}`);
+            lines.push('───────────────────────────────');
+            lines.push(`   Текущий баланс: ${fmt(acc.balance)}`);
+            lines.push(`   Оборот:         ${fmt(accStats.turnover)}`);
+            lines.push(`   Доходы:         ${fmt(accStats.totalIncome)}`);
+            lines.push(`   Расходы:        ${fmt(accStats.totalExpense)}`);
+            lines.push(`   Выручка:        ${fmt(accStats.revenue)}`);
+            lines.push('');
+        });
+        
+        lines.push(`📊 ИТОГО ПО ДЕРЖАТЕЛЮ "${h.name}":`);
+        lines.push('───────────────────────────────');
+        lines.push(`   Оборот:   ${fmt(holderTotal.turnover)}`);
+        lines.push(`   Доходы:   ${fmt(holderTotal.income)}`);
+        lines.push(`   Расходы:  ${fmt(holderTotal.expense)}`);
+        lines.push(`   Выручка:  ${fmt(holderTotal.revenue)}`);
+        lines.push('');
+        
+        grandTotal.income += holderTotal.income;
+        grandTotal.expense += holderTotal.expense;
+        grandTotal.turnover += holderTotal.turnover;
+        grandTotal.revenue += holderTotal.revenue;
+    });
+    
+    lines.push('═══════════════════════════════');
+    lines.push('   ОБЩИЙ ИТОГ ЗА ПЕРИОД');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(`💹 Общий оборот: ${fmt(grandTotal.turnover)}`);
+    lines.push(` Общие доходы: ${fmt(grandTotal.income)}`);
+    lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
+    lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
+    lines.push('');
+    lines.push('═══════════════════════════════');
+    lines.push('        Findr • Решения для бизнеса');
+    lines.push('═══════════════════════════════');
+    
+    return lines.join('\n');
+}
+
+const doShareCurrentReport = () => {
+    const s = calcAll();
+    const now = new Date();
+    const text = buildDetailedReport(s, now, 'Текущий финансовый отчёт');
+    shareText(text, 'Текущий отчёт Findr');
+};
+
+const doShareDetail = () => {
+    const now = new Date();
+    const text = buildDetailedDetailReport(now);
+    shareText(text, 'Детализация Findr');
+};
+
+const shareText = async (text, title) => {
+    haptic('light');
+    if (tg?.switchInlineQuery) {
+        try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){}
+    }
+    if (navigator.share) {
+        try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; }
+    }
+    try {
+        await navigator.clipboard.writeText(text);
+        haptic('success');
+        showToast('📋', 'Скопировано в буфер обмена');
+    } catch(e) { prompt('Скопируйте текст:', text); }
+};
+
+window.shareReport = (key) => {
+    const r = savedReports[key];
+    if (!r) return;
+    const now = new Date();
+    const text = buildDetailedReportForSaved(r, now);
+    shareText(text, 'Зафиксированный отчёт Findr');
+};
+
 window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
+
 window.deleteReport = (key) => { const r = savedReports[key]; if (!r) return; const confirm = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); } else { if (confirm('Удалить?')) confirm(); } };
+
 const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
-const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
+const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
 
-// ===== ACCOUNT SHEET WITH DELETE IN EDIT MODE =====
 window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
 window.closeAccountSheet = () => { document.getElementById('accountOverlay').classList.remove('active'); document.getElementById('accountSheet').classList.remove('active'); isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); };
 window.toggleActionsMenu = () => { const menu = document.getElementById('actionsMenu'); menu.classList.toggle('active'); haptic('light'); };
@@ -550,193 +639,13 @@ window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) 
 
 window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); haptic('light'); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); };
 
-// ===== DELETE HOLDER =====
-window.deleteHolder = (hid) => {
-    const h = holders[hid];
-    if (!h) return;
-    
-    const holderKeys = Object.keys(holders);
-    if (holderKeys.length <= 1) {
-        showToast('⚠️', 'Нельзя удалить последнего держателя');
-        haptic('error');
-        return;
-    }
-    
-    const accCount = Object.keys(h.accounts || {}).length;
-    const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`;
-    
-    const doDelete = () => {
-        // If deleting active holder, switch to another
-        if (activeHolderId === hid) {
-            const otherKeys = holderKeys.filter(k => k !== hid);
-            activeHolderId = otherKeys[0];
-            const otherHolder = holders[activeHolderId];
-            activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null;
-        }
-        
-        delete holders[hid];
-        renderAccountTree();
-        renderAll();
-        saveLocal();
-        saveServer();
-        haptic('success');
-        showToast('🗑️', `Держатель "${h.name}" удалён`);
-    };
-    
-    if (tg?.showConfirm) {
-        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); });
-    } else {
-        if (confirm(message)) doDelete();
-    }
-};
+window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const holderKeys = Object.keys(holders); if (holderKeys.length <= 1) { showToast('️', 'Нельзя удалить последнего держателя'); haptic('error'); return; } const accCount = Object.keys(h.accounts || {}).length; const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid) { const otherKeys = holderKeys.filter(k => k !== hid); activeHolderId = otherKeys[0]; const otherHolder = holders[activeHolderId]; activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Держатель "${h.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
-// ===== DELETE ACCOUNT =====
-window.deleteAccount = (hid, aid) => {
-    const h = holders[hid];
-    if (!h || !h.accounts[aid]) return;
-    
-    const acc = h.accounts[aid];
-    const accKeys = Object.keys(h.accounts);
-    
-    if (accKeys.length <= 1) {
-        showToast('⚠️', 'Нельзя удалить последний счёт держателя');
-        haptic('error');
-        return;
-    }
-    
-    const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`;
-    
-    const doDelete = () => {
-        // If deleting active account, switch to another
-        if (activeHolderId === hid && activeAccountId === aid) {
-            const otherAccKeys = accKeys.filter(k => k !== aid);
-            activeAccountId = otherAccKeys[0];
-        }
-        
-        delete h.accounts[aid];
-        renderAccountTree();
-        renderAll();
-        saveLocal();
-        saveServer();
-        haptic('success');
-        showToast('🗑️', `Счёт "${acc.name}" удалён`);
-    };
-    
-    if (tg?.showConfirm) {
-        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); });
-    } else {
-        if (confirm(message)) doDelete();
-    }
-};
+window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
-const renderAccountTree = () => {
-    const container = document.getElementById('accountTree');
-    const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim();
-    container.innerHTML = '';
-    const keys = Object.keys(holders);
-    if (!keys.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>';
-        return;
-    }
-    keys.forEach(hid => {
-        const h = holders[hid];
-        if (!h) return;
-        const block = document.createElement('div');
-        block.style.marginBottom = '12px';
-        
-        if (isEditMode) {
-            // Edit mode - show inputs and delete button
-            const head = document.createElement('div');
-            head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;';
-            head.innerHTML = `
-                <div class="edit-row-header">
-                    <span class="edit-row-label">Держатель</span>
-                    <span class="edit-row-badge">👤</span>
-                </div>
-                <input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя">
-                <button class="delete-btn-inline" onclick="deleteHolder('${hid}')">
-                    <span class="delete-icon">🗑️</span>
-                    <span>Удалить держателя</span>
-                </button>
-            `;
-            block.appendChild(head);
-        } else {
-            const head = document.createElement('div');
-            head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;';
-            head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`;
-            block.appendChild(head);
-        }
-        
-        const accs = document.createElement('div');
-        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';
-        Object.values(h.accounts||{}).forEach(a => {
-            if (!a) return;
-            if (search && !a.name.toLowerCase().includes(search)) return;
-            const isActive = hid === activeHolderId && a.id === activeAccountId;
-            
-            if (isEditMode) {
-                const row = document.createElement('div');
-                row.style.cssText = 'margin-bottom:8px;';
-                row.innerHTML = `
-                    <div class="edit-row-header">
-                        <span class="edit-row-label">Счёт</span>
-                        <span class="edit-row-badge"></span>
-                    </div>
-                    <input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта">
-                    <button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')">
-                        <span>🗑️</span>
-                        <span>Удалить счёт</span>
-                    </button>
-                `;
-                accs.appendChild(row);
-            } else {
-                const row = document.createElement('div');
-                row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;
-                row.onclick = () => {
-                    activeHolderId = hid;
-                    activeAccountId = a.id;
-                    renderAll();
-                    saveLocal();
-                    saveServer();
-                    closeAccountSheet();
-                    haptic('success');
-                    showToast('✅', `Выбран: ${a.name}`);
-                };
-                row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`;
-                accs.appendChild(row);
-            }
-        });
-        block.appendChild(accs);
-        
-        if (isEditMode) {
-            const editActions = document.createElement('div');
-            editActions.className = 'edit-actions';
-            editActions.innerHTML = `
-                <button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button>
-                <button class="btn btn-secondary" onclick="cancelEditMode()"> Отмена</button>
-            `;
-            block.appendChild(editActions);
-        }
-        
-        container.appendChild(block);
-    });
-};
+const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge">👤</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')"><span>🗑️</span><span>Удалить счёт</span></button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', `Выбран: ${a.name}`); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const editActions = document.createElement('div'); editActions.className = 'edit-actions'; editActions.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(editActions); } container.appendChild(block); }); };
 
-window.saveHolderEdits = (hid) => {
-    const h = holders[hid];
-    if (!h) return;
-    const newNameInput = document.getElementById(`editHolderName_${hid}`);
-    if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) h.name = newName; }
-    Object.values(h.accounts||{}).forEach(a => { if (!a) return; const newNameInput = document.getElementById(`editAccountName_${a.id}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) a.name = newName; } });
-    isEditMode = false;
-    renderAccountTree();
-    renderAll();
-    saveLocal();
-    saveServer();
-    haptic('success');
-    showToast('✅', 'Названия обновлены');
-};
-
+window.saveHolderEdits = (hid) => { const h = holders[hid]; if (!h) return; const newNameInput = document.getElementById(`editHolderName_${hid}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) h.name = newName; } Object.values(h.accounts||{}).forEach(a => { if (!a) return; const newNameInput = document.getElementById(`editAccountName_${a.id}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) a.name = newName; } }); isEditMode = false; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Названия обновлены'); };
 window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); haptic('light'); showToast('ℹ️', 'Изменения отменены'); };
 
 window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveServer(); });
