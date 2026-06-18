@@ -8,6 +8,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -43,150 +44,22 @@
     visibility: hidden;
 }
 
-/* 3D Бриллиант */
-.diamond-container {
-    width: 200px;
-    height: 200px;
-    perspective: 1000px;
-    margin-bottom: 3rem;
+#diamondCanvas {
+    width: 300px;
+    height: 300px;
+    margin-bottom: 2rem;
     position: relative;
     z-index: 1;
 }
 
-.diamond-3d {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    animation: rotateDiamond3D 8s linear infinite;
-}
-
-@keyframes rotateDiamond3D {
-    0% { transform: rotateY(0deg) rotateX(10deg); }
-    100% { transform: rotateY(360deg) rotateX(10deg); }
-}
-
-.diamond-face {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-}
-
-/* Верхняя корона */
-.diamond-top {
-    width: 120px;
-    height: 120px;
-    top: 10px;
-    left: 40px;
-    transform-style: preserve-3d;
-}
-
-.diamond-top-face {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
-    border-bottom: 80px solid rgba(255, 255, 255, 0.9);
-    transform-origin: center bottom;
-}
-
-.diamond-top-face:nth-child(1) {
-    transform: rotateY(0deg) translateZ(30px) rotateX(-30deg);
-    border-bottom-color: rgba(224, 247, 250, 0.95);
-    filter: brightness(1.1);
-}
-
-.diamond-top-face:nth-child(2) {
-    transform: rotateY(90deg) translateZ(30px) rotateX(-30deg);
-    border-bottom-color: rgba(179, 229, 252, 0.9);
-    filter: brightness(1.05);
-}
-
-.diamond-top-face:nth-child(3) {
-    transform: rotateY(180deg) translateZ(30px) rotateX(-30deg);
-    border-bottom-color: rgba(129, 212, 250, 0.85);
-    filter: brightness(1);
-}
-
-.diamond-top-face:nth-child(4) {
-    transform: rotateY(270deg) translateZ(30px) rotateX(-30deg);
-    border-bottom-color: rgba(79, 195, 247, 0.9);
-    filter: brightness(0.95);
-}
-
-/* Нижняя пирамида */
-.diamond-bottom {
-    width: 120px;
-    height: 120px;
-    top: 70px;
-    left: 40px;
-    transform-style: preserve-3d;
-}
-
-.diamond-bottom-face {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
-    border-top: 100px solid rgba(2, 136, 209, 0.9);
-    transform-origin: center top;
-}
-
-.diamond-bottom-face:nth-child(1) {
-    transform: rotateY(0deg) translateZ(30px) rotateX(30deg);
-    border-top-color: rgba(79, 195, 247, 0.95);
-    filter: brightness(1.1);
-}
-
-.diamond-bottom-face:nth-child(2) {
-    transform: rotateY(90deg) translateZ(30px) rotateX(30deg);
-    border-top-color: rgba(41, 182, 246, 0.9);
-    filter: brightness(1.05);
-}
-
-.diamond-bottom-face:nth-child(3) {
-    transform: rotateY(180deg) translateZ(30px) rotateX(30deg);
-    border-top-color: rgba(3, 155, 229, 0.85);
-    filter: brightness(1);
-}
-
-.diamond-bottom-face:nth-child(4) {
-    transform: rotateY(270deg) translateZ(30px) rotateX(30deg);
-    border-top-color: rgba(2, 136, 209, 0.9);
-    filter: brightness(0.95);
-}
-
-/* Блик */
-.diamond-highlight {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    top: 30px;
-    left: 50px;
-    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
-    border-radius: 50%;
-    transform: translateZ(50px);
-    animation: highlightMove 4s ease-in-out infinite;
-}
-
-@keyframes highlightMove {
-    0%, 100% { transform: translateZ(50px) translate(0, 0); opacity: 0.8; }
-    50% { transform: translateZ(50px) translate(10px, -10px); opacity: 1; }
-}
-
-/* Свечение */
 .diamond-glow {
     position: absolute;
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(212,175,55,0.4) 30%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(212,175,55,0.3) 30%, transparent 70%);
     border-radius: 50%;
     animation: pulseGlow 3s ease-in-out infinite;
     pointer-events: none;
@@ -198,40 +71,6 @@
     50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
 }
 
-/* Блёстки */
-.sparkles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.sparkle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 15px 3px rgba(255,255,255,0.9), 0 0 30px 6px rgba(212,175,55,0.7);
-    animation: sparkleAnim 2.5s ease-in-out infinite;
-}
-
-.sparkle:nth-child(1) { top: 15%; left: 25%; animation-delay: 0s; }
-.sparkle:nth-child(2) { top: 35%; left: 75%; animation-delay: 0.6s; }
-.sparkle:nth-child(3) { top: 65%; left: 20%; animation-delay: 1.2s; }
-.sparkle:nth-child(4) { top: 25%; left: 65%; animation-delay: 1.8s; }
-.sparkle:nth-child(5) { top: 55%; left: 45%; animation-delay: 0.9s; }
-.sparkle:nth-child(6) { top: 45%; left: 30%; animation-delay: 1.5s; }
-
-@keyframes sparkleAnim {
-    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-    50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
-}
-
-/* Типографика */
 .splash-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.8rem;
@@ -275,7 +114,6 @@
     text-align: center;
 }
 
-/* Декоративная линия */
 .splash-divider {
     width: 80px;
     height: 1px;
@@ -841,31 +679,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <!-- ЗАГРУЗОЧНЫЙ ЭКРАН -->
 <div id="splashScreen">
     <div class="diamond-glow"></div>
-    <div class="diamond-container">
-        <div class="diamond-3d">
-            <div class="diamond-face diamond-top">
-                <div class="diamond-top-face"></div>
-                <div class="diamond-top-face"></div>
-                <div class="diamond-top-face"></div>
-                <div class="diamond-top-face"></div>
-            </div>
-            <div class="diamond-face diamond-bottom">
-                <div class="diamond-bottom-face"></div>
-                <div class="diamond-bottom-face"></div>
-                <div class="diamond-bottom-face"></div>
-                <div class="diamond-bottom-face"></div>
-            </div>
-            <div class="diamond-highlight"></div>
-        </div>
-        <div class="sparkles">
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-            <div class="sparkle"></div>
-        </div>
-    </div>
+    <canvas id="diamondCanvas"></canvas>
     <div class="splash-title">Finance Luxe</div>
     <div class="splash-divider"></div>
     <div class="splash-subtitle">Премиум управление финансами</div>
@@ -885,7 +699,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="syncStatus" class="sync-indicator">подключение...</div>
 
 <div class="stats-row">
-<div class="stat-card"><div class="stat-label">💹 Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label"> Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🟢 Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🔴 Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">💰 Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
@@ -893,7 +707,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 <div class="button-group">
 <button onclick="openReport()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(212,175,55,0.15);color:#d4af37;border:1px solid rgba(212,175,55,0.3);">📊 Отчет</button>
-<button onclick="openDetail()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);">🔍 Детализация</button>
+<button onclick="openDetail()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);"> Детализация</button>
 <button onclick="openAdjustment()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(192,132,252,0.15);color:#c084fc;border:1px solid rgba(192,132,252,0.3);">✏️ Корректировка</button>
 <button onclick="openSettings()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);">⚙️ Настройки</button>
 </div>
@@ -926,13 +740,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-value turnover-color" id="summaryTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-value revenue-color" id="summaryRevenue">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-value income-color" id="summaryIncome">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label"> Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Общий баланс</div><div class="summary-value" id="summaryBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-value capital-color" id="summaryCapital">0 ₽</div></div>
 <div class="summary-item summary-item-wide"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
 </div>
 </div>
-<button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
+<button onclick="fixReport()" class="save-report-btn"> Зафиксировать отчет</button>
 <button onclick="shareCurrentReport()" class="share-report-btn">📤 Поделиться текущим отчетом</button>
 <div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.3);color:#4ade80">
 ✅ Последний отчет: <span id="fixedDate"></span>
@@ -989,7 +803,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="selectAccountModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title">📂 Выбор счета</div>
+<div class="modal-title"> Выбор счета</div>
 <div class="adjustment-info">💡 Нажмите ✏️ чтобы переименовать держателя или счет</div>
 <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по названию..." oninput="renderSelectTree()">
 <div id="selectTree"></div>
@@ -1045,7 +859,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div class="modal-title">💎 Общие показатели</div>
 <div class="adjustment-info">💡 Общий баланс рассчитывается автоматически как сумма всех счетов.</div>
 <div class="settings-input-group">
-<label class="settings-input-label">⚪ Общий баланс (₽)</label>
+<label class="settings-input-label"> Общий баланс (₽)</label>
 <div class="report-value" id="editCommonBalance" style="text-align:center;padding:0.5rem 0">0 ₽</div>
 <div class="settings-input-hint">Рассчитывается автоматически (сумма всех счетов)</div>
 </div>
@@ -1076,7 +890,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="settingsModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title">⚙️ Настройки</div>
+<div class="modal-title">️ Настройки</div>
 <div class="revenue-capital-info">
 <span>💡</span>
 <span><b>Автоматическая капитализация:</b> после каждой транзакции выручка автоматически прибавляется к общему капиталу.</span>
@@ -1112,6 +926,111 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <script>
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
+
+// ===== 3D БРИЛЛИАНТ =====
+(function() {
+    const canvas = document.getElementById('diamondCanvas');
+    if (!canvas) return;
+    
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    camera.position.z = 5;
+    
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(300, 300);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // Геометрия бриллианта (brilliant cut)
+    const diamondGeometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const crownHeight = 0.6;
+    const pavilionHeight = 1.2;
+    const tableRadius = 0.5;
+    const girdleRadius = 1.0;
+    const segments = 8;
+    
+    // Таблица (верхняя плоская грань)
+    for (let i = 0; i < segments; i++) {
+        const angle1 = (i / segments) * Math.PI * 2;
+        const angle2 = ((i + 1) / segments) * Math.PI * 2;
+        vertices.push(0, crownHeight, 0);
+        vertices.push(Math.cos(angle1) * tableRadius, crownHeight, Math.sin(angle1) * tableRadius);
+        vertices.push(Math.cos(angle2) * tableRadius, crownHeight, Math.sin(angle2) * tableRadius);
+    }
+    
+    // Корона (верхние грани)
+    for (let i = 0; i < segments; i++) {
+        const angle1 = (i / segments) * Math.PI * 2;
+        const angle2 = ((i + 1) / segments) * Math.PI * 2;
+        const midAngle = ((i + 0.5) / segments) * Math.PI * 2;
+        
+        // Верхний треугольник
+        vertices.push(Math.cos(angle1) * tableRadius, crownHeight, Math.sin(angle1) * tableRadius);
+        vertices.push(Math.cos(midAngle) * girdleRadius, 0, Math.sin(midAngle) * girdleRadius);
+        vertices.push(Math.cos(angle2) * tableRadius, crownHeight, Math.sin(angle2) * tableRadius);
+        
+        // Нижний треугольник короны
+        vertices.push(Math.cos(angle1) * tableRadius, crownHeight, Math.sin(angle1) * tableRadius);
+        vertices.push(Math.cos(angle1) * girdleRadius, 0, Math.sin(angle1) * girdleRadius);
+        vertices.push(Math.cos(midAngle) * girdleRadius, 0, Math.sin(midAngle) * girdleRadius);
+        
+        vertices.push(Math.cos(angle2) * tableRadius, crownHeight, Math.sin(angle2) * tableRadius);
+        vertices.push(Math.cos(midAngle) * girdleRadius, 0, Math.sin(midAngle) * girdleRadius);
+        vertices.push(Math.cos(angle2) * girdleRadius, 0, Math.sin(angle2) * girdleRadius);
+    }
+    
+    // Павильон (нижние грани)
+    for (let i = 0; i < segments; i++) {
+        const angle1 = (i / segments) * Math.PI * 2;
+        const angle2 = ((i + 1) / segments) * Math.PI * 2;
+        
+        vertices.push(Math.cos(angle1) * girdleRadius, 0, Math.sin(angle1) * girdleRadius);
+        vertices.push(0, -pavilionHeight, 0);
+        vertices.push(Math.cos(angle2) * girdleRadius, 0, Math.sin(angle2) * girdleRadius);
+    }
+    
+    diamondGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    diamondGeometry.computeVertexNormals();
+    
+    // Материал бриллианта
+    const diamondMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        emissive: 0x000000,
+        specular: 0xffffff,
+        shininess: 100,
+        transparent: true,
+        opacity: 0.9,
+        side: THREE.DoubleSide
+    });
+    
+    const diamond = new THREE.Mesh(diamondGeometry, diamondMaterial);
+    scene.add(diamond);
+    
+    // Освещение
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    
+    const light1 = new THREE.PointLight(0xffffff, 1, 100);
+    light1.position.set(5, 5, 5);
+    scene.add(light1);
+    
+    const light2 = new THREE.PointLight(0xffd700, 0.8, 100);
+    light2.position.set(-5, -5, 5);
+    scene.add(light2);
+    
+    const light3 = new THREE.PointLight(0xffffff, 0.6, 100);
+    light3.position.set(0, 5, -5);
+    scene.add(light3);
+    
+    // Анимация вращения
+    function animate() {
+        requestAnimationFrame(animate);
+        diamond.rotation.y += 0.01;
+        diamond.rotation.x = Math.sin(Date.now() * 0.001) * 0.1;
+        renderer.render(scene, camera);
+    }
+    animate();
+})();
 
 // ===== ЗАГРУЗОЧНЫЙ ЭКРАН =====
 window.addEventListener('load', () => {
@@ -1243,9 +1162,9 @@ const calculateAllStats = () => {
 
 const updateSyncStatus = (status) => {
     const statuses = {
-        syncing: { text: '☁️ синхронизация...', class: 'syncing' },
-        synced: { text: '☁️ сохранено в облаке', class: 'synced' },
-        offline: { text: '💾 локально', class: '' },
+        syncing: { text: '️ синхронизация...', class: 'syncing' },
+        synced: { text: '️ сохранено в облаке', class: 'synced' },
+        offline: { text: ' локально', class: '' },
         error: { text: '⚠️ ошибка', class: 'error' },
         local: { text: '💾 локальное хранилище', class: 'warning' }
     };
@@ -1258,7 +1177,7 @@ const updateSelectorPath = () => {
     const h = getActiveHolder();
     const acc = getActiveAccount();
     if (!h || !acc) { selectorPath.textContent = '📂 Выберите счет'; return; }
-    selectorPath.textContent = `👤 ${h.name} → 💼 ${acc.name}`;
+    selectorPath.textContent = ` ${h.name} → 💼 ${acc.name}`;
 };
 
 const updateUI = () => {
@@ -1611,7 +1530,7 @@ window.editHolderName = (holderId, e) => {
     const oldName = h.name;
     const container = document.createElement('div');
     container.className = 'inline-edit-container';
-    container.innerHTML = `<input type="text" class="inline-edit-input" value="${oldName}" id="holderEditInput_${holderId}"><div class="inline-edit-actions"><button class="inline-edit-btn inline-edit-save" onclick="saveHolderName('${holderId}')">✓</button><button class="inline-edit-btn inline-edit-cancel" onclick="cancelHolderEdit('${holderId}')">✕</button></div>`;
+    container.innerHTML = `<input type="text" class="inline-edit-input" value="${oldName}" id="holderEditInput_${holderId}"><div class="inline-edit-actions"><button class="inline-edit-btn inline-edit-save" onclick="saveHolderName('${holderId}')">✓</button><button class="inline-edit-btn inline-edit-cancel" onclick="cancelHolderEdit('${holderId}')"></button></div>`;
     nameSpan.replaceWith(container);
     const input = document.getElementById('holderEditInput_' + holderId);
     input.focus();
@@ -1836,10 +1755,10 @@ const renderDetailTree = () => {
         const totalRow = document.createElement('div');
         totalRow.className = 'holder-total-row';
         totalRow.innerHTML = `
-<div class="holder-total-label">📊 Итого по держателю</div>
+<div class="holder-total-label"> Итого по держателю</div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(holderTotal.turnover)}</div></div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(holderTotal.income)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label"> Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(holderTotal.revenue)}</div></div>
 `;
         accountsList.appendChild(totalRow);
@@ -1965,7 +1884,7 @@ const renderReportsList = () => {
             const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             const item = document.createElement('div');
             item.className = 'report-list-item';
-            item.innerHTML = `<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn share-btn" onclick="shareReport('${key}')">📤</button><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
+            item.innerHTML = `<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn share-btn" onclick="shareReport('${key}')">📤</button><button class="report-action-btn edit-btn" onclick="editReport('${key}')">️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
             list.appendChild(item);
         });
     } catch (e) { console.error('renderReportsList error:', e); }
@@ -1988,7 +1907,7 @@ window.shareCurrentReport = () => {
     const now = new Date();
     const dateStr = `${now.getDate()} ${MONTH_NAMES_GEN[now.getMonth()]} ${now.getFullYear()} ${now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
 
-    const text = `📊 Текущий финансовый отчёт\n📅 ${dateStr}\n\n💹 Оборот: ${formatMoney(stats.turnover)}\n💰 Выручка: ${formatMoney(stats.revenue)}\n🟢 Доходы: ${formatMoney(stats.totalIncome)}\n🔴 Расходы: ${formatMoney(stats.totalExpense)}\n⚪ Баланс: ${formatMoney(stats.totalBalance)}\n💜 Капитал: ${formatMoney(capital)}\n🔵 Баланс на сайте: ${formatMoney(stats.siteBalance)}\n\n— Finance Luxe`;
+    const text = `📊 Текущий финансовый отчёт\n📅 ${dateStr}\n\n💹 Оборот: ${formatMoney(stats.turnover)}\n💰 Выручка: ${formatMoney(stats.revenue)}\n Доходы: ${formatMoney(stats.totalIncome)}\n🔴 Расходы: ${formatMoney(stats.totalExpense)}\n⚪ Баланс: ${formatMoney(stats.totalBalance)}\n💜 Капитал: ${formatMoney(capital)}\n Баланс на сайте: ${formatMoney(stats.siteBalance)}\n\n— Finance Luxe`;
 
     shareText(text, 'Текущий отчёт');
 };
@@ -2100,7 +2019,7 @@ const shareText = async (text, title) => {
     try {
         await navigator.clipboard.writeText(text);
         haptic('notification', 'success');
-        if (tg?.showAlert) { tg.showAlert('📋 Скопировано в буфер обмена!'); }
+        if (tg?.showAlert) { tg.showAlert(' Скопировано в буфер обмена!'); }
         else { alert('📋 Текст скопирован в буфер обмена!'); }
     } catch (e) {
         prompt('Скопируйте текст:', text);
@@ -2114,7 +2033,7 @@ window.editReport = (key) => {
         if (!report) { alert('Отчет не найден'); return; }
         const fields = document.getElementById('editReportFields');
         if (!fields) return;
-        fields.innerHTML = `<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance || 0}" step="0.01"></div>`;
+        fields.innerHTML = `<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label"> Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance || 0}" step="0.01"></div>`;
         editReportModal.classList.add('active');
         haptic('impact', 'medium');
     } catch (e) { console.error('editReport error:', e); alert('Ошибка: ' + e.message); }
