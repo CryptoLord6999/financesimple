@@ -13,153 +13,131 @@
 #splashScreen {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #fffef5 0%, #f5e6c8 30%, #d4af37 60%, #f5e6c8 80%, #fffef5 100%);
+    background: linear-gradient(135deg, #fefef8 0%, #f8f4e8 20%, #e8d5a0 40%, #d4af37 60%, #f8f4e8 80%, #fefef8 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    transition: opacity 0.8s ease, visibility 0.8s ease;
+    transition: opacity 1s ease, visibility 1s ease;
+    overflow: hidden;
+}
+#splashScreen::before {
+    content: '';
+    position: absolute;
+    width: 200%; height: 200%;
+    top: -50%; left: -50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(212,175,55,0.3) 0%, transparent 50%);
+    animation: shimmer 8s ease-in-out infinite;
+}
+@keyframes shimmer {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(5%, 5%) rotate(180deg); }
 }
 #splashScreen.hidden {
     opacity: 0;
     visibility: hidden;
 }
 
-/* Реалистичный алмаз */
 .diamond-container {
-    perspective: 800px;
-    width: 150px;
-    height: 150px;
-    margin-bottom: 2rem;
+    width: 180px;
+    height: 180px;
+    position: relative;
+    margin-bottom: 2.5rem;
+    filter: drop-shadow(0 20px 40px rgba(212,175,55,0.4));
 }
-.diamond {
+
+.diamond-svg {
     width: 100%;
     height: 100%;
-    position: relative;
+    animation: rotateDiamond 6s linear infinite;
     transform-style: preserve-3d;
-    animation: rotateDiamond 4s linear infinite;
 }
+
 @keyframes rotateDiamond {
-    0% { transform: rotateY(0deg) rotateX(15deg); }
-    100% { transform: rotateY(360deg) rotateX(15deg); }
-}
-.diamond-top {
-    width: 80px; height: 80px;
-    top: 0; left: 35px;
-    transform: rotateX(60deg) translateZ(40px);
-    background: linear-gradient(135deg, #e8f4f8 0%, #b8e6f0 25%, #87ceeb 50%, #e0f7fa 75%, #ffffff 100%);
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(135,206,235,0.5);
-}
-.diamond-top::before {
-    content: '';
-    position: absolute;
-    top: 10%; left: 10%;
-    width: 80%; height: 80%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.9) 50%, transparent 70%);
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-}
-.diamond-top::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, 
-        rgba(255,255,255,0.4) 0%, 
-        rgba(173,216,230,0.3) 25%, 
-        rgba(255,255,255,0.6) 50%, 
-        rgba(135,206,235,0.3) 75%, 
-        rgba(255,255,255,0.4) 100%);
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    animation: sparkle 2s ease-in-out infinite;
-}
-@keyframes sparkle {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
 }
 
-.diamond-facet {
-    position: absolute;
-    width: 60px; height: 60px;
-    top: 45px; left: 45px;
-}
-.diamond-facet:nth-child(2) {
-    transform: rotateY(0deg) translateZ(35px) rotateX(-30deg);
-    background: linear-gradient(180deg, #e0f7fa 0%, #87ceeb 50%, #4fc3f7 100%);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    opacity: 0.9;
-}
-.diamond-facet:nth-child(3) {
-    transform: rotateY(90deg) translateZ(35px) rotateX(-30deg);
-    background: linear-gradient(180deg, #b3e5fc 0%, #4fc3f7 50%, #0288d1 100%);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    opacity: 0.85;
-}
-.diamond-facet:nth-child(4) {
-    transform: rotateY(180deg) translateZ(35px) rotateX(-30deg);
-    background: linear-gradient(180deg, #e1f5fe 0%, #81d4fa 50%, #039be5 100%);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    opacity: 0.8;
-}
-.diamond-facet:nth-child(5) {
-    transform: rotateY(270deg) translateZ(35px) rotateX(-30deg);
-    background: linear-gradient(180deg, #b3e5fc 0%, #29b6f6 50%, #0277bd 100%);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    opacity: 0.85;
-}
-.diamond-bottom {
-    width: 80px; height: 80px;
-    top: 40px; left: 35px;
-    transform: rotateX(-60deg) translateZ(40px);
-    background: linear-gradient(0deg, #01579b 0%, #0288d1 30%, #4fc3f7 60%, #b3e5fc 100%);
-    clip-path: polygon(50% 100%, 100% 50%, 50% 0%, 0% 50%);
-    box-shadow: inset 0 0 15px rgba(1,87,155,0.5);
-}
-
-.diamond-glare {
+.diamond-sparkle {
     position: absolute;
     width: 100%; height: 100%;
     top: 0; left: 0;
-    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%);
-    animation: glareMove 3s ease-in-out infinite;
     pointer-events: none;
 }
-@keyframes glareMove {
-    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
-    50% { transform: translate(10px, -10px) scale(1.1); opacity: 1; }
+
+.sparkle {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(255,255,255,0.8), 0 0 20px 4px rgba(212,175,55,0.6);
+    animation: sparkleAnim 2s ease-in-out infinite;
+}
+
+.sparkle:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+.sparkle:nth-child(2) { top: 40%; left: 70%; animation-delay: 0.5s; }
+.sparkle:nth-child(3) { top: 60%; left: 25%; animation-delay: 1s; }
+.sparkle:nth-child(4) { top: 30%; left: 60%; animation-delay: 1.5s; }
+.sparkle:nth-child(5) { top: 50%; left: 40%; animation-delay: 0.8s; }
+
+@keyframes sparkleAnim {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1.5); }
 }
 
 .diamond-glow {
     position: absolute;
-    width: 200px; height: 200px;
+    width: 300px; height: 300px;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(255,215,0,0.1) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(212,175,55,0.3) 30%, transparent 70%);
     border-radius: 50%;
-    animation: pulseGlow 2s ease-in-out infinite;
+    animation: pulseGlow 3s ease-in-out infinite;
+    pointer-events: none;
 }
+
 @keyframes pulseGlow {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
 }
 
 .splash-title {
-    font-family: 'Georgia', serif;
-    font-size: 1.8rem;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 2.2rem;
     font-weight: 300;
     color: #8b6914;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.4em;
     text-transform: uppercase;
-    text-shadow: 0 2px 10px rgba(212,175,55,0.3);
+    text-shadow: 0 2px 20px rgba(212,175,55,0.5), 0 0 40px rgba(255,215,0,0.3);
     margin-top: 1rem;
+    position: relative;
+    z-index: 1;
 }
+
 .splash-subtitle {
-    font-size: 0.85rem;
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
     color: #b8860b;
+    letter-spacing: 0.2em;
+    margin-top: 0.8rem;
+    opacity: 0.9;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+}
+
+.splash-tagline {
+    font-family: 'Georgia', serif;
+    font-size: 0.85rem;
+    color: #a0750a;
     letter-spacing: 0.15em;
-    margin-top: 0.5rem;
-    opacity: 0.8;
+    margin-top: 1.5rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== ОСНОВНОЙ ФОН — РОСКОШЬ ===== */
@@ -707,18 +685,70 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="splashScreen">
     <div class="diamond-glow"></div>
     <div class="diamond-container">
-        <div class="diamond">
-            <div class="diamond-top"></div>
-            <div class="diamond-facet"></div>
-            <div class="diamond-facet"></div>
-            <div class="diamond-facet"></div>
-            <div class="diamond-facet"></div>
-            <div class="diamond-bottom"></div>
-            <div class="diamond-glare"></div>
+        <svg class="diamond-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="diamondGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#e0f7fa;stop-opacity:0.9" />
+                    <stop offset="50%" style="stop-color:#b3e5fc;stop-opacity:0.8" />
+                    <stop offset="75%" style="stop-color:#81d4fa;stop-opacity:0.9" />
+                    <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="diamondGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#4fc3f7;stop-opacity:0.9" />
+                    <stop offset="50%" style="stop-color:#29b6f6;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#0288d1;stop-opacity:0.9" />
+                </linearGradient>
+                <linearGradient id="diamondGradient3" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#b3e5fc;stop-opacity:0.9" />
+                    <stop offset="50%" style="stop-color:#4fc3f7;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#0277bd;stop-opacity:0.9" />
+                </linearGradient>
+                <filter id="diamondGlow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            
+            <!-- Верхняя грань (корона) -->
+            <polygon points="100,20 140,50 120,70 80,70 60,50" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="1" opacity="0.95" filter="url(#diamondGlow)"/>
+            
+            <!-- Левая верхняя грань -->
+            <polygon points="60,50 80,70 70,100 40,80" fill="url(#diamondGradient2)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
+            
+            <!-- Правая верхняя грань -->
+            <polygon points="140,50 120,70 130,100 160,80" fill="url(#diamondGradient3)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
+            
+            <!-- Центральная верхняя грань -->
+            <polygon points="80,70 120,70 130,100 70,100" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
+            
+            <!-- Левая нижняя грань -->
+            <polygon points="40,80 70,100 100,180" fill="url(#diamondGradient2)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
+            
+            <!-- Центральная нижняя грань -->
+            <polygon points="70,100 130,100 100,180" fill="url(#diamondGradient1)" stroke="#ffffff" stroke-width="0.5" opacity="0.9"/>
+            
+            <!-- Правая нижняя грань -->
+            <polygon points="160,80 130,100 100,180" fill="url(#diamondGradient3)" stroke="#ffffff" stroke-width="0.5" opacity="0.85"/>
+            
+            <!-- Блики -->
+            <ellipse cx="90" cy="45" rx="15" ry="8" fill="white" opacity="0.6"/>
+            <ellipse cx="110" cy="60" rx="8" ry="5" fill="white" opacity="0.4"/>
+        </svg>
+        <div class="diamond-sparkle">
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
         </div>
     </div>
     <div class="splash-title">Finance Luxe</div>
     <div class="splash-subtitle">Премиум управление финансами</div>
+    <div class="splash-tagline">Решения для бизнеса</div>
 </div>
 
 <div class="flex-1 flex flex-col justify-center items-center mb-4" style="position:relative;z-index:1;">
@@ -967,7 +997,7 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         if (splash) splash.classList.add('hidden');
-    }, 3000);
+    }, 3500);
 });
 
 const getUserId = () => {
