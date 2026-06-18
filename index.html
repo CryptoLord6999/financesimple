@@ -23,10 +23,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .sync-indicator.synced{color:#48bb78}
 .sync-indicator.error{color:#f56565}
 .sync-indicator.warning{color:#ed8936}
-.stats-row{display:flex;gap:0.6rem;margin-top:0.75rem}
-.stat-card{flex:1;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.5rem 0.3rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
+
+/* ИСПРАВЛЕНО: grid вместо flex для ровных карточек */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;width:100%}
+.stat-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem 0.4rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03);display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:3.5rem}
+
 .stat-label{font-size:0.6rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.03em}
-.stat-value{font-size:0.95rem;font-weight:600;margin-top:0.15rem}
+.stat-value{font-size:0.95rem;font-weight:600;margin-top:0.15rem;word-break:break-word}
 .income-color{color:#48bb78}
 .expense-color{color:#f56565}
 .revenue-color{color:#ed8936}
@@ -68,62 +71,31 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .report-stat-value{font-weight:600}
 .summary-card{background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem;padding:1rem;margin-bottom:0.75rem}
 .summary-title{font-size:0.85rem;font-weight:600;color:#4c51bf;margin-bottom:0.5rem;text-align:center}
-.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem}
-.summary-item{text-align:center}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.4rem}
+
+/* ИСПРАВЛЕНО: выровненные summary-элементы */
+.summary-item{text-align:center;padding:0.5rem 0.25rem;border-radius:0.65rem;transition:background 0.2s;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:3.5rem}
 .summary-label{font-size:0.65rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em}
-.summary-value{font-size:1.1rem;font-weight:700;margin-top:0.15rem}
+.summary-value{font-size:1.1rem;font-weight:700;margin-top:0.15rem;word-break:break-word}
+
+/* ИСПРАВЛЕНО: специальный класс для "Баланса на сайте" */
+.summary-item-wide{grid-column:span 2;background:linear-gradient(135deg,rgba(102,126,234,0.08) 0%,rgba(118,75,162,0.08) 100%);border:1px solid rgba(102,126,234,0.2);padding:0.75rem 0.5rem}
+
 .empty-reports-message{padding:2rem 1rem;text-align:center;color:#a0aec0;font-size:0.85rem}
 .close-modal-btn{width:100%;padding:0.75rem;background:rgba(226,232,240,0.8);color:#4a5568;border-radius:0.875rem;font-weight:500;font-size:0.9rem;margin-top:0.75rem}
 .close-modal-btn:active{transform:scale(0.98)}
 
-/* Селектор держателя/счета */
-.account-selector-btn{
-width:100%;
-background:rgba(255,255,255,0.7);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,0.8);
-border-radius:1rem;
-padding:0.75rem 1rem;
-margin-bottom:0.75rem;
-display:flex;
-align-items:center;
-justify-content:space-between;
-cursor:pointer;
-transition:all 0.2s;
-box-shadow:0 4px 12px rgba(0,0,0,0.03);
-}
+.account-selector-btn{width:100%;background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;padding:0.75rem 1rem;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
 .account-selector-btn:hover{background:rgba(255,255,255,0.9)}
 .account-selector-btn:active{transform:scale(0.99)}
 .selector-path{display:flex;align-items:center;gap:0.4rem;font-size:0.9rem;font-weight:500;color:#2c3e50;flex:1;min-width:0}
 .selector-path-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .selector-arrow{color:#a0aec0;font-size:1.2rem;flex-shrink:0}
 
-/* Дерево в модалке выбора */
-.search-input{
-width:100%;
-background:rgba(255,255,255,0.6);
-border:1px solid rgba(255,255,255,0.8);
-border-radius:0.75rem;
-padding:0.65rem 0.85rem;
-font-size:0.9rem;
-color:#2c3e50;
-outline:none;
-margin-bottom:0.75rem;
-box-shadow:0 2px 8px rgba(0,0,0,0.03);
-}
+.search-input{width:100%;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.75rem;padding:0.65rem 0.85rem;font-size:0.9rem;color:#2c3e50;outline:none;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
 .search-input:focus{border-color:#667eea}
 .holder-group{margin-bottom:0.5rem}
-.holder-header{
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);
-border:1px solid rgba(159,122,234,0.2);
-border-radius:0.75rem;
-padding:0.6rem 0.85rem;
-cursor:pointer;
-transition:all 0.2s;
-}
+.holder-header{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);border:1px solid rgba(159,122,234,0.2);border-radius:0.75rem;padding:0.6rem 0.85rem;cursor:pointer;transition:all 0.2s}
 .holder-header:hover{background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%)}
 .holder-header-left{display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0}
 .holder-name{font-weight:600;color:#4c51bf;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -133,33 +105,11 @@ transition:all 0.2s;
 .holder-toggle.expanded{transform:rotate(90deg)}
 .holder-delete{padding:0.2rem 0.4rem;background:rgba(245,101,101,0.1);color:#f56565;border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer}
 .holder-delete:hover{background:rgba(245,101,101,0.2)}
-.accounts-list{
-margin-left:0.5rem;
-margin-top:0.3rem;
-padding-left:0.75rem;
-border-left:2px solid rgba(159,122,234,0.2);
-display:none;
-}
+.accounts-list{margin-left:0.5rem;margin-top:0.3rem;padding-left:0.75rem;border-left:2px solid rgba(159,122,234,0.2);display:none}
 .accounts-list.expanded{display:block}
-.account-item{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0.55rem 0.75rem;
-margin-bottom:0.3rem;
-background:rgba(255,255,255,0.6);
-border:1px solid rgba(255,255,255,0.8);
-border-radius:0.65rem;
-cursor:pointer;
-transition:all 0.2s;
-}
+.account-item{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.75rem;margin-bottom:0.3rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.65rem;cursor:pointer;transition:all 0.2s}
 .account-item:hover{background:rgba(255,255,255,0.9)}
-.account-item.active{
-background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-color:white;
-border-color:transparent;
-box-shadow:0 4px 12px rgba(102,126,234,0.3);
-}
+.account-item.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
 .account-item.active .account-balance{color:rgba(255,255,255,0.9)}
 .account-item.active .account-delete{background:rgba(255,255,255,0.2);color:white}
 .account-item-left{display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0}
@@ -167,39 +117,9 @@ box-shadow:0 4px 12px rgba(102,126,234,0.3);
 .account-balance{font-size:0.75rem;color:#718096;font-weight:500}
 .account-delete{padding:0.2rem 0.4rem;background:rgba(245,101,101,0.1);color:#f56565;border-radius:0.4rem;font-size:0.7rem;font-weight:700;cursor:pointer}
 .account-delete:hover{background:rgba(245,101,101,0.2)}
-.add-small-btn{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:0.3rem;
-padding:0.5rem;
-margin-top:0.3rem;
-background:rgba(102,126,234,0.08);
-border:1px dashed rgba(102,126,234,0.3);
-border-radius:0.65rem;
-color:#667eea;
-font-size:0.8rem;
-font-weight:500;
-cursor:pointer;
-transition:all 0.2s;
-}
+.add-small-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.5rem;margin-top:0.3rem;background:rgba(102,126,234,0.08);border:1px dashed rgba(102,126,234,0.3);border-radius:0.65rem;color:#667eea;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s}
 .add-small-btn:hover{background:rgba(102,126,234,0.15)}
-.add-holder-btn{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:0.3rem;
-padding:0.65rem;
-margin-top:0.5rem;
-background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);
-border:1px dashed rgba(159,122,234,0.3);
-border-radius:0.75rem;
-color:#4c51bf;
-font-size:0.85rem;
-font-weight:500;
-cursor:pointer;
-transition:all 0.2s;
-}
+.add-holder-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.65rem;margin-top:0.5rem;background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);border:1px dashed rgba(159,122,234,0.3);border-radius:0.75rem;color:#4c51bf;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s}
 .add-holder-btn:hover{background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%)}
 .no-results{padding:1.5rem;text-align:center;color:#a0aec0;font-size:0.85rem}
 .inline-input-row{display:flex;gap:0.4rem;margin-top:0.3rem}
@@ -215,7 +135,7 @@ transition:all 0.2s;
 <!-- СЕЛЕКТОР ДЕРЖАТЕЛЯ/СЧЕТА -->
 <div class="account-selector-btn" onclick="openSelectAccount()">
 <div class="selector-path">
-<span class="selector-path-text" id="selectorPath">👤 Основной → 💼 Основной</span>
+<span class="selector-path-text" id="selectorPath">📂 Выберите счет</span>
 </div>
 <span class="selector-arrow">›</span>
 </div>
@@ -223,12 +143,15 @@ transition:all 0.2s;
 <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
 <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
 <div id="syncStatus" class="sync-indicator">подключение...</div>
+
+<!-- ИСПРАВЛЕНО: grid для ровных карточек -->
 <div class="stats-row">
 <div class="stat-card"><div class="stat-label">💹 Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🟢 Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🔴 Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">💰 Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
 </div>
+
 <div class="button-group">
 <button onclick="openReport()" class="px-5 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
 <button onclick="openAdjustment()" class="px-5 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
@@ -268,7 +191,8 @@ transition:all 0.2s;
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Общий баланс</div><div class="summary-value" id="summaryBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-value capital-color" id="summaryCapital">0 ₽</div></div>
-<div class="summary-item" style="grid-column:span 2"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
+<!-- ИСПРАВЛЕНО: отдельный класс summary-item-wide -->
+<div class="summary-item summary-item-wide"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
 </div>
 </div>
 <button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
@@ -390,7 +314,7 @@ let saveTimeout=null;
 let useFirebase=false;
 let userRef=null;
 let currentEditingReportKey=null;
-let expandedHolders={}; // Состояние раскрытия держателей в модалке
+let expandedHolders={};
 
 const balanceEl=document.getElementById('balance');
 const amountEl=document.getElementById('amount');
@@ -478,26 +402,6 @@ selectorPath.textContent='📂 Выберите счет';
 return;
 }
 selectorPath.textContent=`👤 ${h.name} → 💼 ${acc.name}`;
-};
-
-const switchHolder=(holderId)=>{
-if(!holders[holderId])return;
-activeHolderId=holderId;
-const h=holders[holderId];
-const accKeys=Object.keys(h.accounts||{});
-activeAccountId=accKeys[0]||null;
-updateUI();
-saveToLocal();
-saveToServer();
-};
-
-const switchAccount=(accountId)=>{
-const h=getActiveHolder();
-if(!h||!h.accounts[accountId])return;
-activeAccountId=accountId;
-updateUI();
-saveToLocal();
-saveToServer();
 };
 
 const updateUI=()=>{
@@ -702,7 +606,6 @@ else{if(confirm(`Обнулить баланс и историю счета "${a
 // ===== МОДАЛКА ВЫБОРА СЧЕТА =====
 window.openSelectAccount=()=>{
 document.getElementById('searchInput').value='';
-// Раскрываем держателя с активным счетом
 if(activeHolderId)expandedHolders[activeHolderId]=true;
 renderSelectTree();
 selectAccountModal.classList.add('active');
@@ -850,7 +753,6 @@ holderKeys.forEach(hId=>{
 const h=holders[hId];
 if(!h)return;
 
-// Фильтрация по поиску
 const holderMatches=!search||h.name.toLowerCase().includes(search);
 let filteredAccounts=[];
 Object.values(h.accounts||{}).forEach(acc=>{
