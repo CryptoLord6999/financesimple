@@ -81,12 +81,66 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; cursor: pointer; transition: all 0.2s ease; }
-.nav-icon { font-size: 1.4rem; transition: all 0.2s ease; opacity: 0.5; line-height: 1; }
-.nav-item.active .nav-icon { opacity: 1; transform: scale(1.1); }
-.nav-label { font-size: 0.6rem; font-weight: 500; color: var(--ios-text-secondary); transition: color 0.2s ease; letter-spacing: 0.02em; }
-.nav-item.active .nav-label { color: var(--ios-blue); }
+
+/* ===== ИСПРАВЛЕННАЯ НИЖНЯЯ ПАНЕЛЬ ===== */
+.bottom-nav { 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    background: rgba(28, 28, 30, 0.92); 
+    backdrop-filter: blur(30px); 
+    -webkit-backdrop-filter: blur(30px); 
+    border-top: 1px solid var(--ios-separator); 
+    display: flex; 
+    justify-content: space-around; 
+    align-items: stretch;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom)); 
+    z-index: 1000; 
+}
+.nav-item { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    gap: 2px; 
+    padding: 4px 2px; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    min-height: 48px;
+}
+.nav-icon { 
+    font-size: 22px; 
+    line-height: 1;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.45;
+    transition: all 0.2s ease; 
+}
+.nav-item.active .nav-icon { 
+    opacity: 1; 
+    transform: scale(1.05); 
+}
+.nav-label { 
+    font-size: 10px; 
+    font-weight: 500; 
+    color: var(--ios-text-secondary); 
+    transition: color 0.2s ease; 
+    letter-spacing: 0.01em;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+.nav-item.active .nav-label { 
+    color: var(--ios-blue); 
+    font-weight: 600;
+}
+
 .sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
 .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
@@ -184,7 +238,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
-<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName"> Выберите счёт</span><span class="account-chip-arrow">›</span></div>
+<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
 <div class="balance-card"><div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div><div class="balance-value" id="balanceDisplay">0 ₽</div><div class="sync-badge" id="syncBadge">☁️ подключение...</div></div>
 <div class="stats-grid">
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
@@ -195,7 +249,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions"><button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button><button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button></div>
 <div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
-<div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon"></div><div class="empty-text">Нет операций</div></div></div>
+<div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
 <div class="page" id="page-report"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
@@ -250,7 +304,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <nav class="bottom-nav">
 <div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
 <div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
-<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon"></span><span class="nav-label">Детали</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Детали</span></div>
 <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
 </nav>
@@ -371,7 +425,7 @@ window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!
 
 const refreshReport = () => { const s = calcAll(); document.getElementById('sumTurnover').textContent = fmt(s.turnover); document.getElementById('sumRevenue').textContent = fmt(s.revenue); document.getElementById('sumIncome').textContent = fmt(s.totalIncome); document.getElementById('sumExpense').textContent = fmt(s.totalExpense); document.getElementById('sumBalance').textContent = fmt(s.totalBalance); document.getElementById('sumCapital').textContent = fmt(capital); document.getElementById('sumSite').textContent = fmt(s.siteBalance); renderReportsList(); checkLastFixed(); };
 const renderReport = refreshReport;
-const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
+const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
 const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
 const renderDetail = refreshDetail;
@@ -381,7 +435,7 @@ const refreshSettings = () => { document.getElementById('setCapital').value = ca
 
 const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
-window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
+window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
 window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
 window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance < -999999999 || newBalance > 999999999) { showToast('⚠️', 'Сумма вне допустимого диапазона'); haptic('error'); return; } if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; const desc = comment || 'Корректировка баланса'; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: desc, date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс изменён на ${fmt(newBalance)}`); };
 
@@ -478,7 +532,7 @@ function buildDetailedDetailReport(now) {
     lines.push(`💹 Общий оборот: ${fmt(grandTotal.turnover)}`);
     lines.push(`🟢 Общие доходы: ${fmt(grandTotal.income)}`);
     lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
-    lines.push(` Общая выручка: ${fmt(grandTotal.revenue)}`);
+    lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
     lines.push('');
     lines.push('═══════════════════════════════');
     lines.push('        Findr • Решения для бизнеса');
@@ -499,7 +553,7 @@ function buildDetailedReport(s, now, title) {
     lines.push('');
     lines.push(`📋 ${title}`);
     lines.push(`📅 Дата: ${dateStr}, ${timeStr}`);
-    lines.push(` Держателей: ${holderCount}`);
+    lines.push(`👥 Держателей: ${holderCount}`);
     lines.push(`💼 Всего счетов: ${accountCount}`);
     lines.push('');
     lines.push('───────────────────────────────');
@@ -515,14 +569,14 @@ function buildDetailedReport(s, now, title) {
     lines.push(`🔴 Расходы: ${fmt(s.totalExpense)}`);
     lines.push('   (все списания со счетов)');
     lines.push('');
-    lines.push(` Выручка: ${fmt(s.revenue)}`);
+    lines.push(`💰 Выручка: ${fmt(s.revenue)}`);
     lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
     lines.push('');
     lines.push('───────────────────────────────');
     lines.push('   БАЛАНСЫ И КАПИТАЛ');
     lines.push('───────────────────────────────');
     lines.push('');
-    lines.push(` Баланс на счетах: ${fmt(s.totalBalance)}`);
+    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
     lines.push('   (сумма всех активных счетов)');
     lines.push('');
     lines.push(`💜 Общий капитал: ${fmt(capital)}`);
@@ -590,7 +644,7 @@ window.shareReport = (key) => { const r = savedReports[key]; if (!r) return; con
 window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
 window.deleteReport = (key) => { const r = savedReports[key]; if (!r) return; const confirm = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); } else { if (confirm('Удалить?')) confirm(); } };
 const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
-const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
+const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
 
 window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
@@ -600,9 +654,9 @@ window.createHolder = () => { const name = prompt('Введите имя дер�
 window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) { showToast('⚠️', 'Сначала выберите держателя'); return; } const name = prompt('Введите название счёта:'); if (!name || !name.trim()) return; const h = holders[activeHolderId]; const newAid = 'a_' + Date.now(); h.accounts[newAid] = { id: newAid, name: name.trim(), balance: 0, transactions: [], createdAt: new Date().toISOString() }; activeAccountId = newAid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); haptic('success'); showToast('✅', 'Счёт создан'); };
 window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); haptic('light'); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); };
 window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const holderKeys = Object.keys(holders); if (holderKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последнего держателя'); haptic('error'); return; } const accCount = Object.keys(h.accounts || {}).length; const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid) { const otherKeys = holderKeys.filter(k => k !== hid); activeHolderId = otherKeys[0]; const otherHolder = holders[activeHolderId]; activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Держатель "${h.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
-window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
+window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
-const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge"></span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')"><span>️</span><span>Удалить счёт</span></button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', `Выбран: ${a.name}`); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const editActions = document.createElement('div'); editActions.className = 'edit-actions'; editActions.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(editActions); } container.appendChild(block); }); };
+const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge">👤</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')"><span>🗑️</span><span>Удалить счёт</span></button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', `Выбран: ${a.name}`); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const editActions = document.createElement('div'); editActions.className = 'edit-actions'; editActions.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(editActions); } container.appendChild(block); }); };
 window.saveHolderEdits = (hid) => { const h = holders[hid]; if (!h) return; const newNameInput = document.getElementById(`editHolderName_${hid}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) h.name = newName; } Object.values(h.accounts||{}).forEach(a => { if (!a) return; const newNameInput = document.getElementById(`editAccountName_${a.id}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) a.name = newName; } }); isEditMode = false; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Названия обновлены'); };
 window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); haptic('light'); showToast('ℹ️', 'Изменения отменены'); };
 
