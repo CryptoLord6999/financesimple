@@ -75,22 +75,25 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .empty-reports-message{padding:2rem 1rem;text-align:center;color:#a0aec0;font-size:0.85rem}
 .close-modal-btn{width:100%;padding:0.75rem;background:rgba(226,232,240,0.8);color:#4a5568;border-radius:0.875rem;font-weight:500;font-size:0.9rem;margin-top:0.75rem}
 .close-modal-btn:active{transform:scale(0.98)}
-.accounts-selector{display:flex;gap:0.5rem;overflow-x:auto;padding:0.5rem 0;scrollbar-width:none;-ms-overflow-style:none}
-.accounts-selector::-webkit-scrollbar{display:none}
-.account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem}
-.account-chip:hover{background:rgba(255,255,255,0.8)}
-.account-chip.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
-.account-chip.active .account-delete-btn{color:rgba(255,255,255,0.7)}
-.account-chip.active .account-delete-btn:hover{color:white;background:rgba(255,255,255,0.2)}
-.account-delete-btn{padding:0.15rem 0.4rem;background:rgba(0,0,0,0.08);border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.2s;color:#718096;line-height:1}
-.account-delete-btn:hover{background:rgba(245,101,101,0.2);color:#f56565}
-.add-account-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(102,126,234,0.1);border:1px dashed rgba(102,126,234,0.3);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#667eea;cursor:pointer;transition:all 0.2s}
-.add-account-chip:hover{background:rgba(102,126,234,0.2)}
+.selector-row{display:flex;gap:0.5rem;overflow-x:auto;padding:0.5rem 0;scrollbar-width:none;-ms-overflow-style:none}
+.selector-row::-webkit-scrollbar{display:none}
+.selector-label{font-size:0.65rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;margin-top:0.5rem}
+.selector-label:first-child{margin-top:0}
+.chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem}
+.chip:hover{background:rgba(255,255,255,0.8)}
+.chip.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
+.chip.active .chip-delete{color:rgba(255,255,255,0.7)}
+.chip.active .chip-delete:hover{color:white;background:rgba(255,255,255,0.2)}
+.chip-delete{padding:0.15rem 0.4rem;background:rgba(0,0,0,0.08);border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.2s;color:#718096;line-height:1}
+.chip-delete:hover{background:rgba(245,101,101,0.2);color:#f56565}
+.add-chip{flex-shrink:0;padding:0.5rem 1rem;background:rgba(102,126,234,0.1);border:1px dashed rgba(102,126,234,0.3);border-radius:1rem;font-size:0.85rem;font-weight:500;color:#667eea;cursor:pointer;transition:all 0.2s}
+.add-chip:hover{background:rgba(102,126,234,0.2)}
+.holder-chip.active{background:linear-gradient(135deg,#9f7aea 0%,#667eea 100%)}
 </style>
 </head>
 <body class="flex flex-col h-screen p-6">
 
-<div class="flex-1 flex flex-col justify-center items-center mb-6">
+<div class="flex-1 flex flex-col justify-center items-center mb-4">
 <p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2" id="accountNameLabel">Текущий баланс</p>
 <h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
 <div id="syncStatus" class="sync-indicator">подключение...</div>
@@ -107,10 +110,15 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- СЕЛЕКТОРЫ -->
 <div class="glass-card rounded-3xl p-4 mb-4">
-<div class="accounts-selector" id="accountsSelector"></div>
+<div class="selector-label">👤 Держатель</div>
+<div class="selector-row" id="holdersSelector"></div>
+<div class="selector-label">💼 Счет</div>
+<div class="selector-row" id="accountsSelector"></div>
 </div>
 
+<!-- ВВОД -->
 <div class="glass-card rounded-3xl p-6 mb-6">
 <input type="number" id="amount" placeholder="0" class="input-premium w-full mb-6" inputmode="decimal" min="0" step="0.01">
 <div class="grid grid-cols-2 gap-4">
@@ -119,6 +127,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- ИСТОРИЯ -->
 <div class="flex-1 overflow-y-auto">
 <div class="flex justify-between items-center mb-4">
 <p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
@@ -127,12 +136,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div id="history" class="space-y-3 pb-6"></div>
 </div>
 
+<!-- ОТЧЕТ -->
 <div id="reportModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
 <div class="modal-title">📊 Отчет</div>
 <div class="summary-card">
-<div class="summary-title">📊 Сводка по всем счетам</div>
+<div class="summary-title">📊 Сводка по всем держателям и счетам</div>
 <div class="summary-grid">
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-value turnover-color" id="summaryTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-value revenue-color" id="summaryRevenue">0 ₽</div></div>
@@ -145,7 +155,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 <button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
 <div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(72,187,120,0.08);border-color:rgba(72,187,120,0.3);color:#2f855a">
-✅ Последний отчет зафиксирован: <span id="fixedDate"></span>
+✅ Последний отчет: <span id="fixedDate"></span>
 </div>
 <div class="report-divider"></div>
 <div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">📋 Зафиксированные отчеты</div>
@@ -154,6 +164,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- РЕДАКТИРОВАНИЕ ОТЧЕТА -->
 <div id="editReportModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -167,6 +178,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- КОРРЕКТИРОВКА -->
 <div id="adjustmentModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
@@ -193,10 +205,28 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- ДОБАВИТЬ ДЕРЖАТЕЛЯ -->
+<div id="addHolderModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">👤 Новый держатель</div>
+<div class="settings-input-group">
+<label class="settings-input-label">Имя держателя</label>
+<input type="text" id="newHolderNameInput" class="settings-input" placeholder="Например: Иванов, Семья" style="font-size:1rem;text-align:left">
+</div>
+<div class="button-row">
+<button onclick="addHolder()" class="bg-indigo-500 text-white hover:bg-indigo-600 active:scale-95 transition-all duration-200">✓ Создать</button>
+<button onclick="closeAddHolder()" class="bg-zinc-200 hover:bg-zinc-300 active:scale-95 transition-all duration-200">✕ Отмена</button>
+</div>
+</div>
+</div>
+
+<!-- ДОБАВИТЬ СЧЕТ -->
 <div id="addAccountModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title">➕ Новый счет</div>
+<div class="modal-title">💼 Новый счет</div>
+<div class="adjustment-info" id="addAccountHolderInfo">Добавить в держателя: Основной</div>
 <div class="settings-input-group">
 <label class="settings-input-label">Название счета</label>
 <input type="text" id="newAccountNameInput" class="settings-input" placeholder="Например: Наличные, Карта" style="font-size:1rem;text-align:left">
@@ -208,11 +238,15 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 
+<!-- НАСТРОЙКИ -->
 <div id="settingsModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
 <div class="modal-title">⚙️ Настройки</div>
-<div class="adjustment-info" id="settingsAccountInfo">💼 Настройки для счета: Основной</div>
+<div class="settings-input-group">
+<label class="settings-input-label">👤 Название держателя</label>
+<input type="text" id="holderNameInput" class="settings-input" placeholder="Основной" style="font-size:1rem;text-align:left">
+</div>
 <div class="settings-input-group">
 <label class="settings-input-label">💼 Название счета</label>
 <input type="text" id="accountNameInput" class="settings-input" placeholder="Основной" style="font-size:1rem;text-align:left">
@@ -220,7 +254,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="settings-input-group">
 <label class="settings-input-label">💜 Общий капитал (₽)</label>
 <input type="number" id="capitalInput" class="settings-input" placeholder="100000" step="1" min="0">
-<div class="settings-input-hint">Единый капитал для всех счетов</div>
+<div class="settings-input-hint">Единый капитал для всех держателей и счетов</div>
 </div>
 <div class="settings-input-group">
 <label class="settings-input-label">% выручки от доходов</label>
@@ -255,7 +289,9 @@ return userId;
 };
 const USER_ID=getUserId();
 
-let accounts={};
+// СТРУКТУРА: holders = { id: { id, name, accounts: { id: { id, name, balance, transactions, createdAt } }, createdAt } }
+let holders={};
+let activeHolderId=null;
 let activeAccountId=null;
 let capital=0;
 let savedReports={};
@@ -281,6 +317,7 @@ const reportModal=document.getElementById('reportModal');
 const editReportModal=document.getElementById('editReportModal');
 const settingsModal=document.getElementById('settingsModal');
 const adjustmentModal=document.getElementById('adjustmentModal');
+const addHolderModal=document.getElementById('addHolderModal');
 const addAccountModal=document.getElementById('addAccountModal');
 const resetBtn=document.getElementById('resetBtn');
 
@@ -302,7 +339,12 @@ if(tg?.HapticFeedback){try{if(type==='notification')tg.HapticFeedback.notificati
 
 const MONTH_NAMES_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
-const getActiveAccount=()=>accounts[activeAccountId];
+const getActiveHolder=()=>holders[activeHolderId];
+const getActiveAccount=()=>{
+const h=getActiveHolder();
+if(!h||!h.accounts)return null;
+return h.accounts[activeAccountId];
+};
 
 const calculateAccountStats=(account)=>{
 let totalIncome=0,totalExpense=0;
@@ -316,14 +358,17 @@ const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
 return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense};
 };
 
-const calculateAllAccountsStats=()=>{
+const calculateAllStats=()=>{
 let totalIncome=0,totalExpense=0,totalBalance=0;
-Object.values(accounts).forEach(acc=>{
+Object.values(holders).forEach(h=>{
+if(!h||!h.accounts)return;
+Object.values(h.accounts).forEach(acc=>{
 if(!acc)return;
 const stats=calculateAccountStats(acc);
 totalIncome+=stats.totalIncome||0;
 totalExpense+=stats.totalExpense||0;
 totalBalance+=acc.balance||0;
+});
 });
 const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
 const turnover=totalIncome+totalExpense;
@@ -338,39 +383,84 @@ syncStatusEl.textContent=s.text;
 syncStatusEl.className='sync-indicator '+s.class;
 };
 
-const renderAccountsSelector=()=>{
-const selector=document.getElementById('accountsSelector');
+const renderHoldersSelector=()=>{
+const selector=document.getElementById('holdersSelector');
 if(!selector)return;
 selector.innerHTML='';
-const accountKeys=Object.keys(accounts);
-accountKeys.forEach(accId=>{
-const acc=accounts[accId];
-if(!acc)return;
+const holderKeys=Object.keys(holders);
+holderKeys.forEach(hId=>{
+const h=holders[hId];
+if(!h)return;
 const chip=document.createElement('div');
-chip.className='account-chip'+(accId===activeAccountId?' active':'');
+chip.className='chip holder-chip'+(hId===activeHolderId?' active':'');
 const nameSpan=document.createElement('span');
-nameSpan.textContent=acc.name;
-nameSpan.onclick=()=>switchAccount(accId);
+nameSpan.textContent='👤 '+h.name;
+nameSpan.onclick=()=>switchHolder(hId);
 chip.appendChild(nameSpan);
-if(accountKeys.length>1){
+if(holderKeys.length>1){
 const deleteBtn=document.createElement('span');
-deleteBtn.className='account-delete-btn';
+deleteBtn.className='chip-delete';
 deleteBtn.textContent='×';
-deleteBtn.title='Удалить счет';
-deleteBtn.onclick=(e)=>{e.stopPropagation();deleteAccount(accId);};
+deleteBtn.onclick=(e)=>{e.stopPropagation();deleteHolder(hId);};
 chip.appendChild(deleteBtn);
 }
 selector.appendChild(chip);
 });
 const addChip=document.createElement('div');
-addChip.className='add-account-chip';
-addChip.textContent='+ Добавить';
+addChip.className='add-chip';
+addChip.textContent='+ Держатель';
+addChip.onclick=openAddHolder;
+selector.appendChild(addChip);
+};
+
+const renderAccountsSelector=()=>{
+const selector=document.getElementById('accountsSelector');
+if(!selector)return;
+selector.innerHTML='';
+const h=getActiveHolder();
+if(!h){selector.innerHTML='<div style="color:#a0aec0;font-size:0.8rem;padding:0.5rem">Сначала выберите держателя</div>';return}
+const accKeys=Object.keys(h.accounts||{});
+accKeys.forEach(aId=>{
+const acc=h.accounts[aId];
+if(!acc)return;
+const chip=document.createElement('div');
+chip.className='chip'+(aId===activeAccountId?' active':'');
+const nameSpan=document.createElement('span');
+nameSpan.textContent='💼 '+acc.name;
+nameSpan.onclick=()=>switchAccount(aId);
+chip.appendChild(nameSpan);
+if(accKeys.length>1){
+const deleteBtn=document.createElement('span');
+deleteBtn.className='chip-delete';
+deleteBtn.textContent='×';
+deleteBtn.onclick=(e)=>{e.stopPropagation();deleteAccount(aId);};
+chip.appendChild(deleteBtn);
+}
+selector.appendChild(chip);
+});
+const addChip=document.createElement('div');
+addChip.className='add-chip';
+addChip.textContent='+ Счет';
 addChip.onclick=openAddAccount;
 selector.appendChild(addChip);
 };
 
+const switchHolder=(holderId)=>{
+if(!holders[holderId])return;
+activeHolderId=holderId;
+const h=holders[holderId];
+const accKeys=Object.keys(h.accounts||{});
+activeAccountId=accKeys[0]||null;
+updateUI();
+renderHoldersSelector();
+renderAccountsSelector();
+saveToLocal();
+haptic('impact','light');
+};
+
 const switchAccount=(accountId)=>{
-if(!accounts[accountId])return;
+const h=getActiveHolder();
+if(!h||!h.accounts[accountId])return;
 activeAccountId=accountId;
 updateUI();
 renderAccountsSelector();
@@ -380,7 +470,8 @@ haptic('impact','light');
 
 const updateUI=()=>{
 const account=getActiveAccount();
-if(!account){
+const holder=getActiveHolder();
+if(!account||!holder){
 balanceEl.textContent='0 ₽';
 totalTurnoverEl.textContent='0 ₽';
 totalIncomeEl.textContent='0 ₽';
@@ -392,7 +483,7 @@ resetBtn.style.display='none';
 return;
 }
 balanceEl.textContent=formatMoney(account.balance);
-accountNameLabel.textContent=`💼 ${account.name}`;
+accountNameLabel.textContent=`👤 ${holder.name} · 💼 ${account.name}`;
 const stats=calculateAccountStats(account);
 totalTurnoverEl.textContent=formatMoney(stats.turnover);
 totalIncomeEl.textContent=formatMoney(stats.totalIncome);
@@ -424,7 +515,8 @@ saveToLocal();
 };
 
 const saveToLocal=()=>{try{
-localStorage.setItem('accounts',JSON.stringify(accounts));
+localStorage.setItem('holders',JSON.stringify(holders));
+localStorage.setItem('activeHolderId',activeHolderId);
 localStorage.setItem('activeAccountId',activeAccountId);
 localStorage.setItem('capital',capital.toString());
 localStorage.setItem('savedReports',JSON.stringify(savedReports));
@@ -433,33 +525,50 @@ localStorage.setItem('expensePercent',expensePercent.toString());
 }catch(e){console.error('Save error:',e)}};
 
 const loadFromLocal=()=>{try{
-const accountsStr=localStorage.getItem('accounts');
-if(accountsStr){
-accounts=JSON.parse(accountsStr);
+const holdersStr=localStorage.getItem('holders');
+if(holdersStr){
+holders=JSON.parse(holdersStr);
+activeHolderId=localStorage.getItem('activeHolderId');
 activeAccountId=localStorage.getItem('activeAccountId');
-if(!activeAccountId||!accounts[activeAccountId]){activeAccountId=Object.keys(accounts)[0]}
-Object.values(accounts).forEach(acc=>{
-if(acc&&acc.capital!==undefined){
-if(capital===0&&acc.capital>0)capital=acc.capital;
-delete acc.capital;
+if(!activeHolderId||!holders[activeHolderId]){activeHolderId=Object.keys(holders)[0]}
+const h=holders[activeHolderId];
+if(h&&(!activeAccountId||!h.accounts[activeAccountId])){
+activeAccountId=Object.keys(h.accounts||{})[0]||null;
+}
+}else{
+// Миграция со старой структуры accounts
+const oldAccountsStr=localStorage.getItem('accounts');
+const oldCapital=parseFloat(localStorage.getItem('capital'))||0;
+if(oldAccountsStr){
+const oldAccounts=JSON.parse(oldAccountsStr);
+const holderId='holder_'+Date.now();
+const accounts={};
+Object.values(oldAccounts).forEach(acc=>{
+if(acc&&acc.id){
+const newAcc={...acc};
+delete newAcc.capital;
+accounts[acc.id]=newAcc;
 }
 });
-}else{
-const oldBalance=parseFloat(localStorage.getItem('balance'))||0;
-const oldTransactions=JSON.parse(localStorage.getItem('transactions')||'[]');
-const oldCapital=parseFloat(localStorage.getItem('capital'))||0;
-const defaultId='acc_'+Date.now();
-accounts={[defaultId]:{id:defaultId,name:'Основной',balance:oldBalance,transactions:oldTransactions,createdAt:new Date().toISOString()}};
-activeAccountId=defaultId;
+holders={[holderId]:{id:holderId,name:'Основной',accounts:accounts,createdAt:new Date().toISOString()}};
+activeHolderId=holderId;
+activeAccountId=Object.keys(accounts)[0]||null;
 capital=oldCapital;
-localStorage.removeItem('balance');
-localStorage.removeItem('transactions');
+localStorage.removeItem('accounts');
+}else{
+const holderId='holder_'+Date.now();
+const accId='acc_'+Date.now();
+holders={[holderId]:{id:holderId,name:'Основной',accounts:{[accId]:{id:accId,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()}};
+activeHolderId=holderId;
+activeAccountId=accId;
+capital=oldCapital;
+}
 }
 savedReports=JSON.parse(localStorage.getItem('savedReports'))||{};
 incomePercent=parseFloat(localStorage.getItem('incomePercent'))||7;
 expensePercent=parseFloat(localStorage.getItem('expensePercent'))||2.5;
 const savedCapital=localStorage.getItem('capital');
-if(savedCapital!==null&&accountsStr)capital=parseFloat(savedCapital)||0;
+if(savedCapital!==null)capital=parseFloat(savedCapital)||0;
 return true;
 }catch(e){console.error('Load error:',e);return false}};
 
@@ -486,31 +595,55 @@ if(isSyncing)return;
 isSyncing=true;
 updateSyncStatus('syncing');
 try{
-const stats=calculateAllAccountsStats();
-await userRef.set({accounts,activeAccountId,capital,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,lastUpdated:new Date().toISOString()});
+const stats=calculateAllStats();
+await userRef.set({holders,activeHolderId,activeAccountId,capital,savedReports,totalIncome:stats.totalIncome,totalExpense:stats.totalExpense,revenue:stats.revenue,incomePercent,expensePercent,lastUpdated:new Date().toISOString()});
 updateSyncStatus('synced');
 }catch(e){updateSyncStatus('error')}finally{isSyncing=false}
 },500);
 };
 
 const loadFromServer=()=>{
-if(!useFirebase){loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('local');return}
+if(!useFirebase){loadFromLocal();updateUI();renderHoldersSelector();renderAccountsSelector();updateSyncStatus('local');return}
 updateSyncStatus('syncing');
 userRef.once('value').then((snapshot)=>{
 const data=snapshot.val();
-if(data&&data.accounts){
-accounts=data.accounts;
-activeAccountId=data.activeAccountId||Object.keys(accounts)[0];
+if(data&&data.holders){
+holders=data.holders;
+activeHolderId=data.activeHolderId||Object.keys(holders)[0];
+activeAccountId=data.activeAccountId;
 capital=data.capital||0;
 savedReports=data.savedReports||{};
 incomePercent=data.incomePercent||7;
 expensePercent=data.expensePercent||2.5;
-Object.values(accounts).forEach(acc=>{if(acc&&acc.capital!==undefined){if(capital===0&&acc.capital>0)capital=acc.capital;delete acc.capital}});
+const h=holders[activeHolderId];
+if(h&&(!activeAccountId||!h.accounts[activeAccountId])){
+activeAccountId=Object.keys(h.accounts||{})[0]||null;
+}
 updateUI();
+renderHoldersSelector();
 renderAccountsSelector();
 updateSyncStatus('synced');
-}else{loadFromLocal();updateUI();renderAccountsSelector();if(isOnline)saveToServer()}
-}).catch(()=>{loadFromLocal();updateUI();renderAccountsSelector();updateSyncStatus('offline')});
+}else if(data&&data.accounts){
+// Миграция со старой структуры
+const holderId='holder_'+Date.now();
+const accounts={};
+Object.values(data.accounts).forEach(acc=>{
+if(acc&&acc.id){const newAcc={...acc};delete newAcc.capital;accounts[acc.id]=newAcc}
+});
+holders={[holderId]:{id:holderId,name:'Основной',accounts:accounts,createdAt:new Date().toISOString()}};
+activeHolderId=holderId;
+activeAccountId=Object.keys(accounts)[0]||null;
+capital=data.capital||0;
+savedReports=data.savedReports||{};
+incomePercent=data.incomePercent||7;
+expensePercent=data.expensePercent||2.5;
+updateUI();
+renderHoldersSelector();
+renderAccountsSelector();
+if(isOnline)saveToServer();
+updateSyncStatus('synced');
+}else{loadFromLocal();updateUI();renderHoldersSelector();renderAccountsSelector();if(isOnline)saveToServer()}
+}).catch(()=>{loadFromLocal();updateUI();renderHoldersSelector();renderAccountsSelector();updateSyncStatus('offline')});
 };
 
 const addTransaction=(type)=>{
@@ -530,7 +663,8 @@ saveToServer();
 
 const resetAll=()=>{
 const account=getActiveAccount();
-if(!account||!account.transactions||account.transactions.length===0){haptic('notification','warning');return}
+const holder=getActiveHolder();
+if(!account||!holder||!account.transactions||account.transactions.length===0){haptic('notification','warning');return}
 haptic('notification','warning');
 const doReset=()=>{
 account.balance=0;
@@ -540,21 +674,73 @@ updateUI();
 saveToLocal();
 saveToServer();
 };
-if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Зафиксированные отчеты останутся.`,function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
-else{if(confirm(`Обнулить баланс и историю счета "${account.name}"?\n\n💾 Зафиксированные отчеты останутся.`))doReset();else haptic('impact','soft')}
+if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и историю счета "${account.name}" (${holder.name})?\n\n💾 Зафиксированные отчеты останутся.`,function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
+else{if(confirm(`Обнулить баланс и историю счета "${account.name}" (${holder.name})?\n\n💾 Зафиксированные отчеты останутся.`))doReset();else haptic('impact','soft')}
 };
 
+// ДЕРЖАТЕЛИ
+window.openAddHolder=()=>{
+document.getElementById('newHolderNameInput').value='';
+addHolderModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeAddHolder=()=>addHolderModal.classList.remove('active');
+window.addHolder=()=>{
+const name=document.getElementById('newHolderNameInput').value.trim();
+if(!name){alert('Введите имя держателя');return}
+const id='holder_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+const accId='acc_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+holders[id]={id,name,accounts:{[accId]:{id:accId,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()};
+activeHolderId=id;
+activeAccountId=accId;
+updateUI();
+renderHoldersSelector();
+renderAccountsSelector();
+saveToServer();
+closeAddHolder();
+haptic('notification','success');
+};
+
+window.deleteHolder=(holderId)=>{
+const h=holders[holderId];
+if(!h)return;
+const holderKeys=Object.keys(holders);
+if(holderKeys.length<=1){alert('Нельзя удалить единственного держателя');return}
+const doDelete=()=>{
+delete holders[holderId];
+if(activeHolderId===holderId){
+activeHolderId=Object.keys(holders)[0];
+const newH=holders[activeHolderId];
+activeAccountId=Object.keys(newH.accounts||{})[0]||null;
+}
+updateUI();
+renderHoldersSelector();
+renderAccountsSelector();
+saveToLocal();
+saveToServer();
+haptic('notification','success');
+};
+if(tg?.showConfirm){tg.showConfirm(`Удалить держателя "${h.name}" и ВСЕ его счета?\n\n⚠️ Все данные будут потеряны.`,function(confirmed){if(confirmed)doDelete();else haptic('impact','soft')})}
+else{if(confirm(`Удалить держателя "${h.name}" и ВСЕ его счета?\n\n⚠️ Все данные будут потеряны.`))doDelete();else haptic('impact','soft')}
+};
+
+// СЧЕТА
 window.openAddAccount=()=>{
+const h=getActiveHolder();
+if(!h){alert('Сначала создайте держателя');return}
 document.getElementById('newAccountNameInput').value='';
+document.getElementById('addAccountHolderInfo').textContent=`Добавить в держателя: ${h.name}`;
 addAccountModal.classList.add('active');
 haptic('impact','medium');
 };
 window.closeAddAccount=()=>addAccountModal.classList.remove('active');
 window.addAccount=()=>{
+const h=getActiveHolder();
+if(!h)return;
 const name=document.getElementById('newAccountNameInput').value.trim();
 if(!name){alert('Введите название счета');return}
 const id='acc_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
-accounts[id]={id,name,balance:0,transactions:[],createdAt:new Date().toISOString()};
+h.accounts[id]={id,name,balance:0,transactions:[],createdAt:new Date().toISOString()};
 activeAccountId=id;
 updateUI();
 renderAccountsSelector();
@@ -564,23 +750,25 @@ haptic('notification','success');
 };
 
 window.deleteAccount=(accountId)=>{
-const account=accounts[accountId];
-if(!account)return;
-const accountKeys=Object.keys(accounts);
-if(accountKeys.length<=1){alert('Нельзя удалить единственный счет');return}
+const h=getActiveHolder();
+if(!h||!h.accounts[accountId])return;
+const accKeys=Object.keys(h.accounts);
+if(accKeys.length<=1){alert('Нельзя удалить единственный счет в держателе');return}
+const acc=h.accounts[accountId];
 const doDelete=()=>{
-delete accounts[accountId];
-if(activeAccountId===accountId)activeAccountId=Object.keys(accounts)[0];
+delete h.accounts[accountId];
+if(activeAccountId===accountId)activeAccountId=Object.keys(h.accounts)[0];
 updateUI();
 renderAccountsSelector();
 saveToLocal();
 saveToServer();
 haptic('notification','success');
 };
-if(tg?.showConfirm){tg.showConfirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные счета будут потеряны.`,function(confirmed){if(confirmed)doDelete();else haptic('impact','soft')})}
-else{if(confirm(`Удалить счет "${account.name}"?\n\n⚠️ Все данные счета будут потеряны.`))doDelete();else haptic('impact','soft')}
+if(tg?.showConfirm){tg.showConfirm(`Удалить счет "${acc.name}"?\n\n⚠️ Все данные счета будут потеряны.`,function(confirmed){if(confirmed)doDelete();else haptic('impact','soft')})}
+else{if(confirm(`Удалить счет "${acc.name}"?\n\n⚠️ Все данные счета будут потеряны.`))doDelete();else haptic('impact','soft')}
 };
 
+// ОТЧЕТ
 window.openReport=()=>{
 try{
 renderSummary();
@@ -594,7 +782,7 @@ window.closeReport=()=>reportModal.classList.remove('active');
 
 const renderSummary=()=>{
 try{
-const stats=calculateAllAccountsStats();
+const stats=calculateAllStats();
 document.getElementById('summaryTurnover').textContent=formatMoney(stats.turnover);
 document.getElementById('summaryRevenue').textContent=formatMoney(stats.revenue);
 document.getElementById('summaryIncome').textContent=formatMoney(stats.totalIncome);
@@ -607,7 +795,7 @@ document.getElementById('summarySiteBalance').textContent=formatMoney(stats.site
 
 window.fixReport=()=>{
 try{
-const stats=calculateAllAccountsStats();
+const stats=calculateAllStats();
 const now=new Date();
 const key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);
 savedReports[key]={
@@ -720,10 +908,12 @@ if(tg?.showConfirm){tg.showConfirm(`Удалить отчет за ${dateStr}?`,
 else{if(confirm(`Удалить отчет за ${dateStr}?`))doDelete()}
 };
 
+// КОРРЕКТИРОВКА
 window.openAdjustment=()=>{
 const account=getActiveAccount();
-if(!account){alert('Нет активного счета');return}
-document.getElementById('adjustmentAccountInfo').textContent=`💼 Счет: ${account.name}`;
+const holder=getActiveHolder();
+if(!account||!holder){alert('Нет активного счета');return}
+document.getElementById('adjustmentAccountInfo').textContent=`👤 ${holder.name} · 💼 ${account.name}`;
 document.getElementById('adjustmentBalanceInput').value='';
 document.getElementById('adjustmentCapitalInput').value='';
 document.getElementById('adjustmentCommentInput').value='';
@@ -763,10 +953,12 @@ saveToServer();
 closeAdjustment();
 };
 
+// НАСТРОЙКИ
 window.openSettings=()=>{
 const account=getActiveAccount();
-if(!account){alert('Нет активного счета');return}
-document.getElementById('settingsAccountInfo').textContent=`💼 Настройки для счета: ${account.name}`;
+const holder=getActiveHolder();
+if(!account||!holder){alert('Нет активного счета');return}
+document.getElementById('holderNameInput').value=holder.name;
 document.getElementById('accountNameInput').value=account.name;
 document.getElementById('capitalInput').value=capital;
 document.getElementById('incomePercentInput').value=incomePercent;
@@ -777,29 +969,34 @@ haptic('impact','medium');
 window.closeSettings=()=>settingsModal.classList.remove('active');
 window.saveSettings=()=>{
 const account=getActiveAccount();
-if(!account)return;
-const newName=document.getElementById('accountNameInput').value.trim();
+const holder=getActiveHolder();
+if(!account||!holder)return;
+const newHolderName=document.getElementById('holderNameInput').value.trim();
+const newAccountName=document.getElementById('accountNameInput').value.trim();
 const newCapital=parseFloat(document.getElementById('capitalInput').value);
 const newIncomePercent=parseFloat(document.getElementById('incomePercentInput').value);
 const newExpensePercent=parseFloat(document.getElementById('expensePercentInput').value);
-if(!newName){alert('Введите название счета');return}
+if(!newHolderName){alert('Введите имя держателя');return}
+if(!newAccountName){alert('Введите название счета');return}
 if(isNaN(newCapital)||newCapital<0){alert('Некорректный капитал');return}
 if(isNaN(newIncomePercent)||newIncomePercent<0||newIncomePercent>100){alert('Некорректный % доходов');return}
 if(isNaN(newExpensePercent)||newExpensePercent<0||newExpensePercent>100){alert('Некорректный % расходов');return}
-account.name=newName;
+holder.name=newHolderName;
+account.name=newAccountName;
 capital=newCapital;
 incomePercent=newIncomePercent;
 expensePercent=newExpensePercent;
 document.getElementById('currentIncomePercent').textContent=incomePercent;
 document.getElementById('currentExpensePercent').textContent=expensePercent;
 updateUI();
+renderHoldersSelector();
 renderAccountsSelector();
 saveToServer();
 closeSettings();
 haptic('notification','success');
 };
 
-[reportModal,editReportModal,settingsModal,adjustmentModal,addAccountModal].forEach(modal=>{
+[reportModal,editReportModal,settingsModal,adjustmentModal,addHolderModal,addAccountModal].forEach(modal=>{
 if(modal)modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')});
 });
 window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveToServer()});
