@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
     --ios-bg: #000000;
@@ -30,7 +30,6 @@
     --radius-ios-sm: 12px;
 }
 
-/* Light Theme */
 .theme-light {
     --ios-bg: #F2F2F7;
     --ios-card: rgba(255, 255, 255, 0.8);
@@ -40,7 +39,6 @@
     --ios-text-secondary: rgba(60, 60, 67, 0.6);
 }
 
-/* Gold Theme */
 .theme-gold {
     --ios-bg: #0a0a0f;
     --ios-card: rgba(26, 26, 46, 0.6);
@@ -68,11 +66,9 @@ html, body {
     background: var(--ios-bg);
     color: var(--ios-text);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* ===== SPLASH SCREEN ===== */
 #splash {
     position: fixed;
     inset: 0;
@@ -84,48 +80,14 @@ html, body {
     justify-content: center;
     transition: opacity 0.6s ease, visibility 0.6s ease;
 }
-#splash.hide {
-    opacity: 0;
-    visibility: hidden;
-}
-#splashCanvas {
-    width: 180px;
-    height: 180px;
-    filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15));
-}
-.splash-title {
-    font-family: 'Inter', -apple-system, sans-serif;
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #1c1c1e;
-    letter-spacing: -0.02em;
-    margin-top: 1.5rem;
-}
-.splash-sub {
-    font-size: 0.8rem;
-    color: #8E8E93;
-    letter-spacing: 0.05em;
-    margin-top: 0.25rem;
-    font-weight: 400;
-}
+#splash.hide { opacity: 0; visibility: hidden; }
+#splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
+.splash-title { font-size: 1.75rem; font-weight: 600; color: #1c1c1e; letter-spacing: -0.02em; margin-top: 1.5rem; }
+.splash-sub { font-size: 0.8rem; color: #8E8E93; letter-spacing: 0.05em; margin-top: 0.25rem; font-weight: 400; }
 
-/* ===== APP LAYOUT ===== */
-#app {
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    background: var(--ios-bg);
-    transition: background 0.3s ease;
-}
+#app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: var(--ios-bg); transition: background 0.3s ease; }
 
-/* ===== PAGES ===== */
-.pages {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: var(--ios-bg);
-}
+.pages { flex: 1; position: relative; overflow: hidden; background: var(--ios-bg); }
 .page {
     position: absolute;
     inset: 0;
@@ -138,20 +100,10 @@ html, body {
     pointer-events: none;
     -webkit-overflow-scrolling: touch;
 }
-.page.active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
-}
+.page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 .page::-webkit-scrollbar { display: none; }
+.page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
-.page-content {
-    padding: 12px 16px;
-    padding-top: max(12px, env(safe-area-inset-top));
-    min-height: 100%;
-}
-
-/* ===== BALANCE CARD ===== */
 .balance-card {
     background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
     border-radius: var(--radius-ios);
@@ -160,12 +112,8 @@ html, body {
     position: relative;
     overflow: hidden;
 }
-.theme-light .balance-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f2f2f7 100%);
-}
-.theme-gold .balance-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 100%);
-}
+.theme-light .balance-card { background: linear-gradient(135deg, #ffffff 0%, #f2f2f7 100%); }
+.theme-gold .balance-card { background: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 100%); }
 .balance-card::before {
     content: '';
     position: absolute;
@@ -175,70 +123,16 @@ html, body {
     height: 100%;
     background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
 }
-.balance-label {
-    font-size: 0.75rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-.balance-value {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--ios-text);
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.03em;
-}
-.balance-sub {
-    font-size: 0.8rem;
-    color: var(--ios-text-secondary);
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
+.balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; font-weight: 500; }
+.balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
 
-/* ===== STATS GRID ===== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.stat-card {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    border: 1px solid var(--ios-separator);
-}
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-}
-.stat-icon {
-    font-size: 0.9rem;
-}
-.stat-name {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-}
-.stat-value {
-    font-size: 1rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+.stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
+.stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.stat-icon { font-size: 0.9rem; }
+.stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
+.stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 
-/* ===== ACCOUNT SELECTOR ===== */
 .account-chip {
     background: var(--ios-card);
     backdrop-filter: blur(20px);
@@ -253,588 +147,121 @@ html, body {
     border: 1px solid var(--ios-separator);
     transition: all 0.2s ease;
 }
-.account-chip:active {
-    transform: scale(0.98);
-    opacity: 0.8;
-}
-.account-chip-name {
-    font-size: 0.85rem;
-    font-weight: 500;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.account-chip-arrow {
-    color: var(--ios-blue);
-    font-size: 1rem;
-}
+.account-chip:active { transform: scale(0.98); opacity: 0.8; }
+.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.account-chip-arrow { color: var(--ios-blue); font-size: 1rem; }
 
-/* ===== INPUT ===== */
-.amount-input-wrap {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 4px;
-    margin-bottom: 12px;
-    border: 1px solid var(--ios-separator);
-}
-.amount-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--ios-text);
-    font-size: 1.75rem;
-    font-weight: 600;
-    text-align: center;
-    padding: 14px;
-    outline: none;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-}
-.amount-input::placeholder {
-    color: var(--ios-text-secondary);
-}
+.amount-input-wrap { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 4px; margin-bottom: 12px; border: 1px solid var(--ios-separator); }
+.amount-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 1.75rem; font-weight: 600; text-align: center; padding: 14px; outline: none; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.amount-input::placeholder { color: var(--ios-text-secondary); }
 
-/* ===== QUICK ACTIONS ===== */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.action-btn {
-    padding: 14px;
-    border-radius: var(--radius-ios-sm);
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.action-btn:active {
-    transform: scale(0.96);
-    opacity: 0.9;
-}
-.action-income {
-    background: var(--ios-green);
-    color: white;
-}
-.action-expense {
-    background: var(--ios-red);
-    color: white;
-}
+.quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.action-btn:active { transform: scale(0.96); opacity: 0.9; }
+.action-income { background: var(--ios-green); color: white; }
+.action-expense { background: var(--ios-red); color: white; }
 
-/* ===== SECTION ===== */
-.section-title {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 10px;
-    font-weight: 600;
-    padding: 0 4px;
-}
+.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; font-weight: 600; padding: 0 4px; }
 
-/* ===== TRANSACTION LIST ===== */
-.tx-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.tx-item {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 12px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--ios-separator);
-    animation: slideUp 0.3s ease;
-}
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.tx-info {
-    flex: 1;
-    min-width: 0;
-}
-.tx-desc {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.tx-time {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-}
-.tx-amount {
-    font-size: 0.95rem;
-    font-weight: 600;
-    white-space: nowrap;
-    margin-left: 12px;
-    font-variant-numeric: tabular-nums;
-}
+.tx-list { display: flex; flex-direction: column; gap: 8px; }
+.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.tx-info { flex: 1; min-width: 0; }
+.tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
+.tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(28, 28, 30, 0.85);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-top: 1px solid var(--ios-separator);
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-    z-index: 1000;
-}
-.nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-.nav-icon {
-    font-size: 1.4rem;
-    transition: all 0.2s ease;
-    opacity: 0.5;
-}
-.nav-item.active .nav-icon {
-    opacity: 1;
-    transform: scale(1.1);
-}
-.nav-label {
-    font-size: 0.6rem;
-    font-weight: 500;
-    color: var(--ios-text-secondary);
-    transition: color 0.2s ease;
-    letter-spacing: 0.02em;
-}
-.nav-item.active .nav-label {
-    color: var(--ios-blue);
-}
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; cursor: pointer; transition: all 0.2s ease; }
+.nav-icon { font-size: 1.4rem; transition: all 0.2s ease; opacity: 0.5; }
+.nav-item.active .nav-icon { opacity: 1; transform: scale(1.1); }
+.nav-label { font-size: 0.6rem; font-weight: 500; color: var(--ios-text-secondary); transition: color 0.2s ease; letter-spacing: 0.02em; }
+.nav-item.active .nav-label { color: var(--ios-blue); }
 
-/* ===== BOTTOM SHEET ===== */
-.sheet-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-.sheet-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-.bottom-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #1c1c1e;
-    border-radius: 20px 20px 0 0;
-    padding: 12px 16px max(16px, env(safe-area-inset-bottom));
-    z-index: 2001;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 85vh;
-    overflow-y: auto;
-}
-.theme-light .bottom-sheet {
-    background: #ffffff;
-}
-.theme-gold .bottom-sheet {
-    background: #1a1a2e;
-}
-.bottom-sheet.active {
-    transform: translateY(0);
-}
-.sheet-handle {
-    width: 36px;
-    height: 5px;
-    background: #3a3a3c;
-    border-radius: 3px;
-    margin: 0 auto 16px;
-}
-.theme-light .sheet-handle {
-    background: #c7c7cc;
-}
-.sheet-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 16px;
-}
+.sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.sheet-overlay.active { opacity: 1; visibility: visible; }
+.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
+.theme-light .bottom-sheet { background: #ffffff; }
+.theme-gold .bottom-sheet { background: #1a1a2e; }
+.bottom-sheet.active { transform: translateY(0); }
+.sheet-handle { width: 36px; height: 5px; background: #3a3a3c; border-radius: 3px; margin: 0 auto 16px; }
+.theme-light .sheet-handle { background: #c7c7cc; }
+.sheet-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 16px; }
 
-/* ===== ADD BUTTONS ===== */
-.add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 12px;
-    background: var(--ios-blue);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 8px;
-    width: 100%;
-}
-.add-btn:active {
-    transform: scale(0.97);
-    opacity: 0.9;
-}
+.add-btn { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; background: var(--ios-blue); color: white; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 8px; width: 100%; }
+.add-btn:active { transform: scale(0.97); opacity: 0.9; }
 
-/* ===== TOAST ===== */
-.toast-container {
-    position: fixed;
-    top: max(16px, env(safe-area-inset-top));
-    left: 16px;
-    right: 16px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-}
-.toast {
-    background: rgba(28, 28, 30, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 12px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: toastIn 0.3s ease;
-    pointer-events: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-.theme-light .toast {
-    background: rgba(255, 255, 255, 0.95);
-    color: #000;
-}
-.toast.out {
-    animation: toastOut 0.3s ease forwards;
-}
-@keyframes toastIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes toastOut {
-    to { opacity: 0; transform: translateY(-20px); }
-}
-.toast-icon {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.toast-text {
-    font-size: 0.85rem;
-    flex: 1;
-    font-weight: 500;
-}
+.toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; animation: toastIn 0.3s ease; pointer-events: auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+.theme-light .toast { background: rgba(255, 255, 255, 0.95); color: #000; }
+.toast.out { animation: toastOut 0.3s ease forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(-20px); } }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
 
-/* ===== BUTTONS ===== */
-.btn {
-    padding: 13px 20px;
-    border-radius: var(--radius-ios-sm);
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.btn:active {
-    transform: scale(0.97);
-    opacity: 0.9;
-}
-.btn-primary {
-    background: var(--ios-blue);
-    color: white;
-}
-.btn-secondary {
-    background: rgba(120, 120, 128, 0.12);
-    color: var(--ios-blue);
-}
+.btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:active { transform: scale(0.97); opacity: 0.9; }
+.btn-primary { background: var(--ios-blue); color: white; }
+.btn-secondary { background: rgba(120, 120, 128, 0.12); color: var(--ios-blue); }
 
-/* ===== REPORT CARD ===== */
-.report-card {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    margin-bottom: 10px;
-    border: 1px solid var(--ios-separator);
-}
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-}
-.report-date {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-.report-time {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    margin-top: 2px;
-}
-.report-actions {
-    display: flex;
-    gap: 6px;
-}
-.report-action {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+.report-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
+.report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.report-date { font-size: 0.9rem; font-weight: 600; }
+.report-time { font-size: 0.7rem; color: var(--ios-text-secondary); margin-top: 2px; }
+.report-actions { display: flex; gap: 6px; }
+.report-action { width: 30px; height: 30px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer; }
 .report-action:active { transform: scale(0.9); }
 .report-action.share { background: rgba(0, 122, 255, 0.15); }
 .report-action.edit { background: rgba(255, 149, 0, 0.15); }
 .report-action.delete { background: rgba(255, 59, 48, 0.15); }
+.report-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.report-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.75rem; }
+.report-stat-label { color: var(--ios-text-secondary); }
+.report-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.report-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-}
-.report-stat {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    font-size: 0.75rem;
-}
-.report-stat-label {
-    color: var(--ios-text-secondary);
-}
-.report-stat-value {
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
+.summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
+.summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); }
+.summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
+.summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
 
-/* ===== SUMMARY CARD ===== */
-.summary-block {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios);
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid var(--ios-separator);
-}
-.summary-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 12px;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-.summary-item {
-    text-align: center;
-    padding: 10px 8px;
-    background: rgba(120, 120, 128, 0.08);
-    border-radius: var(--radius-ios-sm);
-}
-.summary-label {
-    font-size: 0.6rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-}
-.summary-val {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-top: 4px;
-    font-variant-numeric: tabular-nums;
-}
-
-/* ===== PERIOD CHIPS ===== */
-.period-row {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    margin-bottom: 16px;
-    scrollbar-width: none;
-}
+.period-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
 .period-row::-webkit-scrollbar { display: none; }
-.period-chip {
-    padding: 7px 14px;
-    border-radius: 100px;
-    background: var(--ios-card);
-    border: 1px solid var(--ios-separator);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--ios-text-secondary);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-}
-.period-chip.active {
-    background: var(--ios-blue);
-    color: white;
-    border-color: var(--ios-blue);
-}
+.period-chip { padding: 7px 14px; border-radius: 100px; background: var(--ios-card); border: 1px solid var(--ios-separator); font-size: 0.8rem; font-weight: 500; color: var(--ios-text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(10px); }
+.period-chip.active { background: var(--ios-blue); color: white; border-color: var(--ios-blue); }
 
-/* ===== SETTINGS ===== */
-.setting-group {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    margin-bottom: 10px;
-    border: 1px solid var(--ios-separator);
-}
-.setting-label {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 6px;
-    font-weight: 500;
-}
-.setting-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--ios-separator);
-    color: var(--ios-text);
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 6px 0;
-    outline: none;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-}
-.setting-input:focus {
-    border-bottom-color: var(--ios-blue);
-}
-.setting-hint {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    margin-top: 4px;
-}
+.setting-group { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
+.setting-label { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; font-weight: 500; }
+.setting-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--ios-separator); color: var(--ios-text); font-size: 1.1rem; font-weight: 600; padding: 6px 0; outline: none; text-align: center; font-variant-numeric: tabular-nums; }
+.setting-input:focus { border-bottom-color: var(--ios-blue); }
+.setting-hint { font-size: 0.65rem; color: var(--ios-text-secondary); margin-top: 4px; }
 
-/* Theme Selector */
-.theme-selector {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 10px;
-}
-.theme-option {
-    padding: 10px;
-    border-radius: 12px;
-    border: 2px solid var(--ios-separator);
-    background: var(--ios-card);
-    cursor: pointer;
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-.theme-option.active {
-    border-color: var(--ios-blue);
-    background: rgba(0, 122, 255, 0.1);
-}
-.theme-option:active {
-    transform: scale(0.95);
-}
-.theme-icon {
-    font-size: 1.5rem;
-    margin-bottom: 4px;
-}
+.theme-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.theme-option { padding: 10px; border-radius: 12px; border: 2px solid var(--ios-separator); background: var(--ios-card); cursor: pointer; text-align: center; font-size: 0.75rem; font-weight: 500; transition: all 0.2s ease; }
+.theme-option.active { border-color: var(--ios-blue); background: rgba(0, 122, 255, 0.1); }
+.theme-option:active { transform: scale(0.95); }
+.theme-icon { font-size: 1.5rem; margin-bottom: 4px; }
 
-/* ===== SYNC BADGE ===== */
-.sync-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    padding: 4px 10px;
-    background: rgba(120, 120, 128, 0.12);
-    border-radius: 100px;
-    margin-top: 8px;
-    font-weight: 500;
-}
+.sync-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; color: var(--ios-text-secondary); padding: 4px 10px; background: rgba(120, 120, 128, 0.12); border-radius: 100px; margin-top: 8px; font-weight: 500; }
 .sync-badge.syncing { color: var(--ios-orange); }
 .sync-badge.synced { color: var(--ios-green); }
 
-/* ===== EMPTY STATE ===== */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ios-text-secondary);
-}
-.empty-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    opacity: 0.5;
-}
-.empty-text {
-    font-size: 0.85rem;
-}
+.empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5; }
+.empty-text { font-size: 0.85rem; }
 
-/* ===== COLORS ===== */
 .text-green { color: var(--ios-green); }
 .text-red { color: var(--ios-red); }
 .text-blue { color: var(--ios-blue); }
 .text-orange { color: var(--ios-orange); }
 
-/* ===== UTILS ===== */
 .mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
@@ -842,21 +269,16 @@ html, body {
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
     <canvas id="splashCanvas"></canvas>
     <div class="splash-title">Finance Luxe</div>
     <div class="splash-sub">Решения для бизнеса</div>
 </div>
 
-<!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- APP -->
 <div id="app">
     <div class="pages">
-        
-        <!-- HOME -->
         <div class="page active" id="page-home">
             <div class="page-content">
                 <div class="account-chip" onclick="openAccountSheet()">
@@ -872,31 +294,19 @@ html, body {
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">💹</span>
-                            <span class="stat-name">Оборот</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div>
                         <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">🟢</span>
-                            <span class="stat-name">Доход</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div>
                         <div class="stat-value text-green" id="statIncome">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">🔴</span>
-                            <span class="stat-name">Расход</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div>
                         <div class="stat-value text-red" id="statExpense">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">💰</span>
-                            <span class="stat-name">Выручка</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div>
                         <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
                     </div>
                 </div>
@@ -906,185 +316,112 @@ html, body {
                 </div>
 
                 <div class="quick-actions">
-                    <button class="action-btn action-income" onclick="doTransaction('income')">
-                        <span>＋</span> Доход
-                    </button>
-                    <button class="action-btn action-expense" onclick="doTransaction('expense')">
-                        <span>−</span> Расход
-                    </button>
+                    <button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button>
+                    <button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button>
                 </div>
 
                 <div class="section-title">История операций</div>
                 <div class="tx-list" id="txList">
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <div class="empty-text">Нет операций</div>
-                    </div>
+                    <div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- REPORT -->
         <div class="page" id="page-report">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
-                
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"> Отчёт</div>
                 <div class="summary-block">
                     <div class="summary-title">Сводка по всем счетам</div>
                     <div class="summary-grid">
-                        <div class="summary-item">
-                            <div class="summary-label">💹 Оборот</div>
-                            <div class="summary-val text-blue" id="sumTurnover">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💰 Выручка</div>
-                            <div class="summary-val text-orange" id="sumRevenue">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🟢 Доходы</div>
-                            <div class="summary-val text-green" id="sumIncome">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🔴 Расходы</div>
-                            <div class="summary-val text-red" id="sumExpense">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">⚪ Баланс</div>
-                            <div class="summary-val" id="sumBalance">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💜 Капитал</div>
-                            <div class="summary-val text-blue" id="sumCapital">0 ₽</div>
-                        </div>
-                        <div class="summary-item" style="grid-column:span 2;">
-                            <div class="summary-label">🔵 На сайте</div>
-                            <div class="summary-val text-orange" id="sumSite">0 ₽</div>
-                        </div>
+                        <div class="summary-item"><div class="summary-label"> Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
+                        <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
                     </div>
                 </div>
-
                 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
-                <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
-
-                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
-                    ✅ Последний: <span id="lastFixedDate"></span>
-                </div>
-
+                <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()"> Поделиться</button>
+                <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
                 <div class="section-title">Зафиксированные отчёты</div>
                 <div id="reportsList"></div>
             </div>
         </div>
 
-        <!-- DETAIL -->
         <div class="page" id="page-detail">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
-
                 <div class="summary-block">
                     <div class="summary-title">Общие показатели</div>
                     <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-                        <div class="summary-item">
-                            <div class="summary-label">⚪ Баланс</div>
-                            <div class="summary-val" id="detBalance">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💜 Капитал</div>
-                            <div class="summary-val text-blue" id="detCapital">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🔵 Сайт</div>
-                            <div class="summary-val text-orange" id="detSite">0 ₽</div>
-                        </div>
+                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
                     </div>
                 </div>
-
                 <div class="period-row" id="periodRow">
                     <div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
                     <div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
                     <div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
                     <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
                 </div>
-
                 <div id="detailTree"></div>
-
                 <button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">📤 Поделиться</button>
             </div>
         </div>
 
-        <!-- ADJUST -->
         <div class="page" id="page-adjust">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
-                
-                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
-                    💼 Счёт: Основной
-                </div>
-
+                <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;"> Счёт: Основной</div>
                 <div class="setting-group">
                     <div class="setting-label">Новый баланс (₽)</div>
                     <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">📝 Комментарий</div>
                     <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
                 </div>
-
                 <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
             </div>
         </div>
 
-        <!-- SETTINGS -->
         <div class="page" id="page-settings">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
-
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">️ Настройки</div>
                 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
                     <span style="font-size:1.1rem;">💡</span>
                     <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">🎨 Тема оформления</div>
                     <div class="theme-selector">
-                        <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
-                            <div class="theme-icon">🌙</div>
-                            <div>Тёмная</div>
-                        </div>
-                        <div class="theme-option" data-theme="light" onclick="setTheme('light')">
-                            <div class="theme-icon">☀️</div>
-                            <div>Светлая</div>
-                        </div>
-                        <div class="theme-option" data-theme="gold" onclick="setTheme('gold')">
-                            <div class="theme-icon">💎</div>
-                            <div>Золотая</div>
-                        </div>
+                        <div class="theme-option" data-theme="dark" onclick="setTheme('dark')"><div class="theme-icon">🌙</div><div>Тёмная</div></div>
+                        <div class="theme-option" data-theme="light" onclick="setTheme('light')"><div class="theme-icon">️</div><div>Светлая</div></div>
+                        <div class="theme-option" data-theme="gold" onclick="setTheme('gold')"><div class="theme-icon">💎</div><div>Золотая</div></div>
                     </div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
                     <div class="setting-hint">Общий для всех счетов</div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">% от доходов</div>
                     <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">% от расходов</div>
                     <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
                 </div>
-
                 <div class="report-card" style="background:rgba(0,122,255,0.08);">
                     <div class="setting-label" style="margin-bottom:6px;">Формула</div>
                     <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
@@ -1092,55 +429,35 @@ html, body {
                         <span style="color:var(--ios-blue);">💜 Капитал += Выручка</span>
                     </div>
                 </div>
-
                 <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
             </div>
         </div>
-
     </div>
 
-    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
-        <div class="nav-item active" data-page="home" onclick="switchPage('home')">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Главная</span>
-        </div>
-        <div class="nav-item" data-page="report" onclick="switchPage('report')">
-            <span class="nav-icon">📊</span>
-            <span class="nav-label">Отчёт</span>
-        </div>
-        <div class="nav-item" data-page="detail" onclick="switchPage('detail')">
-            <span class="nav-icon">📈</span>
-            <span class="nav-label">Статистика</span>
-        </div>
-        <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
-            <span class="nav-icon">✏️</span>
-            <span class="nav-label">Коррекция</span>
-        </div>
-        <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Настройки</span>
-        </div>
+        <div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
+        <div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
+        <div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Статистика</span></div>
+        <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
+        <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
     </nav>
 </div>
 
-<!-- ACCOUNT SHEET -->
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
     <div class="sheet-handle"></div>
     <div class="sheet-title">Выбор счёта</div>
-    <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
+    <input type="text" id="accountSearch" class="setting-input" placeholder=" Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
     <div id="accountTree"></div>
     <button class="add-btn" onclick="showAddHolder()">➕ Добавить держателя</button>
     <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
 
 <script>
-// ===== TELEGRAM =====
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== SPLASH WITH GOLDEN DIAMOND =====
+// ===== SPLASH =====
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -1151,19 +468,16 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     renderer.setSize(400, 400);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // Realistic diamond geometry
     const geo = new THREE.BufferGeometry();
     const verts = [];
     const segs = 12;
     const topR = 0.5, midR = 1.0, topH = 0.4, botH = 1.0;
 
-    // Table (top flat)
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
         verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR);
     }
-    // Crown
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1172,7 +486,6 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
         verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR);
         verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR);
     }
-    // Pavilion
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1181,7 +494,6 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
 
-    // Golden diamond material
     const mat = new THREE.MeshPhysicalMaterial({
         color: 0xffd700,
         metalness: 0.3,
@@ -1200,12 +512,10 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    // Lighting for golden diamond
     scene.add(new THREE.AmbientLight(0xffffff, 0.4));
     const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
     const l2 = new THREE.PointLight(0xffd700, 1.2, 100); l2.position.set(-5, 3, 5); scene.add(l2);
     const l3 = new THREE.PointLight(0xffffff, 0.8, 100); l3.position.set(0, 5, -5); scene.add(l3);
-    const l4 = new THREE.PointLight(0xffa500, 0.8, 100); l4.position.set(3, -3, 3); scene.add(l4);
 
     function anim() {
         requestAnimationFrame(anim);
@@ -1237,21 +547,14 @@ function showToast(icon, text, duration = 2500) {
 function setTheme(theme) {
     document.body.className = '';
     document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
-    
-    if (theme === 'light') {
-        document.body.classList.add('theme-light');
-    } else if (theme === 'gold') {
-        document.body.classList.add('theme-gold');
-    }
-    
+    if (theme === 'light') document.body.classList.add('theme-light');
+    else if (theme === 'gold') document.body.classList.add('theme-gold');
     const option = document.querySelector(`.theme-option[data-theme="${theme}"]`);
     if (option) option.classList.add('active');
-    
     localStorage.setItem('fl_theme', theme);
     haptic('light');
 }
 
-// Load saved theme
 const savedTheme = localStorage.getItem('fl_theme') || 'dark';
 setTheme(savedTheme);
 
@@ -1261,7 +564,6 @@ function switchPage(name) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     document.querySelector(`.nav-item[data-page="${name}"]`).classList.add('active');
-    
     if (name === 'report') refreshReport();
     if (name === 'detail') refreshDetail();
     if (name === 'adjust') refreshAdjust();
@@ -1298,17 +600,17 @@ const haptic = (type) => {
     }
 };
 
-// ===== STORAGE =====
+// ===== STORAGE - ИСПРАВЛЕНО =====
 const saveLocal = () => {
     try {
         localStorage.setItem('fl_holders', JSON.stringify(holders));
-        localStorage.setItem('fl_ah', activeHolderId);
-        localStorage.setItem('fl_aa', activeAccountId);
+        localStorage.setItem('fl_ah', activeHolderId || '');
+        localStorage.setItem('fl_aa', activeAccountId || '');
         localStorage.setItem('fl_cap', capital.toString());
         localStorage.setItem('fl_reports', JSON.stringify(savedReports));
         localStorage.setItem('fl_ip', incomePercent.toString());
         localStorage.setItem('fl_ep', expensePercent.toString());
-    } catch(e){}
+    } catch(e){ console.error('Save error:', e); }
 };
 
 const loadLocal = () => {
@@ -1316,11 +618,17 @@ const loadLocal = () => {
         const h = localStorage.getItem('fl_holders');
         if (h) {
             holders = JSON.parse(h);
-            activeHolderId = localStorage.getItem('fl_ah');
-            activeAccountId = localStorage.getItem('fl_aa');
-            if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0];
-            const hh = holders[activeHolderId];
-            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null;
+            activeHolderId = localStorage.getItem('fl_ah') || null;
+            activeAccountId = localStorage.getItem('fl_aa') || null;
+            if (!activeHolderId || !holders[activeHolderId]) {
+                activeHolderId = Object.keys(holders)[0] || null;
+            }
+            if (activeHolderId) {
+                const hh = holders[activeHolderId];
+                if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) {
+                    activeAccountId = Object.keys(hh.accounts||{})[0] || null;
+                }
+            }
         } else {
             const hid = 'h_' + Date.now();
             const aid = 'a_' + Date.now();
@@ -1333,7 +641,8 @@ const loadLocal = () => {
         expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5;
         const c = localStorage.getItem('fl_cap');
         if (c !== null) capital = parseFloat(c) || 0;
-    } catch(e){}
+        return true;
+    } catch(e){ console.error('Load error:', e); return false; }
 };
 
 // ===== FIREBASE =====
@@ -1361,7 +670,8 @@ const initFB = () => {
         if (!firebase.apps.length) firebase.initializeApp(cfg);
         userRef = firebase.database().ref(`users/${UID}`);
         useFirebase = true;
-    } catch(e){ useFirebase = false; }
+        return true;
+    } catch(e){ console.error('Firebase init error:', e); useFirebase = false; return false; }
 };
 
 const saveServer = () => {
@@ -1375,7 +685,7 @@ const saveServer = () => {
             const s = calcAll();
             await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() });
             updateSync('synced');
-        } catch(e){ updateSync('error'); } finally { isSyncing = false; }
+        } catch(e){ console.error('Save error:', e); updateSync('error'); } finally { isSyncing = false; }
     }, 500);
 };
 
@@ -1393,19 +703,28 @@ const loadServer = () => {
             incomePercent = d.incomePercent || 7;
             expensePercent = d.expensePercent || 2.5;
             const hh = holders[activeHolderId];
-            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null;
+            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) {
+                activeAccountId = Object.keys(hh.accounts||{})[0] || null;
+            }
             renderAll();
             updateSync('synced');
         } else {
             loadLocal();
             renderAll();
             if (isOnline) saveServer();
+            updateSync('synced');
         }
-    }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); });
+    }).catch(err => {
+        console.error('Load error:', err);
+        loadLocal();
+        renderAll();
+        updateSync('offline');
+    });
 };
 
 const updateSync = (s) => {
     const el = document.getElementById('syncBadge');
+    if (!el) return;
     const map = {
         syncing: { t: '☁️ синхронизация...', c: 'syncing' },
         synced: { t: '☁️ сохранено', c: 'synced' },
@@ -1475,8 +794,11 @@ const renderHome = () => {
     if (!acc || !h) {
         nameEl.textContent = '📂 Выберите счёт';
         document.getElementById('balanceDisplay').textContent = '0 ₽';
-        ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽');
-        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>';
+        ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = '0 ₽';
+        });
+        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>';
         return;
     }
     nameEl.textContent = `${h.name} → ${acc.name}`;
@@ -1545,14 +867,11 @@ const renderReportsList = () => {
         card.className = 'report-card';
         card.innerHTML = `
             <div class="report-header">
-                <div>
-                    <div class="report-date">${dateStr}</div>
-                    <div class="report-time">${timeStr}</div>
-                </div>
+                <div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div>
                 <div class="report-actions">
-                    <button class="report-action share" onclick="shareReport('${key}')">📤</button>
-                    <button class="report-action edit" onclick="editReport('${key}')">✏️</button>
-                    <button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button>
+                    <button class="report-action share" onclick="shareReport('${key}')"></button>
+                    <button class="report-action edit" onclick="editReport('${key}')">️</button>
+                    <button class="report-action delete" onclick="deleteReport('${key}')">️</button>
                 </div>
             </div>
             <div class="report-stats">
@@ -1595,16 +914,12 @@ const renderDetailTree = () => {
         container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>';
         return;
     }
-    let grand = { income: 0, expense: 0, turnover: 0, revenue: 0 };
     keys.forEach(hid => {
         const h = holders[hid];
         if (!h?.accounts) return;
-        let ht = { income: 0, expense: 0, turnover: 0, revenue: 0 };
         const block = document.createElement('div');
-        block.className = 'holder-block';
         block.style.marginBottom = '12px';
         const head = document.createElement('div');
-        head.className = 'holder-head';
         head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;';
         head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`;
         block.appendChild(head);
@@ -1613,9 +928,7 @@ const renderDetailTree = () => {
         Object.values(h.accounts).forEach(a => {
             if (!a) return;
             const s = calcAcc(a, detailPeriod);
-            ht.income += s.totalIncome; ht.expense += s.totalExpense; ht.turnover += s.turnover; ht.revenue += s.revenue;
             const row = document.createElement('div');
-            row.className = 'acc-row';
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';
             row.innerHTML = `
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
@@ -1632,7 +945,6 @@ const renderDetailTree = () => {
         });
         block.appendChild(accs);
         container.appendChild(block);
-        grand.income += ht.income; grand.expense += ht.expense; grand.turnover += ht.turnover; grand.revenue += ht.revenue;
     });
 };
 
@@ -1657,7 +969,7 @@ const refreshSettings = () => {
 // ===== ACTIONS =====
 const doTransaction = (type) => {
     const acc = getAccount();
-    if (!acc) { showToast('⚠️', 'Выберите счёт'); return; }
+    if (!acc) { showToast('️', 'Выберите счёт'); return; }
     const amount = parseFloat(document.getElementById('amountInput').value);
     if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; }
 
@@ -1673,7 +985,7 @@ const doTransaction = (type) => {
 
     if (revenue > 0) {
         capital += revenue;
-        acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() });
+        acc.transactions.push({ type: 'revenue', amount: revenue, desc: 'Капитализация', date: new Date().toISOString() });
     }
 
     document.getElementById('amountInput').value = '';
@@ -1681,9 +993,7 @@ const doTransaction = (type) => {
     renderAll();
     saveServer();
 
-    if (revenue > 0) {
-        setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300);
-    }
+    if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300);
 };
 
 const doFixReport = () => {
@@ -1701,14 +1011,13 @@ const doFixReport = () => {
 
 const doShareCurrentReport = () => {
     const s = calcAll();
-    const now = new Date();
     const text = `📊 Finance Luxe\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
     shareText(text, 'Отчёт');
 };
 
 const doShareDetail = () => {
     const s = calcAll();
-    const text = `📈 Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`;
+    const text = ` Детализация\n\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}\n🔵 ${fmt(s.siteBalance)}`;
     shareText(text, 'Детализация');
 };
 
@@ -1731,7 +1040,7 @@ window.shareReport = (key) => {
     const r = savedReports[key];
     if (!r) return;
     const d = new Date(r.date);
-    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n🟢 ${fmt(r.income)}\n🔴 ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
+    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n🟢 ${fmt(r.income)}\n🔴 ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
     shareText(text, 'Отчёт');
 };
 
@@ -1740,7 +1049,7 @@ window.editReport = (key) => { showToast('✏️', 'Редактирование
 window.deleteReport = (key) => {
     const r = savedReports[key];
     if (!r) return;
-    const confirm = () => {
+    const doDelete = () => {
         delete savedReports[key];
         saveLocal();
         saveServer();
@@ -1749,8 +1058,8 @@ window.deleteReport = (key) => {
         haptic('success');
         showToast('🗑️', 'Удалено');
     };
-    if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); }
-    else { if (confirm('Удалить?')) confirm(); }
+    if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) doDelete(); }); }
+    else { if (confirm('Удалить?')) doDelete(); }
 };
 
 const doSaveAdjust = () => {
@@ -1800,7 +1109,7 @@ window.setPeriod = (p) => {
     haptic('light');
 };
 
-// ===== ACCOUNT SHEET WITH ADD FUNCTIONS =====
+// ===== ACCOUNT SHEET =====
 window.openAccountSheet = () => {
     document.getElementById('accountSearch').value = '';
     renderAccountTree();
@@ -1808,6 +1117,7 @@ window.openAccountSheet = () => {
     document.getElementById('accountSheet').classList.add('active');
     haptic('light');
 };
+
 window.closeAccountSheet = () => {
     document.getElementById('accountOverlay').classList.remove('active');
     document.getElementById('accountSheet').classList.remove('active');
@@ -1816,24 +1126,14 @@ window.closeAccountSheet = () => {
 window.showAddHolder = () => {
     const name = prompt('Введите имя держателя:');
     if (!name || !name.trim()) return;
-    
     const hid = 'h_' + Date.now();
     const aid = 'a_' + Date.now();
     holders[hid] = {
         id: hid,
         name: name.trim(),
-        accounts: {
-            [aid]: {
-                id: aid,
-                name: 'Основной',
-                balance: 0,
-                transactions: [],
-                createdAt: new Date().toISOString()
-            }
-        },
+        accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } },
         createdAt: new Date().toISOString()
     };
-    
     activeHolderId = hid;
     activeAccountId = aid;
     renderAccountTree();
@@ -1881,7 +1181,6 @@ const renderAccountTree = () => {
             row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`;
             block.appendChild(row);
         });
-        // Add account button
         const addAccBtn = document.createElement('button');
         addAccBtn.className = 'add-btn';
         addAccBtn.innerHTML = '➕ Добавить счёт';
@@ -1889,13 +1188,7 @@ const renderAccountTree = () => {
             const accName = prompt('Введите название счёта:');
             if (!accName || !accName.trim()) return;
             const newAid = 'a_' + Date.now();
-            h.accounts[newAid] = {
-                id: newAid,
-                name: accName.trim(),
-                balance: 0,
-                transactions: [],
-                createdAt: new Date().toISOString()
-            };
+            h.accounts[newAid] = { id: newAid, name: accName.trim(), balance: 0, transactions: [], createdAt: new Date().toISOString() };
             activeHolderId = hid;
             activeAccountId = newAid;
             renderAccountTree();
@@ -1917,8 +1210,16 @@ document.getElementById('amountInput').addEventListener('keypress', e => { if (e
 window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
 
-initFB();
-loadServer();
+// Запуск приложения
+try {
+    initFB();
+    loadServer();
+} catch(e) {
+    console.error('Init error:', e);
+    loadLocal();
+    renderAll();
+    updateSync('error');
+}
 </script>
 </body>
 </html>
