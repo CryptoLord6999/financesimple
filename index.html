@@ -184,13 +184,13 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
-<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
+<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName"> Выберите счёт</span><span class="account-chip-arrow">›</span></div>
 <div class="balance-card"><div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div><div class="balance-value" id="balanceDisplay">0 ₽</div><div class="sync-badge" id="syncBadge">☁️ подключение...</div></div>
 <div class="stats-grid">
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions"><button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button><button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button></div>
@@ -198,17 +198,17 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
 <div class="page" id="page-report"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"> Отчёт</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
 <div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label"> Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
 <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
 </div></div>
-<button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
+<button class="btn btn-primary mb-12" onclick="doFixReport()"> Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
 <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
 <div class="section-title">Зафиксированные отчёты</div>
@@ -218,7 +218,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
 <div class="summary-block"><div class="summary-title">Общие показатели</div><div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label"> Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
 </div></div>
 <div class="period-row" id="periodRow">
@@ -241,7 +241,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
-<div class="setting-group"><div class="setting-label"> Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
+<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
 <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
 <div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
 <div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
@@ -249,9 +249,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div></div>
 </div>
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon"></span><span class="nav-label">Главная</span></div>
-<div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
-<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Статистика</span></div>
+<div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon"></span><span class="nav-label">Отчёт</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon"></span><span class="nav-label">Статистика</span></div>
 <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
 </nav>
@@ -273,9 +273,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="bottom-sheet" id="editBalanceSheet">
 <div class="sheet-handle"></div>
 <div class="sheet-title">✏️ Редактировать баланс</div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;"></span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
 <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label"> Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
+<div class="setting-group"><div class="setting-label">📝 Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
 <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
 <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
 </div>
@@ -372,7 +372,7 @@ window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!
 
 const refreshReport = () => { const s = calcAll(); document.getElementById('sumTurnover').textContent = fmt(s.turnover); document.getElementById('sumRevenue').textContent = fmt(s.revenue); document.getElementById('sumIncome').textContent = fmt(s.totalIncome); document.getElementById('sumExpense').textContent = fmt(s.totalExpense); document.getElementById('sumBalance').textContent = fmt(s.totalBalance); document.getElementById('sumCapital').textContent = fmt(capital); document.getElementById('sumSite').textContent = fmt(s.siteBalance); renderReportsList(); checkLastFixed(); };
 const renderReport = refreshReport;
-const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
+const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
 const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
 const renderDetail = refreshDetail;
@@ -388,7 +388,123 @@ window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast
 
 const doFixReport = () => { const s = calcAll(); const now = new Date(); const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, revenue: s.revenue, balance: s.totalBalance, capital, siteBalance: s.siteBalance }; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('✅', 'Отчёт сохранён'); };
 
-// ===== НОВЫЕ ФУНКЦИИ ФОРМИРОВАНИЯ ОТЧЁТОВ С ПОЯСНЕНИЯМИ =====
+// ===== ДЕТАЛИЗИРОВАННЫЕ ОТЧЁТЫ С ПОЛНОЙ ИНФОРМАЦИЕЙ =====
+
+function buildDetailedDetailReport(now) {
+    const periodNames = { today: 'Сегодня', week: 'Последние 7 дней', month: 'Последний месяц', all: 'Всё время' };
+    const periodName = periodNames[detailPeriod] || 'Период';
+    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    const s = calcAll();
+    const holderKeys = Object.keys(holders);
+    const holderCount = holderKeys.length;
+    let totalAccountCount = 0;
+    Object.values(holders).forEach(h => { if (h?.accounts) totalAccountCount += Object.keys(h.accounts).length; });
+    
+    let lines = [];
+    lines.push('═══════════════════════════════');
+    lines.push('      ДЕТАЛИЗАЦИЯ ФИНАНСОВ');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(`📅 Дата: ${dateStr}, ${timeStr}`);
+    lines.push(`📊 Период: ${periodName}`);
+    lines.push(`👥 Держателей: ${holderCount}`);
+    lines.push(`💼 Всего счетов: ${totalAccountCount}`);
+    lines.push('');
+    lines.push('───────────────────────────────');
+    lines.push('   ОБЩИЕ ПОКАЗАТЕЛИ');
+    lines.push('───────────────────────────────');
+    lines.push('');
+    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
+    lines.push('   (сумма всех активных счетов)');
+    lines.push('');
+    lines.push(`💜 Общий капитал: ${fmt(capital)}`);
+    lines.push('   (включая накопленную выручку)');
+    lines.push('');
+    lines.push(` Баланс на сайте: ${fmt(s.siteBalance)}`);
+    lines.push('   (капитал − баланс на счетах)');
+    lines.push('');
+    
+    let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
+    
+    holderKeys.forEach((hid, holderIndex) => {
+        const h = holders[hid];
+        if (!h || !h.accounts) return;
+        
+        const accKeys = Object.keys(h.accounts);
+        const accountCount = accKeys.length;
+        
+        lines.push('═══════════════════════════════');
+        lines.push(`👤 ДЕРЖАТЕЛЬ ${holderIndex + 1}: ${h.name}`);
+        lines.push(`   Счетов: ${accountCount}`);
+        lines.push('═══════════════════════════════');
+        lines.push('');
+        
+        let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0, balance: 0 };
+        
+        // Сводные показатели держателя
+        accKeys.forEach(aid => {
+            const acc = h.accounts[aid];
+            if (!acc) return;
+            const accStats = calcAcc(acc, detailPeriod);
+            holderTotal.income += accStats.totalIncome;
+            holderTotal.expense += accStats.totalExpense;
+            holderTotal.turnover += accStats.turnover;
+            holderTotal.revenue += accStats.revenue;
+            holderTotal.balance += acc.balance || 0;
+        });
+        
+        lines.push(`📊 СВОДКА ПО ДЕРЖАТЕЛЮ "${h.name}":`);
+        lines.push('───────────────────────────────');
+        lines.push(`   Оборот:   ${fmt(holderTotal.turnover)}`);
+        lines.push(`   Доходы:   ${fmt(holderTotal.income)}`);
+        lines.push(`   Расходы:  ${fmt(holderTotal.expense)}`);
+        lines.push(`   Выручка:  ${fmt(holderTotal.revenue)}`);
+        lines.push(`   Баланс:   ${fmt(holderTotal.balance)}`);
+        lines.push('');
+        
+        // Детализация по счетам
+        lines.push(`💼 ДЕТАЛИЗАЦИЯ ПО СЧЕТАМ:`);
+        lines.push('───────────────────────────────');
+        lines.push('');
+        
+        accKeys.forEach((aid, accIndex) => {
+            const acc = h.accounts[aid];
+            if (!acc) return;
+            const accStats = calcAcc(acc, detailPeriod);
+            
+            lines.push(`   Счёт ${accIndex + 1}: ${acc.name}`);
+            lines.push(`   ────────────────────────`);
+            lines.push(`   Баланс:   ${fmt(acc.balance)}`);
+            lines.push(`   Оборот:   ${fmt(accStats.turnover)}`);
+            lines.push(`   Доходы:   ${fmt(accStats.totalIncome)}`);
+            lines.push(`   Расходы:  ${fmt(accStats.totalExpense)}`);
+            lines.push(`   Выручка:  ${fmt(accStats.revenue)}`);
+            lines.push('');
+        });
+        
+        grandTotal.income += holderTotal.income;
+        grandTotal.expense += holderTotal.expense;
+        grandTotal.turnover += holderTotal.turnover;
+        grandTotal.revenue += holderTotal.revenue;
+    });
+    
+    lines.push('═══════════════════════════════');
+    lines.push('   ОБЩИЙ ИТОГ ЗА ПЕРИОД');
+    lines.push('═══════════════════════════════');
+    lines.push('');
+    lines.push(`💹 Общий оборот: ${fmt(grandTotal.turnover)}`);
+    lines.push(`🟢 Общие доходы: ${fmt(grandTotal.income)}`);
+    lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
+    lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
+    lines.push('');
+    lines.push('═══════════════════════════════');
+    lines.push('        Findr • Решения для бизнеса');
+    lines.push('═══════════════════════════════');
+    
+    return lines.join('\n');
+}
 
 function buildDetailedReport(s, now, title) {
     const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
@@ -402,9 +518,10 @@ function buildDetailedReport(s, now, title) {
     lines.push('       ФИНАНСОВЫЙ ОТЧЁТ');
     lines.push('═══════════════════════════════');
     lines.push('');
-    lines.push(` ${title}`);
-    lines.push(` Дата: ${dateStr}, ${timeStr}`);
-    lines.push(`👥 Держателей: ${holderCount} | Счетов: ${accountCount}`);
+    lines.push(`📋 ${title}`);
+    lines.push(`📅 Дата: ${dateStr}, ${timeStr}`);
+    lines.push(`👥 Держателей: ${holderCount}`);
+    lines.push(`💼 Всего счетов: ${accountCount}`);
     lines.push('');
     lines.push('───────────────────────────────');
     lines.push('   ОСНОВНЫЕ ПОКАЗАТЕЛИ');
@@ -413,7 +530,7 @@ function buildDetailedReport(s, now, title) {
     lines.push(`💹 Общий оборот: ${fmt(s.turnover)}`);
     lines.push('   (сумма всех доходов и расходов)');
     lines.push('');
-    lines.push(`🟢 Доходы: ${fmt(s.totalIncome)}`);
+    lines.push(` Доходы: ${fmt(s.totalIncome)}`);
     lines.push('   (все поступления на счета)');
     lines.push('');
     lines.push(`🔴 Расходы: ${fmt(s.totalExpense)}`);
@@ -426,7 +543,7 @@ function buildDetailedReport(s, now, title) {
     lines.push('   БАЛАНСЫ И КАПИТАЛ');
     lines.push('───────────────────────────────');
     lines.push('');
-    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
+    lines.push(` Баланс на счетах: ${fmt(s.totalBalance)}`);
     lines.push('   (сумма всех активных счетов)');
     lines.push('');
     lines.push(`💜 Общий капитал: ${fmt(capital)}`);
@@ -452,7 +569,7 @@ function buildDetailedReportForSaved(r, now) {
     lines.push('   ЗАФИКСИРОВАННЫЙ ОТЧЁТ');
     lines.push('═══════════════════════════════');
     lines.push('');
-    lines.push(`📅 Дата отчёта: ${dateStr}, ${timeStr}`);
+    lines.push(` Дата отчёта: ${dateStr}, ${timeStr}`);
     lines.push(`📤 Сформирован: ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`);
     lines.push('');
     lines.push('───────────────────────────────');
@@ -483,100 +600,6 @@ function buildDetailedReportForSaved(r, now) {
     lines.push('');
     lines.push(` Баланс на сайте: ${fmt(r.siteBalance)}`);
     lines.push('   (капитал − баланс на счетах)');
-    lines.push('');
-    lines.push('═══════════════════════════════');
-    lines.push('        Findr • Решения для бизнеса');
-    lines.push('═══════════════════════════════');
-    
-    return lines.join('\n');
-}
-
-function buildDetailedDetailReport(now) {
-    const periodNames = { today: 'Сегодня', week: 'Последние 7 дней', month: 'Последний месяц', all: 'Всё время' };
-    const periodName = periodNames[detailPeriod] || 'Период';
-    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-    
-    const s = calcAll();
-    const holderCount = Object.keys(holders).length;
-    let accountCount = 0;
-    Object.values(holders).forEach(h => { if (h?.accounts) accountCount += Object.keys(h.accounts).length; });
-    
-    let lines = [];
-    lines.push('═══════════════════════════════');
-    lines.push('      ДЕТАЛИЗАЦИЯ ФИНАНСОВ');
-    lines.push('═══════════════════════════════');
-    lines.push('');
-    lines.push(`📅 Дата: ${dateStr}, ${timeStr}`);
-    lines.push(`📊 Период: ${periodName}`);
-    lines.push(`👥 Держателей: ${holderCount} | Счетов: ${accountCount}`);
-    lines.push('');
-    lines.push('───────────────────────────────');
-    lines.push('   ОБЩИЕ ПОКАЗАТЕЛИ');
-    lines.push('───────────────────────────────');
-    lines.push('');
-    lines.push(`⚪ Баланс на счетах: ${fmt(s.totalBalance)}`);
-    lines.push('   (сумма всех активных счетов)');
-    lines.push('');
-    lines.push(`💜 Общий капитал: ${fmt(capital)}`);
-    lines.push('   (включая накопленную выручку)');
-    lines.push('');
-    lines.push(`🔵 Баланс на сайте: ${fmt(s.siteBalance)}`);
-    lines.push('   (капитал − баланс на счетах)');
-    lines.push('');
-    
-    let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
-    
-    Object.values(holders).forEach(h => {
-        if (!h || !h.accounts) return;
-        lines.push('═══════════════════════════════');
-        lines.push(`👤 ДЕРЖАТЕЛЬ: ${h.name}`);
-        lines.push('═══════════════════════════════');
-        lines.push('');
-        
-        let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
-        
-        Object.values(h.accounts).forEach(acc => {
-            if (!acc) return;
-            accountCount++;
-            const accStats = calcAcc(acc, detailPeriod);
-            holderTotal.income += accStats.totalIncome;
-            holderTotal.expense += accStats.totalExpense;
-            holderTotal.turnover += accStats.turnover;
-            holderTotal.revenue += accStats.revenue;
-            
-            lines.push(`💼 Счёт: ${acc.name}`);
-            lines.push('───────────────────────────────');
-            lines.push(`   Текущий баланс: ${fmt(acc.balance)}`);
-            lines.push(`   Оборот:         ${fmt(accStats.turnover)}`);
-            lines.push(`   Доходы:         ${fmt(accStats.totalIncome)}`);
-            lines.push(`   Расходы:        ${fmt(accStats.totalExpense)}`);
-            lines.push(`   Выручка:        ${fmt(accStats.revenue)}`);
-            lines.push('');
-        });
-        
-        lines.push(`📊 ИТОГО ПО ДЕРЖАТЕЛЮ "${h.name}":`);
-        lines.push('───────────────────────────────');
-        lines.push(`   Оборот:   ${fmt(holderTotal.turnover)}`);
-        lines.push(`   Доходы:   ${fmt(holderTotal.income)}`);
-        lines.push(`   Расходы:  ${fmt(holderTotal.expense)}`);
-        lines.push(`   Выручка:  ${fmt(holderTotal.revenue)}`);
-        lines.push('');
-        
-        grandTotal.income += holderTotal.income;
-        grandTotal.expense += holderTotal.expense;
-        grandTotal.turnover += holderTotal.turnover;
-        grandTotal.revenue += holderTotal.revenue;
-    });
-    
-    lines.push('═══════════════════════════════');
-    lines.push('   ОБЩИЙ ИТОГ ЗА ПЕРИОД');
-    lines.push('═══════════════════════════════');
-    lines.push('');
-    lines.push(`💹 Общий оборот: ${fmt(grandTotal.turnover)}`);
-    lines.push(` Общие доходы: ${fmt(grandTotal.income)}`);
-    lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
-    lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
     lines.push('');
     lines.push('═══════════════════════════════');
     lines.push('        Findr • Решения для бизнеса');
@@ -625,7 +648,7 @@ window.editReport = (key) => { showToast('✏️', 'Редактирование
 
 window.deleteReport = (key) => { const r = savedReports[key]; if (!r) return; const confirm = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); } else { if (confirm('Удалить?')) confirm(); } };
 
-const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
+const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
 const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
 
@@ -639,9 +662,9 @@ window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) 
 
 window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); haptic('light'); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); };
 
-window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const holderKeys = Object.keys(holders); if (holderKeys.length <= 1) { showToast('️', 'Нельзя удалить последнего держателя'); haptic('error'); return; } const accCount = Object.keys(h.accounts || {}).length; const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid) { const otherKeys = holderKeys.filter(k => k !== hid); activeHolderId = otherKeys[0]; const otherHolder = holders[activeHolderId]; activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Держатель "${h.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
+window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const holderKeys = Object.keys(holders); if (holderKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последнего держателя'); haptic('error'); return; } const accCount = Object.keys(h.accounts || {}).length; const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid) { const otherKeys = holderKeys.filter(k => k !== hid); activeHolderId = otherKeys[0]; const otherHolder = holders[activeHolderId]; activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Держатель "${h.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
-window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
+window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
 const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge">👤</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')"><span>🗑️</span><span>Удалить счёт</span></button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', `Выбран: ${a.name}`); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const editActions = document.createElement('div'); editActions.className = 'edit-actions'; editActions.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(editActions); } container.appendChild(block); }); };
 
