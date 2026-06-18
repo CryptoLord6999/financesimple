@@ -30,6 +30,30 @@
     --radius-ios-sm: 12px;
 }
 
+/* Light Theme */
+.theme-light {
+    --ios-bg: #F2F2F7;
+    --ios-card: rgba(255, 255, 255, 0.8);
+    --ios-card-solid: #FFFFFF;
+    --ios-separator: rgba(120, 120, 128, 0.2);
+    --ios-text: #000000;
+    --ios-text-secondary: rgba(60, 60, 67, 0.6);
+}
+
+/* Gold Theme */
+.theme-gold {
+    --ios-bg: #0a0a0f;
+    --ios-card: rgba(26, 26, 46, 0.6);
+    --ios-card-solid: #1a1a2e;
+    --ios-blue: #d4af37;
+    --ios-green: #4ade80;
+    --ios-red: #fb7185;
+    --ios-orange: #fbbf24;
+    --ios-separator: rgba(212, 175, 55, 0.2);
+    --ios-text: #f5e6c8;
+    --ios-text-secondary: rgba(184, 134, 11, 0.6);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -45,6 +69,7 @@ html, body {
     color: var(--ios-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ===== SPLASH SCREEN ===== */
@@ -91,6 +116,7 @@ html, body {
     display: flex;
     flex-direction: column;
     background: var(--ios-bg);
+    transition: background 0.3s ease;
 }
 
 /* ===== PAGES ===== */
@@ -133,6 +159,12 @@ html, body {
     margin-bottom: 16px;
     position: relative;
     overflow: hidden;
+}
+.theme-light .balance-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f2f2f7 100%);
+}
+.theme-gold .balance-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 100%);
 }
 .balance-card::before {
     content: '';
@@ -430,6 +462,12 @@ html, body {
     max-height: 85vh;
     overflow-y: auto;
 }
+.theme-light .bottom-sheet {
+    background: #ffffff;
+}
+.theme-gold .bottom-sheet {
+    background: #1a1a2e;
+}
 .bottom-sheet.active {
     transform: translateY(0);
 }
@@ -440,11 +478,36 @@ html, body {
     border-radius: 3px;
     margin: 0 auto 16px;
 }
+.theme-light .sheet-handle {
+    background: #c7c7cc;
+}
 .sheet-title {
     font-size: 1.1rem;
     font-weight: 600;
     text-align: center;
     margin-bottom: 16px;
+}
+
+/* ===== ADD BUTTONS ===== */
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    background: var(--ios-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    width: 100%;
+}
+.add-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
 }
 
 /* ===== TOAST ===== */
@@ -470,6 +533,10 @@ html, body {
     animation: toastIn 0.3s ease;
     pointer-events: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.theme-light .toast {
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
 }
 .toast.out {
     animation: toastOut 0.3s ease forwards;
@@ -692,6 +759,36 @@ html, body {
     font-size: 0.65rem;
     color: var(--ios-text-secondary);
     margin-top: 4px;
+}
+
+/* Theme Selector */
+.theme-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.theme-option {
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid var(--ios-separator);
+    background: var(--ios-card);
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.theme-option.active {
+    border-color: var(--ios-blue);
+    background: rgba(0, 122, 255, 0.1);
+}
+.theme-option:active {
+    transform: scale(0.95);
+}
+.theme-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
 }
 
 /* ===== SYNC BADGE ===== */
@@ -955,6 +1052,24 @@ html, body {
                 </div>
 
                 <div class="setting-group">
+                    <div class="setting-label">🎨 Тема оформления</div>
+                    <div class="theme-selector">
+                        <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+                            <div class="theme-icon">🌙</div>
+                            <div>Тёмная</div>
+                        </div>
+                        <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+                            <div class="theme-icon">☀️</div>
+                            <div>Светлая</div>
+                        </div>
+                        <div class="theme-option" data-theme="gold" onclick="setTheme('gold')">
+                            <div class="theme-icon">💎</div>
+                            <div>Золотая</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
                     <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
                     <div class="setting-hint">Общий для всех счетов</div>
@@ -995,7 +1110,7 @@ html, body {
             <span class="nav-label">Отчёт</span>
         </div>
         <div class="nav-item" data-page="detail" onclick="switchPage('detail')">
-            <span class="nav-icon"></span>
+            <span class="nav-icon">📈</span>
             <span class="nav-label">Статистика</span>
         </div>
         <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
@@ -1016,6 +1131,7 @@ html, body {
     <div class="sheet-title">Выбор счёта</div>
     <input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
     <div id="accountTree"></div>
+    <button class="add-btn" onclick="showAddHolder()">➕ Добавить держателя</button>
     <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
 
@@ -1024,7 +1140,7 @@ html, body {
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== SPLASH WITH REALISTIC DIAMOND =====
+// ===== SPLASH WITH GOLDEN DIAMOND =====
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -1065,29 +1181,31 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
 
-    // Realistic diamond material - clear with slight blue tint
+    // Golden diamond material
     const mat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 0,
-        roughness: 0,
-        transmission: 0.95,
+        color: 0xffd700,
+        metalness: 0.3,
+        roughness: 0.1,
+        transmission: 0.6,
         thickness: 0.5,
         ior: 2.417,
         transparent: true,
         opacity: 1,
         side: THREE.DoubleSide,
         clearcoat: 1,
-        clearcoatRoughness: 0
+        clearcoatRoughness: 0.1,
+        emissive: 0xffa500,
+        emissiveIntensity: 0.2
     });
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    // Lighting for realistic diamond
+    // Lighting for golden diamond
     scene.add(new THREE.AmbientLight(0xffffff, 0.4));
     const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
-    const l2 = new THREE.PointLight(0xe0f7ff, 1.0, 100); l2.position.set(-5, 3, 5); scene.add(l2);
+    const l2 = new THREE.PointLight(0xffd700, 1.2, 100); l2.position.set(-5, 3, 5); scene.add(l2);
     const l3 = new THREE.PointLight(0xffffff, 0.8, 100); l3.position.set(0, 5, -5); scene.add(l3);
-    const l4 = new THREE.PointLight(0xffffff, 0.6, 100); l4.position.set(3, -3, 3); scene.add(l4);
+    const l4 = new THREE.PointLight(0xffa500, 0.8, 100); l4.position.set(3, -3, 3); scene.add(l4);
 
     function anim() {
         requestAnimationFrame(anim);
@@ -1114,6 +1232,28 @@ function showToast(icon, text, duration = 2500) {
         setTimeout(() => toast.remove(), 300);
     }, duration);
 }
+
+// ===== THEME =====
+function setTheme(theme) {
+    document.body.className = '';
+    document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
+    
+    if (theme === 'light') {
+        document.body.classList.add('theme-light');
+    } else if (theme === 'gold') {
+        document.body.classList.add('theme-gold');
+    }
+    
+    const option = document.querySelector(`.theme-option[data-theme="${theme}"]`);
+    if (option) option.classList.add('active');
+    
+    localStorage.setItem('fl_theme', theme);
+    haptic('light');
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('fl_theme') || 'dark';
+setTheme(savedTheme);
 
 // ===== NAVIGATION =====
 function switchPage(name) {
@@ -1660,7 +1800,7 @@ window.setPeriod = (p) => {
     haptic('light');
 };
 
-// ===== ACCOUNT SHEET =====
+// ===== ACCOUNT SHEET WITH ADD FUNCTIONS =====
 window.openAccountSheet = () => {
     document.getElementById('accountSearch').value = '';
     renderAccountTree();
@@ -1671,6 +1811,37 @@ window.openAccountSheet = () => {
 window.closeAccountSheet = () => {
     document.getElementById('accountOverlay').classList.remove('active');
     document.getElementById('accountSheet').classList.remove('active');
+};
+
+window.showAddHolder = () => {
+    const name = prompt('Введите имя держателя:');
+    if (!name || !name.trim()) return;
+    
+    const hid = 'h_' + Date.now();
+    const aid = 'a_' + Date.now();
+    holders[hid] = {
+        id: hid,
+        name: name.trim(),
+        accounts: {
+            [aid]: {
+                id: aid,
+                name: 'Основной',
+                balance: 0,
+                transactions: [],
+                createdAt: new Date().toISOString()
+            }
+        },
+        createdAt: new Date().toISOString()
+    };
+    
+    activeHolderId = hid;
+    activeAccountId = aid;
+    renderAccountTree();
+    renderAll();
+    saveLocal();
+    saveServer();
+    haptic('success');
+    showToast('✅', 'Держатель добавлен');
 };
 
 const renderAccountTree = () => {
@@ -1710,6 +1881,31 @@ const renderAccountTree = () => {
             row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmtShort(a.balance)}</span>`;
             block.appendChild(row);
         });
+        // Add account button
+        const addAccBtn = document.createElement('button');
+        addAccBtn.className = 'add-btn';
+        addAccBtn.innerHTML = '➕ Добавить счёт';
+        addAccBtn.onclick = () => {
+            const accName = prompt('Введите название счёта:');
+            if (!accName || !accName.trim()) return;
+            const newAid = 'a_' + Date.now();
+            h.accounts[newAid] = {
+                id: newAid,
+                name: accName.trim(),
+                balance: 0,
+                transactions: [],
+                createdAt: new Date().toISOString()
+            };
+            activeHolderId = hid;
+            activeAccountId = newAid;
+            renderAccountTree();
+            renderAll();
+            saveLocal();
+            saveServer();
+            haptic('success');
+            showToast('✅', 'Счёт добавлен');
+        };
+        block.appendChild(addAccBtn);
         container.appendChild(block);
     });
 };
