@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Finance Luxe</title>
+<title>Findr</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
@@ -68,20 +68,43 @@ html, body {
     height: 180px;
     filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15));
 }
+
+/* Анимация текста Findr */
 .splash-title {
     font-family: 'Inter', -apple-system, sans-serif;
-    font-size: 1.75rem;
-    font-weight: 600;
+    font-size: 2.5rem;
+    font-weight: 700;
     color: #1c1c1e;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: titleReveal 1s ease-out 0.5s forwards;
 }
+
 .splash-sub {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #8E8E93;
-    letter-spacing: 0.05em;
-    margin-top: 0.25rem;
+    letter-spacing: 0.08em;
+    margin-top: 0.5rem;
     font-weight: 400;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: subtitleReveal 0.8s ease-out 1s forwards;
+}
+
+@keyframes titleReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes subtitleReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ===== APP LAYOUT ===== */
@@ -748,7 +771,7 @@ html, body {
 <!-- SPLASH -->
 <div id="splash">
     <canvas id="splashCanvas"></canvas>
-    <div class="splash-title">Finance Luxe</div>
+    <div class="splash-title">Findr</div>
     <div class="splash-sub">Решения для бизнеса</div>
 </div>
 
@@ -995,7 +1018,7 @@ html, body {
             <span class="nav-label">Отчёт</span>
         </div>
         <div class="nav-item" data-page="detail" onclick="switchPage('detail')">
-            <span class="nav-icon"></span>
+            <span class="nav-icon">📈</span>
             <span class="nav-label">Статистика</span>
         </div>
         <div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
@@ -1035,7 +1058,7 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     renderer.setSize(400, 400);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // Realistic diamond geometry
+    // Diamond geometry
     const geo = new THREE.BufferGeometry();
     const verts = [];
     const segs = 12;
@@ -1065,29 +1088,42 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
 
-    // Realistic diamond material - clear with slight blue tint
-    const mat = new THREE.MeshPhysicalMaterial({
+    // Realistic diamond material using MeshPhongMaterial
+    const mat = new THREE.MeshPhongMaterial({
         color: 0xffffff,
-        metalness: 0,
-        roughness: 0,
-        transmission: 0.95,
-        thickness: 0.5,
-        ior: 2.417,
+        specular: 0xffffff,
+        shininess: 150,
         transparent: true,
-        opacity: 1,
+        opacity: 0.85,
         side: THREE.DoubleSide,
-        clearcoat: 1,
-        clearcoatRoughness: 0
+        reflectivity: 1,
+        refractionRatio: 0.98
     });
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    // Lighting for realistic diamond
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-    const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
-    const l2 = new THREE.PointLight(0xe0f7ff, 1.0, 100); l2.position.set(-5, 3, 5); scene.add(l2);
-    const l3 = new THREE.PointLight(0xffffff, 0.8, 100); l3.position.set(0, 5, -5); scene.add(l3);
-    const l4 = new THREE.PointLight(0xffffff, 0.6, 100); l4.position.set(3, -3, 3); scene.add(l4);
+    // Enhanced lighting for realistic diamond
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    
+    const l1 = new THREE.PointLight(0xffffff, 1.5, 100);
+    l1.position.set(5, 5, 5);
+    scene.add(l1);
+    
+    const l2 = new THREE.PointLight(0xe0f7ff, 1.2, 100);
+    l2.position.set(-5, 3, 5);
+    scene.add(l2);
+    
+    const l3 = new THREE.PointLight(0xffffff, 1.0, 100);
+    l3.position.set(0, 5, -5);
+    scene.add(l3);
+    
+    const l4 = new THREE.PointLight(0xfff5e0, 0.8, 100);
+    l4.position.set(3, -3, 3);
+    scene.add(l4);
+    
+    const l5 = new THREE.PointLight(0xe0e0ff, 0.6, 100);
+    l5.position.set(-3, -3, -3);
+    scene.add(l5);
 
     function anim() {
         requestAnimationFrame(anim);
@@ -1099,7 +1135,7 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
     setTimeout(() => {
         document.getElementById('splash').classList.add('hide');
-    }, 3000);
+    }, 3500);
 })();
 
 // ===== TOAST =====
@@ -1562,7 +1598,7 @@ const doFixReport = () => {
 const doShareCurrentReport = () => {
     const s = calcAll();
     const now = new Date();
-    const text = `📊 Finance Luxe\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
+    const text = `📊 Findr\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
     shareText(text, 'Отчёт');
 };
 
