@@ -9,8 +9,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#f5f7fa 0%,#e8ecf1 100%);color:#2c3e50;-webkit-font-smoothing:antialiased;min-height:100vh}
-.glass-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);box-shadow:0 8px 32px rgba(0,0,0,0.05)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#2c3e50;-webkit-font-smoothing:antialiased;min-height:100vh}
+.glass-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.9);box-shadow:0 8px 32px rgba(0,0,0,0.1)}
 .input-premium{background:transparent;border:none;border-bottom:2px solid #cbd5e0;color:#2c3e50;font-size:1.5rem;font-weight:300;text-align:center;outline:none;transition:border-color 0.3s ease}
 .input-premium:focus{border-bottom-color:#667eea}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -18,13 +18,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .reset-btn{opacity:0.4;transition:opacity 0.3s ease}
 .reset-btn:hover{opacity:0.8}
-.sync-indicator{font-size:0.75rem;color:#718096;margin-top:0.5rem;text-align:center}
-.sync-indicator.syncing{color:#667eea}
-.sync-indicator.synced{color:#48bb78}
-.sync-indicator.error{color:#f56565}
-.sync-indicator.warning{color:#ed8936}
+.sync-indicator{font-size:0.75rem;color:#fff;margin-top:0.5rem;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,0.2)}
+.sync-indicator.syncing{color:#ffd700}
+.sync-indicator.synced{color:#90EE90}
+.sync-indicator.error{color:#ff6b6b}
+.sync-indicator.warning{color:#ffa500}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.75rem;width:100%}
-.stat-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.6rem 0.4rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.03);display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:3.5rem}
+.stat-card{background:rgba(255,255,255,0.95);border:1px solid rgba(255,255,255,0.9);border-radius:0.875rem;padding:0.6rem 0.4rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:3.5rem}
 .stat-label{font-size:0.6rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.03em}
 .stat-value{font-size:0.95rem;font-weight:600;margin-top:0.15rem;word-break:break-word}
 .income-color{color:#48bb78}
@@ -34,27 +34,27 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .turnover-color{color:#4299e1}
 .site-balance-color{color:#667eea}
 .button-group{display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;justify-content:center}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;animation:fadeIn 0.3s ease-out}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;animation:fadeIn 0.3s ease-out;backdrop-filter:blur(4px)}
 .modal.active{display:flex;align-items:flex-end}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-content{width:100%;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.8);border-radius:1.5rem 1.5rem 0 0;padding:1.25rem 1rem 2rem;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease-out;box-shadow:0 -8px 32px rgba(0,0,0,0.1)}
+.modal-content{width:100%;background:linear-gradient(135deg,#f5f7fa 0%,#e8ecf1 100%);border-top:1px solid rgba(255,255,255,0.9);border-radius:1.5rem 1.5rem 0 0;padding:1.25rem 1rem 2rem;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease-out;box-shadow:0 -8px 32px rgba(0,0,0,0.2)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-close{width:2.5rem;height:0.3rem;background:rgba(0,0,0,0.1);border-radius:0.15rem;margin:0 auto 0.75rem}
 .modal-title{font-size:1.35rem;font-weight:700;text-align:center;margin-bottom:1rem;color:#2c3e50}
-.report-item{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.report-item{background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .report-label{font-size:0.7rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem}
 .report-value{font-size:1.25rem;font-weight:700;color:#2c3e50}
 .report-divider{height:1px;background:rgba(0,0,0,0.08);margin:0.75rem 0}
-.settings-input-group{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.settings-input-group{background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:0.875rem;padding:0.75rem 1rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .settings-input-label{font-size:0.7rem;color:#718096;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;display:block}
 .settings-input{width:100%;background:transparent;border:none;border-bottom:2px solid #667eea;color:#2c3e50;font-size:1.25rem;font-weight:600;text-align:center;outline:none;padding:0.35rem 0}
 .settings-input-hint{font-size:0.7rem;color:#a0aec0;margin-top:0.35rem}
 .button-row{display:flex;gap:0.5rem;margin-top:0.75rem}
 .button-row button{flex:1;padding:0.75rem;border-radius:0.875rem;font-weight:500;font-size:0.9rem}
-.save-report-btn{width:100%;padding:0.75rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:0.875rem;font-weight:600;margin-top:0.75rem;box-shadow:0 4px 12px rgba(102,126,234,0.3);font-size:0.9rem}
+.save-report-btn{width:100%;padding:0.75rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:0.875rem;font-weight:600;margin-top:0.75rem;box-shadow:0 4px 12px rgba(102,126,234,0.4);font-size:0.9rem}
 .save-report-btn:active{transform:scale(0.98)}
-.adjustment-info{background:rgba(102,126,234,0.08);border:1px solid rgba(102,126,234,0.2);border-radius:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#4c51bf;line-height:1.4}
-.report-list-item{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.adjustment-info{background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#4c51bf;line-height:1.4}
+.report-list-item{background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .report-list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
 .report-list-date{font-size:0.9rem;font-weight:600;color:#2c3e50}
 .report-list-time{font-size:0.7rem;color:#a0aec0;margin-top:0.15rem}
@@ -67,30 +67,30 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .report-stat{display:flex;justify-content:space-between;padding:0.25rem 0}
 .report-stat-label{color:#718096}
 .report-stat-value{font-weight:600}
-.summary-card{background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem;padding:1rem;margin-bottom:0.75rem}
+.summary-card{background:linear-gradient(135deg,rgba(102,126,234,0.15) 0%,rgba(118,75,162,0.15) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem;padding:1rem;margin-bottom:0.75rem}
 .summary-title{font-size:0.85rem;font-weight:600;color:#4c51bf;margin-bottom:0.5rem;text-align:center}
 .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.4rem}
 .summary-item{text-align:center;padding:0.5rem 0.25rem;border-radius:0.65rem;transition:background 0.2s;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:3.5rem}
 .summary-label{font-size:0.65rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em}
 .summary-value{font-size:1.1rem;font-weight:700;margin-top:0.15rem;word-break:break-word}
-.summary-item-wide{grid-column:span 2;background:linear-gradient(135deg,rgba(102,126,234,0.08) 0%,rgba(118,75,162,0.08) 100%);border:1px solid rgba(102,126,234,0.2);padding:0.75rem 0.5rem}
+.summary-item-wide{grid-column:span 2;background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.2);padding:0.75rem 0.5rem}
 .empty-reports-message{padding:2rem 1rem;text-align:center;color:#a0aec0;font-size:0.85rem}
-.close-modal-btn{width:100%;padding:0.75rem;background:rgba(226,232,240,0.8);color:#4a5568;border-radius:0.875rem;font-weight:500;font-size:0.9rem;margin-top:0.75rem}
+.close-modal-btn{width:100%;padding:0.75rem;background:rgba(226,232,240,0.9);color:#4a5568;border-radius:0.875rem;font-weight:500;font-size:0.9rem;margin-top:0.75rem}
 .close-modal-btn:active{transform:scale(0.98)}
-.account-selector-btn{width:100%;background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;padding:0.75rem 1rem;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
-.account-selector-btn:hover{background:rgba(255,255,255,0.9)}
+.account-selector-btn{width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.9);border-radius:1rem;padding:0.75rem 1rem;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.account-selector-btn:hover{background:rgba(255,255,255,1);transform:translateY(-1px)}
 .account-selector-btn:active{transform:scale(0.99)}
 .selector-path{display:flex;align-items:center;gap:0.4rem;font-size:0.9rem;font-weight:500;color:#2c3e50;flex:1;min-width:0}
 .selector-path-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .selector-arrow{color:#a0aec0;font-size:1.2rem;flex-shrink:0}
-.search-input{width:100%;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.75rem;padding:0.65rem 0.85rem;font-size:0.9rem;color:#2c3e50;outline:none;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.search-input{width:100%;background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:0.75rem;padding:0.65rem 0.85rem;font-size:0.9rem;color:#2c3e50;outline:none;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .search-input:focus{border-color:#667eea}
 .holder-group{margin-bottom:0.5rem}
-.holder-header{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);border:1px solid rgba(159,122,234,0.2);border-radius:0.75rem;padding:0.6rem 0.85rem;cursor:pointer;transition:all 0.2s}
-.holder-header:hover{background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%)}
+.holder-header{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%);border:1px solid rgba(159,122,234,0.3);border-radius:0.75rem;padding:0.6rem 0.85rem;cursor:pointer;transition:all 0.2s}
+.holder-header:hover{background:linear-gradient(135deg,rgba(159,122,234,0.2) 0%,rgba(102,126,234,0.2) 100%)}
 .holder-header-left{display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0}
 .holder-name{font-weight:600;color:#4c51bf;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.holder-count{font-size:0.7rem;color:#718096;background:rgba(255,255,255,0.6);padding:0.15rem 0.5rem;border-radius:0.5rem}
+.holder-count{font-size:0.7rem;color:#718096;background:rgba(255,255,255,0.9);padding:0.15rem 0.5rem;border-radius:0.5rem}
 .holder-actions{display:flex;gap:0.3rem;align-items:center}
 .holder-toggle{color:#718096;font-size:0.9rem;transition:transform 0.2s}
 .holder-toggle.expanded{transform:rotate(90deg)}
@@ -98,11 +98,11 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .holder-action-icon:hover{background:rgba(102,126,234,0.2)}
 .holder-delete{padding:0.2rem 0.4rem;background:rgba(245,101,101,0.1);color:#f56565;border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer}
 .holder-delete:hover{background:rgba(245,101,101,0.2)}
-.accounts-list{margin-left:0.5rem;margin-top:0.3rem;padding-left:0.75rem;border-left:2px solid rgba(159,122,234,0.2);display:none}
+.accounts-list{margin-left:0.5rem;margin-top:0.3rem;padding-left:0.75rem;border-left:2px solid rgba(159,122,234,0.3);display:none}
 .accounts-list.expanded{display:block}
-.account-item{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.75rem;margin-bottom:0.3rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.65rem;cursor:pointer;transition:all 0.2s}
-.account-item:hover{background:rgba(255,255,255,0.9)}
-.account-item.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
+.account-item{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.75rem;margin-bottom:0.3rem;background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:0.65rem;cursor:pointer;transition:all 0.2s}
+.account-item:hover{background:rgba(255,255,255,1)}
+.account-item.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.4)}
 .account-item.active .account-balance{color:rgba(255,255,255,0.9)}
 .account-item.active .account-edit,.account-item.active .account-delete{background:rgba(255,255,255,0.2);color:white}
 .account-item-left{display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0}
@@ -112,35 +112,35 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .account-edit:hover{background:rgba(102,126,234,0.2)}
 .account-delete{padding:0.2rem 0.4rem;background:rgba(245,101,101,0.1);color:#f56565;border-radius:0.4rem;font-size:0.7rem;font-weight:700;cursor:pointer}
 .account-delete:hover{background:rgba(245,101,101,0.2)}
-.add-small-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.5rem;margin-top:0.3rem;background:rgba(102,126,234,0.08);border:1px dashed rgba(102,126,234,0.3);border-radius:0.65rem;color:#667eea;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s}
-.add-small-btn:hover{background:rgba(102,126,234,0.15)}
-.add-holder-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.65rem;margin-top:0.5rem;background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);border:1px dashed rgba(159,122,234,0.3);border-radius:0.75rem;color:#4c51bf;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s}
-.add-holder-btn:hover{background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%)}
+.add-small-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.5rem;margin-top:0.3rem;background:rgba(102,126,234,0.1);border:1px dashed rgba(102,126,234,0.3);border-radius:0.65rem;color:#667eea;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+.add-small-btn:hover{background:rgba(102,126,234,0.2)}
+.add-holder-btn{display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.65rem;margin-top:0.5rem;background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%);border:1px dashed rgba(159,122,234,0.3);border-radius:0.75rem;color:#4c51bf;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+.add-holder-btn:hover{background:linear-gradient(135deg,rgba(159,122,234,0.2) 0%,rgba(102,126,234,0.2) 100%)}
 .no-results{padding:1.5rem;text-align:center;color:#a0aec0;font-size:0.85rem}
 .inline-input-row{display:flex;gap:0.4rem;margin-top:0.3rem}
-.inline-input{flex:1;background:rgba(255,255,255,0.8);border:1px solid #667eea;border-radius:0.65rem;padding:0.5rem 0.75rem;font-size:0.85rem;color:#2c3e50;outline:none}
+.inline-input{flex:1;background:rgba(255,255,255,0.9);border:1px solid #667eea;border-radius:0.65rem;padding:0.5rem 0.75rem;font-size:0.85rem;color:#2c3e50;outline:none}
 .inline-btn{padding:0.5rem 0.85rem;border-radius:0.65rem;font-size:0.8rem;font-weight:500}
 .inline-btn-primary{background:#667eea;color:white}
-.inline-btn-secondary{background:rgba(226,232,240,0.8);color:#4a5568}
+.inline-btn-secondary{background:rgba(226,232,240,0.9);color:#4a5568}
 .period-filter{display:flex;gap:0.35rem;margin-bottom:0.75rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding:0.25rem 0}
 .period-filter::-webkit-scrollbar{display:none}
-.period-chip{flex-shrink:0;padding:0.45rem 0.85rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.78rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.period-chip:hover{background:rgba(255,255,255,0.9)}
-.period-chip.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
-.common-stats-block{background:linear-gradient(135deg,rgba(159,122,234,0.08) 0%,rgba(102,126,234,0.08) 100%);border:1px solid rgba(159,122,234,0.2);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.75rem}
+.period-chip{flex-shrink:0;padding:0.45rem 0.85rem;background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.9);border-radius:1rem;font-size:0.78rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.period-chip:hover{background:rgba(255,255,255,1)}
+.period-chip.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.4)}
+.common-stats-block{background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%);border:1px solid rgba(159,122,234,0.3);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.75rem}
 .common-stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem}
 .common-stats-title{font-size:0.85rem;font-weight:600;color:#4c51bf}
 .edit-icon-btn{padding:0.35rem 0.6rem;background:rgba(102,126,234,0.1);color:#667eea;border:1px solid rgba(102,126,234,0.2);border-radius:0.5rem;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem}
 .edit-icon-btn:hover{background:rgba(102,126,234,0.2)}
 .common-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem}
-.common-stat-item{text-align:center;padding:0.4rem 0.2rem;background:rgba(255,255,255,0.5);border-radius:0.6rem}
+.common-stat-item{text-align:center;padding:0.4rem 0.2rem;background:rgba(255,255,255,0.9);border-radius:0.6rem}
 .common-stat-label{font-size:0.6rem;color:#718096;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.15rem}
 .common-stat-value{font-size:0.95rem;font-weight:700;word-break:break-word}
-.account-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-top:0.35rem;padding:0.4rem;background:rgba(102,126,234,0.04);border-radius:0.5rem}
+.account-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-top:0.35rem;padding:0.4rem;background:rgba(102,126,234,0.08);border-radius:0.5rem}
 .account-stat-mini{text-align:center}
 .account-stat-mini-label{font-size:0.55rem;color:#718096;text-transform:uppercase;letter-spacing:0.02em}
 .account-stat-mini-value{font-size:0.75rem;font-weight:600;margin-top:0.1rem}
-.holder-total-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-top:0.35rem;padding:0.5rem;background:linear-gradient(135deg,rgba(159,122,234,0.1) 0%,rgba(102,126,234,0.1) 100%);border:1px dashed rgba(159,122,234,0.3);border-radius:0.6rem}
+.holder-total-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-top:0.35rem;padding:0.5rem;background:linear-gradient(135deg,rgba(159,122,234,0.15) 0%,rgba(102,126,234,0.15) 100%);border:1px dashed rgba(159,122,234,0.3);border-radius:0.6rem}
 .holder-total-label{grid-column:span 4;font-size:0.7rem;font-weight:600;color:#4c51bf;text-align:center;margin-bottom:0.15rem}
 .holder-total-mini{text-align:center}
 .holder-total-mini-label{font-size:0.55rem;color:#718096;text-transform:uppercase;letter-spacing:0.02em}
@@ -150,31 +150,27 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .inline-edit-actions{display:flex;gap:0.2rem}
 .inline-edit-btn{padding:0.25rem 0.5rem;border-radius:0.4rem;font-size:0.75rem;font-weight:700;cursor:pointer}
 .inline-edit-save{background:#48bb78;color:white}
-.inline-edit-cancel{background:rgba(226,232,240,0.8);color:#4a5568}
-.linked-fields-info{background:rgba(237,137,54,0.08);border:1px solid rgba(237,137,54,0.2);border-radius:0.65rem;padding:0.5rem 0.75rem;margin-bottom:0.5rem;font-size:0.7rem;color:#c05621;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
-.revenue-capital-info{background:linear-gradient(135deg,rgba(237,137,54,0.08) 0%,rgba(159,122,234,0.08) 100%);border:1px solid rgba(237,137,54,0.2);border-radius:0.75rem;padding:0.6rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#744210;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
-.chart-tabs{display:flex;gap:0.3rem;margin-bottom:0.75rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding:0.25rem 0}
-.chart-tabs::-webkit-scrollbar{display:none}
-.chart-tab{flex-shrink:0;padding:0.45rem 0.85rem;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:1rem;font-size:0.78rem;font-weight:500;color:#4a5568;cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.chart-tab:hover{background:rgba(255,255,255,0.9)}
-.chart-tab.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
-.chart-container{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-.chart-canvas{width:100%;height:220px;display:block}
-.trend-card{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:0.875rem;padding:0.75rem;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-.trend-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem}
-.trend-title{font-size:0.8rem;font-weight:600;color:#2c3e50}
-.trend-value{font-size:1.1rem;font-weight:700}
-.trend-up{color:#48bb78}
-.trend-down{color:#f56565}
-.trend-neutral{color:#718096}
-.trend-bar{height:6px;background:rgba(0,0,0,0.05);border-radius:3px;overflow:hidden;margin-top:0.3rem}
-.trend-bar-fill{height:100%;border-radius:3px;transition:width 0.5s ease}
-.chart-empty{padding:2rem 1rem;text-align:center;color:#a0aec0;font-size:0.85rem}
+.inline-edit-cancel{background:rgba(226,232,240,0.9);color:#4a5568}
+.linked-fields-info{background:rgba(237,137,54,0.1);border:1px solid rgba(237,137,54,0.2);border-radius:0.65rem;padding:0.5rem 0.75rem;margin-bottom:0.5rem;font-size:0.7rem;color:#c05621;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
+.revenue-capital-info{background:linear-gradient(135deg,rgba(237,137,54,0.1) 0%,rgba(159,122,234,0.1) 100%);border:1px solid rgba(237,137,54,0.2);border-radius:0.75rem;padding:0.6rem 0.75rem;margin-bottom:0.75rem;font-size:0.75rem;color:#744210;line-height:1.4;display:flex;align-items:center;gap:0.4rem}
 .share-menu{display:flex;gap:0.4rem;margin-top:0.5rem}
 .share-menu-btn{flex:1;padding:0.5rem;border-radius:0.65rem;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:center}
-.share-text-btn{background:rgba(72,187,120,0.1);color:#48bb78;border:1px solid rgba(72,187,120,0.2)}
-.share-menu-btn:hover{transform:translateY(-1px)}
+.share-text-btn{background:linear-gradient(135deg,rgba(72,187,120,0.15) 0%,rgba(72,187,120,0.1) 100%);color:#48bb78;border:1px solid rgba(72,187,120,0.3)}
+.share-menu-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(72,187,120,0.3)}
 .share-menu-btn:active{transform:scale(0.97)}
+
+/* ФИРМЕННЫЙ СТИЛЬ ДЛЯ ЭКСПОРТА */
+.export-option-card{background:linear-gradient(135deg,rgba(255,255,255,0.95) 0%,rgba(248,250,252,0.95) 100%);border:2px solid rgba(102,126,234,0.2);border-radius:0.875rem;padding:0.85rem;margin-bottom:0.5rem;cursor:pointer;transition:all 0.2s}
+.export-option-card:hover{border-color:#667eea;transform:translateY(-2px);box-shadow:0 4px 16px rgba(102,126,234,0.2)}
+.export-option-card.active{border-color:#667eea;background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%)}
+.export-option-header{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem}
+.export-option-icon{font-size:1.2rem}
+.export-option-title{font-size:0.9rem;font-weight:600;color:#2c3e50}
+.export-option-desc{font-size:0.7rem;color:#718096;margin-left:1.7rem}
+.share-button-primary{width:100%;padding:0.85rem;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;border-radius:0.875rem;font-weight:600;font-size:0.95rem;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(102,126,234,0.4)}
+.share-button-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,0.5)}
+.share-button-primary:active{transform:scale(0.98)}
+.section-title{font-size:0.85rem;font-weight:600;color:#4c51bf;margin:0.75rem 0 0.5rem 0;text-transform:uppercase;letter-spacing:0.05em}
 </style>
 </head>
 <body class="flex flex-col h-screen p-6">
@@ -187,8 +183,8 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <span class="selector-arrow">›</span>
 </div>
 
-<p class="text-zinc-500 text-sm font-medium tracking-widest uppercase mb-2">Текущий баланс</p>
-<h1 id="balance" class="text-6xl font-extralight tracking-tight">0 ₽</h1>
+<p class="text-white text-sm font-medium tracking-widest uppercase mb-2" style="text-shadow:0 1px 2px rgba(0,0,0,0.2)">Текущий баланс</p>
+<h1 id="balance" class="text-6xl font-extralight tracking-tight text-white" style="text-shadow:0 2px 8px rgba(0,0,0,0.2)">0 ₽</h1>
 <div id="syncStatus" class="sync-indicator">подключение...</div>
 
 <div class="stats-row">
@@ -199,11 +195,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 
 <div class="button-group">
-<button onclick="openReport()" class="px-3 py-2 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📊 Отчет</button>
-<button onclick="openDynamics()" class="px-3 py-2 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">📈 Динамика</button>
-<button onclick="openDetail()" class="px-3 py-2 bg-teal-500/10 text-teal-600 hover:bg-teal-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">🔍 Детализация</button>
-<button onclick="openAdjustment()" class="px-3 py-2 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">✏️ Корректировка</button>
-<button onclick="openSettings()" class="px-3 py-2 bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm">⚙️ Настройки</button>
+<button onclick="openReport()" class="px-3 py-2 bg-white/20 text-white hover:bg-white/30 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm backdrop-blur-sm">📊 Отчет</button>
+<button onclick="openDetail()" class="px-3 py-2 bg-white/20 text-white hover:bg-white/30 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm backdrop-blur-sm">🔍 Детализация</button>
+<button onclick="openAdjustment()" class="px-3 py-2 bg-white/20 text-white hover:bg-white/30 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm backdrop-blur-sm">✏️ Корректировка</button>
+<button onclick="openSettings()" class="px-3 py-2 bg-white/20 text-white hover:bg-white/30 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm backdrop-blur-sm">⚙️ Настройки</button>
 </div>
 </div>
 
@@ -217,8 +212,8 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 
 <div class="flex-1 overflow-y-auto">
 <div class="flex justify-between items-center mb-4">
-<p class="text-zinc-500 text-xs font-medium tracking-widest uppercase">История операций</p>
-<button id="resetBtn" onclick="resetAll()" class="reset-btn text-zinc-500 text-xs font-medium tracking-widest uppercase hover:text-rose-500 transition-colors">Обнулить</button>
+<p class="text-white text-xs font-medium tracking-widest uppercase" style="text-shadow:0 1px 2px rgba(0,0,0,0.2)">История операций</p>
+<button id="resetBtn" onclick="resetAll()" class="reset-btn text-white text-xs font-medium tracking-widest uppercase hover:text-rose-300 transition-colors" style="text-shadow:0 1px 2px rgba(0,0,0,0.2)">Обнулить</button>
 </div>
 <div id="history" class="space-y-3 pb-6"></div>
 </div>
@@ -241,41 +236,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 </div>
 </div>
 <button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
-<div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(72,187,120,0.08);border-color:rgba(72,187,120,0.3);color:#2f855a">
+<div id="fixedIndicator" class="adjustment-info" style="display:none">
 ✅ Последний отчет: <span id="fixedDate"></span>
 </div>
 <div class="report-divider"></div>
 <div class="modal-title" style="font-size:1rem;margin-bottom:0.5rem">📋 Зафиксированные отчеты</div>
 <div id="reportsList"></div>
 <button onclick="closeReport()" class="close-modal-btn">Закрыть</button>
-</div>
-</div>
-
-<!-- ДИНАМИКА -->
-<div id="dynamicsModal" class="modal">
-<div class="modal-content">
-<div class="modal-close"></div>
-<div class="modal-title">📈 Динамика</div>
-
-<div class="chart-tabs" id="chartTabs">
-<div class="chart-tab active" data-chart="capital" onclick="switchChart('capital')">💜 Капитал</div>
-<div class="chart-tab" data-chart="balance" onclick="switchChart('balance')">⚪ Баланс</div>
-<div class="chart-tab" data-chart="siteBalance" onclick="switchChart('siteBalance')">🔵 На сайте</div>
-<div class="chart-tab" data-chart="turnover" onclick="switchChart('turnover')">💹 Оборот</div>
-<div class="chart-tab" data-chart="revenue" onclick="switchChart('revenue')">💰 Выручка</div>
-</div>
-
-<div class="chart-container">
-<canvas id="mainChart" class="chart-canvas"></canvas>
-</div>
-
-<div id="trendCards"></div>
-
-<div class="adjustment-info" id="dynamicsInfo" style="background:rgba(72,187,120,0.08);border-color:rgba(72,187,120,0.3);color:#2f855a">
-💡 Графики строятся на основе зафиксированных отчетов. Зафиксируйте несколько отчетов, чтобы увидеть динамику.
-</div>
-
-<button onclick="closeDynamics()" class="close-modal-btn">Закрыть</button>
 </div>
 </div>
 
@@ -355,7 +322,30 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 <div class="period-chip" data-period="all" onclick="setDetailPeriod('all')">Всё время</div>
 </div>
 <div id="detailTree"></div>
+<button onclick="openShareModal()" class="share-button-primary" style="margin-top:0.75rem">📤 Поделиться</button>
 <button onclick="closeDetail()" class="close-modal-btn">Закрыть</button>
+</div>
+</div>
+
+<!-- НОВАЯ МОДАЛКА: ВЫБОР ПАРАМЕТРОВ ЭКСПОРТА -->
+<div id="shareModal" class="modal">
+<div class="modal-content">
+<div class="modal-close"></div>
+<div class="modal-title">📤 Поделиться отчетом</div>
+
+<div class="section-title">📅 Выберите период</div>
+<div class="period-filter" id="sharePeriodFilter" style="margin-bottom:1rem">
+<div class="period-chip active" data-period="today" onclick="setSharePeriod('today')">Сегодня</div>
+<div class="period-chip" data-period="week" onclick="setSharePeriod('week')">7 дней</div>
+<div class="period-chip" data-period="month" onclick="setSharePeriod('month')">Месяц</div>
+<div class="period-chip" data-period="all" onclick="setSharePeriod('all')">Всё время</div>
+</div>
+
+<div class="section-title">👤 Выберите держателя</div>
+<div id="shareHoldersList"></div>
+
+<button onclick="generateAndShare()" class="share-button-primary" style="margin-top:1rem">📤 Сформировать отчет</button>
+<button onclick="closeShareModal()" class="close-modal-btn">Отмена</button>
 </div>
 </div>
 
@@ -451,7 +441,8 @@ let currentEditingReportKey=null;
 let expandedHolders={};
 let expandedDetailHolders={};
 let detailPeriod='today';
-let currentChartType='capital';
+let sharePeriod='today';
+let selectedShareHolderId='all';
 
 const balanceEl=document.getElementById('balance');
 const amountEl=document.getElementById('amount');
@@ -463,12 +454,12 @@ const totalExpenseEl=document.getElementById('totalExpense');
 const totalRevenueEl=document.getElementById('totalRevenue');
 const selectorPath=document.getElementById('selectorPath');
 const reportModal=document.getElementById('reportModal');
-const dynamicsModal=document.getElementById('dynamicsModal');
 const editReportModal=document.getElementById('editReportModal');
 const settingsModal=document.getElementById('settingsModal');
 const adjustmentModal=document.getElementById('adjustmentModal');
 const selectAccountModal=document.getElementById('selectAccountModal');
 const detailModal=document.getElementById('detailModal');
+const shareModal=document.getElementById('shareModal');
 const editCommonStatsModal=document.getElementById('editCommonStatsModal');
 const resetBtn=document.getElementById('resetBtn');
 
@@ -523,13 +514,13 @@ const revenue=totalIncome*(incomePercent/100)+totalExpense*(expensePercent/100);
 return{totalIncome,totalExpense,revenue,turnover:totalIncome+totalExpense};
 };
 
-const calculateAllStats=()=>{
+const calculateAllStats=(period)=>{
 let totalIncome=0,totalExpense=0,totalBalance=0;
 Object.values(holders).forEach(h=>{
 if(!h||!h.accounts)return;
 Object.values(h.accounts).forEach(acc=>{
 if(!acc)return;
-const stats=calculateAccountStats(acc);
+const stats=calculateAccountStats(acc,period);
 totalIncome+=stats.totalIncome||0;
 totalExpense+=stats.totalExpense||0;
 totalBalance+=acc.balance||0;
@@ -565,7 +556,7 @@ totalTurnoverEl.textContent='0 ₽';
 totalIncomeEl.textContent='0 ₽';
 totalExpenseEl.textContent='0 ₽';
 totalRevenueEl.textContent='0 ₽';
-historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет счетов</p>';
+historyEl.innerHTML='<p class="text-white text-center text-sm font-light py-8" style="text-shadow:0 1px 2px rgba(0,0,0,0.2)">Нет счетов</p>';
 resetBtn.style.display='none';
 return;
 }
@@ -578,12 +569,12 @@ totalRevenueEl.textContent=formatMoney(stats.revenue);
 
 historyEl.innerHTML='';
 if(!account.transactions||account.transactions.length===0){
-historyEl.innerHTML='<p class="text-zinc-500 text-center text-sm font-light py-8">Нет операций</p>';
+historyEl.innerHTML='<p class="text-white text-center text-sm font-light py-8" style="text-shadow:0 1px 2px rgba(0,0,0,0.2)">Нет операций</p>';
 }else{
 account.transactions.slice().reverse().forEach((t)=>{
 if(!t)return;
 const div=document.createElement('div');
-div.className='transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/60 border border-white/80';
+div.className='transaction-item flex justify-between items-center p-4 rounded-2xl bg-white/95 border border-white/90';
 let colorClass,sign,desc;
 const date=new Date(t.date);
 const timeStr=isNaN(date.getTime())?'':date.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
@@ -643,7 +634,7 @@ capital=oldCapital;
 }
 }
 savedReports=JSON.parse(localStorage.getItem('savedReports'))||{};
-incomePercent=parseFloat(localStorage.getItem('incomePercent'))||7;
+incomePercent=parseFloat(localStoraghttps://github.com/CryptoLord6999/financesimple/settingse.getItem('incomePercent'))||7;
 expensePercent=parseFloat(localStorage.getItem('expensePercent'))||2.5;
 const savedCapital=localStorage.getItem('capital');
 if(savedCapital!==null)capital=parseFloat(savedCapital)||0;
@@ -766,246 +757,6 @@ saveToServer();
 };
 if(tg?.showConfirm){tg.showConfirm(`Обнулить баланс и историю счета "${account.name}" (${holder.name})?\n\n💾 Зафиксированные отчеты и капитал останутся.`,function(confirmed){if(confirmed)doReset();else haptic('impact','soft')})}
 else{if(confirm(`Обнулить баланс и историю счета "${account.name}" (${holder.name})?\n\n💾 Зафиксированные отчеты и капитал останутся.`))doReset();else haptic('impact','soft')}
-};
-
-// ===== ДИНАМИКА =====
-window.openDynamics=()=>{
-try{
-currentChartType='capital';
-document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart==='capital'));
-renderDynamics();
-dynamicsModal.classList.add('active');
-haptic('impact','medium');
-}catch(e){
-console.error('openDynamics error:',e);
-alert('Ошибка открытия Динамики: '+e.message);
-}
-};
-
-window.closeDynamics=()=>dynamicsModal.classList.remove('active');
-
-window.switchChart=(type)=>{
-currentChartType=type;
-document.querySelectorAll('.chart-tab').forEach(t=>t.classList.toggle('active',t.dataset.chart===type));
-drawChart();
-haptic('impact','light');
-};
-
-const renderDynamics=()=>{drawChart()};
-
-const getChartData=()=>{
-const reports=Object.entries(savedReports)
-.map(([key,r])=>{
-const dateObj=new Date(r.date);
-// ИСПРАВЛЕНИЕ: проверяем валидность даты
-if(isNaN(dateObj.getTime())){
-console.warn('Некорректная дата в отчете:',key,r.date);
-return null;
-}
-return{key,date:dateObj,...r};
-})
-.filter(r=>r!==null) // убираем некорректные
-.sort((a,b)=>a.date-b.date);
-return reports;
-};
-
-const drawChart=()=>{
-const canvas=document.getElementById('mainChart');
-if(!canvas)return;
-const ctx=canvas.getContext('2d');
-const dpr=window.devicePixelRatio||1;
-const rect=canvas.getBoundingClientRect();
-canvas.width=rect.width*dpr;
-canvas.height=rect.height*dpr;
-ctx.scale(dpr,dpr);
-const W=rect.width;
-const H=rect.height;
-ctx.clearRect(0,0,W,H);
-
-const reports=getChartData();
-const info=document.getElementById('dynamicsInfo');
-
-if(reports.length===0){
-if(info)info.style.display='block';
-ctx.fillStyle='#a0aec0';
-ctx.font='14px -apple-system, sans-serif';
-ctx.textAlign='center';
-ctx.fillText('📭 Нет зафиксированных отчетов',W/2,H/2-10);
-ctx.font='11px -apple-system, sans-serif';
-ctx.fillText('Зафиксируйте отчет в разделе "📊 Отчет"',W/2,H/2+15);
-const trendContainer=document.getElementById('trendCards');
-if(trendContainer)trendContainer.innerHTML='';
-return;
-}
-if(info)info.style.display='none';
-
-const chartConfig={
-capital:{label:'💜 Капитал',color:'#9f7aea',key:'capital'},
-balance:{label:'⚪ Общий баланс',color:'#2c3e50',key:'balance'},
-siteBalance:{label:'🔵 Баланс на сайте',color:'#667eea',key:'siteBalance'},
-turnover:{label:'💹 Оборот',color:'#4299e1',key:'turnover'},
-revenue:{label:'💰 Выручка',color:'#ed8936',key:'revenue'}
-};
-const cfg=chartConfig[currentChartType];
-const values=reports.map(r=>r[cfg.key]||0);
-const dates=reports.map(r=>r.date);
-
-const padding={top:25,right:15,bottom:35,left:55};
-const chartW=W-padding.left-padding.right;
-const chartH=H-padding.top-padding.bottom;
-
-const maxVal=Math.max(...values)*1.1||1;
-const minVal=Math.min(0,Math.min(...values)*0.9);
-const range=maxVal-minVal||1;
-
-ctx.strokeStyle='rgba(0,0,0,0.05)';
-ctx.lineWidth=1;
-ctx.setLineDash([2,3]);
-for(let i=0;i<=4;i++){
-const y=padding.top+(chartH/4)*i;
-ctx.beginPath();
-ctx.moveTo(padding.left,y);
-ctx.lineTo(W-padding.right,y);
-ctx.stroke();
-}
-ctx.setLineDash([]);
-
-ctx.fillStyle='#718096';
-ctx.font='10px -apple-system, sans-serif';
-ctx.textAlign='right';
-for(let i=0;i<=4;i++){
-const y=padding.top+(chartH/4)*i;
-const val=maxVal-(range/4)*i;
-ctx.fillText(formatMoneyShort(val),padding.left-6,y+3);
-}
-
-ctx.textAlign='center';
-const step=Math.max(1,Math.floor(dates.length/5));
-dates.forEach((d,i)=>{
-if(i%step===0||i===dates.length-1){
-const x=padding.left+(chartW/(Math.max(dates.length-1,1)))*i;
-const label=`${d.getDate()} ${MONTH_NAMES[d.getMonth()].slice(0,3)}`;
-ctx.fillText(label,x,H-padding.bottom+15);
-}
-});
-
-const points=values.map((v,i)=>{
-const x=padding.left+(chartW/(Math.max(values.length-1,1)))*i;
-const y=padding.top+chartH-((v-minVal)/range)*chartH;
-return{x,y,value:v};
-});
-
-const gradient=ctx.createLinearGradient(0,padding.top,0,padding.top+chartH);
-gradient.addColorStop(0,cfg.color+'40');
-gradient.addColorStop(1,cfg.color+'05');
-ctx.fillStyle=gradient;
-ctx.beginPath();
-ctx.moveTo(points[0].x,padding.top+chartH);
-points.forEach(p=>ctx.lineTo(p.x,p.y));
-ctx.lineTo(points[points.length-1].x,padding.top+chartH);
-ctx.closePath();
-ctx.fill();
-
-ctx.strokeStyle=cfg.color;
-ctx.lineWidth=2.5;
-ctx.lineJoin='round';
-ctx.beginPath();
-points.forEach((p,i)=>{
-if(i===0)ctx.moveTo(p.x,p.y);
-else ctx.lineTo(p.x,p.y);
-});
-ctx.stroke();
-
-points.forEach((p)=>{
-ctx.fillStyle='white';
-ctx.beginPath();
-ctx.arc(p.x,p.y,4,0,Math.PI*2);
-ctx.fill();
-ctx.strokeStyle=cfg.color;
-ctx.lineWidth=2;
-ctx.stroke();
-});
-
-ctx.fillStyle=cfg.color;
-ctx.font='bold 12px -apple-system, sans-serif';
-ctx.textAlign='left';
-ctx.fillText(cfg.label,padding.left,15);
-
-const last=points[points.length-1];
-ctx.fillStyle=cfg.color;
-ctx.font='bold 13px -apple-system, sans-serif';
-ctx.textAlign='right';
-ctx.fillText(formatMoney(last.value),W-padding.right,15);
-
-renderTrendCards(reports,cfg);
-};
-
-const renderTrendCards=(reports,cfg)=>{
-const container=document.getElementById('trendCards');
-if(!container)return;
-container.innerHTML='';
-
-if(reports.length<2){
-container.innerHTML='<div class="chart-empty">📊 Нужно минимум 2 отчета для анализа тренда</div>';
-return;
-}
-
-const values=reports.map(r=>r[cfg.key]||0);
-const first=values[0];
-const last=values[values.length-1];
-const change=last-first;
-const changePercent=first!==0?(change/first)*100:0;
-const max=Math.max(...values);
-const min=Math.min(...values);
-const avg=values.reduce((a,b)=>a+b,0)/values.length;
-
-const isUp=change>0;
-const isDown=change<0;
-const trendClass=isUp?'trend-up':(isDown?'trend-down':'trend-neutral');
-const arrow=isUp?'📈':(isDown?'📉':'️');
-const barWidth=Math.min(100,Math.abs(changePercent));
-
-const totalCard=document.createElement('div');
-totalCard.className='trend-card';
-totalCard.innerHTML=`
-<div class="trend-header">
-<div class="trend-title">${arrow} Изменение за период</div>
-<div class="trend-value ${trendClass}">${isUp?'+':''}${formatMoney(change)}</div>
-</div>
-<div style="font-size:0.75rem;color:#718096">
-От ${formatMoney(first)} → ${formatMoney(last)} (${isUp?'+':''}${changePercent.toFixed(1)}%)
-</div>
-<div class="trend-bar">
-<div class="trend-bar-fill" style="width:${barWidth}%;background:${isUp?'#48bb78':(isDown?'#f56565':'#718096')}"></div>
-</div>
-`;
-container.appendChild(totalCard);
-
-const statsCard=document.createElement('div');
-statsCard.className='trend-card';
-statsCard.innerHTML=`
-<div class="trend-header">
-<div class="trend-title">📊 Статистика</div>
-</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.3rem">
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Минимум</div>
-<div style="font-size:0.95rem;font-weight:700;color:#f56565">${formatMoneyShort(min)}</div>
-</div>
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Среднее</div>
-<div style="font-size:0.95rem;font-weight:700;color:#4a5568">${formatMoneyShort(avg)}</div>
-</div>
-<div style="text-align:center">
-<div style="font-size:0.6rem;color:#718096;text-transform:uppercase">Максимум</div>
-<div style="font-size:0.95rem;font-weight:700;color:#48bb78">${formatMoneyShort(max)}</div>
-</div>
-</div>
-<div style="font-size:0.7rem;color:#718096;margin-top:0.4rem;text-align:center">
-📅 Всего отчетов: ${values.length}
-</div>
-`;
-container.appendChild(statsCard);
 };
 
 // ===== ВЫБОР СЧЕТА =====
@@ -1267,6 +1018,234 @@ container.insertBefore(noResults,addHolderBtn);
 }
 };
 
+// ===== ДЕТАЛИЗАЦИЯ =====
+window.openDetail=()=>{
+if(activeHolderId)expandedDetailHolders[activeHolderId]=true;
+renderDetail();
+detailModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeDetail=()=>detailModal.classList.remove('active');
+
+window.setDetailPeriod=(period)=>{
+detailPeriod=period;
+document.querySelectorAll('#periodFilter .period-chip').forEach(chip=>{chip.classList.toggle('active',chip.dataset.period===period)});
+renderDetailTree();
+haptic('impact','light');
+};
+
+window.toggleDetailHolder=(holderId)=>{
+expandedDetailHolders[holderId]=!expandedDetailHolders[holderId];
+renderDetailTree();
+};
+
+const renderDetail=()=>{
+const stats=calculateAllStats(detailPeriod);
+document.getElementById('detailTotalBalance').textContent=formatMoney(stats.totalBalance);
+document.getElementById('detailCapital').textContent=formatMoney(capital);
+document.getElementById('detailSiteBalance').textContent=formatMoney(stats.siteBalance);
+renderDetailTree();
+};
+
+const renderDetailTree=()=>{
+const container=document.getElementById('detailTree');
+if(!container)return;
+container.innerHTML='';
+const holderKeys=Object.keys(holders);
+if(holderKeys.length===0){container.innerHTML='<div class="no-results">Нет держателей</div>';return}
+let grandTotal={income:0,expense:0,turnover:0,revenue:0};
+holderKeys.forEach(hId=>{
+const h=holders[hId];
+if(!h||!h.accounts)return;
+let holderTotal={income:0,expense:0,turnover:0,revenue:0};
+const accKeys=Object.keys(h.accounts);
+const group=document.createElement('div');
+group.className='holder-group';
+const isExpanded=expandedDetailHolders[hId]!==false;
+const header=document.createElement('div');
+header.className='holder-header';
+header.onclick=()=>toggleDetailHolder(hId);
+header.innerHTML=`
+<div class="holder-header-left">
+<span class="holder-name">👤 ${h.name}</span>
+<span class="holder-count">${accKeys.length} ${accKeys.length===1?'счет':accKeys.length<5?'счета':'счетов'}</span>
+</div>
+<span class="holder-toggle ${isExpanded?'expanded':''}">›</span>
+`;
+group.appendChild(header);
+const accountsList=document.createElement('div');
+accountsList.className='accounts-list'+(isExpanded?' expanded':'');
+accKeys.forEach(aId=>{
+const acc=h.accounts[aId];
+if(!acc)return;
+const stats=calculateAccountStats(acc,detailPeriod);
+holderTotal.income+=stats.totalIncome;
+holderTotal.expense+=stats.totalExpense;
+holderTotal.turnover+=stats.turnover;
+holderTotal.revenue+=stats.revenue;
+const item=document.createElement('div');
+item.className='account-item';
+item.style.cursor='default';
+item.innerHTML=`
+<div style="flex:1;min-width:0">
+<div style="display:flex;align-items:center;gap:0.5rem">
+<span class="account-name">💼 ${acc.name}</span>
+<span class="account-balance">${formatMoneyShort(acc.balance)}</span>
+</div>
+<div class="account-stats-row">
+<div class="account-stat-mini"><div class="account-stat-mini-label">💹 Оборот</div><div class="account-stat-mini-value turnover-color">${formatMoneyShort(stats.turnover)}</div></div>
+<div class="account-stat-mini"><div class="account-stat-mini-label">🟢 Доход</div><div class="account-stat-mini-value income-color">${formatMoneyShort(stats.totalIncome)}</div></div>
+<div class="account-stat-mini"><div class="account-stat-mini-label">🔴 Расход</div><div class="account-stat-mini-value expense-color">${formatMoneyShort(stats.totalExpense)}</div></div>
+<div class="account-stat-mini"><div class="account-stat-mini-label">💰 Выручка</div><div class="account-stat-mini-value revenue-color">${formatMoneyShort(stats.revenue)}</div></div>
+</div>
+</div>
+`;
+accountsList.appendChild(item);
+});
+const totalRow=document.createElement('div');
+totalRow.className='holder-total-row';
+totalRow.innerHTML=`
+<div class="holder-total-label">📊 Итого по держателю</div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(holderTotal.turnover)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(holderTotal.income)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(holderTotal.revenue)}</div></div>
+`;
+accountsList.appendChild(totalRow);
+group.appendChild(accountsList);
+container.appendChild(group);
+grandTotal.income+=holderTotal.income;
+grandTotal.expense+=holderTotal.expense;
+grandTotal.turnover+=holderTotal.turnover;
+grandTotal.revenue+=holderTotal.revenue;
+});
+const grandTotalRow=document.createElement('div');
+grandTotalRow.style.cssText='margin-top:0.75rem;padding:0.85rem;background:linear-gradient(135deg,rgba(102,126,234,0.15) 0%,rgba(118,75,162,0.15) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem';
+grandTotalRow.innerHTML=`
+<div style="text-align:center;font-size:0.85rem;font-weight:600;color:#4c51bf;margin-bottom:0.5rem">🏆 Общий итог за период</div>
+<div class="holder-total-row" style="margin:0;background:rgba(255,255,255,0.9);border:none">
+<div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(grandTotal.turnover)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(grandTotal.income)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(grandTotal.expense)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(grandTotal.revenue)}</div></div>
+</div>
+`;
+container.appendChild(grandTotalRow);
+};
+
+// ===== НОВАЯ ФУНКЦИЯ: ОТКРЫТИЕ МОДАЛКИ ЭКСПОРТА =====
+window.openShareModal=()=>{
+sharePeriod='today';
+selectedShareHolderId='all';
+document.querySelectorAll('#sharePeriodFilter .period-chip').forEach(chip=>{
+chip.classList.toggle('active',chip.dataset.period==='today');
+});
+renderShareHoldersList();
+shareModal.classList.add('active');
+haptic('impact','medium');
+};
+window.closeShareModal=()=>shareModal.classList.remove('active');
+
+window.setSharePeriod=(period)=>{
+sharePeriod=period;
+document.querySelectorAll('#sharePeriodFilter .period-chip').forEach(chip=>{
+chip.classList.toggle('active',chip.dataset.period===period);
+});
+haptic('impact','light');
+};
+
+const renderShareHoldersList=()=>{
+const container=document.getElementById('shareHoldersList');
+if(!container)return;
+container.innerHTML='';
+
+// Опция "Все держатели"
+const allOption=document.createElement('div');
+allOption.className='export-option-card'+(selectedShareHolderId==='all'?' active':'');
+allOption.onclick=()=>{selectedShareHolderId='all';renderShareHoldersList()};
+allOption.innerHTML=`
+<div class="export-option-header">
+<div class="export-option-icon">🌍</div>
+<div class="export-option-title">Все держатели</div>
+</div>
+<div class="export-option-desc">Общий отчет по всем держателям и счетам</div>
+`;
+container.appendChild(allOption);
+
+// Опции по каждому держателю
+Object.values(holders).forEach(h=>{
+if(!h)return;
+const option=document.createElement('div');
+option.className='export-option-card'+(selectedShareHolderId===h.id?' active':'');
+option.onclick=()=>{selectedShareHolderId=h.id;renderShareHoldersList()};
+const accCount=Object.keys(h.accounts||{}).length;
+option.innerHTML=`
+<div class="export-option-header">
+<div class="export-option-icon">👤</div>
+<div class="export-option-title">${h.name}</div>
+</div>
+<div class="export-option-desc">${accCount} ${accCount===1?'счет':accCount<5?'счета':'счетов'}</div>
+`;
+container.appendChild(option);
+});
+};
+
+window.generateAndShare=()=>{
+const now=new Date();
+const periodLabels={today:'сегодня',week:'за 7 дней',month:'за месяц',all:'за всё время'};
+const periodLabel=periodLabels[sharePeriod]||'за период';
+
+let holderName='Все держатели';
+let holderData=null;
+
+if(selectedShareHolderId==='all'){
+holderData=calculateAllStats(sharePeriod);
+}else{
+const h=holders[selectedShareHolderId];
+if(h){
+holderName=h.name;
+let income=0,expense=0,turnover=0,revenue=0;
+Object.values(h.accounts||{}).forEach(acc=>{
+if(!acc)return;
+const stats=calculateAccountStats(acc,sharePeriod);
+income+=stats.totalIncome;
+expense+=stats.totalExpense;
+turnover+=stats.turnover;
+revenue+=stats.revenue;
+});
+holderData={totalIncome:income,totalExpense:expense,turnover,revenue};
+}
+}
+
+if(!holderData){alert('Ошибка формирования отчета');return}
+
+const text=`📊 ФИНАНСОВЫЙ ОТЧЕТ
+━━━━━━━━━━━━━━━━━━━━
+📅 ${now.getDate()} ${MONTH_NAMES_GEN[now.getMonth()]} ${now.getFullYear()}
+📋 ${holderName} · ${periodLabel}
+
+💹 Оборот: ${formatMoney(holderData.turnover)}
+💰 Выручка: ${formatMoney(holderData.revenue)}
+🟢 Доходы: ${formatMoney(holderData.totalIncome)}
+🔴 Расходы: ${formatMoney(holderData.totalExpense)}
+
+━━━━━━━━━━━━━━━━━━━━
+💜 Капитал: ${formatMoney(capital)}
+⚪ Общий баланс: ${formatMoney(holderData.totalBalance||calculateAllStats().totalBalance)}
+
+━━━━━━━━━━━━━━━━━━━━
+💡 Finance Minimal`;
+
+if(navigator.share){
+navigator.share({title:`Отчет: ${holderName}`,text:text}).catch(()=>{copyToClipboard(text)});
+}else{
+copyToClipboard(text);
+}
+
+closeShareModal();
+haptic('notification','success');
+};
+
 // ===== ОТЧЕТ =====
 window.openReport=()=>{
 try{renderSummary();renderReportsList();checkLastFixed();reportModal.classList.add('active');haptic('impact','medium')}
@@ -1457,121 +1436,6 @@ if(tg?.showConfirm){tg.showConfirm(`Удалить отчет за ${dateStr}?`,
 else{if(confirm(`Удалить отчет за ${dateStr}?`))doDelete()}
 };
 
-// ===== ДЕТАЛИЗАЦИЯ =====
-window.openDetail=()=>{
-if(activeHolderId)expandedDetailHolders[activeHolderId]=true;
-renderDetail();
-detailModal.classList.add('active');
-haptic('impact','medium');
-};
-window.closeDetail=()=>detailModal.classList.remove('active');
-
-window.setDetailPeriod=(period)=>{
-detailPeriod=period;
-document.querySelectorAll('.period-chip').forEach(chip=>{chip.classList.toggle('active',chip.dataset.period===period)});
-renderDetailTree();
-haptic('impact','light');
-};
-
-window.toggleDetailHolder=(holderId)=>{
-expandedDetailHolders[holderId]=!expandedDetailHolders[holderId];
-renderDetailTree();
-};
-
-const renderDetail=()=>{
-const stats=calculateAllStats();
-document.getElementById('detailTotalBalance').textContent=formatMoney(stats.totalBalance);
-document.getElementById('detailCapital').textContent=formatMoney(capital);
-document.getElementById('detailSiteBalance').textContent=formatMoney(stats.siteBalance);
-renderDetailTree();
-};
-
-const renderDetailTree=()=>{
-const container=document.getElementById('detailTree');
-if(!container)return;
-container.innerHTML='';
-const holderKeys=Object.keys(holders);
-if(holderKeys.length===0){container.innerHTML='<div class="no-results">Нет держателей</div>';return}
-let grandTotal={income:0,expense:0,turnover:0,revenue:0};
-holderKeys.forEach(hId=>{
-const h=holders[hId];
-if(!h||!h.accounts)return;
-let holderTotal={income:0,expense:0,turnover:0,revenue:0};
-const accKeys=Object.keys(h.accounts);
-const group=document.createElement('div');
-group.className='holder-group';
-const isExpanded=expandedDetailHolders[hId]!==false;
-const header=document.createElement('div');
-header.className='holder-header';
-header.onclick=()=>toggleDetailHolder(hId);
-header.innerHTML=`
-<div class="holder-header-left">
-<span class="holder-name">👤 ${h.name}</span>
-<span class="holder-count">${accKeys.length} ${accKeys.length===1?'счет':accKeys.length<5?'счета':'счетов'}</span>
-</div>
-<span class="holder-toggle ${isExpanded?'expanded':''}">›</span>
-`;
-group.appendChild(header);
-const accountsList=document.createElement('div');
-accountsList.className='accounts-list'+(isExpanded?' expanded':'');
-accKeys.forEach(aId=>{
-const acc=h.accounts[aId];
-if(!acc)return;
-const stats=calculateAccountStats(acc,detailPeriod);
-holderTotal.income+=stats.totalIncome;
-holderTotal.expense+=stats.totalExpense;
-holderTotal.turnover+=stats.turnover;
-holderTotal.revenue+=stats.revenue;
-const item=document.createElement('div');
-item.className='account-item';
-item.style.cursor='default';
-item.innerHTML=`
-<div style="flex:1;min-width:0">
-<div style="display:flex;align-items:center;gap:0.5rem">
-<span class="account-name">💼 ${acc.name}</span>
-<span class="account-balance">${formatMoneyShort(acc.balance)}</span>
-</div>
-<div class="account-stats-row">
-<div class="account-stat-mini"><div class="account-stat-mini-label">💹 Оборот</div><div class="account-stat-mini-value turnover-color">${formatMoneyShort(stats.turnover)}</div></div>
-<div class="account-stat-mini"><div class="account-stat-mini-label">🟢 Доход</div><div class="account-stat-mini-value income-color">${formatMoneyShort(stats.totalIncome)}</div></div>
-<div class="account-stat-mini"><div class="account-stat-mini-label">🔴 Расход</div><div class="account-stat-mini-value expense-color">${formatMoneyShort(stats.totalExpense)}</div></div>
-<div class="account-stat-mini"><div class="account-stat-mini-label">💰 Выручка</div><div class="account-stat-mini-value revenue-color">${formatMoneyShort(stats.revenue)}</div></div>
-</div>
-</div>
-`;
-accountsList.appendChild(item);
-});
-const totalRow=document.createElement('div');
-totalRow.className='holder-total-row';
-totalRow.innerHTML=`
-<div class="holder-total-label">📊 Итого по держателю</div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(holderTotal.turnover)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(holderTotal.income)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(holderTotal.revenue)}</div></div>
-`;
-accountsList.appendChild(totalRow);
-group.appendChild(accountsList);
-container.appendChild(group);
-grandTotal.income+=holderTotal.income;
-grandTotal.expense+=holderTotal.expense;
-grandTotal.turnover+=holderTotal.turnover;
-grandTotal.revenue+=holderTotal.revenue;
-});
-const grandTotalRow=document.createElement('div');
-grandTotalRow.style.cssText='margin-top:0.75rem;padding:0.85rem;background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border:1px solid rgba(102,126,234,0.3);border-radius:0.875rem';
-grandTotalRow.innerHTML=`
-<div style="text-align:center;font-size:0.85rem;font-weight:600;color:#4c51bf;margin-bottom:0.5rem">🏆 Общий итог за период</div>
-<div class="holder-total-row" style="margin:0;background:rgba(255,255,255,0.5);border:none">
-<div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(grandTotal.turnover)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(grandTotal.income)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(grandTotal.expense)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(grandTotal.revenue)}</div></div>
-</div>
-`;
-container.appendChild(grandTotalRow);
-};
-
 // ===== РЕДАКТИРОВАНИЕ ОБЩИХ ПОКАЗАТЕЛЕЙ =====
 window.openEditCommonStats=()=>{
 const stats=calculateAllStats();
@@ -1679,7 +1543,7 @@ closeSettings();
 haptic('notification','success');
 };
 
-[reportModal,dynamicsModal,editReportModal,settingsModal,adjustmentModal,selectAccountModal,detailModal,editCommonStatsModal].forEach(modal=>{
+[reportModal,editReportModal,settingsModal,adjustmentModal,selectAccountModal,detailModal,shareModal,editCommonStatsModal].forEach(modal=>{
 if(modal)modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('active')});
 });
 window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveToServer()});
@@ -1687,9 +1551,6 @@ window.addEventListener('offline',()=>{isOnline=false;updateSyncStatus('offline'
 amountEl.addEventListener('keypress',(e)=>{if(e.key==='Enter')addTransaction('expense')});
 window.addEventListener('beforeunload',()=>saveToLocal());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveToLocal()});
-window.addEventListener('resize',()=>{
-if(dynamicsModal.classList.contains('active'))drawChart();
-});
 
 window.addTransaction=addTransaction;
 window.resetAll=resetAll;
