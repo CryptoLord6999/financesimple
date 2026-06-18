@@ -103,7 +103,6 @@ html, body {
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
-/* ===== BALANCE CARD ===== */
 .balance-card {
     background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
     border-radius: var(--radius-ios);
@@ -213,6 +212,37 @@ html, body {
 .action-expense { background: var(--ios-red); color: white; }
 
 .section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; font-weight: 600; padding: 0 4px; }
+
+/* ===== RESET BUTTON ===== */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 4px;
+}
+.reset-btn {
+    font-size: 0.7rem;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+.reset-btn:hover {
+    opacity: 1;
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--ios-red);
+}
+.reset-btn:active {
+    transform: scale(0.95);
+}
 
 .tx-list { display: flex; flex-direction: column; gap: 8px; }
 .tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.3s ease; }
@@ -366,7 +396,10 @@ html, body {
                     </button>
                 </div>
 
-                <div class="section-title">История операций</div>
+                <div class="section-header">
+                    <div class="section-title" style="margin-bottom:0;">История операций</div>
+                    <button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button>
+                </div>
                 <div class="tx-list" id="txList">
                     <div class="empty-state">
                         <div class="empty-icon">📭</div>
@@ -844,6 +877,7 @@ const renderHome = () => {
         document.getElementById('balanceDisplay').textContent = '0 ₽';
         ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽');
         document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>';
+        document.getElementById('resetBtn').style.display = 'none';
         return;
     }
     nameEl.textContent = `${h.name} → ${acc.name}`;
@@ -857,6 +891,7 @@ const renderHome = () => {
     const list = document.getElementById('txList');
     if (!acc.transactions?.length) {
         list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>';
+        document.getElementById('resetBtn').style.display = 'none';
     } else {
         list.innerHTML = '';
         acc.transactions.slice().reverse().forEach(t => {
@@ -875,8 +910,42 @@ const renderHome = () => {
             item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;
             list.appendChild(item);
         });
+        document.getElementById('resetBtn').style.display = 'block';
     }
     saveLocal();
+};
+
+// ===== RESET ALL =====
+window.resetAll = () => {
+    const acc = getAccount();
+    const h = getHolder();
+    if (!acc || !h || !acc.transactions?.length) {
+        showToast('⚠️', 'Нет операций для обнуления');
+        haptic('warning');
+        return;
+    }
+    
+    haptic('warning');
+    
+    const doReset = () => {
+        acc.balance = 0;
+        acc.transactions = [];
+        haptic('success');
+        renderAll();
+        saveLocal();
+        saveServer();
+        showToast('✅', 'История операций обнулена');
+    };
+    
+    if (tg?.showConfirm) {
+        tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => {
+            if (confirmed) doReset();
+        });
+    } else {
+        if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) {
+            doReset();
+        }
+    }
 };
 
 const refreshReport = () => {
