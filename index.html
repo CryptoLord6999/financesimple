@@ -257,7 +257,9 @@ html, body {
     margin-bottom: 16px;
 }
 .sheet-title { font-size: 1.1rem; font-weight: 600; text-align: center; flex: 1; }
-.sheet-settings-btn {
+
+/* ===== HAMBURGER MENU BUTTON ===== */
+.sheet-menu-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -268,11 +270,31 @@ html, body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-size: 1.1rem;
+    position: relative;
 }
-.sheet-settings-btn:active {
+.sheet-menu-btn:active {
     transform: scale(0.9);
     background: rgba(120, 120, 128, 0.25);
+}
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 12px;
+}
+.hamburger-icon span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--ios-text-secondary);
+    border-radius: 1px;
+    transition: all 0.2s ease;
+}
+.sheet-menu-btn:active .hamburger-icon span {
+    background: var(--ios-text);
 }
 
 /* ===== ACTIONS MENU ===== */
@@ -453,15 +475,15 @@ html, body {
                         <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div>
+                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Доход</span></div>
                         <div class="stat-value text-green" id="statIncome">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div>
+                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Расход</span></div>
                         <div class="stat-value text-red" id="statExpense">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div>
+                        <div class="stat-header"><span class="stat-icon"></span><span class="stat-name">Выручка</span></div>
                         <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
                     </div>
                 </div>
@@ -504,7 +526,7 @@ html, body {
                         <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
                         <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
                         <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
-                        <div class="summary-item" style="grid-column:span 2;"><div class="summary-label"> На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
+                        <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
                     </div>
                 </div>
                 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
@@ -541,7 +563,7 @@ html, body {
 
         <div class="page" id="page-adjust">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">️ Корректировка</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
                 <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
                     💼 Счёт: Основной
                 </div>
@@ -565,7 +587,7 @@ html, body {
 
         <div class="page" id="page-settings">
             <div class="page-content">
-                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">️ Настройки</div>
+                <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
                 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
                     <span style="font-size:1.1rem;">💡</span>
                     <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
@@ -627,7 +649,13 @@ html, body {
     <div class="sheet-header">
         <div style="width:36px;"></div>
         <div class="sheet-title">Выбор счёта</div>
-        <button class="sheet-settings-btn" onclick="toggleActionsMenu()">️</button>
+        <button class="sheet-menu-btn" onclick="toggleActionsMenu()" title="Меню действий">
+            <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
     </div>
     
     <!-- Actions Menu -->
@@ -658,7 +686,7 @@ html, body {
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title">✏️ Редактировать баланс</div>
+    <div class="sheet-title">️ Редактировать баланс</div>
     <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
         <span style="font-size:1.1rem;">💡</span>
         <span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
@@ -919,7 +947,7 @@ const updateSync = (s) => {
         synced: { t: '☁️ сохранено', c: 'synced' },
         offline: { t: ' локально', c: '' },
         error: { t: '⚠️ ошибка', c: '' },
-        local: { t: ' локально', c: '' }
+        local: { t: '💾 локально', c: '' }
     };
     const m = map[s] || map.syncing;
     el.textContent = m.t;
@@ -1028,7 +1056,7 @@ window.resetAll = () => {
     const acc = getAccount();
     const h = getHolder();
     if (!acc || !h || !acc.transactions?.length) {
-        showToast('⚠️', 'Нет операций для обнуления');
+        showToast('️', 'Нет операций для обнуления');
         haptic('warning');
         return;
     }
@@ -1102,7 +1130,7 @@ const renderReportsList = () => {
             <div class="report-stats">
                 <div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div>
                 <div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div>
-                <div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
+                <div class="report-stat"><span class="report-stat-label"></span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
                 <div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div>
             </div>`;
         list.appendChild(card);
@@ -1194,7 +1222,7 @@ const refreshSettings = () => {
 // ===== ACTIONS =====
 const doTransaction = (type) => {
     const acc = getAccount();
-    if (!acc) { showToast('⚠️', 'Выберите счёт'); return; }
+    if (!acc) { showToast('️', 'Выберите счёт'); return; }
     const amount = parseFloat(document.getElementById('amountInput').value);
     if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; }
 
@@ -1264,7 +1292,7 @@ window.saveEditBalance = () => {
         return;
     }
     if (newBalance === acc.balance) {
-        showToast('ℹ️', 'Баланс не изменился');
+        showToast('️', 'Баланс не изменился');
         closeEditBalance();
         return;
     }
@@ -1304,7 +1332,7 @@ const doFixReport = () => {
 
 const doShareCurrentReport = () => {
     const s = calcAll();
-    const text = `📊 Findr\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
+    const text = `📊 Findr\n\n ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
     shareText(text, 'Отчёт');
 };
 
@@ -1333,7 +1361,7 @@ window.shareReport = (key) => {
     const r = savedReports[key];
     if (!r) return;
     const d = new Date(r.date);
-    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n🟢 ${fmt(r.income)}\n🔴 ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
+    const text = `📊 Отчёт ${d.getDate()} ${MONTHS[d.getMonth()]}\n\n💹 ${fmt(r.turnover)}\n💰 ${fmt(r.revenue)}\n ${fmt(r.income)}\n ${fmt(r.expense)}\n⚪ ${fmt(r.balance)}\n💜 ${fmt(r.capital)}`;
     shareText(text, 'Отчёт');
 };
 
@@ -1357,13 +1385,13 @@ window.deleteReport = (key) => {
 
 const doSaveAdjust = () => {
     const acc = getAccount();
-    if (!acc) { showToast('⚠️', 'Выберите счёт'); return; }
+    if (!acc) { showToast('️', 'Выберите счёт'); return; }
     const bStr = document.getElementById('adjBalance').value;
     const cStr = document.getElementById('adjCapital').value;
     const comment = document.getElementById('adjComment').value.trim();
     const newB = bStr !== '' ? parseFloat(bStr) : null;
     const newC = cStr !== '' ? parseFloat(cStr) : null;
-    if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; }
+    if (newB === null && newC === null) { showToast('️', 'Введите значение'); return; }
     if (!acc.transactions) acc.transactions = [];
     if (newB !== null && newB !== acc.balance) {
         acc.balance = newB;
@@ -1402,7 +1430,7 @@ window.setPeriod = (p) => {
     haptic('light');
 };
 
-// ===== ACCOUNT SHEET WITH ACTIONS MENU =====
+// ===== ACCOUNT SHEET WITH HAMBURGER MENU =====
 window.openAccountSheet = () => {
     document.getElementById('accountSearch').value = '';
     isEditMode = false;
@@ -1453,7 +1481,7 @@ window.createHolder = () => {
 
 window.createAccount = () => {
     if (!activeHolderId || !holders[activeHolderId]) {
-        showToast('⚠️', 'Сначала выберите держателя');
+        showToast('️', 'Сначала выберите держателя');
         return;
     }
     
@@ -1506,7 +1534,6 @@ const renderAccountTree = () => {
         block.style.marginBottom = '12px';
         
         if (isEditMode) {
-            // Edit mode - show inputs
             const head = document.createElement('div');
             head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;';
             head.innerHTML = `
@@ -1515,7 +1542,6 @@ const renderAccountTree = () => {
             `;
             block.appendChild(head);
         } else {
-            // Normal mode
             const head = document.createElement('div');
             head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;';
             head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`;
@@ -1530,7 +1556,6 @@ const renderAccountTree = () => {
             const isActive = hid === activeHolderId && a.id === activeAccountId;
             
             if (isEditMode) {
-                // Edit mode - show input
                 const row = document.createElement('div');
                 row.style.cssText = 'margin-bottom:8px;';
                 row.innerHTML = `
@@ -1539,7 +1564,6 @@ const renderAccountTree = () => {
                 `;
                 accs.appendChild(row);
             } else {
-                // Normal mode
                 const row = document.createElement('div');
                 row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;
                 row.onclick = () => {
@@ -1559,7 +1583,6 @@ const renderAccountTree = () => {
         block.appendChild(accs);
         
         if (isEditMode) {
-            // Add save/cancel buttons for this holder
             const editActions = document.createElement('div');
             editActions.className = 'edit-actions';
             editActions.innerHTML = `
