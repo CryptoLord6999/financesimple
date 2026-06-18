@@ -47,7 +47,6 @@ html, body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== SPLASH SCREEN ===== */
 #splash {
     position: fixed;
     inset: 0;
@@ -59,17 +58,8 @@ html, body {
     justify-content: center;
     transition: opacity 0.6s ease, visibility 0.6s ease;
 }
-#splash.hide {
-    opacity: 0;
-    visibility: hidden;
-}
-#splashCanvas {
-    width: 180px;
-    height: 180px;
-    filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15));
-}
-
-/* Анимация текста Findr */
+#splash.hide { opacity: 0; visibility: hidden; }
+#splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
 .splash-title {
     font-family: 'Inter', -apple-system, sans-serif;
     font-size: 2.5rem;
@@ -81,7 +71,6 @@ html, body {
     transform: translateY(20px);
     animation: titleReveal 1s ease-out 0.5s forwards;
 }
-
 .splash-sub {
     font-size: 0.85rem;
     color: #8E8E93;
@@ -92,37 +81,12 @@ html, body {
     transform: translateY(15px);
     animation: subtitleReveal 0.8s ease-out 1s forwards;
 }
+@keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
+@keyframes subtitleReveal { to { opacity: 1; transform: translateY(0); } }
 
-@keyframes titleReveal {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+#app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: var(--ios-bg); }
 
-@keyframes subtitleReveal {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== APP LAYOUT ===== */
-#app {
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    background: var(--ios-bg);
-}
-
-/* ===== PAGES ===== */
-.pages {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: var(--ios-bg);
-}
+.pages { flex: 1; position: relative; overflow: hidden; background: var(--ios-bg); }
 .page {
     position: absolute;
     inset: 0;
@@ -135,18 +99,9 @@ html, body {
     pointer-events: none;
     -webkit-overflow-scrolling: touch;
 }
-.page.active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
-}
+.page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 .page::-webkit-scrollbar { display: none; }
-
-.page-content {
-    padding: 12px 16px;
-    padding-top: max(12px, env(safe-area-inset-top));
-    min-height: 100%;
-}
+.page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
 /* ===== BALANCE CARD ===== */
 .balance-card {
@@ -166,13 +121,40 @@ html, body {
     height: 100%;
     background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
 }
+.balance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
+}
 .balance-label {
     font-size: 0.75rem;
     color: var(--ios-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 8px;
     font-weight: 500;
+}
+.balance-edit-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--ios-text-secondary);
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.balance-edit-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.2);
 }
 .balance-value {
     font-size: 2.25rem;
@@ -181,6 +163,8 @@ html, body {
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.03em;
+    position: relative;
+    z-index: 2;
 }
 .balance-sub {
     font-size: 0.8rem;
@@ -189,47 +173,17 @@ html, body {
     display: flex;
     align-items: center;
     gap: 6px;
+    position: relative;
+    z-index: 2;
 }
 
-/* ===== STATS GRID ===== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.stat-card {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    border: 1px solid var(--ios-separator);
-}
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-}
-.stat-icon {
-    font-size: 0.9rem;
-}
-.stat-name {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-}
-.stat-value {
-    font-size: 1rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+.stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
+.stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.stat-icon { font-size: 0.9rem; }
+.stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
+.stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 
-/* ===== ACCOUNT SELECTOR ===== */
 .account-chip {
     background: var(--ios-card);
     backdrop-filter: blur(20px);
@@ -244,523 +198,108 @@ html, body {
     border: 1px solid var(--ios-separator);
     transition: all 0.2s ease;
 }
-.account-chip:active {
-    transform: scale(0.98);
-    opacity: 0.8;
-}
-.account-chip-name {
-    font-size: 0.85rem;
-    font-weight: 500;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.account-chip-arrow {
-    color: var(--ios-blue);
-    font-size: 1rem;
-}
+.account-chip:active { transform: scale(0.98); opacity: 0.8; }
+.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.account-chip-arrow { color: var(--ios-blue); font-size: 1rem; }
 
-/* ===== INPUT ===== */
-.amount-input-wrap {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 4px;
-    margin-bottom: 12px;
-    border: 1px solid var(--ios-separator);
-}
-.amount-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--ios-text);
-    font-size: 1.75rem;
-    font-weight: 600;
-    text-align: center;
-    padding: 14px;
-    outline: none;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-}
-.amount-input::placeholder {
-    color: var(--ios-text-secondary);
-}
+.amount-input-wrap { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 4px; margin-bottom: 12px; border: 1px solid var(--ios-separator); }
+.amount-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 1.75rem; font-weight: 600; text-align: center; padding: 14px; outline: none; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.amount-input::placeholder { color: var(--ios-text-secondary); }
 
-/* ===== QUICK ACTIONS ===== */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.action-btn {
-    padding: 14px;
-    border-radius: var(--radius-ios-sm);
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.action-btn:active {
-    transform: scale(0.96);
-    opacity: 0.9;
-}
-.action-income {
-    background: var(--ios-green);
-    color: white;
-}
-.action-expense {
-    background: var(--ios-red);
-    color: white;
-}
+.quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.action-btn:active { transform: scale(0.96); opacity: 0.9; }
+.action-income { background: var(--ios-green); color: white; }
+.action-expense { background: var(--ios-red); color: white; }
 
-/* ===== SECTION ===== */
-.section-title {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 10px;
-    font-weight: 600;
-    padding: 0 4px;
-}
+.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; font-weight: 600; padding: 0 4px; }
 
-/* ===== TRANSACTION LIST ===== */
-.tx-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.tx-item {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 12px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--ios-separator);
-    animation: slideUp 0.3s ease;
-}
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.tx-info {
-    flex: 1;
-    min-width: 0;
-}
-.tx-desc {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.tx-time {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-}
-.tx-amount {
-    font-size: 0.95rem;
-    font-weight: 600;
-    white-space: nowrap;
-    margin-left: 12px;
-    font-variant-numeric: tabular-nums;
-}
+.tx-list { display: flex; flex-direction: column; gap: 8px; }
+.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.tx-info { flex: 1; min-width: 0; }
+.tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
+.tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(28, 28, 30, 0.85);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-top: 1px solid var(--ios-separator);
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-    z-index: 1000;
-}
-.nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-.nav-icon {
-    font-size: 1.4rem;
-    transition: all 0.2s ease;
-    opacity: 0.5;
-}
-.nav-item.active .nav-icon {
-    opacity: 1;
-    transform: scale(1.1);
-}
-.nav-label {
-    font-size: 0.6rem;
-    font-weight: 500;
-    color: var(--ios-text-secondary);
-    transition: color 0.2s ease;
-    letter-spacing: 0.02em;
-}
-.nav-item.active .nav-label {
-    color: var(--ios-blue);
-}
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; cursor: pointer; transition: all 0.2s ease; }
+.nav-icon { font-size: 1.4rem; transition: all 0.2s ease; opacity: 0.5; }
+.nav-item.active .nav-icon { opacity: 1; transform: scale(1.1); }
+.nav-label { font-size: 0.6rem; font-weight: 500; color: var(--ios-text-secondary); transition: color 0.2s ease; letter-spacing: 0.02em; }
+.nav-item.active .nav-label { color: var(--ios-blue); }
 
-/* ===== BOTTOM SHEET ===== */
-.sheet-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-.sheet-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-.bottom-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #1c1c1e;
-    border-radius: 20px 20px 0 0;
-    padding: 12px 16px max(16px, env(safe-area-inset-bottom));
-    z-index: 2001;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 85vh;
-    overflow-y: auto;
-}
-.bottom-sheet.active {
-    transform: translateY(0);
-}
-.sheet-handle {
-    width: 36px;
-    height: 5px;
-    background: #3a3a3c;
-    border-radius: 3px;
-    margin: 0 auto 16px;
-}
-.sheet-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 16px;
-}
+.sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.sheet-overlay.active { opacity: 1; visibility: visible; }
+.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
+.bottom-sheet.active { transform: translateY(0); }
+.sheet-handle { width: 36px; height: 5px; background: #3a3a3c; border-radius: 3px; margin: 0 auto 16px; }
+.sheet-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 16px; }
 
-/* ===== TOAST ===== */
-.toast-container {
-    position: fixed;
-    top: max(16px, env(safe-area-inset-top));
-    left: 16px;
-    right: 16px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-}
-.toast {
-    background: rgba(28, 28, 30, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 12px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: toastIn 0.3s ease;
-    pointer-events: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-.toast.out {
-    animation: toastOut 0.3s ease forwards;
-}
-@keyframes toastIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes toastOut {
-    to { opacity: 0; transform: translateY(-20px); }
-}
-.toast-icon {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.toast-text {
-    font-size: 0.85rem;
-    flex: 1;
-    font-weight: 500;
-}
+.toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; animation: toastIn 0.3s ease; pointer-events: auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+.toast.out { animation: toastOut 0.3s ease forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(-20px); } }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
 
-/* ===== BUTTONS ===== */
-.btn {
-    padding: 13px 20px;
-    border-radius: var(--radius-ios-sm);
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.btn:active {
-    transform: scale(0.97);
-    opacity: 0.9;
-}
-.btn-primary {
-    background: var(--ios-blue);
-    color: white;
-}
-.btn-secondary {
-    background: rgba(120, 120, 128, 0.12);
-    color: var(--ios-blue);
-}
+.btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:active { transform: scale(0.97); opacity: 0.9; }
+.btn-primary { background: var(--ios-blue); color: white; }
+.btn-secondary { background: rgba(120, 120, 128, 0.12); color: var(--ios-blue); }
 
-/* ===== REPORT CARD ===== */
-.report-card {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    margin-bottom: 10px;
-    border: 1px solid var(--ios-separator);
-}
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-}
-.report-date {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-.report-time {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    margin-top: 2px;
-}
-.report-actions {
-    display: flex;
-    gap: 6px;
-}
-.report-action {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+.report-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
+.report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.report-date { font-size: 0.9rem; font-weight: 600; }
+.report-time { font-size: 0.7rem; color: var(--ios-text-secondary); margin-top: 2px; }
+.report-actions { display: flex; gap: 6px; }
+.report-action { width: 30px; height: 30px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
 .report-action:active { transform: scale(0.9); }
 .report-action.share { background: rgba(0, 122, 255, 0.15); }
 .report-action.edit { background: rgba(255, 149, 0, 0.15); }
 .report-action.delete { background: rgba(255, 59, 48, 0.15); }
+.report-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.report-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.75rem; }
+.report-stat-label { color: var(--ios-text-secondary); }
+.report-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.report-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-}
-.report-stat {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    font-size: 0.75rem;
-}
-.report-stat-label {
-    color: var(--ios-text-secondary);
-}
-.report-stat-value {
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
+.summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
+.summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); }
+.summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
+.summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
 
-/* ===== SUMMARY CARD ===== */
-.summary-block {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios);
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid var(--ios-separator);
-}
-.summary-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 12px;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-.summary-item {
-    text-align: center;
-    padding: 10px 8px;
-    background: rgba(120, 120, 128, 0.08);
-    border-radius: var(--radius-ios-sm);
-}
-.summary-label {
-    font-size: 0.6rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-}
-.summary-val {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-top: 4px;
-    font-variant-numeric: tabular-nums;
-}
-
-/* ===== PERIOD CHIPS ===== */
-.period-row {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    margin-bottom: 16px;
-    scrollbar-width: none;
-}
+.period-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
 .period-row::-webkit-scrollbar { display: none; }
-.period-chip {
-    padding: 7px 14px;
-    border-radius: 100px;
-    background: var(--ios-card);
-    border: 1px solid var(--ios-separator);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--ios-text-secondary);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-}
-.period-chip.active {
-    background: var(--ios-blue);
-    color: white;
-    border-color: var(--ios-blue);
-}
+.period-chip { padding: 7px 14px; border-radius: 100px; background: var(--ios-card); border: 1px solid var(--ios-separator); font-size: 0.8rem; font-weight: 500; color: var(--ios-text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(10px); }
+.period-chip.active { background: var(--ios-blue); color: white; border-color: var(--ios-blue); }
 
-/* ===== SETTINGS ===== */
-.setting-group {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    margin-bottom: 10px;
-    border: 1px solid var(--ios-separator);
-}
-.setting-label {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 6px;
-    font-weight: 500;
-}
-.setting-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--ios-separator);
-    color: var(--ios-text);
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 6px 0;
-    outline: none;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-}
-.setting-input:focus {
-    border-bottom-color: var(--ios-blue);
-}
-.setting-hint {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    margin-top: 4px;
-}
+.setting-group { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; margin-bottom: 10px; border: 1px solid var(--ios-separator); }
+.setting-label { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; font-weight: 500; }
+.setting-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--ios-separator); color: var(--ios-text); font-size: 1.1rem; font-weight: 600; padding: 6px 0; outline: none; text-align: center; font-variant-numeric: tabular-nums; }
+.setting-input:focus { border-bottom-color: var(--ios-blue); }
+.setting-hint { font-size: 0.65rem; color: var(--ios-text-secondary); margin-top: 4px; }
 
-/* ===== SYNC BADGE ===== */
-.sync-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    padding: 4px 10px;
-    background: rgba(120, 120, 128, 0.12);
-    border-radius: 100px;
-    margin-top: 8px;
-    font-weight: 500;
-}
+.sync-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; color: var(--ios-text-secondary); padding: 4px 10px; background: rgba(120, 120, 128, 0.12); border-radius: 100px; margin-top: 8px; font-weight: 500; }
 .sync-badge.syncing { color: var(--ios-orange); }
 .sync-badge.synced { color: var(--ios-green); }
 
-/* ===== EMPTY STATE ===== */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ios-text-secondary);
-}
-.empty-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    opacity: 0.5;
-}
-.empty-text {
-    font-size: 0.85rem;
-}
+.empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5; }
+.empty-text { font-size: 0.85rem; }
 
-/* ===== COLORS ===== */
 .text-green { color: var(--ios-green); }
 .text-red { color: var(--ios-red); }
 .text-blue { color: var(--ios-blue); }
 .text-orange { color: var(--ios-orange); }
 
-/* ===== UTILS ===== */
 .mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
@@ -768,21 +307,17 @@ html, body {
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
     <canvas id="splashCanvas"></canvas>
     <div class="splash-title">Findr</div>
     <div class="splash-sub">Решения для бизнеса</div>
 </div>
 
-<!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- APP -->
 <div id="app">
     <div class="pages">
         
-        <!-- HOME -->
         <div class="page active" id="page-home">
             <div class="page-content">
                 <div class="account-chip" onclick="openAccountSheet()">
@@ -791,38 +326,29 @@ html, body {
                 </div>
 
                 <div class="balance-card">
-                    <div class="balance-label">Текущий баланс</div>
+                    <div class="balance-header">
+                        <div class="balance-label">Текущий баланс</div>
+                        <button class="balance-edit-btn" onclick="openEditBalance()" title="Редактировать баланс">✏️</button>
+                    </div>
                     <div class="balance-value" id="balanceDisplay">0 ₽</div>
                     <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">💹</span>
-                            <span class="stat-name">Оборот</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div>
                         <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">🟢</span>
-                            <span class="stat-name">Доход</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div>
                         <div class="stat-value text-green" id="statIncome">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">🔴</span>
-                            <span class="stat-name">Расход</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div>
                         <div class="stat-value text-red" id="statExpense">0 ₽</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-icon">💰</span>
-                            <span class="stat-name">Выручка</span>
-                        </div>
+                        <div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div>
                         <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
                     </div>
                 </div>
@@ -850,149 +376,97 @@ html, body {
             </div>
         </div>
 
-        <!-- REPORT -->
         <div class="page" id="page-report">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
-                
                 <div class="summary-block">
                     <div class="summary-title">Сводка по всем счетам</div>
                     <div class="summary-grid">
-                        <div class="summary-item">
-                            <div class="summary-label">💹 Оборот</div>
-                            <div class="summary-val text-blue" id="sumTurnover">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💰 Выручка</div>
-                            <div class="summary-val text-orange" id="sumRevenue">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🟢 Доходы</div>
-                            <div class="summary-val text-green" id="sumIncome">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🔴 Расходы</div>
-                            <div class="summary-val text-red" id="sumExpense">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">⚪ Баланс</div>
-                            <div class="summary-val" id="sumBalance">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💜 Капитал</div>
-                            <div class="summary-val text-blue" id="sumCapital">0 ₽</div>
-                        </div>
-                        <div class="summary-item" style="grid-column:span 2;">
-                            <div class="summary-label">🔵 На сайте</div>
-                            <div class="summary-val text-orange" id="sumSite">0 ₽</div>
-                        </div>
+                        <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
+                        <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
                     </div>
                 </div>
-
                 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
                 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
-
                 <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
                     ✅ Последний: <span id="lastFixedDate"></span>
                 </div>
-
                 <div class="section-title">Зафиксированные отчёты</div>
                 <div id="reportsList"></div>
             </div>
         </div>
 
-        <!-- DETAIL -->
         <div class="page" id="page-detail">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">🔍 Детализация</div>
-
                 <div class="summary-block">
                     <div class="summary-title">Общие показатели</div>
                     <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-                        <div class="summary-item">
-                            <div class="summary-label">⚪ Баланс</div>
-                            <div class="summary-val" id="detBalance">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">💜 Капитал</div>
-                            <div class="summary-val text-blue" id="detCapital">0 ₽</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">🔵 Сайт</div>
-                            <div class="summary-val text-orange" id="detSite">0 ₽</div>
-                        </div>
+                        <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+                        <div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
                     </div>
                 </div>
-
                 <div class="period-row" id="periodRow">
                     <div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
                     <div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
                     <div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
                     <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
                 </div>
-
                 <div id="detailTree"></div>
-
                 <button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">📤 Поделиться</button>
             </div>
         </div>
 
-        <!-- ADJUST -->
         <div class="page" id="page-adjust">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
-                
                 <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
                     💼 Счёт: Основной
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">Новый баланс (₽)</div>
                     <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
                     <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">📝 Комментарий</div>
                     <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
                 </div>
-
                 <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
             </div>
         </div>
 
-        <!-- SETTINGS -->
         <div class="page" id="page-settings">
             <div class="page-content">
                 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
-
                 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
                     <span style="font-size:1.1rem;">💡</span>
                     <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">💜 Капитал (₽)</div>
                     <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
                     <div class="setting-hint">Общий для всех счетов</div>
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">% от доходов</div>
                     <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
                 </div>
-
                 <div class="setting-group">
                     <div class="setting-label">% от расходов</div>
                     <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
                 </div>
-
                 <div class="report-card" style="background:rgba(0,122,255,0.08);">
                     <div class="setting-label" style="margin-bottom:6px;">Формула</div>
                     <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
@@ -1000,14 +474,12 @@ html, body {
                         <span style="color:var(--ios-blue);">💜 Капитал += Выручка</span>
                     </div>
                 </div>
-
                 <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
             </div>
         </div>
 
     </div>
 
-    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
         <div class="nav-item active" data-page="home" onclick="switchPage('home')">
             <span class="nav-icon">🏠</span>
@@ -1042,12 +514,33 @@ html, body {
     <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
 
+<!-- EDIT BALANCE SHEET -->
+<div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
+<div class="bottom-sheet" id="editBalanceSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">✏️ Редактировать баланс</div>
+    <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+        <span style="font-size:1.1rem;">💡</span>
+        <span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
+    </div>
+    <div class="setting-group">
+        <div class="setting-label">Новый баланс (₽)</div>
+        <input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+        <div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div>
+    </div>
+    <div class="setting-group">
+        <div class="setting-label">📝 Комментарий (необязательно)</div>
+        <input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;">
+    </div>
+    <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
+    <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
+</div>
+
 <script>
-// ===== TELEGRAM =====
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== SPLASH WITH REALISTIC DIAMOND =====
+// ===== SPLASH =====
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -1058,19 +551,16 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     renderer.setSize(400, 400);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // Diamond geometry
     const geo = new THREE.BufferGeometry();
     const verts = [];
     const segs = 12;
     const topR = 0.5, midR = 1.0, topH = 0.4, botH = 1.0;
 
-    // Table (top flat)
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
         verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR);
     }
-    // Crown
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1079,7 +569,6 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
         verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR);
         verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR);
     }
-    // Pavilion
     for (let i = 0; i < segs; i++) {
         const a1 = (i / segs) * Math.PI * 2;
         const a2 = ((i + 1) / segs) * Math.PI * 2;
@@ -1088,7 +577,6 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
     geo.computeVertexNormals();
 
-    // Realistic diamond material using MeshPhongMaterial
     const mat = new THREE.MeshPhongMaterial({
         color: 0xffffff,
         specular: 0xffffff,
@@ -1102,28 +590,12 @@ if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    // Enhanced lighting for realistic diamond
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    
-    const l1 = new THREE.PointLight(0xffffff, 1.5, 100);
-    l1.position.set(5, 5, 5);
-    scene.add(l1);
-    
-    const l2 = new THREE.PointLight(0xe0f7ff, 1.2, 100);
-    l2.position.set(-5, 3, 5);
-    scene.add(l2);
-    
-    const l3 = new THREE.PointLight(0xffffff, 1.0, 100);
-    l3.position.set(0, 5, -5);
-    scene.add(l3);
-    
-    const l4 = new THREE.PointLight(0xfff5e0, 0.8, 100);
-    l4.position.set(3, -3, 3);
-    scene.add(l4);
-    
-    const l5 = new THREE.PointLight(0xe0e0ff, 0.6, 100);
-    l5.position.set(-3, -3, -3);
-    scene.add(l5);
+    const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
+    const l2 = new THREE.PointLight(0xe0f7ff, 1.2, 100); l2.position.set(-5, 3, 5); scene.add(l2);
+    const l3 = new THREE.PointLight(0xffffff, 1.0, 100); l3.position.set(0, 5, -5); scene.add(l3);
+    const l4 = new THREE.PointLight(0xfff5e0, 0.8, 100); l4.position.set(3, -3, 3); scene.add(l4);
+    const l5 = new THREE.PointLight(0xe0e0ff, 0.6, 100); l5.position.set(-3, -3, -3); scene.add(l5);
 
     function anim() {
         requestAnimationFrame(anim);
@@ -1157,7 +629,6 @@ function switchPage(name) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     document.querySelector(`.nav-item[data-page="${name}"]`).classList.add('active');
-    
     if (name === 'report') refreshReport();
     if (name === 'detail') refreshDetail();
     if (name === 'adjust') refreshAdjust();
@@ -1491,16 +962,12 @@ const renderDetailTree = () => {
         container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>';
         return;
     }
-    let grand = { income: 0, expense: 0, turnover: 0, revenue: 0 };
     keys.forEach(hid => {
         const h = holders[hid];
         if (!h?.accounts) return;
-        let ht = { income: 0, expense: 0, turnover: 0, revenue: 0 };
         const block = document.createElement('div');
-        block.className = 'holder-block';
         block.style.marginBottom = '12px';
         const head = document.createElement('div');
-        head.className = 'holder-head';
         head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;';
         head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`;
         block.appendChild(head);
@@ -1509,9 +976,7 @@ const renderDetailTree = () => {
         Object.values(h.accounts).forEach(a => {
             if (!a) return;
             const s = calcAcc(a, detailPeriod);
-            ht.income += s.totalIncome; ht.expense += s.totalExpense; ht.turnover += s.turnover; ht.revenue += s.revenue;
             const row = document.createElement('div');
-            row.className = 'acc-row';
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';
             row.innerHTML = `
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
@@ -1528,7 +993,6 @@ const renderDetailTree = () => {
         });
         block.appendChild(accs);
         container.appendChild(block);
-        grand.income += ht.income; grand.expense += ht.expense; grand.turnover += ht.turnover; grand.revenue += ht.revenue;
     });
 };
 
@@ -1582,6 +1046,72 @@ const doTransaction = (type) => {
     }
 };
 
+// ===== EDIT BALANCE =====
+window.openEditBalance = () => {
+    const acc = getAccount();
+    if (!acc) {
+        showToast('⚠️', 'Выберите счёт');
+        return;
+    }
+    document.getElementById('editBalanceInput').value = '';
+    document.getElementById('editBalanceComment').value = '';
+    document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance);
+    document.getElementById('editBalanceOverlay').classList.add('active');
+    document.getElementById('editBalanceSheet').classList.add('active');
+    haptic('light');
+    setTimeout(() => document.getElementById('editBalanceInput').focus(), 400);
+};
+
+window.closeEditBalance = () => {
+    document.getElementById('editBalanceOverlay').classList.remove('active');
+    document.getElementById('editBalanceSheet').classList.remove('active');
+};
+
+window.saveEditBalance = () => {
+    const acc = getAccount();
+    if (!acc) {
+        showToast('⚠️', 'Выберите счёт');
+        closeEditBalance();
+        return;
+    }
+    const newBalanceStr = document.getElementById('editBalanceInput').value;
+    if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) {
+        showToast('⚠️', 'Введите корректную сумму');
+        haptic('error');
+        return;
+    }
+    const newBalance = parseFloat(newBalanceStr);
+    if (newBalance < -999999999 || newBalance > 999999999) {
+        showToast('⚠️', 'Сумма вне допустимого диапазона');
+        haptic('error');
+        return;
+    }
+    if (newBalance === acc.balance) {
+        showToast('ℹ️', 'Баланс не изменился');
+        closeEditBalance();
+        return;
+    }
+
+    const comment = document.getElementById('editBalanceComment').value.trim();
+    const diff = newBalance - acc.balance;
+    const desc = comment || 'Корректировка баланса';
+
+    if (!acc.transactions) acc.transactions = [];
+    acc.transactions.push({
+        type: 'adjustment',
+        amount: diff,
+        desc: desc,
+        date: new Date().toISOString()
+    });
+    acc.balance = newBalance;
+
+    haptic('success');
+    renderAll();
+    saveServer();
+    closeEditBalance();
+    showToast('✅', `Баланс изменён на ${fmt(newBalance)}`);
+};
+
 const doFixReport = () => {
     const s = calcAll();
     const now = new Date();
@@ -1597,7 +1127,6 @@ const doFixReport = () => {
 
 const doShareCurrentReport = () => {
     const s = calcAll();
-    const now = new Date();
     const text = `📊 Findr\n\n💹 ${fmt(s.turnover)}\n💰 ${fmt(s.revenue)}\n🟢 ${fmt(s.totalIncome)}\n🔴 ${fmt(s.totalExpense)}\n⚪ ${fmt(s.totalBalance)}\n💜 ${fmt(capital)}`;
     shareText(text, 'Отчёт');
 };
