@@ -17,7 +17,11 @@
 #splashScreen {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #fefef8 0%, #f8f4e8 25%, #e8d5a0 50%, #d4af37 75%, #fefef8 100%);
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(255,253,240,0.9) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255,248,220,0.8) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255,251,235,0.95) 0%, rgba(245,230,180,0.9) 40%, rgba(212,175,55,0.85) 100%);
+    background-size: 100% 100%, 100% 100%, 100% 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,19 +30,107 @@
     transition: opacity 1.2s ease, visibility 1.2s ease;
     overflow: hidden;
 }
+
+/* Реалистичная текстура */
 #splashScreen::before {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212,175,55,0.03) 2px, rgba(212,175,55,0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Световые лучи */
+#splashScreen::after {
     content: '';
     position: absolute;
     width: 200%; height: 200%;
     top: -50%; left: -50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(212,175,55,0.4) 0%, transparent 50%);
-    animation: shimmer 10s ease-in-out infinite;
+    background: 
+        conic-gradient(from 0deg at 50% 50%, 
+            rgba(255,255,255,0) 0deg,
+            rgba(255,248,220,0.15) 45deg,
+            rgba(255,255,255,0) 90deg,
+            rgba(255,248,220,0.1) 135deg,
+            rgba(255,255,255,0) 180deg,
+            rgba(255,248,220,0.15) 225deg,
+            rgba(255,255,255,0) 270deg,
+            rgba(255,248,220,0.1) 315deg,
+            rgba(255,255,255,0) 360deg
+        );
+    animation: rotateLight 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
 }
-@keyframes shimmer {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(5%, 5%) rotate(180deg); }
+
+@keyframes rotateLight {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
+
+/* Плавающие частицы */
+.splash-particles {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatParticle 15s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { width: 4px; height: 4px; top: 20%; left: 30%; animation-delay: 0s; }
+.particle:nth-child(2) { width: 6px; height: 6px; top: 60%; left: 70%; animation-delay: 3s; }
+.particle:nth-child(3) { width: 3px; height: 3px; top: 40%; left: 80%; animation-delay: 6s; }
+.particle:nth-child(4) { width: 5px; height: 5px; top: 70%; left: 20%; animation-delay: 9s; }
+.particle:nth-child(5) { width: 4px; height: 4px; top: 30%; left: 60%; animation-delay: 12s; }
+.particle:nth-child(6) { width: 7px; height: 7px; top: 80%; left: 50%; animation-delay: 5s; }
+.particle:nth-child(7) { width: 3px; height: 3px; top: 15%; left: 45%; animation-delay: 8s; }
+.particle:nth-child(8) { width: 5px; height: 5px; top: 50%; left: 10%; animation-delay: 11s; }
+
+@keyframes floatParticle {
+    0%, 100% { 
+        transform: translateY(0) translateX(0) scale(1); 
+        opacity: 0;
+    }
+    10% { opacity: 0.6; }
+    50% { 
+        transform: translateY(-100px) translateX(50px) scale(1.5); 
+        opacity: 0.8;
+    }
+    90% { opacity: 0.6; }
+}
+
+/* Мерцание света */
+.light-flicker {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background: radial-gradient(circle at 50% 30%, 
+        rgba(255,255,255,0.4) 0%, 
+        transparent 60%);
+    animation: flicker 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    25% { opacity: 0.5; transform: scale(1.1); }
+    50% { opacity: 0.4; transform: scale(0.95); }
+    75% { opacity: 0.6; transform: scale(1.05); }
+}
+
 #splashScreen.hidden {
     opacity: 0;
     visibility: hidden;
@@ -49,21 +141,24 @@
     height: 300px;
     margin-bottom: 2rem;
     position: relative;
-    z-index: 1;
+    z-index: 3;
+    filter: drop-shadow(0 20px 40px rgba(212,175,55,0.4));
 }
 
 .diamond-glow {
     position: absolute;
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(212,175,55,0.3) 30%, transparent 70%);
+    background: 
+        radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,248,220,0.6) 20%, rgba(212,175,55,0.3) 40%, transparent 70%);
     border-radius: 50%;
-    animation: pulseGlow 3s ease-in-out infinite;
+    animation: pulseGlow 4s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
+    filter: blur(20px);
 }
 
 @keyframes pulseGlow {
@@ -81,7 +176,7 @@
     text-shadow: 0 3px 25px rgba(212,175,55,0.6), 0 0 50px rgba(255,215,0,0.4);
     margin-top: 0;
     position: relative;
-    z-index: 1;
+    z-index: 3;
     text-align: center;
     line-height: 1.2;
 }
@@ -96,7 +191,7 @@
     opacity: 0.85;
     text-transform: uppercase;
     position: relative;
-    z-index: 1;
+    z-index: 3;
     text-align: center;
 }
 
@@ -110,7 +205,7 @@
     opacity: 0.6;
     text-transform: uppercase;
     position: relative;
-    z-index: 1;
+    z-index: 3;
     text-align: center;
 }
 
@@ -120,7 +215,7 @@
     background: linear-gradient(90deg, transparent, #d4af37, transparent);
     margin: 1.5rem auto;
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .splash-divider::before {
@@ -131,7 +226,7 @@
     transform: translate(-50%, -50%);
     color: #d4af37;
     font-size: 0.6rem;
-    background: #fefef8;
+    background: linear-gradient(135deg, #fefef8, #f8f4e8);
     padding: 0 0.5rem;
 }
 
@@ -679,6 +774,17 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <!-- ЗАГРУЗОЧНЫЙ ЭКРАН -->
 <div id="splashScreen">
     <div class="diamond-glow"></div>
+    <div class="light-flicker"></div>
+    <div class="splash-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
     <canvas id="diamondCanvas"></canvas>
     <div class="splash-title">Finance Luxe</div>
     <div class="splash-divider"></div>
@@ -686,6 +792,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     <div class="splash-tagline">Решения для бизнеса</div>
 </div>
 
+<!-- Остальной код приложения остаётся без изменений -->
 <div class="flex-1 flex flex-col justify-center items-center mb-4" style="position:relative;z-index:1;">
 <div class="account-selector-btn" onclick="openSelectAccount()">
 <div class="selector-path">
@@ -699,7 +806,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="syncStatus" class="sync-indicator">подключение...</div>
 
 <div class="stats-row">
-<div class="stat-card"><div class="stat-label"> Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-label">💹 Оборот</div><div class="stat-value turnover-color" id="totalTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🟢 Доход</div><div class="stat-value income-color" id="totalIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">🔴 Расход</div><div class="stat-value expense-color" id="totalExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-label">💰 Выручка</div><div class="stat-value revenue-color" id="totalRevenue">0 ₽</div></div>
@@ -707,7 +814,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 <div class="button-group">
 <button onclick="openReport()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(212,175,55,0.15);color:#d4af37;border:1px solid rgba(212,175,55,0.3);">📊 Отчет</button>
-<button onclick="openDetail()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);"> Детализация</button>
+<button onclick="openDetail()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3);">🔍 Детализация</button>
 <button onclick="openAdjustment()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(192,132,252,0.15);color:#c084fc;border:1px solid rgba(192,132,252,0.3);">✏️ Корректировка</button>
 <button onclick="openSettings()" class="px-4 py-2 hover:opacity-80 active:scale-95 transition-all duration-200 rounded-2xl font-medium text-sm" style="background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.3);">⚙️ Настройки</button>
 </div>
@@ -729,6 +836,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="history" class="space-y-3 pb-6"></div>
 </div>
 
+<!-- Остальные модальные окна остаются без изменений -->
 <!-- ОТЧЕТ -->
 <div id="reportModal" class="modal">
 <div class="modal-content">
@@ -740,13 +848,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-value turnover-color" id="summaryTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-value revenue-color" id="summaryRevenue">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-value income-color" id="summaryIncome">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label"> Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-value expense-color" id="summaryExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Общий баланс</div><div class="summary-value" id="summaryBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-value capital-color" id="summaryCapital">0 ₽</div></div>
 <div class="summary-item summary-item-wide"><div class="summary-label">🔵 Баланс на сайте</div><div class="summary-value site-balance-color" id="summarySiteBalance">0 ₽</div></div>
 </div>
 </div>
-<button onclick="fixReport()" class="save-report-btn"> Зафиксировать отчет</button>
+<button onclick="fixReport()" class="save-report-btn">📌 Зафиксировать отчет</button>
 <button onclick="shareCurrentReport()" class="share-report-btn">📤 Поделиться текущим отчетом</button>
 <div id="fixedIndicator" class="adjustment-info" style="display:none;background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.3);color:#4ade80">
 ✅ Последний отчет: <span id="fixedDate"></span>
@@ -803,7 +911,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="selectAccountModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title"> Выбор счета</div>
+<div class="modal-title">📂 Выбор счета</div>
 <div class="adjustment-info">💡 Нажмите ✏️ чтобы переименовать держателя или счет</div>
 <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по названию..." oninput="renderSelectTree()">
 <div id="selectTree"></div>
@@ -859,7 +967,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div class="modal-title">💎 Общие показатели</div>
 <div class="adjustment-info">💡 Общий баланс рассчитывается автоматически как сумма всех счетов.</div>
 <div class="settings-input-group">
-<label class="settings-input-label"> Общий баланс (₽)</label>
+<label class="settings-input-label">⚪ Общий баланс (₽)</label>
 <div class="report-value" id="editCommonBalance" style="text-align:center;padding:0.5rem 0">0 ₽</div>
 <div class="settings-input-hint">Рассчитывается автоматически (сумма всех счетов)</div>
 </div>
@@ -890,7 +998,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 <div id="settingsModal" class="modal">
 <div class="modal-content">
 <div class="modal-close"></div>
-<div class="modal-title">️ Настройки</div>
+<div class="modal-title">⚙️ Настройки</div>
 <div class="revenue-capital-info">
 <span>💡</span>
 <span><b>Автоматическая капитализация:</b> после каждой транзакции выручка автоматически прибавляется к общему капиталу.</span>
@@ -1040,6 +1148,8 @@ window.addEventListener('load', () => {
     }, 4000);
 });
 
+// ... (весь остальной JavaScript код остается без изменений)
+
 const getUserId = () => {
     const tgUserId = tg?.initDataUnsafe?.user?.id;
     if (tgUserId) return 'tg_' + tgUserId;
@@ -1162,9 +1272,9 @@ const calculateAllStats = () => {
 
 const updateSyncStatus = (status) => {
     const statuses = {
-        syncing: { text: '️ синхронизация...', class: 'syncing' },
-        synced: { text: '️ сохранено в облаке', class: 'synced' },
-        offline: { text: ' локально', class: '' },
+        syncing: { text: '☁️ синхронизация...', class: 'syncing' },
+        synced: { text: '☁️ сохранено в облаке', class: 'synced' },
+        offline: { text: '💾 локально', class: '' },
         error: { text: '⚠️ ошибка', class: 'error' },
         local: { text: '💾 локальное хранилище', class: 'warning' }
     };
@@ -1177,7 +1287,7 @@ const updateSelectorPath = () => {
     const h = getActiveHolder();
     const acc = getActiveAccount();
     if (!h || !acc) { selectorPath.textContent = '📂 Выберите счет'; return; }
-    selectorPath.textContent = ` ${h.name} → 💼 ${acc.name}`;
+    selectorPath.textContent = `👤 ${h.name} → 💼 ${acc.name}`;
 };
 
 const updateUI = () => {
@@ -1530,7 +1640,7 @@ window.editHolderName = (holderId, e) => {
     const oldName = h.name;
     const container = document.createElement('div');
     container.className = 'inline-edit-container';
-    container.innerHTML = `<input type="text" class="inline-edit-input" value="${oldName}" id="holderEditInput_${holderId}"><div class="inline-edit-actions"><button class="inline-edit-btn inline-edit-save" onclick="saveHolderName('${holderId}')">✓</button><button class="inline-edit-btn inline-edit-cancel" onclick="cancelHolderEdit('${holderId}')"></button></div>`;
+    container.innerHTML = `<input type="text" class="inline-edit-input" value="${oldName}" id="holderEditInput_${holderId}"><div class="inline-edit-actions"><button class="inline-edit-btn inline-edit-save" onclick="saveHolderName('${holderId}')">✓</button><button class="inline-edit-btn inline-edit-cancel" onclick="cancelHolderEdit('${holderId}')">✕</button></div>`;
     nameSpan.replaceWith(container);
     const input = document.getElementById('holderEditInput_' + holderId);
     input.focus();
@@ -1755,10 +1865,10 @@ const renderDetailTree = () => {
         const totalRow = document.createElement('div');
         totalRow.className = 'holder-total-row';
         totalRow.innerHTML = `
-<div class="holder-total-label"> Итого по держателю</div>
+<div class="holder-total-label">📊 Итого по держателю</div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">💹 Оборот</div><div class="holder-total-mini-value turnover-color">${formatMoneyShort(holderTotal.turnover)}</div></div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">🟢 Доход</div><div class="holder-total-mini-value income-color">${formatMoneyShort(holderTotal.income)}</div></div>
-<div class="holder-total-mini"><div class="holder-total-mini-label"> Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
+<div class="holder-total-mini"><div class="holder-total-mini-label">🔴 Расход</div><div class="holder-total-mini-value expense-color">${formatMoneyShort(holderTotal.expense)}</div></div>
 <div class="holder-total-mini"><div class="holder-total-mini-label">💰 Выручка</div><div class="holder-total-mini-value revenue-color">${formatMoneyShort(holderTotal.revenue)}</div></div>
 `;
         accountsList.appendChild(totalRow);
@@ -1884,7 +1994,7 @@ const renderReportsList = () => {
             const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             const item = document.createElement('div');
             item.className = 'report-list-item';
-            item.innerHTML = `<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn share-btn" onclick="shareReport('${key}')">📤</button><button class="report-action-btn edit-btn" onclick="editReport('${key}')">️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
+            item.innerHTML = `<div class="report-list-header"><div><div class="report-list-date">${dateStr}</div><div class="report-list-time">${timeStr}</div></div><div class="report-list-actions"><button class="report-action-btn share-btn" onclick="shareReport('${key}')">📤</button><button class="report-action-btn edit-btn" onclick="editReport('${key}')">✏️</button><button class="report-action-btn delete-btn" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-list-stats"><div class="report-stat"><span class="report-stat-label">💹 Оборот:</span><span class="report-stat-value turnover-color">${formatMoneyShort(report.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰 Выручка:</span><span class="report-stat-value revenue-color">${formatMoneyShort(report.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢 Доходы:</span><span class="report-stat-value income-color">${formatMoneyShort(report.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴 Расходы:</span><span class="report-stat-value expense-color">${formatMoneyShort(report.expense)}</span></div><div class="report-stat"><span class="report-stat-label">⚪ Баланс:</span><span class="report-stat-value">${formatMoneyShort(report.balance)}</span></div><div class="report-stat"><span class="report-stat-label">💜 Капитал:</span><span class="report-stat-value capital-color">${formatMoneyShort(report.capital)}</span></div><div class="report-stat" style="grid-column:span 2"><span class="report-stat-label">🔵 Баланс на сайте:</span><span class="report-stat-value site-balance-color">${formatMoneyShort(report.siteBalance)}</span></div></div>`;
             list.appendChild(item);
         });
     } catch (e) { console.error('renderReportsList error:', e); }
@@ -1907,7 +2017,7 @@ window.shareCurrentReport = () => {
     const now = new Date();
     const dateStr = `${now.getDate()} ${MONTH_NAMES_GEN[now.getMonth()]} ${now.getFullYear()} ${now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
 
-    const text = `📊 Текущий финансовый отчёт\n📅 ${dateStr}\n\n💹 Оборот: ${formatMoney(stats.turnover)}\n💰 Выручка: ${formatMoney(stats.revenue)}\n Доходы: ${formatMoney(stats.totalIncome)}\n🔴 Расходы: ${formatMoney(stats.totalExpense)}\n⚪ Баланс: ${formatMoney(stats.totalBalance)}\n💜 Капитал: ${formatMoney(capital)}\n Баланс на сайте: ${formatMoney(stats.siteBalance)}\n\n— Finance Luxe`;
+    const text = `📊 Текущий финансовый отчёт\n📅 ${dateStr}\n\n💹 Оборот: ${formatMoney(stats.turnover)}\n💰 Выручка: ${formatMoney(stats.revenue)}\n🟢 Доходы: ${formatMoney(stats.totalIncome)}\n🔴 Расходы: ${formatMoney(stats.totalExpense)}\n⚪ Баланс: ${formatMoney(stats.totalBalance)}\n💜 Капитал: ${formatMoney(capital)}\n🔵 Баланс на сайте: ${formatMoney(stats.siteBalance)}\n\n— Finance Luxe`;
 
     shareText(text, 'Текущий отчёт');
 };
@@ -2019,7 +2129,7 @@ const shareText = async (text, title) => {
     try {
         await navigator.clipboard.writeText(text);
         haptic('notification', 'success');
-        if (tg?.showAlert) { tg.showAlert(' Скопировано в буфер обмена!'); }
+        if (tg?.showAlert) { tg.showAlert('📋 Скопировано в буфер обмена!'); }
         else { alert('📋 Текст скопирован в буфер обмена!'); }
     } catch (e) {
         prompt('Скопируйте текст:', text);
@@ -2033,7 +2143,7 @@ window.editReport = (key) => {
         if (!report) { alert('Отчет не найден'); return; }
         const fields = document.getElementById('editReportFields');
         if (!fields) return;
-        fields.innerHTML = `<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label"> Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance || 0}" step="0.01"></div>`;
+        fields.innerHTML = `<div class="settings-input-group"><label class="settings-input-label">💹 Оборот (₽)</label><input type="number" id="editTurnover" class="settings-input" value="${report.turnover || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💰 Выручка (₽)</label><input type="number" id="editRevenue" class="settings-input" value="${report.revenue || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🟢 Доходы (₽)</label><input type="number" id="editIncome" class="settings-input" value="${report.income || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔴 Расходы (₽)</label><input type="number" id="editExpense" class="settings-input" value="${report.expense || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">⚪ Баланс (₽)</label><input type="number" id="editBalance" class="settings-input" value="${report.balance || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">💜 Капитал (₽)</label><input type="number" id="editCapital" class="settings-input" value="${report.capital || 0}" step="0.01"></div><div class="settings-input-group"><label class="settings-input-label">🔵 Баланс на сайте (₽)</label><input type="number" id="editSiteBalance" class="settings-input" value="${report.siteBalance || 0}" step="0.01"></div>`;
         editReportModal.classList.add('active');
         haptic('impact', 'medium');
     } catch (e) { console.error('editReport error:', e); alert('Ошибка: ' + e.message); }
