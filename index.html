@@ -167,7 +167,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .report-stat-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
 .summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
-.summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); }
 .summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
@@ -196,6 +196,18 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
+
+/* ===== Детализация: подписи к показателям ===== */
+.detail-metric { 
+    text-align: center; 
+    padding: 8px 4px; 
+    background: rgba(120, 120, 128, 0.08); 
+    border-radius: 8px; 
+}
+.detail-metric-icon { font-size: 1rem; margin-bottom: 2px; }
+.detail-metric-label { font-size: 0.55rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; margin-bottom: 3px; }
+.detail-metric-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
@@ -241,6 +253,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
 <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
+
 <div class="page" id="page-report"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
 <div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
@@ -251,8 +264,8 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
-<div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
-<div class="summary-item" style="grid-column:span 2;"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
+<div class="summary-item" style="grid-column:span 3;"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
@@ -260,13 +273,23 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="section-title">Зафиксированные отчёты</div>
 <div id="reportsList"></div>
 </div></div>
+
 <div class="page" id="page-detail"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📈 Детализация</div>
-<div class="summary-block"><div class="summary-title">Общие показатели</div><div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🔵 Сайт</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
-</div></div>
+
+<!-- Общие показатели с подписями -->
+<div class="summary-block">
+  <div class="summary-title">Общие показатели</div>
+  <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="detSpend">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="detRevenue">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="detMargin">0 ₽</div></div>
+  </div>
+</div>
+
 <div class="period-row" id="periodRow">
 <div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
 <div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
@@ -275,6 +298,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div>
 <div id="detailTree"></div>
 </div></div>
+
 <div class="page" id="page-adjust"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
 <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
@@ -283,6 +307,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
 <button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
 </div></div>
+
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
@@ -293,6 +318,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
 </div></div>
 </div>
+
 <nav class="bottom-nav">
 <div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
 <div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
@@ -536,7 +562,6 @@ const refreshReport = () => {
 };
 const renderReport = refreshReport;
 
-// ===== ИСПРАВЛЕНО: отображение трат и маржи в списке зафиксированных отчётов =====
 const renderReportsList = () => { 
     const list = document.getElementById('reportsList'); 
     const keys = Object.keys(savedReports).sort().reverse(); 
@@ -580,9 +605,93 @@ const renderReportsList = () => {
 };
 
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
-const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
+
+// ===== ДЕТАЛИЗАЦИЯ С ПОДПИСЯМИ =====
+const refreshDetail = () => { 
+    const s = calcAll(); 
+    document.getElementById('detBalance').textContent = fmt(s.totalBalance); 
+    document.getElementById('detCapital').textContent = fmt(capital); 
+    document.getElementById('detSite').textContent = fmt(s.siteBalance); 
+    document.getElementById('detSpend').textContent = fmt(s.totalSpend); 
+    document.getElementById('detRevenue').textContent = fmt(s.revenue); 
+    const marginEl = document.getElementById('detMargin');
+    marginEl.textContent = fmt(s.margin);
+    if (s.margin < 0) marginEl.classList.add('negative');
+    else marginEl.classList.remove('negative');
+    renderDetailTree(); 
+};
 const renderDetail = refreshDetail;
-const renderDetailTree = () => { const container = document.getElementById('detailTree'); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h?.accounts) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; block.appendChild(head); const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, detailPeriod); const row = document.createElement('div'); row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; row.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💹</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-blue">${fmtShort(s.turnover)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🟢</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-green">${fmtShort(s.totalIncome)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">🔴</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-red">${fmtShort(s.totalExpense)}</div></div><div style="text-align:center;padding:6px 4px;background:rgba(120,120,128,0.08);border-radius:8px;"><div style="font-size:0.55rem;color:var(--ios-text-secondary);">💰</div><div style="font-size:0.75rem;font-weight:600;margin-top:2px;" class="text-orange">${fmtShort(s.revenue)}</div></div></div>`; accs.appendChild(row); }); block.appendChild(accs); container.appendChild(block); }); };
+
+const renderDetailTree = () => { 
+    const container = document.getElementById('detailTree'); 
+    container.innerHTML = ''; 
+    const keys = Object.keys(holders); 
+    if (!keys.length) { 
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; 
+        return; 
+    } 
+    keys.forEach(hid => { 
+        const h = holders[hid]; 
+        if (!h?.accounts) return; 
+        const block = document.createElement('div'); 
+        block.style.marginBottom = '12px'; 
+        const head = document.createElement('div'); 
+        head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; 
+        head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; 
+        block.appendChild(head); 
+        const accs = document.createElement('div'); 
+        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; 
+        Object.values(h.accounts).forEach(a => { 
+            if (!a) return; 
+            const s = calcAcc(a, detailPeriod); 
+            const row = document.createElement('div'); 
+            row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; 
+            
+            // Сетка 3×2 с подписями
+            row.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <span style="font-weight:500;">💼 ${a.name}</span>
+                    <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmtShort(a.balance)}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">💹</div>
+                        <div class="detail-metric-label">Оборот</div>
+                        <div class="detail-metric-value text-blue">${fmtShort(s.turnover)}</div>
+                    </div>
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">🟢</div>
+                        <div class="detail-metric-label">Доход</div>
+                        <div class="detail-metric-value text-green">${fmtShort(s.totalIncome)}</div>
+                    </div>
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">🔴</div>
+                        <div class="detail-metric-label">Расход</div>
+                        <div class="detail-metric-value text-red">${fmtShort(s.totalExpense)}</div>
+                    </div>
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">💰</div>
+                        <div class="detail-metric-label">Выручка</div>
+                        <div class="detail-metric-value text-orange">${fmtShort(s.revenue)}</div>
+                    </div>
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">🛍️</div>
+                        <div class="detail-metric-label">Траты</div>
+                        <div class="detail-metric-value text-purple">${fmtShort(s.totalSpend)}</div>
+                    </div>
+                    <div class="detail-metric">
+                        <div class="detail-metric-icon">📈</div>
+                        <div class="detail-metric-label">Маржа</div>
+                        <div class="detail-metric-value text-teal">${fmtShort(s.margin)}</div>
+                    </div>
+                </div>`; 
+            accs.appendChild(row); 
+        }); 
+        block.appendChild(accs); 
+        container.appendChild(block); 
+    }); 
+};
+
 const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
 const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
