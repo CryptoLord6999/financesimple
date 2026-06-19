@@ -30,15 +30,23 @@
     --ios-text-secondary: rgba(255, 255, 255, 0.6);
     --radius-ios: 20px;
     --radius-ios-sm: 12px;
-    
-    /* Spring-анимации */
     --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     --spring-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --spring-snappy: cubic-bezier(0.5, 1.5, 0.5, 1);
-    --spring-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; }
+
+/* ===== NOISE TEXTURE (macOS Big Sur style) ===== */
+.noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 500;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
 
 /* ===== SPLASH ===== */
 #splash { position: fixed; inset: 0; z-index: 10000; background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--spring-smooth), visibility 0.6s; }
@@ -52,7 +60,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: var(--ios-bg); }
 .pages { flex: 1; position: relative; overflow: hidden; background: var(--ios-bg); }
 
-/* ===== PARALLAX PAGES ===== */
 .page { 
     position: absolute; 
     inset: 0; 
@@ -66,11 +73,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     will-change: transform, opacity;
     transform: translateX(30%) scale(0.95);
 }
-.page.active { 
-    opacity: 1; 
-    transform: translateX(0) scale(1); 
-    pointer-events: auto; 
-}
+.page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
 .page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
 .page.exit-right { opacity: 0; transform: translateX(30%) scale(0.95); }
 .page::-webkit-scrollbar { display: none; }
@@ -80,18 +83,16 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .balance-card-wrapper {
     position: relative;
     margin-bottom: 16px;
-    padding: 6px;
 }
 .progress-ring-container {
     position: absolute;
-    inset: 0;
+    inset: -3px;
     pointer-events: none;
     z-index: 3;
 }
 .progress-ring-container svg {
     width: 100%;
     height: 100%;
-    transform: rotate(-90deg);
 }
 .progress-ring-bg {
     fill: none;
@@ -102,21 +103,22 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     fill: none;
     stroke-width: 3;
     stroke-linecap: round;
-    transition: stroke-dashoffset 1s var(--spring-smooth), stroke 0.5s var(--spring-smooth);
+    transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth);
     filter: drop-shadow(0 0 6px currentColor);
 }
 .progress-ring-label {
     position: absolute;
-    top: 8px;
+    top: 10px;
     right: 12px;
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 3px 8px;
     border-radius: 100px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
     z-index: 4;
-    transition: all 0.3s var(--spring-bounce);
+    transition: color 0.5s var(--spring-smooth);
+    font-variant-numeric: tabular-nums;
 }
 
 .balance-card { 
@@ -189,7 +191,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
 
-/* ===== BOTTOM NAV ===== */
 .bottom-nav { 
     position: fixed; bottom: 0; left: 0; right: 0; 
     background: rgba(28, 28, 30, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); 
@@ -197,30 +198,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     display: flex; justify-content: space-around; align-items: stretch;
     padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; 
 }
-.nav-item { 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 2px; 
-    padding: 4px 2px; 
-    cursor: pointer; 
-    transition: all 0.3s var(--spring-bounce); 
-    min-height: 48px; 
-    position: relative;
-}
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
 .nav-item:active { transform: scale(0.88); }
-.nav-icon { 
-    font-size: 22px; 
-    line-height: 1; 
-    height: 26px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    opacity: 0.45; 
-    transition: all 0.4s var(--spring-bounce); 
-}
+.nav-icon { font-size: 22px; line-height: 1; height: 26px; display: flex; align-items: center; justify-content: center; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.15) translateY(-2px); }
 .nav-item.active::before {
     content: '';
@@ -234,25 +214,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     border-radius: 0 0 3px 3px;
     animation: indicatorIn 0.4s var(--spring-bounce);
 }
-@keyframes indicatorIn {
-    from { width: 0; opacity: 0; }
-    to { width: 20px; opacity: 1; }
-}
-.nav-label { 
-    font-size: 10px; 
-    font-weight: 500; 
-    color: var(--ios-text-secondary); 
-    transition: all 0.3s var(--spring-bounce); 
-    letter-spacing: 0.01em; 
-    height: 14px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    white-space: nowrap; 
-}
+@keyframes indicatorIn { from { width: 0; opacity: 0; } to { width: 20px; opacity: 1; } }
+.nav-label { font-size: 10px; font-weight: 500; color: var(--ios-text-secondary); transition: all 0.3s var(--spring-bounce); letter-spacing: 0.01em; height: 14px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 .nav-item.active .nav-label { color: var(--ios-blue); font-weight: 600; }
 
-/* ===== SHEETS С SPRING ===== */
 .sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s var(--spring-smooth); }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
 .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.5s var(--spring-bounce); max-height: 85vh; overflow-y: auto; }
@@ -380,118 +345,58 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .holder-summary-title { font-size: 0.7rem; color: var(--ios-teal); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 8px; text-align: center; }
 
 /* ===== СТРАНИЦА ЦЕЛИ ===== */
-.goal-page-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.goal-ring-wrapper {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin: 0 auto 24px;
-}
-.goal-ring-wrapper svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-.goal-ring-bg {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.08);
-    stroke-width: 14;
-}
-.goal-ring-fill {
-    fill: none;
-    stroke-width: 14;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth);
-    filter: drop-shadow(0 0 10px currentColor);
-}
-.goal-ring-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-}
-.goal-percent {
-    font-size: 3rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
-    transition: color 0.5s var(--spring-smooth);
-}
-.goal-percent-sign {
-    font-size: 1.5rem;
-    font-weight: 500;
-    opacity: 0.6;
-    margin-left: 2px;
-}
-.goal-subtitle {
-    font-size: 0.75rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 6px;
-}
+.goal-page-header { text-align: center; margin-bottom: 20px; }
+.goal-ring-wrapper { position: relative; width: 220px; height: 220px; margin: 0 auto 24px; }
+.goal-ring-wrapper svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.goal-ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 14; }
+.goal-ring-fill { fill: none; stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth); filter: drop-shadow(0 0 10px currentColor); }
+.goal-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.goal-percent { font-size: 3rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; transition: color 0.5s var(--spring-smooth); }
+.goal-percent-sign { font-size: 1.5rem; font-weight: 500; opacity: 0.6; margin-left: 2px; }
+.goal-subtitle { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
 
-.goal-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.goal-stat-card {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    border: 1px solid var(--ios-separator);
-    text-align: center;
-    transition: transform 0.3s var(--spring-bounce);
-}
+.goal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.goal-stat-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); text-align: center; transition: transform 0.3s var(--spring-bounce); }
 .goal-stat-card:active { transform: scale(0.95); }
-.goal-stat-label {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-}
-.goal-stat-value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-}
+.goal-stat-label { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.goal-stat-value { font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-.goal-history-title {
-    font-size: 0.7rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    margin: 20px 0 10px;
-    padding: 0 4px;
-}
-.goal-history-item {
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    border: 1px solid var(--ios-separator);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.3s var(--spring-bounce);
+.goal-history-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 20px 0 10px; padding: 0 4px; }
+.goal-history-item { 
+    background: var(--ios-card); 
+    backdrop-filter: blur(20px); 
+    border-radius: var(--radius-ios-sm); 
+    padding: 12px 14px; 
+    margin-bottom: 8px; 
+    border: 1px solid var(--ios-separator); 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    transition: transform 0.3s var(--spring-bounce); 
 }
 .goal-history-item:active { transform: scale(0.98); }
-.goal-history-info { display: flex; flex-direction: column; gap: 2px; }
+.goal-history-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .goal-history-date { font-size: 0.8rem; font-weight: 500; }
 .goal-history-target { font-size: 0.7rem; color: var(--ios-text-secondary); }
+.goal-history-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .goal-history-result { font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.goal-history-delete {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 59, 48, 0.12);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    color: var(--ios-red);
+    font-size: 1rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s var(--spring-bounce);
+    line-height: 1;
+}
+.goal-history-delete:active { transform: scale(0.85); background: rgba(255, 59, 48, 0.25); }
 
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -499,6 +404,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </style>
 </head>
 <body>
+
+<!-- NOISE TEXTURE OVERLAY -->
+<div class="noise-overlay"></div>
+
 <div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
 <div class="toast-container" id="toastContainer"></div>
 <div id="app">
@@ -508,9 +417,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 <div class="balance-card-wrapper">
     <div class="progress-ring-container" id="miniRingContainer">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-            <rect class="progress-ring-bg" x="2" y="2" width="96" height="96" rx="20" ry="20"/>
-            <rect class="progress-ring-fill" id="miniRingFill" x="2" y="2" width="96" height="96" rx="20" ry="20"/>
+        <svg>
+            <rect class="progress-ring-bg" id="miniRingBg" x="1.5" y="1.5" rx="22" ry="22"/>
+            <rect class="progress-ring-fill" id="miniRingFill" x="1.5" y="1.5" rx="22" ry="22" pathLength="1"/>
         </svg>
         <div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div>
     </div>
@@ -570,7 +479,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="reportsList"></div>
 </div></div>
 
-<!-- НОВАЯ СТРАНИЦА: ЦЕЛЬ -->
 <div class="page" id="page-goal"><div class="page-content">
 <div class="goal-page-header">
     <div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">🎯 Цель по выручке</div>
@@ -580,7 +488,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="goal-ring-wrapper">
     <svg viewBox="0 0 200 200">
         <circle class="goal-ring-bg" cx="100" cy="100" r="85"/>
-        <circle class="goal-ring-fill" id="goalRingFill" cx="100" cy="100" r="85"/>
+        <circle class="goal-ring-fill" id="goalRingFill" cx="100" cy="100" r="85" pathLength="1"/>
     </svg>
     <div class="goal-ring-center">
         <div>
@@ -712,7 +620,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button>
 </div>
 
-<!-- SHEET: УСТАНОВИТЬ ЦЕЛЬ -->
 <div class="sheet-overlay" id="setGoalOverlay" onclick="closeSetGoal()"></div>
 <div class="bottom-sheet" id="setGoalSheet">
 <div class="sheet-handle"></div>
@@ -775,13 +682,11 @@ function showToast(icon, text, duration = 2500) {
     setTimeout(() => { toast.classList.add('out'); setTimeout(() => toast.remove(), 300); }, duration);
 }
 
-// ===== PARALLAX ПЕРЕХОДЫ =====
 let currentPageName = 'home';
 const pageOrder = ['home', 'report', 'goal', 'detail', 'adjust', 'settings'];
 
 function switchPage(name) {
     if (name === currentPageName) return;
-    
     const oldIndex = pageOrder.indexOf(currentPageName);
     const newIndex = pageOrder.indexOf(name);
     const goingRight = newIndex > oldIndex;
@@ -799,10 +704,7 @@ function switchPage(name) {
     
     const target = document.getElementById('page-' + name);
     if (target) {
-        // Небольшая задержка для плавного перехода
-        requestAnimationFrame(() => {
-            target.classList.add('active');
-        });
+        requestAnimationFrame(() => { target.classList.add('active'); });
     }
     
     navItems.forEach(n => n.classList.remove('active'));
@@ -827,8 +729,8 @@ let detailPeriod = 'today';
 let isOnline = navigator.onLine;
 let isEditMode = false;
 let expandedHolders = {};
-let goalTarget = 0; // Цель по выручке
-let goalHistory = []; // История целей
+let goalTarget = 0;
+let goalHistory = [];
 
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 const MONTHS_FULL = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -883,39 +785,41 @@ const calcAll = () => {
     return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: margin, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; 
 };
 
-// ===== ПРОГРЕСС-КОЛЬЦО =====
+// ===== ПРОГРЕСС-КОЛЬЦО НА ГЛАВНОЙ (исправлено) =====
 function updateMiniRing() {
     const s = calcAll();
+    const container = document.getElementById('miniRingContainer');
+    const bg = document.getElementById('miniRingBg');
     const ring = document.getElementById('miniRingFill');
     const label = document.getElementById('miniRingLabel');
-    if (!ring || !label) return;
+    if (!bg || !ring || !container) return;
     
-    // Периметр прямоугольника с rx=20: 2*(96+96) - 8*20 ≈ 352 (с учётом скруглений)
-    // Упрощённо: 2*(width + height) - correction
-    const perimeter = 2 * (96 + 96) - 8 * 20 + 2 * Math.PI * 20;
+    // Получаем реальные размеры контейнера
+    const rect = container.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    const rx = 22;
+    
+    // Обновляем размеры rect в SVG
+    bg.setAttribute('width', w - 3);
+    bg.setAttribute('height', h - 3);
+    ring.setAttribute('width', w - 3);
+    ring.setAttribute('height', h - 3);
     
     if (goalTarget > 0) {
         const progress = Math.min(s.revenue / goalTarget, 1);
-        const offset = perimeter * (1 - progress);
-        ring.style.strokeDasharray = perimeter;
-        ring.style.strokeDashoffset = offset;
+        ring.style.strokeDasharray = '1';
+        ring.style.strokeDashoffset = 1 - progress;
         
-        // Цвет от красного через жёлтый к зелёному
         let color;
         if (progress < 0.5) {
-            // Красный → Жёлтый
             const t = progress * 2;
-            const r = 255;
-            const g = Math.round(59 + (200 - 59) * t);
-            const b = Math.round(48 + (0 - 48) * t);
-            color = `rgb(${r}, ${g}, ${b})`;
-        } else {
-            // Жёлтый → Зелёный
+            color = `rgb(255, ${Math.round(59 + 141 * t)}, ${Math.round(48 - 48 * t)})`;
+        } else if (progress < 1) {
             const t = (progress - 0.5) * 2;
-            const r = Math.round(255 + (52 - 255) * t);
-            const g = Math.round(200 + (199 - 200) * t);
-            const b = Math.round(0 + (89 - 0) * t);
-            color = `rgb(${r}, ${g}, ${b})`;
+            color = `rgb(${Math.round(255 - 203 * t)}, ${Math.round(200 - 1 * t)}, ${Math.round(0 + 89 * t)})`;
+        } else {
+            color = 'var(--ios-green)';
         }
         ring.style.stroke = color;
         
@@ -924,8 +828,8 @@ function updateMiniRing() {
         label.style.display = 'block';
         label.style.color = color;
     } else {
-        ring.style.strokeDasharray = perimeter;
-        ring.style.strokeDashoffset = perimeter;
+        ring.style.strokeDasharray = '1';
+        ring.style.strokeDashoffset = '1';
         ring.style.stroke = 'rgba(255,255,255,0.1)';
         label.style.display = 'none';
     }
@@ -943,16 +847,12 @@ function updateGoalPage() {
     
     if (!ring) return;
     
-    //周长 круга: 2 * π * r
-    const perimeter = 2 * Math.PI * 85;
-    
     currentEl.textContent = fmt(s.revenue);
     
     if (goalTarget > 0) {
         const progress = Math.min(s.revenue / goalTarget, 1);
-        const offset = perimeter * (1 - progress);
-        ring.style.strokeDasharray = perimeter;
-        ring.style.strokeDashoffset = offset;
+        ring.style.strokeDasharray = '1';
+        ring.style.strokeDashoffset = 1 - progress;
         
         let color;
         if (progress < 0.5) {
@@ -993,8 +893,8 @@ function updateGoalPage() {
         }
         subtitleEl.textContent = `${fmt(s.revenue)} / ${fmt(goalTarget)}`;
     } else {
-        ring.style.strokeDasharray = perimeter;
-        ring.style.strokeDashoffset = perimeter;
+        ring.style.strokeDasharray = '1';
+        ring.style.strokeDashoffset = '1';
         ring.style.stroke = 'rgba(255,255,255,0.1)';
         percentEl.textContent = '0';
         percentEl.style.color = 'var(--ios-text-secondary)';
@@ -1019,9 +919,10 @@ function renderGoalHistory() {
     }
     
     container.innerHTML = '';
-    const s = calcAll();
     
-    goalHistory.slice().reverse().forEach(item => {
+    goalHistory.slice().reverse().forEach((item, reverseIdx) => {
+        // Индекс в оригинальном массиве (для удаления)
+        const realIdx = goalHistory.length - 1 - reverseIdx;
         const d = new Date(item.date);
         const dateStr = `${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}`;
         const progress = item.target > 0 ? Math.min(item.revenueAtClose / item.target, 1) : 0;
@@ -1034,11 +935,24 @@ function renderGoalHistory() {
                 <div class="goal-history-date">${dateStr}</div>
                 <div class="goal-history-target">Цель: ${fmt(item.target)} · Достигнуто: ${fmt(item.revenueAtClose)}</div>
             </div>
-            <div class="goal-history-result" style="color: ${percent >= 100 ? 'var(--ios-green)' : 'var(--ios-orange)'}">${percent}%</div>
+            <div class="goal-history-right">
+                <div class="goal-history-result" style="color: ${percent >= 100 ? 'var(--ios-green)' : 'var(--ios-orange)'}">${percent}%</div>
+                <button class="goal-history-delete" onclick="deleteGoalHistory(${realIdx})">×</button>
+            </div>
         `;
         container.appendChild(el);
     });
 }
+
+window.deleteGoalHistory = (index) => {
+    if (index < 0 || index >= goalHistory.length) return;
+    goalHistory.splice(index, 1);
+    saveLocal();
+    saveServer();
+    renderGoalHistory();
+    haptic('success');
+    showToast('🗑️', 'Запись удалена');
+};
 
 window.openSetGoal = () => {
     const s = calcAll();
@@ -1061,7 +975,6 @@ window.saveGoal = () => {
         return;
     }
     
-    // Если была старая цель — сохраняем в историю
     const s = calcAll();
     if (goalTarget > 0) {
         goalHistory.push({
@@ -1069,7 +982,6 @@ window.saveGoal = () => {
             target: goalTarget,
             revenueAtClose: s.revenue
         });
-        // Ограничиваем историю 10 записями
         if (goalHistory.length > 10) goalHistory = goalHistory.slice(-10);
     }
     
@@ -1110,9 +1022,7 @@ window.resetGoal = () => {
     }
 };
 
-function refreshGoal() {
-    updateGoalPage();
-}
+function refreshGoal() { updateGoalPage(); }
 
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); updateMiniRing(); };
 const renderHome = () => { 
@@ -1128,6 +1038,7 @@ const renderHome = () => {
         marginEl.classList.remove('negative');
         document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
+        updateMiniRing();
         return; 
     } 
     nameEl.textContent = `${h.name} → ${acc.name}`; 
@@ -1167,7 +1078,8 @@ const renderHome = () => {
         }); 
         document.getElementById('resetBtn').style.display = 'block'; 
     } 
-    saveLocal(); 
+    saveLocal();
+    updateMiniRing();
 };
 
 window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций для обнуления'); haptic('warning'); return; } haptic('warning'); const doReset = () => { acc.balance = 0; acc.transactions = []; haptic('success'); renderAll(); saveLocal(); saveServer(); showToast('✅', 'История операций обнулена'); }; if (tg?.showConfirm) { tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => { if (confirmed) doReset(); }); } else { if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) doReset(); } };
@@ -1356,7 +1268,7 @@ const renderDetailTree = () => {
 const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
 const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
-const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); updateMiniRing(); if (currentPageName === 'goal') refreshGoal(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
+const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
 window.openQuickExpense = () => {
   if (!getAccount()) { showToast('⚠️', 'Выберите счёт'); return; }
@@ -1671,6 +1583,13 @@ window.addEventListener('offline', () => { isOnline = false; updateSync('offline
 document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') doTransaction('expense'); });
 window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
+
+// Пересчёт кольца при изменении размера окна
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { updateMiniRing(); }, 100);
+});
 
 initFB();
 loadServer();
