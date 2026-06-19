@@ -161,10 +161,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .report-action.share { background: rgba(0, 122, 255, 0.15); }
 .report-action.edit { background: rgba(255, 149, 0, 0.15); }
 .report-action.delete { background: rgba(255, 59, 48, 0.15); }
-.report-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.report-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.75rem; }
-.report-stat-label { color: var(--ios-text-secondary); }
-.report-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+.report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.report-stat { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; background: rgba(120, 120, 128, 0.06); border-radius: 8px; }
+.report-stat-label { font-size: 0.9rem; margin-bottom: 2px; }
+.report-stat-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
 .summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
 .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -249,10 +249,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
 <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
+<div class="summary-item" style="grid-column:span 2;"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
@@ -418,7 +418,7 @@ let useFirebase = false, userRef = null, saveTimeout = null, isSyncing = false;
 const getUserId = () => { const tid = tg?.initDataUnsafe?.user?.id; if (tid) return 'tg_' + tid; let id = localStorage.getItem('fl_uid'); if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); } return id; };
 const UID = getUserId();
 const initFB = () => { try { const cfg = { apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", authDomain: "financesimple-7c73a.firebaseapp.com", databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", projectId: "financesimple-7c73a", storageBucket: "financesimple-7c73a.firebasestorage.app", messagingSenderId: "1072812838336", appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" }; if (!firebase.apps.length) firebase.initializeApp(cfg); userRef = firebase.database().ref(`users/${UID}`); useFirebase = true; } catch(e){ useFirebase = false; } };
-const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
+const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, margin: s.margin, incomePercent, expensePercent, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
 const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; } updateSync('syncing'); userRef.once('value').then(snap => { const d = snap.val(); if (d && d.holders) { holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId; capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; renderAll(); updateSync('synced'); } else { loadLocal(); renderAll(); if (isOnline) saveServer(); } }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); }); };
 const updateSync = (s) => { const el = document.getElementById('syncBadge'); const map = { syncing: { t: '☁️ синхронизация...', c: 'syncing' }, synced: { t: '☁️ сохранено', c: 'synced' }, offline: { t: '💾 локально', c: '' }, error: { t: '⚠️ ошибка', c: '' }, local: { t: '💾 локально', c: '' } }; const m = map[s] || map.syncing; el.textContent = m.t; el.className = 'sync-badge ' + m.c; };
 
@@ -426,7 +426,6 @@ const getHolder = () => holders[activeHolderId];
 const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
 const filterTx = (txs, period) => { if (!txs || period === 'all') return txs || []; const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let start; if (period === 'today') start = today; else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); } else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= start); };
 
-// ===== РАСЧЁТ С МАРЖЕЙ =====
 const calcAcc = (acc, period) => { 
     let inc = 0, exp = 0, spend = 0; 
     if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, margin: 0, turnover: 0 }; 
@@ -525,18 +524,61 @@ const refreshReport = () => {
     document.getElementById('sumIncome').textContent = fmt(s.totalIncome); 
     document.getElementById('sumExpense').textContent = fmt(s.totalExpense); 
     document.getElementById('sumSpend').textContent = fmt(s.totalSpend); 
+    document.getElementById('sumBalance').textContent = fmt(s.totalBalance); 
+    document.getElementById('sumCapital').textContent = fmt(capital); 
+    document.getElementById('sumSite').textContent = fmt(s.siteBalance); 
     const marginEl = document.getElementById('sumMargin');
     marginEl.textContent = fmt(s.margin);
     if (s.margin < 0) marginEl.classList.add('negative');
     else marginEl.classList.remove('negative');
-    document.getElementById('sumBalance').textContent = fmt(s.totalBalance); 
-    document.getElementById('sumCapital').textContent = fmt(capital); 
-    document.getElementById('sumSite').textContent = fmt(s.siteBalance); 
     renderReportsList(); 
     checkLastFixed(); 
 };
 const renderReport = refreshReport;
-const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
+
+// ===== ИСПРАВЛЕНО: отображение трат и маржи в списке зафиксированных отчётов =====
+const renderReportsList = () => { 
+    const list = document.getElementById('reportsList'); 
+    const keys = Object.keys(savedReports).sort().reverse(); 
+    if (!keys.length) { 
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; 
+        return; 
+    } 
+    list.innerHTML = ''; 
+    keys.forEach(key => { 
+        const r = savedReports[key]; 
+        if (!r) return; 
+        const d = new Date(r.date); 
+        const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; 
+        const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); 
+        const spend = r.spend || 0;
+        const margin = r.margin !== undefined ? r.margin : (r.revenue || 0) - spend;
+        const card = document.createElement('div'); 
+        card.className = 'report-card'; 
+        card.innerHTML = `
+            <div class="report-header">
+                <div>
+                    <div class="report-date">${dateStr}</div>
+                    <div class="report-time">${timeStr}</div>
+                </div>
+                <div class="report-actions">
+                    <button class="report-action share" onclick="shareReport('${key}')">📤</button>
+                    <button class="report-action edit" onclick="editReport('${key}')">✏️</button>
+                    <button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button>
+                </div>
+            </div>
+            <div class="report-stats">
+                <div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmtShort(spend)}</span></div>
+                <div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmtShort(margin)}</span></div>
+            </div>`; 
+        list.appendChild(card); 
+    }); 
+};
+
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
 const refreshDetail = () => { const s = calcAll(); document.getElementById('detBalance').textContent = fmt(s.totalBalance); document.getElementById('detCapital').textContent = fmt(capital); document.getElementById('detSite').textContent = fmt(s.siteBalance); renderDetailTree(); };
 const renderDetail = refreshDetail;
