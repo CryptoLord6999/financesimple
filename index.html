@@ -208,6 +208,51 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .detail-metric-label { font-size: 0.55rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; margin-bottom: 3px; }
 .detail-metric-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
+/* ===== Сворачиваемые блоки держателей ===== */
+.holder-block { margin-bottom: 12px; }
+.holder-head {
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--ios-separator);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.holder-head:active { background: rgba(44, 44, 46, 0.8); }
+.holder-head-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.holder-head-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.holder-name { font-weight: 600; font-size: 0.95rem; }
+.holder-accounts-count { font-size: 0.7rem; color: var(--ios-text-secondary); }
+.holder-chevron {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ios-text-secondary);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+.holder-chevron.expanded { transform: rotate(180deg); }
+.holder-accounts-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+.holder-accounts-wrap.expanded { max-height: 2000px; }
+.holder-accounts-inner {
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 2px solid var(--ios-separator);
+    margin-top: 8px;
+}
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
@@ -265,7 +310,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
-<div class="summary-item" style="grid-column:span 3;"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
 <button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
@@ -277,7 +322,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="page" id="page-detail"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📈 Детализация</div>
 
-<!-- Общие показатели с подписями -->
 <div class="summary-block">
   <div class="summary-title">Общие показатели</div>
   <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
@@ -431,6 +475,7 @@ let incomePercent = 7, expensePercent = 2.5;
 let detailPeriod = 'today';
 let isOnline = navigator.onLine;
 let isEditMode = false;
+let expandedHolders = {}; // состояние сворачивания держателей в детализации
 
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 const fmt = (n) => { if (n === null || n === undefined || isNaN(n)) n = 0; return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n); };
@@ -606,7 +651,6 @@ const renderReportsList = () => {
 
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
 
-// ===== ДЕТАЛИЗАЦИЯ С ПОДПИСЯМИ =====
 const refreshDetail = () => { 
     const s = calcAll(); 
     document.getElementById('detBalance').textContent = fmt(s.totalBalance); 
@@ -622,6 +666,13 @@ const refreshDetail = () => {
 };
 const renderDetail = refreshDetail;
 
+// ===== СВОРАЧИВАНИЕ ДЕРЖАТЕЛЕЙ =====
+window.toggleHolderExpand = (hid) => {
+    expandedHolders[hid] = !expandedHolders[hid];
+    renderDetailTree();
+    haptic('light');
+};
+
 const renderDetailTree = () => { 
     const container = document.getElementById('detailTree'); 
     container.innerHTML = ''; 
@@ -633,21 +684,42 @@ const renderDetailTree = () => {
     keys.forEach(hid => { 
         const h = holders[hid]; 
         if (!h?.accounts) return; 
+        const isExpanded = expandedHolders[hid] !== false; // по умолчанию раскрыт
+        
         const block = document.createElement('div'); 
-        block.style.marginBottom = '12px'; 
+        block.className = 'holder-block'; 
+        
+        // Заголовок держателя (кликабельный)
         const head = document.createElement('div'); 
-        head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;'; 
-        head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span><span style="font-size:0.75rem;color:var(--ios-text-secondary);">${Object.keys(h.accounts).length} сч.</span>`; 
+        head.className = 'holder-head';
+        head.onclick = () => window.toggleHolderExpand(hid);
+        head.innerHTML = `
+            <div class="holder-head-left">
+                <span style="font-size:1.1rem;">👤</span>
+                <div class="holder-head-info">
+                    <div class="holder-name">${h.name}</div>
+                    <div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div>
+                </div>
+            </div>
+            <div class="holder-chevron ${isExpanded ? 'expanded' : ''}">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        `; 
         block.appendChild(head); 
-        const accs = document.createElement('div'); 
-        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; 
+        
+        // Обёртка со списком счетов (сворачивается)
+        const wrap = document.createElement('div'); 
+        wrap.className = 'holder-accounts-wrap' + (isExpanded ? ' expanded' : '');
+        const inner = document.createElement('div'); 
+        inner.className = 'holder-accounts-inner'; 
+        
         Object.values(h.accounts).forEach(a => { 
             if (!a) return; 
             const s = calcAcc(a, detailPeriod); 
             const row = document.createElement('div'); 
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; 
-            
-            // Сетка 3×2 с подписями
             row.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                     <span style="font-weight:500;">💼 ${a.name}</span>
@@ -685,9 +757,10 @@ const renderDetailTree = () => {
                         <div class="detail-metric-value text-teal">${fmtShort(s.margin)}</div>
                     </div>
                 </div>`; 
-            accs.appendChild(row); 
+            inner.appendChild(row); 
         }); 
-        block.appendChild(accs); 
+        wrap.appendChild(inner);
+        block.appendChild(wrap); 
         container.appendChild(block); 
     }); 
 };
