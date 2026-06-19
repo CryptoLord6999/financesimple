@@ -77,12 +77,46 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
-.balance-card-wrapper { position: relative; margin-bottom: 16px; }
-.progress-ring-container { position: absolute; inset: -3px; pointer-events: none; z-index: 3; }
-.progress-ring-container svg { width: 100%; height: 100%; }
-.progress-ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 3; }
-.progress-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth); filter: drop-shadow(0 0 6px currentColor); }
-.progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); z-index: 4; transition: color 0.5s var(--spring-smooth); }
+.balance-card-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+}
+.progress-ring-container {
+    position: absolute;
+    inset: -3px;
+    pointer-events: none;
+    z-index: 3;
+}
+.progress-ring-container svg {
+    width: 100%;
+    height: 100%;
+}
+.progress-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 3;
+}
+.progress-ring-fill {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth);
+    filter: drop-shadow(0 0 6px currentColor);
+}
+.progress-ring-label {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    z-index: 4;
+    transition: color 0.5s var(--spring-smooth);
+    font-variant-numeric: tabular-nums;
+}
 
 .balance-card { 
     background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); 
@@ -113,7 +147,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 .spend-block { background: rgba(175, 82, 222, 0.08); border: 1px solid rgba(175, 82, 222, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s var(--spring-bounce); }
 .spend-block:active { transform: scale(0.98); }
-.spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+.spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .spend-value { font-size: 1.1rem; font-weight: 600; color: var(--ios-purple); font-variant-numeric: tabular-nums; }
 
 .margin-block { background: rgba(90, 200, 250, 0.08); border: 1px solid rgba(90, 200, 250, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s var(--spring-bounce); }
@@ -124,8 +158,8 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .margin-value.negative { color: var(--ios-red); }
 
 .account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.3s var(--spring-bounce); }
-.account-chip:active { transform: scale(0.98); opacity: 0.8; }
-.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; }
+.account-chip:active { transform: scale(0.95); opacity: 0.8; }
+.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .account-chip-arrow { color: var(--ios-blue); font-size: 1rem; transition: transform 0.3s var(--spring-bounce); }
 .account-chip:active .account-chip-arrow { transform: translateX(4px); }
 
@@ -141,14 +175,14 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .action-expense { background: var(--ios-red); color: white; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
 
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
-.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 6px; }
+.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; }
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s var(--spring-bounce); opacity: 0.7; }
 .reset-btn:active { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); transform: scale(0.9); }
 
 .tx-list { display: flex; flex-direction: column; gap: 8px; }
 .tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.2s var(--spring-bounce); }
 .tx-item:active { transform: scale(0.98); }
-@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .tx-info { flex: 1; min-width: 0; }
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
@@ -161,7 +195,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     display: flex; justify-content: space-around; align-items: stretch;
     padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; 
 }
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 4px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
 .nav-item:active { transform: scale(0.88); }
 .nav-icon { width: 22px; height: 22px; line-height: 1; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.15) translateY(-2px); }
@@ -181,9 +215,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .nav-label { font-size: 10px; font-weight: 500; color: var(--ios-text-secondary); transition: all 0.3s var(--spring-bounce); letter-spacing: 0.01em; height: 14px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 .nav-item.active .nav-label { color: var(--ios-blue); font-weight: 600; }
 
-.sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s var(--spring-smooth); }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
-.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; overflow-y: auto; }
+.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.5s var(--spring-bounce); max-height: 85vh; overflow-y: auto; }
 .bottom-sheet.active { transform: translateY(0); }
 .sheet-handle { width: 36px; height: 5px; background: #3a3a3c; border-radius: 3px; margin: 0 auto 16px; transition: transform 0.3s var(--spring-bounce); }
 .bottom-sheet:active .sheet-handle { transform: scaleX(1.3); }
@@ -200,7 +234,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .action-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid var(--ios-separator); }
 .action-item:last-child { border-bottom: none; }
 .action-item:active { background: rgba(120, 120, 128, 0.15); transform: scale(0.98); }
-.action-item-icon { width: 20px; height: 20px; flex-shrink: 0; }
+.action-item-icon { font-size: 1.2rem; width: 28px; text-align: center; }
 .action-item-text { flex: 1; font-size: 0.9rem; font-weight: 500; }
 .action-item-arrow { color: var(--ios-text-secondary); font-size: 0.9rem; }
 
@@ -221,7 +255,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .toast.out { animation: toastOut 0.3s var(--spring-smooth) forwards; }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes toastOut { to { opacity: 0; transform: translateY(-20px) scale(0.95); } }
-.toast-icon { width: 20px; height: 20px; flex-shrink: 0; }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
 .toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
 
 .btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -241,14 +275,15 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .report-action.edit { background: rgba(255, 149, 0, 0.15); }
 .report-action.delete { background: rgba(255, 59, 48, 0.15); }
 .report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.report-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.75rem; }
-.report-stat-label { color: var(--ios-text-secondary); }
-.report-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+.report-stat { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; background: rgba(120, 120, 128, 0.06); border-radius: 8px; }
+.report-stat-label { font-size: 0.9rem; margin-bottom: 2px; }
+.report-stat-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .summary-block { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; border: 1px solid var(--ios-separator); }
 .summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
 .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); }
+.summary-item { text-align: center; padding: 10px 8px; background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); transition: transform 0.3s var(--spring-bounce); }
+.summary-item:active { transform: scale(0.95); }
 .summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
 
@@ -269,7 +304,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .sync-badge.synced { color: var(--ios-green); }
 
 .empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
-.empty-icon { width: 48px; height: 48px; margin: 0 auto 10px; opacity: 0.5; }
+.empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5; }
 .empty-text { font-size: 0.85rem; }
 
 .text-green { color: var(--ios-green); }
@@ -373,13 +408,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
-<div class="account-chip" onclick="window.openAccountSheet()">
-    <span class="account-chip-name">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-        Выберите счёт
-    </span>
-    <svg class="account-chip-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-</div>
+<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
 
 <div class="balance-card-wrapper">
     <div class="progress-ring-container" id="miniRingContainer">
@@ -390,174 +419,70 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
         <div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div>
     </div>
     <div class="balance-card">
-      <div class="balance-header">
-          <div class="balance-label">Текущий баланс</div>
-          <button class="balance-edit-btn" onclick="window.openEditBalance()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-          </button>
-      </div>
+      <div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div>
       <div class="balance-value-row">
         <div class="balance-value" id="balanceDisplay">0 ₽</div>
-        <button class="balance-plus-btn" onclick="window.openQuickExpense()" title="Быстрая трата">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-        </button>
+        <button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата">＋</button>
       </div>
-      <div class="sync-badge" id="syncBadge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 0 1 9-9"></path></svg>
-          подключение...
-      </div>
+      <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
     </div>
 </div>
 
 <div class="stats-grid">
-<div class="stat-card">
-    <div class="stat-header">
-        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="stat-name">Оборот</span>
-    </div>
-    <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
-</div>
-<div class="stat-card">
-    <div class="stat-header">
-        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="stat-name">Доход</span>
-    </div>
-    <div class="stat-value text-green" id="statIncome">0 ₽</div>
-</div>
-<div class="stat-card">
-    <div class="stat-header">
-        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="stat-name">Расход</span>
-    </div>
-    <div class="stat-value text-red" id="statExpense">0 ₽</div>
-</div>
-<div class="stat-card">
-    <div class="stat-header">
-        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
-        <span class="stat-name">Выручка</span>
-    </div>
-    <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
-</div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
 <div class="spend-block">
-    <div class="spend-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-        Траты
-    </div>
-    <div class="spend-value" id="statSpend">0 ₽</div>
+  <div class="spend-label">🛍️ Траты</div>
+  <div class="spend-value" id="statSpend">0 ₽</div>
 </div>
 <div class="margin-block">
-    <div class="margin-label">
-        <span>Маржинальная прибыль</span>
-        <span class="margin-sub">выручка − траты</span>
-    </div>
-    <div class="margin-value" id="statMargin">0 ₽</div>
+  <div class="margin-label">
+    <span>📈 Маржинальная прибыль</span>
+    <span class="margin-sub">выручка − траты</span>
+  </div>
+  <div class="margin-value" id="statMargin">0 ₽</div>
 </div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
-    <button class="action-btn action-income" onclick="window.doTransaction('income')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-        Доход
-    </button>
-    <button class="action-btn action-expense" onclick="window.doTransaction('expense')">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-        Расход
-    </button>
+  <button class="action-btn action-income" onclick="doTransaction('income')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12L12 5L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Доход
+  </button>
+  <button class="action-btn action-expense" onclick="doTransaction('expense')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12L12 19L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Расход
+  </button>
 </div>
-<div class="section-header">
-    <div class="section-title">История операций</div>
-    <button class="reset-btn" id="resetBtn" onclick="window.resetAll()">Обнулить</button>
-</div>
-<div class="tx-list" id="txList">
-    <div class="empty-state">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-        <div class="empty-text">Нет операций</div>
-    </div>
-</div>
+<div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
+<div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
 
 <div class="page" id="page-report"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-        <defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
-        <rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
-        <path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Отчёт
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+    <rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
+    <path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Отчёт
 </div>
-<div class="summary-block">
-    <div class="summary-title">Сводка по всем счетам</div>
-    <div class="summary-grid">
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-sum-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Оборот
-            </div>
-            <div class="summary-val text-blue" id="sumTurnover">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-sum-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-sum-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
-                Выручка
-            </div>
-            <div class="summary-val text-orange" id="sumRevenue">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-sum-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Доходы
-            </div>
-            <div class="summary-val text-green" id="sumIncome">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-sum-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Расходы
-            </div>
-            <div class="summary-val text-red" id="sumExpense">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-balance" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-sum-balance)" stroke-width="2.5"/><path d="M12 8v8M8 12h8" stroke="url(#grad-sum-balance)" stroke-width="2.5" stroke-linecap="round"/></svg>
-                Баланс
-            </div>
-            <div class="summary-val" id="sumBalance">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-sum-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-sum-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Капитал
-            </div>
-            <div class="summary-val text-blue" id="sumCapital">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-site" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-sum-site)" stroke-width="2.5"/><path d="M3 9h18M9 21V9" stroke="url(#grad-sum-site)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                На сайте
-            </div>
-            <div class="summary-val text-orange" id="sumSite">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3v18h18" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14l4-4 4 4 6-6" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Маржа
-            </div>
-            <div class="summary-val text-teal" id="sumMargin">0 ₽</div>
-        </div>
-    </div>
-</div>
-<button class="btn btn-primary mb-12" onclick="window.doFixReport()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 12"></path><path d="M12 12L12 22"></path><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" fill="none"/></svg>
-    Зафиксировать
-</button>
-<button class="btn btn-secondary mb-20" onclick="window.doShareCurrentReport()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-    Поделиться
-</button>
-<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    Последний: <span id="lastFixedDate"></span>
-</div>
+<div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
+<div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
+</div></div>
+<button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
+<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
+<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
 <div class="section-title">Зафиксированные отчёты</div>
 <div id="reportsList"></div>
 </div></div>
@@ -565,13 +490,13 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="page" id="page-goal"><div class="page-content">
 <div class="goal-page-header">
     <div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-            <defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
-            <circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
-            <circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
-            <circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
-        </svg>
-        Цель по выручке
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
+        <circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
+        <circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
+        <circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
+      </svg>
+      Цель по выручке
     </div>
     <div style="font-size:0.75rem;color:var(--ios-text-secondary);">Отслеживайте прогресс достижения цели</div>
 </div>
@@ -608,14 +533,8 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     </div>
 </div>
 
-<button class="btn btn-primary" onclick="window.openSetGoal()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-    Установить цель
-</button>
-<button class="btn btn-secondary" onclick="window.resetGoal()" style="margin-top:8px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-    Сбросить цель
-</button>
+<button class="btn btn-primary" onclick="openSetGoal()">🎯 Установить цель</button>
+<button class="btn btn-secondary" onclick="resetGoal()" style="margin-top:8px;">Сбросить цель</button>
 
 <div class="goal-history-title">История целей</div>
 <div id="goalHistory"></div>
@@ -623,271 +542,129 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 <div class="page" id="page-detail"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-        <defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
-        <path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Детализация
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+    <path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Детализация
 </div>
 
 <div class="summary-block">
-    <div class="summary-title">Общие показатели</div>
-    <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-balance" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-det-balance)" stroke-width="2.5"/><path d="M12 8v8M8 12h8" stroke="url(#grad-det-balance)" stroke-width="2.5" stroke-linecap="round"/></svg>
-                Баланс
-            </div>
-            <div class="summary-val" id="detBalance">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-det-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-det-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Капитал
-            </div>
-            <div class="summary-val text-blue" id="detCapital">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-site" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-det-site)" stroke-width="2.5"/><path d="M3 9h18M9 21V9" stroke="url(#grad-det-site)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                На сайте
-            </div>
-            <div class="summary-val text-orange" id="detSite">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-spend" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="url(#grad-det-spend)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Траты
-            </div>
-            <div class="summary-val text-purple" id="detSpend">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-det-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-det-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
-                Выручка
-            </div>
-            <div class="summary-val text-orange" id="detRevenue">0 ₽</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3V21H21" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Маржа
-            </div>
-            <div class="summary-val text-teal" id="detMargin">0 ₽</div>
-        </div>
-    </div>
+  <div class="summary-title">Общие показатели</div>
+  <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="detSpend">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="detRevenue">0 ₽</div></div>
+    <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="detMargin">0 ₽</div></div>
+  </div>
 </div>
 
 <div class="period-row" id="periodRow">
-<div class="period-chip active" data-p="today" onclick="window.setPeriod('today')">Сегодня</div>
-<div class="period-chip" data-p="week" onclick="window.setPeriod('week')">7 дней</div>
-<div class="period-chip" data-p="month" onclick="window.setPeriod('month')">Месяц</div>
-<div class="period-chip" data-p="all" onclick="window.setPeriod('all')">Всё</div>
+<div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
+<div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
+<div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
+<div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
 </div>
 <div id="detailTree"></div>
-<button class="btn btn-secondary" onclick="window.doShareDetail()" style="margin-top:16px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-    Поделиться детализацией
-</button>
+<button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;">📤 Поделиться детализацией</button>
 </div></div>
 
 <div class="page" id="page-adjust"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-        <defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
-        <path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Корректировка
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
+    <path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Корректировка
 </div>
-<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-    Счёт: Основной
-</div>
-<div class="setting-group">
-    <div class="setting-label">Новый баланс (₽)</div>
-    <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
-    <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
-</div>
-<div class="setting-group">
-    <div class="setting-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-adj-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-adj-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-adj-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Капитал (₽)
-    </div>
-    <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
-    <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
-</div>
-<div class="setting-group">
-    <div class="setting-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-adj-comment" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="url(#grad-adj-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="url(#grad-adj-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Комментарий
-    </div>
-    <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
-</div>
-<button class="btn btn-primary" onclick="window.doSaveAdjust()" style="margin-top:8px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    Применить
-</button>
+<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
+<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
+<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
 </div></div>
 
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-        <defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
-        <circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
-        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    Настройки
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
+    <circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
+    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  Настройки
 </div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-    <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
-</div>
-<div class="setting-group">
-    <div class="setting-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-set-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-set-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-set-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Капитал (₽)
-    </div>
-    <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
-    <div class="setting-hint">Общий для всех счетов</div>
-</div>
-<div class="setting-group">
-    <div class="setting-label">% от доходов</div>
-    <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
-</div>
-<div class="setting-group">
-    <div class="setting-label">% от расходов</div>
-    <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
-</div>
-<div class="report-card" style="background:rgba(0,122,255,0.08);">
-    <div class="setting-label" style="margin-bottom:6px;">Формула</div>
-    <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
-        Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br>
-        <span style="color:var(--ios-blue);">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-formula" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-formula)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-formula)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Капитал += Выручка
-        </span>
-    </div>
-</div>
-<button class="btn btn-primary" onclick="window.doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    Сохранить
-</button>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
+<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
+<div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
+<div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
+<div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
+<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
 </div></div>
 </div>
 
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="home" onclick="window.switchPage('home')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-    <span class="nav-label">Главная</span>
-</div>
-<div class="nav-item" data-page="report" onclick="window.switchPage('report')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-    <span class="nav-label">Отчёт</span>
-</div>
-<div class="nav-item" data-page="goal" onclick="window.switchPage('goal')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-    <span class="nav-label">Цель</span>
-</div>
-<div class="nav-item" data-page="detail" onclick="window.switchPage('detail')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-    <span class="nav-label">Детали</span>
-</div>
-<div class="nav-item" data-page="adjust" onclick="window.switchPage('adjust')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-    <span class="nav-label">Коррекция</span>
-</div>
-<div class="nav-item" data-page="settings" onclick="window.switchPage('settings')">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-    <span class="nav-label">Настройки</span>
-</div>
+<div class="nav-item active" data-page="home" onclick="switchPage('home')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Главная</span></div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Отчёт</span></div>
+<div class="nav-item" data-page="goal" onclick="switchPage('goal')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="nav-label">Цель</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Детали</span></div>
+<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Коррекция</span></div>
+<div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
 </nav>
 </div>
 
-<div class="sheet-overlay" id="accountOverlay" onclick="window.closeAccountSheet()"></div>
+<div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-header">
-    <div style="width:36px;"></div>
-    <div class="sheet-title">Выбор счёта</div>
-    <button class="sheet-menu-btn" onclick="window.toggleActionsMenu()">
-        <div class="hamburger-icon"><span></span><span></span><span></span></div>
-    </button>
-</div>
+<div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title">Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div>
 <div class="actions-menu" id="actionsMenu">
-    <div class="action-item" onclick="window.createHolder()">
-        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span class="action-item-text">Создать держателя</span>
-        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </div>
-    <div class="action-item" onclick="window.createAccount()">
-        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-        <span class="action-item-text">Создать счёт</span>
-        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </div>
-    <div class="action-item" onclick="window.toggleEditMode()">
-        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-        <span class="action-item-text">Редактировать названия</span>
-        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </div>
+<div class="action-item" onclick="createHolder()"><span class="action-item-icon">👤</span><span class="action-item-text">Создать держателя</span><span class="action-item-arrow">›</span></div>
+<div class="action-item" onclick="createAccount()"><span class="action-item-icon">💼</span><span class="action-item-text">Создать счёт</span><span class="action-item-arrow">›</span></div>
+<div class="action-item" onclick="toggleEditMode()"><span class="action-item-icon">✏️</span><span class="action-item-text">Редактировать названия</span><span class="action-item-arrow">›</span></div>
 </div>
-<input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);">
+<input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
 <div id="accountTree"></div>
-<button class="btn btn-secondary" onclick="window.closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
+<button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
 
-<div class="sheet-overlay" id="editBalanceOverlay" onclick="window.closeEditBalance()"></div>
+<div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">Редактировать баланс</div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-    <span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
-</div>
-<div class="setting-group">
-    <div class="setting-label">Новый баланс (₽)</div>
-    <input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
-    <div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div>
-</div>
-<div class="setting-group">
-    <div class="setting-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-edit-comment" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="url(#grad-edit-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="url(#grad-edit-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Комментарий (необязательно)
-    </div>
-    <input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;">
-</div>
-<button class="btn btn-primary" onclick="window.saveEditBalance()" style="margin-top:8px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    Сохранить
-</button>
-<button class="btn btn-secondary" onclick="window.closeEditBalance()" style="margin-top:8px;">Отмена</button>
+<div class="sheet-title">✏️ Редактировать баланс</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
+<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
+<div class="setting-group"><div class="setting-label">📝 Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
+<button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
+<button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
 </div>
 
-<div class="sheet-overlay" id="quickExpenseOverlay" onclick="window.closeQuickExpense()"></div>
+<div class="sheet-overlay" id="quickExpenseOverlay" onclick="closeQuickExpense()"></div>
 <div class="bottom-sheet" id="quickExpenseSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">Быстрая трата</div>
+<div class="sheet-title">＋ Быстрая трата</div>
 <div class="setting-group">
-    <div class="setting-label">Сумма (₽)</div>
-    <input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+  <div class="setting-label">Сумма (₽)</div>
+  <input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
 </div>
 <div class="setting-group">
-    <div class="setting-label">Примечание (необязательно)</div>
-    <input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
+  <div class="setting-label">Примечание (необязательно)</div>
+  <input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
 </div>
-<button class="btn btn-primary" onclick="window.submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button>
-<button class="btn btn-secondary" onclick="window.closeQuickExpense()" style="margin-top:8px;">Отмена</button>
+<button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button>
+<button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button>
 </div>
 
-<div class="sheet-overlay" id="setGoalOverlay" onclick="window.closeSetGoal()"></div>
+<div class="sheet-overlay" id="setGoalOverlay" onclick="closeSetGoal()"></div>
 <div class="bottom-sheet" id="setGoalSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">Установить цель по выручке</div>
+<div class="sheet-title">🎯 Установить цель по выручке</div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    <span style="font-size:1.1rem;">💡</span>
     <span>Укажите желаемую выручку. Прогресс будет отображаться на главной странице и в разделе «Цель».</span>
 </div>
 <div class="setting-group">
@@ -895,11 +672,8 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     <input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0">
     <div class="setting-hint">Текущая выручка: <span id="goalCurrentHint">0 ₽</span></div>
 </div>
-<button class="btn btn-primary" onclick="window.saveGoal()" style="margin-top:8px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    Установить цель
-</button>
-<button class="btn btn-secondary" onclick="window.closeSetGoal()" style="margin-top:8px;">Отмена</button>
+<button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">✓ Установить цель</button>
+<button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button>
 </div>
 
 <script>
@@ -1001,7 +775,7 @@ function showToast(icon, text, duration = 2500) {
 let currentPageName = 'home';
 const pageOrder = ['home', 'report', 'goal', 'detail', 'adjust', 'settings'];
 
-window.switchPage = function(name) {
+function switchPage(name) {
     if (name === currentPageName) return;
     const oldIndex = pageOrder.indexOf(currentPageName);
     const newIndex = pageOrder.indexOf(name);
@@ -1036,7 +810,7 @@ window.switchPage = function(name) {
     if (name === 'settings') refreshSettings();
     
     haptic('light');
-};
+}
 
 let holders = {}, activeHolderId = null, activeAccountId = null;
 let capital = 0, savedReports = {};
@@ -1059,142 +833,10 @@ const loadLocal = () => { try { const h = localStorage.getItem('fl_holders'); if
 let useFirebase = false, userRef = null, saveTimeout = null, isSyncing = false;
 const getUserId = () => { const tid = tg?.initDataUnsafe?.user?.id; if (tid) return 'tg_' + tid; let id = localStorage.getItem('fl_uid'); if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); } return id; };
 const UID = getUserId();
-
-const initFB = () => { 
-    try { 
-        const cfg = { 
-            apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", 
-            authDomain: "financesimple-7c73a.firebaseapp.com", 
-            databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", 
-            projectId: "financesimple-7c73a", 
-            storageBucket: "financesimple-7c73a.firebasestorage.app", 
-            messagingSenderId: "1072812838336", 
-            appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" 
-        }; 
-        if (!firebase.apps.length) firebase.initializeApp(cfg); 
-        userRef = firebase.database().ref(`users/${UID}`); 
-        useFirebase = true; 
-        
-        // Таймаут для Firebase - если не отвечает за 5 секунд, используем локальное хранилище
-        setTimeout(() => {
-            if (!window.firebaseLoaded) {
-                console.log('Firebase timeout, using local storage');
-                useFirebase = false;
-                loadLocal();
-                renderAll();
-                updateSync('local');
-            }
-        }, 5000);
-    } catch(e){ 
-        useFirebase = false; 
-        loadLocal();
-        renderAll();
-        updateSync('local');
-    } 
-};
-
-// Помечаем Firebase как загруженный
-window.firebaseLoaded = false;
-
-const saveServer = () => { 
-    if (!useFirebase || !isOnline) { 
-        updateSync('local'); 
-        return; 
-    } 
-    if (saveTimeout) clearTimeout(saveTimeout); 
-    saveTimeout = setTimeout(async () => { 
-        if (isSyncing) return; 
-        isSyncing = true; 
-        updateSync('syncing'); 
-        try { 
-            const s = calcAll(); 
-            await userRef.set({ 
-                holders, 
-                activeHolderId, 
-                activeAccountId, 
-                capital, 
-                savedReports, 
-                totalIncome: s.totalIncome, 
-                totalExpense: s.totalExpense, 
-                revenue: s.revenue, 
-                incomePercent, 
-                expensePercent, 
-                goalTarget,
-                goalHistory,
-                lastUpdated: new Date().toISOString() 
-            }); 
-            updateSync('synced'); 
-            window.firebaseLoaded = true;
-        } catch(e){ 
-            updateSync('local'); 
-        } finally { 
-            isSyncing = false; 
-        } 
-    }, 500); 
-};
-
-const loadServer = () => { 
-    if (!useFirebase) { 
-        loadLocal(); 
-        renderAll(); 
-        updateSync('local'); 
-        return; 
-    } 
-    updateSync('syncing'); 
-    
-    // Таймаут для Firebase
-    const timeout = setTimeout(() => {
-        console.log('Firebase load timeout');
-        loadLocal();
-        renderAll();
-        updateSync('local');
-    }, 5000);
-    
-    userRef.once('value').then(snap => { 
-        clearTimeout(timeout);
-        window.firebaseLoaded = true;
-        const d = snap.val(); 
-        if (d && d.holders) { 
-            holders = d.holders; 
-            activeHolderId = d.activeHolderId || Object.keys(holders)[0]; 
-            activeAccountId = d.activeAccountId; 
-            capital = d.capital || 0; 
-            savedReports = d.savedReports || {}; 
-            incomePercent = d.incomePercent || 7; 
-            expensePercent = d.expensePercent || 2.5; 
-            goalTarget = d.goalTarget || 0;
-            goalHistory = d.goalHistory || [];
-            const hh = holders[activeHolderId]; 
-            if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; 
-            renderAll(); 
-            updateSync('synced'); 
-        } else { 
-            loadLocal(); 
-            renderAll(); 
-            if (isOnline) saveServer(); 
-        } 
-    }).catch(() => { 
-        clearTimeout(timeout);
-        loadLocal(); 
-        renderAll(); 
-        updateSync('local'); 
-    }); 
-};
-
-const updateSync = (s) => { 
-    const el = document.getElementById('syncBadge'); 
-    if (!el) return;
-    const map = { 
-        syncing: { t: '☁️ синхронизация...', c: 'syncing' }, 
-        synced: { t: '☁️ сохранено', c: 'synced' }, 
-        offline: { t: '💾 локально', c: '' }, 
-        error: { t: '⚠️ ошибка', c: '' }, 
-        local: { t: '💾 локально', c: '' } 
-    }; 
-    const m = map[s] || map.syncing; 
-    el.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 0 1 9-9"></path></svg> ${m.t}`;
-    el.className = 'sync-badge ' + m.c; 
-};
+const initFB = () => { try { const cfg = { apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", authDomain: "financesimple-7c73a.firebaseapp.com", databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", projectId: "financesimple-7c73a", storageBucket: "financesimple-7c73a.firebasestorage.app", messagingSenderId: "1072812838336", appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" }; if (!firebase.apps.length) firebase.initializeApp(cfg); userRef = firebase.database().ref(`users/${UID}`); useFirebase = true; } catch(e){ useFirebase = false; } };
+const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, margin: s.margin, incomePercent, expensePercent, goalTarget, goalHistory, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
+const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; } updateSync('syncing'); userRef.once('value').then(snap => { const d = snap.val(); if (d && d.holders) { holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId; capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5; goalTarget = d.goalTarget || 0; goalHistory = d.goalHistory || []; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; renderAll(); updateSync('synced'); } else { loadLocal(); renderAll(); if (isOnline) saveServer(); } }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); }); };
+const updateSync = (s) => { const el = document.getElementById('syncBadge'); const map = { syncing: { t: '☁️ синхронизация...', c: 'syncing' }, synced: { t: '☁️ сохранено', c: 'synced' }, offline: { t: '💾 локально', c: '' }, error: { t: '⚠️ ошибка', c: '' }, local: { t: '💾 локально', c: '' } }; const m = map[s] || map.syncing; el.textContent = m.t; el.className = 'sync-badge ' + m.c; };
 
 const getHolder = () => holders[activeHolderId];
 const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
@@ -1380,7 +1022,7 @@ function renderGoalHistory() {
             </div>
             <div class="goal-history-right">
                 <div class="goal-history-result" style="color: ${percent >= 100 ? 'var(--ios-green)' : 'var(--ios-orange)'}">${percent}%</div>
-                <button class="goal-history-delete" onclick="window.deleteGoalHistory(${realIdx})">×</button>
+                <button class="goal-history-delete" onclick="deleteGoalHistory(${realIdx})">×</button>
             </div>
         `;
         container.appendChild(el);
@@ -1473,18 +1115,18 @@ const renderHome = () => {
     const h = getHolder(); 
     const nameEl = document.getElementById('accountName'); 
     if (!acc || !h) { 
-        nameEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> Выберите счёт';
+        nameEl.textContent = '📂 Выберите счёт'; 
         animateValue(document.getElementById('balanceDisplay'), 0, fmt);
         ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => animateValue(document.getElementById(id), 0, fmt));
         const marginEl = document.getElementById('statMargin');
         animateValue(marginEl, 0, fmt);
         marginEl.classList.remove('negative');
-        document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div>'; 
+        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
         updateMiniRing();
         return; 
     } 
-    nameEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> ${h.name} → ${acc.name}`;
+    nameEl.textContent = `${h.name} → ${acc.name}`; 
     animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt);
     const s = calcAcc(acc); 
     animateValue(document.getElementById('statTurnover'), s.turnover, fmt);
@@ -1498,7 +1140,7 @@ const renderHome = () => {
     else marginEl.classList.remove('negative');
     const list = document.getElementById('txList'); 
     if (!acc.transactions?.length) { 
-        list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div>'; 
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
     } else { 
         list.innerHTML = ''; 
@@ -1509,6 +1151,7 @@ const renderHome = () => {
             let cls, sign, desc; 
             if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } 
             else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } 
+            else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } 
             else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } 
             else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } 
             else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } 
@@ -1549,7 +1192,7 @@ const renderReportsList = () => {
     const list = document.getElementById('reportsList'); 
     const keys = Object.keys(savedReports).sort().reverse(); 
     if (!keys.length) { 
-        list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет отчётов</div></div>'; 
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; 
         return; 
     } 
     list.innerHTML = ''; 
@@ -1570,15 +1213,9 @@ const renderReportsList = () => {
                     <div class="report-time">${timeStr}</div>
                 </div>
                 <div class="report-actions">
-                    <button class="report-action share" onclick="window.shareReport('${key}')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                    </button>
-                    <button class="report-action edit" onclick="window.editReport('${key}')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="report-action delete" onclick="window.deleteReport('${key}')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
+                    <button class="report-action share" onclick="shareReport('${key}')">📤</button>
+                    <button class="report-action edit" onclick="editReport('${key}')">✏️</button>
+                    <button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button>
                 </div>
             </div>
             <div class="report-stats">
@@ -1621,7 +1258,7 @@ const renderDetailTree = () => {
     container.innerHTML = ''; 
     const keys = Object.keys(holders); 
     if (!keys.length) { 
-        container.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет держателей</div></div>'; 
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; 
         return; 
     } 
     keys.forEach(hid => { 
@@ -1637,14 +1274,16 @@ const renderDetailTree = () => {
         head.onclick = () => window.toggleHolderExpand(hid);
         head.innerHTML = `
             <div class="holder-head-left">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span style="font-size:1.1rem;">👤</span>
                 <div class="holder-head-info">
                     <div class="holder-name">${h.name}</div>
                     <div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div>
                 </div>
             </div>
             <div class="holder-chevron ${isExpanded ? 'expanded' : ''}">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </div>
         `; 
         block.appendChild(head); 
@@ -1672,10 +1311,7 @@ const renderDetailTree = () => {
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; 
             row.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="font-weight:500;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                        ${a.name}
-                    </span>
+                    <span style="font-weight:500;">💼 ${a.name}</span>
                     <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
@@ -1714,10 +1350,10 @@ const renderDetailTree = () => {
     }); 
 };
 
-const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Счёт: ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
+const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
 const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
-window.doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
+const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
 window.openQuickExpense = () => {
   if (!getAccount()) { showToast('⚠️', 'Выберите счёт'); return; }
@@ -1759,7 +1395,7 @@ window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast
 window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
 window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance < -999999999 || newBalance > 999999999) { showToast('⚠️', 'Сумма вне допустимого диапазона'); haptic('error'); return; } if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; const desc = comment || 'Корректировка баланса'; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: desc, date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс изменён на ${fmt(newBalance)}`); };
 
-window.doFixReport = () => { 
+const doFixReport = () => { 
     const s = calcAll(); 
     const now = new Date(); 
     const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); 
@@ -2004,250 +1640,32 @@ function buildDetailedReportForSaved(r, now) {
     return lines.join('\n');
 }
 
-window.doShareCurrentReport = () => { const s = calcAll(); const now = new Date(); const text = buildDetailedReport(s, now, 'Текущий финансовый отчёт'); shareText(text, 'Текущий отчёт Findr'); };
+const doShareCurrentReport = () => { const s = calcAll(); const now = new Date(); const text = buildDetailedReport(s, now, 'Текущий финансовый отчёт'); shareText(text, 'Текущий отчёт Findr'); };
 const shareText = async (text, title) => { haptic('light'); if (tg?.switchInlineQuery) { try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){} } if (navigator.share) { try { await navigator.share({ title, text }); haptic('success'); return; } catch(e) { if (e.name === 'AbortError') return; } } try { await navigator.clipboard.writeText(text); haptic('success'); showToast('📋', 'Скопировано в буфер обмена'); } catch(e) { prompt('Скопируйте текст:', text); } };
 window.shareReport = (key) => { const r = savedReports[key]; if (!r) return; const now = new Date(); const text = buildDetailedReportForSaved(r, now); shareText(text, 'Зафиксированный отчёт Findr'); };
+window.shareDetail = () => { const now = new Date(); const text = buildDetailedDetailReport(now); shareText(text, 'Детализация Findr'); };
 window.editReport = (key) => { showToast('✏️', 'Редактирование'); };
 window.deleteReport = (key) => { const r = savedReports[key]; if (!r) return; const confirm = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) { tg.showConfirm('Удалить?', c => { if (c) confirm(); }); } else { if (confirm('Удалить?')) confirm(); } };
-window.doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
-window.doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
+const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.balance = newB; acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
+const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
 
-window.openAccountSheet = () => { 
-    document.getElementById('accountSearch').value = ''; 
-    isEditMode = false; 
-    document.getElementById('actionsMenu').classList.remove('active'); 
-    renderAccountTree(); 
-    document.getElementById('accountOverlay').classList.add('active'); 
-    document.getElementById('accountSheet').classList.add('active'); 
-    haptic('light'); 
-};
-window.closeAccountSheet = () => { 
-    document.getElementById('accountOverlay').classList.remove('active'); 
-    document.getElementById('accountSheet').classList.remove('active'); 
-    isEditMode = false; 
-    document.getElementById('actionsMenu').classList.remove('active'); 
-};
-window.toggleActionsMenu = () => { 
-    const menu = document.getElementById('actionsMenu'); 
-    menu.classList.toggle('active'); 
-    haptic('light'); 
-};
-window.createHolder = () => { 
-    const name = prompt('Введите имя держателя:'); 
-    if (!name || !name.trim()) return; 
-    const hid = 'h_' + Date.now(); 
-    const aid = 'a_' + Date.now(); 
-    holders[hid] = { 
-        id: hid, 
-        name: name.trim(), 
-        accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, 
-        createdAt: new Date().toISOString() 
-    }; 
-    activeHolderId = hid; 
-    activeAccountId = aid; 
-    renderAccountTree(); 
-    renderAll(); 
-    saveLocal(); 
-    saveServer(); 
-    document.getElementById('actionsMenu').classList.remove('active'); 
-    haptic('success'); 
-    showToast('✅', 'Держатель создан'); 
-};
-window.createAccount = () => { 
-    if (!activeHolderId || !holders[activeHolderId]) { 
-        showToast('⚠️', 'Сначала выберите держателя'); 
-        return; 
-    } 
-    const name = prompt('Введите название счёта:'); 
-    if (!name || !name.trim()) return; 
-    const h = holders[activeHolderId]; 
-    const newAid = 'a_' + Date.now(); 
-    h.accounts[newAid] = { 
-        id: newAid, 
-        name: name.trim(), 
-        balance: 0, 
-        transactions: [], 
-        createdAt: new Date().toISOString() 
-    }; 
-    activeAccountId = newAid; 
-    renderAccountTree(); 
-    renderAll(); 
-    saveLocal(); 
-    saveServer(); 
-    document.getElementById('actionsMenu').classList.remove('active'); 
-    haptic('success'); 
-    showToast('✅', 'Счёт создан'); 
-};
-window.toggleEditMode = () => { 
-    isEditMode = !isEditMode; 
-    document.getElementById('actionsMenu').classList.remove('active'); 
-    renderAccountTree(); 
-    haptic('light'); 
-    showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); 
-};
-window.deleteHolder = (hid) => { 
-    const h = holders[hid]; 
-    if (!h) return; 
-    const holderKeys = Object.keys(holders); 
-    if (holderKeys.length <= 1) { 
-        showToast('⚠️', 'Нельзя удалить последнего держателя'); 
-        haptic('error'); 
-        return; 
-    } 
-    const accCount = Object.keys(h.accounts || {}).length; 
-    const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; 
-    const doDelete = () => { 
-        if (activeHolderId === hid) { 
-            const otherKeys = holderKeys.filter(k => k !== hid); 
-            activeHolderId = otherKeys[0]; 
-            const otherHolder = holders[activeHolderId]; 
-            activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; 
-        } 
-        delete holders[hid]; 
-        renderAccountTree(); 
-        renderAll(); 
-        saveLocal(); 
-        saveServer(); 
-        haptic('success'); 
-        showToast('🗑️', `Держатель "${h.name}" удалён`); 
-    }; 
-    if (tg?.showConfirm) { 
-        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); 
-    } else { 
-        if (confirm(message)) doDelete(); 
-    } 
-};
-window.deleteAccount = (hid, aid) => { 
-    const h = holders[hid]; 
-    if (!h || !h.accounts[aid]) return; 
-    const acc = h.accounts[aid]; 
-    const accKeys = Object.keys(h.accounts); 
-    if (accKeys.length <= 1) { 
-        showToast('⚠️', 'Нельзя удалить последний счёт держателя'); 
-        haptic('error'); 
-        return; 
-    } 
-    const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`; 
-    const doDelete = () => { 
-        if (activeHolderId === hid && activeAccountId === aid) { 
-            const otherAccKeys = accKeys.filter(k => k !== aid); 
-            activeAccountId = otherAccKeys[0]; 
-        } 
-        delete h.accounts[aid]; 
-        renderAccountTree(); 
-        renderAll(); 
-        saveLocal(); 
-        saveServer(); 
-        haptic('success'); 
-        showToast('🗑️', `Счёт "${acc.name}" удалён`); 
-    }; 
-    if (tg?.showConfirm) { 
-        tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); 
-    } else { 
-        if (confirm(message)) doDelete(); 
-    } 
-};
+window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
+window.closeAccountSheet = () => { document.getElementById('accountOverlay').classList.remove('active'); document.getElementById('accountSheet').classList.remove('active'); isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); };
+window.toggleActionsMenu = () => { const menu = document.getElementById('actionsMenu'); menu.classList.toggle('active'); haptic('light'); };
+window.createHolder = () => { const name = prompt('Введите имя держателя:'); if (!name || !name.trim()) return; const hid = 'h_' + Date.now(); const aid = 'a_' + Date.now(); holders[hid] = { id: hid, name: name.trim(), accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() }; activeHolderId = hid; activeAccountId = aid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); haptic('success'); showToast('✅', 'Держатель создан'); };
+window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) { showToast('⚠️', 'Сначала выберите держателя'); return; } const name = prompt('Введите название счёта:'); if (!name || !name.trim()) return; const h = holders[activeHolderId]; const newAid = 'a_' + Date.now(); h.accounts[newAid] = { id: newAid, name: name.trim(), balance: 0, transactions: [], createdAt: new Date().toISOString() }; activeAccountId = newAid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); haptic('success'); showToast('✅', 'Счёт создан'); };
+window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); haptic('light'); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Редактирование завершено'); };
+window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const holderKeys = Object.keys(holders); if (holderKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последнего держателя'); haptic('error'); return; } const accCount = Object.keys(h.accounts || {}).length; const message = `Удалить держателя "${h.name}" и все его счета (${accCount} сч.)?\n\n⚠️ Все данные будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid) { const otherKeys = holderKeys.filter(k => k !== hid); activeHolderId = otherKeys[0]; const otherHolder = holders[activeHolderId]; activeAccountId = Object.keys(otherHolder.accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Держатель "${h.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
+window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h || !h.accounts[aid]) return; const acc = h.accounts[aid]; const accKeys = Object.keys(h.accounts); if (accKeys.length <= 1) { showToast('⚠️', 'Нельзя удалить последний счёт держателя'); haptic('error'); return; } const message = `Удалить счёт "${acc.name}"?\n\n⚠️ Все данные счёта будут безвозвратно удалены.`; const doDelete = () => { if (activeHolderId === hid && activeAccountId === aid) { const otherAccKeys = accKeys.filter(k => k !== aid); activeAccountId = otherAccKeys[0]; } delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('🗑️', `Счёт "${acc.name}" удалён`); }; if (tg?.showConfirm) { tg.showConfirm(message, (confirmed) => { if (confirmed) doDelete(); }); } else { if (confirm(message)) doDelete(); } };
 
-const renderAccountTree = () => { 
-    const container = document.getElementById('accountTree'); 
-    const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); 
-    container.innerHTML = ''; 
-    const keys = Object.keys(holders); 
-    if (!keys.length) { 
-        container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; 
-        return; 
-    } 
-    keys.forEach(hid => { 
-        const h = holders[hid]; 
-        if (!h) return; 
-        const block = document.createElement('div'); 
-        block.style.marginBottom = '12px'; 
-        if (isEditMode) { 
-            const head = document.createElement('div'); 
-            head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; 
-            head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge">👤</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="window.deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; 
-            block.appendChild(head); 
-        } else { 
-            const head = document.createElement('div'); 
-            head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; 
-            head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; 
-            block.appendChild(head); 
-        } 
-        const accs = document.createElement('div'); 
-        accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; 
-        Object.values(h.accounts||{}).forEach(a => { 
-            if (!a) return; 
-            if (search && !a.name.toLowerCase().includes(search)) return; 
-            const isActive = hid === activeHolderId && a.id === activeAccountId; 
-            if (isEditMode) { 
-                const row = document.createElement('div'); 
-                row.style.cssText = 'margin-bottom:8px;'; 
-                row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="window.deleteAccount('${hid}','${a.id}')"><span>🗑️</span><span>Удалить счёт</span></button>`; 
-                accs.appendChild(row); 
-            } else { 
-                const row = document.createElement('div'); 
-                row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; 
-                row.onclick = () => { 
-                    activeHolderId = hid; 
-                    activeAccountId = a.id; 
-                    renderAll(); 
-                    saveLocal(); 
-                    saveServer(); 
-                    closeAccountSheet(); 
-                    haptic('success'); 
-                    showToast('✅', `Выбран: ${a.name}`); 
-                }; 
-                row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`; 
-                accs.appendChild(row); 
-            } 
-        }); 
-        block.appendChild(accs); 
-        if (isEditMode) { 
-            const editActions = document.createElement('div'); 
-            editActions.className = 'edit-actions'; 
-            editActions.innerHTML = `<button class="btn btn-primary" onclick="window.saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="window.cancelEditMode()">✕ Отмена</button>`; 
-            block.appendChild(editActions); 
-        } 
-        container.appendChild(block); 
-    }); 
-};
-
-window.saveHolderEdits = (hid) => { 
-    const h = holders[hid]; 
-    if (!h) return; 
-    const newNameInput = document.getElementById(`editHolderName_${hid}`); 
-    if (newNameInput) { 
-        const newName = newNameInput.value.trim(); 
-        if (newName) h.name = newName; 
-    } 
-    Object.values(h.accounts||{}).forEach(a => { 
-        if (!a) return; 
-        const newNameInput = document.getElementById(`editAccountName_${a.id}`); 
-        if (newNameInput) { 
-            const newName = newNameInput.value.trim(); 
-            if (newName) a.name = newName; 
-        } 
-    }); 
-    isEditMode = false; 
-    renderAccountTree(); 
-    renderAll(); 
-    saveLocal(); 
-    saveServer(); 
-    haptic('success'); 
-    showToast('✅', 'Названия обновлены'); 
-};
-
-window.cancelEditMode = () => { 
-    isEditMode = false; 
-    renderAccountTree(); 
-    haptic('light'); 
-    showToast('ℹ️', 'Изменения отменены'); 
-};
+const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span><span class="edit-row-badge">👤</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}" placeholder="Имя держателя"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')"><span>🗑️</span><span>Удалить держателя</span></button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'; head.innerHTML = `<span style="font-weight:600;">👤 ${h.name}</span>`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Счёт</span><span class="edit-row-badge">💼</span></div><input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}" placeholder="Название счёта"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')"><span>🗑️</span><span>Удалить счёт</span></button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', `Выбран: ${a.name}`); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const editActions = document.createElement('div'); editActions.className = 'edit-actions'; editActions.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(editActions); } container.appendChild(block); }); };
+window.saveHolderEdits = (hid) => { const h = holders[hid]; if (!h) return; const newNameInput = document.getElementById(`editHolderName_${hid}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) h.name = newName; } Object.values(h.accounts||{}).forEach(a => { if (!a) return; const newNameInput = document.getElementById(`editAccountName_${a.id}`); if (newNameInput) { const newName = newNameInput.value.trim(); if (newName) a.name = newName; } }); isEditMode = false; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Названия обновлены'); };
+window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); haptic('light'); showToast('ℹ️', 'Изменения отменены'); };
 
 window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveServer(); });
 window.addEventListener('offline', () => { isOnline = false; updateSync('offline'); });
-document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') window.doTransaction('expense'); });
+document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') doTransaction('expense'); });
 window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
 
