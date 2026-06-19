@@ -197,7 +197,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .mb-16 { margin-bottom: 16px; }
 .mb-20 { margin-bottom: 20px; }
 
-/* ===== Детализация: подписи к показателям ===== */
 .detail-metric { 
     text-align: center; 
     padding: 8px 4px; 
@@ -208,7 +207,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .detail-metric-label { font-size: 0.55rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; margin-bottom: 3px; }
 .detail-metric-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
-/* ===== Сворачиваемые блоки держателей ===== */
 .holder-block { margin-bottom: 12px; }
 .holder-head {
     background: var(--ios-card);
@@ -251,6 +249,24 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     padding-left: 12px;
     border-left: 2px solid var(--ios-separator);
     margin-top: 8px;
+}
+
+/* Суммарная статистика держателя */
+.holder-summary {
+    background: rgba(90, 200, 250, 0.08);
+    border: 1px solid rgba(90, 200, 250, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 8px;
+}
+.holder-summary-title {
+    font-size: 0.7rem;
+    color: var(--ios-teal);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
 ::-webkit-scrollbar { width: 3px; }
@@ -475,7 +491,7 @@ let incomePercent = 7, expensePercent = 2.5;
 let detailPeriod = 'today';
 let isOnline = navigator.onLine;
 let isEditMode = false;
-let expandedHolders = {}; // состояние сворачивания держателей в детализации
+let expandedHolders = {};
 
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 const fmt = (n) => { if (n === null || n === undefined || isNaN(n)) n = 0; return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n); };
@@ -666,7 +682,6 @@ const refreshDetail = () => {
 };
 const renderDetail = refreshDetail;
 
-// ===== СВОРАЧИВАНИЕ ДЕРЖАТЕЛЕЙ =====
 window.toggleHolderExpand = (hid) => {
     expandedHolders[hid] = !expandedHolders[hid];
     renderDetailTree();
@@ -684,12 +699,11 @@ const renderDetailTree = () => {
     keys.forEach(hid => { 
         const h = holders[hid]; 
         if (!h?.accounts) return; 
-        const isExpanded = expandedHolders[hid] !== false; // по умолчанию раскрыт
+        const isExpanded = expandedHolders[hid] !== false;
         
         const block = document.createElement('div'); 
         block.className = 'holder-block'; 
         
-        // Заголовок держателя (кликабельный)
         const head = document.createElement('div'); 
         head.className = 'holder-head';
         head.onclick = () => window.toggleHolderExpand(hid);
@@ -709,15 +723,25 @@ const renderDetailTree = () => {
         `; 
         block.appendChild(head); 
         
-        // Обёртка со списком счетов (сворачивается)
         const wrap = document.createElement('div'); 
         wrap.className = 'holder-accounts-wrap' + (isExpanded ? ' expanded' : '');
         const inner = document.createElement('div'); 
         inner.className = 'holder-accounts-inner'; 
         
+        let holderTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, margin: 0, balance: 0 };
+        
         Object.values(h.accounts).forEach(a => { 
             if (!a) return; 
             const s = calcAcc(a, detailPeriod); 
+            
+            holderTotal.income += s.totalIncome;
+            holderTotal.expense += s.totalExpense;
+            holderTotal.spend += s.totalSpend;
+            holderTotal.turnover += s.turnover;
+            holderTotal.revenue += s.revenue;
+            holderTotal.margin += s.margin;
+            holderTotal.balance += a.balance || 0;
+            
             const row = document.createElement('div'); 
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; 
             row.innerHTML = `
@@ -759,6 +783,51 @@ const renderDetailTree = () => {
                 </div>`; 
             inner.appendChild(row); 
         }); 
+        
+        // Суммарная статистика держателя
+        const summary = document.createElement('div');
+        summary.className = 'holder-summary';
+        summary.innerHTML = `
+            <div class="holder-summary-title">📊 Итого по держателю</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">💹</div>
+                    <div class="detail-metric-label">Оборот</div>
+                    <div class="detail-metric-value text-blue">${fmtShort(holderTotal.turnover)}</div>
+                </div>
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">🟢</div>
+                    <div class="detail-metric-label">Доход</div>
+                    <div class="detail-metric-value text-green">${fmtShort(holderTotal.income)}</div>
+                </div>
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">🔴</div>
+                    <div class="detail-metric-label">Расход</div>
+                    <div class="detail-metric-value text-red">${fmtShort(holderTotal.expense)}</div>
+                </div>
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">💰</div>
+                    <div class="detail-metric-label">Выручка</div>
+                    <div class="detail-metric-value text-orange">${fmtShort(holderTotal.revenue)}</div>
+                </div>
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">🛍️</div>
+                    <div class="detail-metric-label">Траты</div>
+                    <div class="detail-metric-value text-purple">${fmtShort(holderTotal.spend)}</div>
+                </div>
+                <div class="detail-metric">
+                    <div class="detail-metric-icon">📈</div>
+                    <div class="detail-metric-label">Маржа</div>
+                    <div class="detail-metric-value text-teal">${fmtShort(holderTotal.margin)}</div>
+                </div>
+            </div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(90,200,250,0.2);text-align:center;">
+                <span style="font-size:0.65rem;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;">Общий баланс</span>
+                <div style="font-size:1rem;font-weight:600;color:var(--ios-text);margin-top:2px;">${fmt(holderTotal.balance)}</div>
+            </div>
+        `;
+        inner.appendChild(summary);
+        
         wrap.appendChild(inner);
         block.appendChild(wrap); 
         container.appendChild(block); 
