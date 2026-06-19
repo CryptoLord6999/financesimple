@@ -22,6 +22,7 @@
     --ios-red: #FF3B30;
     --ios-orange: #FF9500;
     --ios-purple: #AF52DE;
+    --ios-teal: #5AC8FA;
     --ios-gray: #8E8E93;
     --ios-light-gray: #C7C7CC;
     --ios-separator: rgba(120, 120, 128, 0.2);
@@ -61,9 +62,14 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .stat-icon { font-size: 0.9rem; }
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.spend-block { background: rgba(175, 82, 222, 0.08); border: 1px solid rgba(175, 82, 222, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.spend-block { background: rgba(175, 82, 222, 0.08); border: 1px solid rgba(175, 82, 222, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 .spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .spend-value { font-size: 1.1rem; font-weight: 600; color: var(--ios-purple); font-variant-numeric: tabular-nums; }
+.margin-block { background: rgba(90, 200, 250, 0.08); border: 1px solid rgba(90, 200, 250, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.margin-label { font-size: 0.7rem; color: var(--ios-teal); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; display: flex; flex-direction: column; gap: 2px; }
+.margin-sub { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: none; letter-spacing: 0; font-weight: 400; }
+.margin-value { font-size: 1.1rem; font-weight: 600; color: var(--ios-teal); font-variant-numeric: tabular-nums; }
+.margin-value.negative { color: var(--ios-red); }
 .account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.2s ease; }
 .account-chip:active { transform: scale(0.98); opacity: 0.8; }
 .account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -185,6 +191,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .text-blue { color: var(--ios-blue); }
 .text-orange { color: var(--ios-orange); }
 .text-purple { color: var(--ios-purple); }
+.text-teal { color: var(--ios-teal); }
 .mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
@@ -219,6 +226,13 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
   <div class="spend-label">🛍️ Траты</div>
   <div class="spend-value" id="statSpend">0 ₽</div>
 </div>
+<div class="margin-block">
+  <div class="margin-label">
+    <span>📈 Маржинальная прибыль</span>
+    <span class="margin-sub">выручка − траты</span>
+  </div>
+  <div class="margin-value" id="statMargin">0 ₽</div>
+</div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
   <button class="action-btn action-income" onclick="doTransaction('income')">in</button>
@@ -235,6 +249,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
 <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
@@ -393,7 +408,7 @@ let isEditMode = false;
 
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 const fmt = (n) => { if (n === null || n === undefined || isNaN(n)) n = 0; return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n); };
-const fmtShort = (n) => { if (!n || isNaN(n)) return '0'; if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(1).replace('.0','') + 'М'; if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(1).replace('.0','') + 'К'; return Math.round(n).toString(); };
+const fmtShort = (n) => { if (!n && n !== 0) return '0'; if (isNaN(n)) return '0'; const abs = Math.abs(n); const sign = n < 0 ? '-' : ''; if (abs >= 1e6) return sign + (abs/1e6).toFixed(1).replace('.0','') + 'М'; if (abs >= 1e3) return sign + (abs/1e3).toFixed(1).replace('.0','') + 'К'; return sign + Math.round(abs).toString(); };
 const haptic = (type) => { if (tg?.HapticFeedback) { try { if (type === 'success') tg.HapticFeedback.notificationOccurred('success'); else if (type === 'error') tg.HapticFeedback.notificationOccurred('error'); else tg.HapticFeedback.impactOccurred('light'); } catch(e){} } };
 
 const saveLocal = () => { try { localStorage.setItem('fl_holders', JSON.stringify(holders)); localStorage.setItem('fl_ah', activeHolderId); localStorage.setItem('fl_aa', activeAccountId); localStorage.setItem('fl_cap', capital.toString()); localStorage.setItem('fl_reports', JSON.stringify(savedReports)); localStorage.setItem('fl_ip', incomePercent.toString()); localStorage.setItem('fl_ep', expensePercent.toString()); } catch(e){} };
@@ -411,10 +426,10 @@ const getHolder = () => holders[activeHolderId];
 const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
 const filterTx = (txs, period) => { if (!txs || period === 'all') return txs || []; const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let start; if (period === 'today') start = today; else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); } else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= start); };
 
-// ===== ИЗМЕНЁННЫЙ CALCACC — ТРАТЫ ОТДЕЛЬНО =====
+// ===== РАСЧЁТ С МАРЖЕЙ =====
 const calcAcc = (acc, period) => { 
     let inc = 0, exp = 0, spend = 0; 
-    if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, turnover: 0 }; 
+    if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, margin: 0, turnover: 0 }; 
     const txs = filterTx(acc.transactions, period); 
     txs.forEach(t => { 
         if (!t || typeof t.amount !== 'number') return; 
@@ -423,7 +438,8 @@ const calcAcc = (acc, period) => {
         else if (t.type === 'spend') spend += t.amount; 
     }); 
     const rev = inc * (incomePercent/100) + exp * (expensePercent/100); 
-    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, turnover: inc + exp }; 
+    const margin = rev - spend;
+    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: margin, turnover: inc + exp }; 
 };
 
 const calcAll = () => { 
@@ -440,7 +456,8 @@ const calcAll = () => {
         }); 
     }); 
     const rev = inc * (incomePercent/100) + exp * (expensePercent/100); 
-    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; 
+    const margin = rev - spend;
+    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: margin, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; 
 };
 
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); };
@@ -452,6 +469,9 @@ const renderHome = () => {
         nameEl.textContent = '📂 Выберите счёт'; 
         document.getElementById('balanceDisplay').textContent = '0 ₽'; 
         ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => document.getElementById(id).textContent = '0 ₽'); 
+        const marginEl = document.getElementById('statMargin');
+        marginEl.textContent = '0 ₽';
+        marginEl.classList.remove('negative');
         document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
         return; 
@@ -464,6 +484,10 @@ const renderHome = () => {
     document.getElementById('statExpense').textContent = fmt(s.totalExpense); 
     document.getElementById('statRevenue').textContent = fmt(s.revenue); 
     document.getElementById('statSpend').textContent = fmt(s.totalSpend); 
+    const marginEl = document.getElementById('statMargin');
+    marginEl.textContent = fmt(s.margin);
+    if (s.margin < 0) marginEl.classList.add('negative');
+    else marginEl.classList.remove('negative');
     const list = document.getElementById('txList'); 
     if (!acc.transactions?.length) { 
         list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; 
@@ -501,6 +525,10 @@ const refreshReport = () => {
     document.getElementById('sumIncome').textContent = fmt(s.totalIncome); 
     document.getElementById('sumExpense').textContent = fmt(s.totalExpense); 
     document.getElementById('sumSpend').textContent = fmt(s.totalSpend); 
+    const marginEl = document.getElementById('sumMargin');
+    marginEl.textContent = fmt(s.margin);
+    if (s.margin < 0) marginEl.classList.add('negative');
+    else marginEl.classList.remove('negative');
     document.getElementById('sumBalance').textContent = fmt(s.totalBalance); 
     document.getElementById('sumCapital').textContent = fmt(capital); 
     document.getElementById('sumSite').textContent = fmt(s.siteBalance); 
@@ -518,7 +546,6 @@ const refreshSettings = () => { document.getElementById('setCapital').value = ca
 
 const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
-// ===== БЫСТРАЯ ТРАТА — БЕЗ КАПИТАЛИЗАЦИИ =====
 window.openQuickExpense = () => {
   if (!getAccount()) { showToast('⚠️', 'Выберите счёт'); return; }
   document.getElementById('quickExpenseAmount').value = '';
@@ -545,7 +572,6 @@ window.submitQuickExpense = () => {
 
   acc.balance -= amount;
   if (!acc.transactions) acc.transactions = [];
-  // Тип 'spend' — не учитывается в обороте/расходах и не даёт капитализации
   acc.transactions.push({ type: 'spend', amount: amount, desc: note || 'Трата', date: new Date().toISOString() });
 
   haptic('success');
@@ -571,6 +597,7 @@ const doFixReport = () => {
         expense: s.totalExpense, 
         spend: s.totalSpend, 
         revenue: s.revenue, 
+        margin: s.margin,
         balance: s.totalBalance, 
         capital, 
         siteBalance: s.siteBalance 
@@ -616,7 +643,7 @@ function buildDetailedDetailReport(now) {
     lines.push(`🔵 Баланс на сайте: ${fmt(s.siteBalance)}`);
     lines.push('   (капитал − баланс на счетах)');
     lines.push('');
-    let grandTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0 };
+    let grandTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, margin: 0 };
     holderKeys.forEach((hid, holderIndex) => {
         const h = holders[hid];
         if (!h || !h.accounts) return;
@@ -627,7 +654,7 @@ function buildDetailedDetailReport(now) {
         lines.push(`   Счетов: ${accountCount}`);
         lines.push('═══════════════════════════════');
         lines.push('');
-        let holderTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, balance: 0 };
+        let holderTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, margin: 0, balance: 0 };
         accKeys.forEach(aid => {
             const acc = h.accounts[aid];
             if (!acc) return;
@@ -637,6 +664,7 @@ function buildDetailedDetailReport(now) {
             holderTotal.spend += accStats.totalSpend;
             holderTotal.turnover += accStats.turnover;
             holderTotal.revenue += accStats.revenue;
+            holderTotal.margin += accStats.margin;
             holderTotal.balance += acc.balance || 0;
         });
         lines.push(`📊 СВОДКА ПО ДЕРЖАТЕЛЮ "${h.name}":`);
@@ -646,6 +674,7 @@ function buildDetailedDetailReport(now) {
         lines.push(`   Расходы:  ${fmt(holderTotal.expense)}`);
         lines.push(`   Траты:    ${fmt(holderTotal.spend)}`);
         lines.push(`   Выручка:  ${fmt(holderTotal.revenue)}`);
+        lines.push(`   Маржа:    ${fmt(holderTotal.margin)}`);
         lines.push(`   Баланс:   ${fmt(holderTotal.balance)}`);
         lines.push('');
         lines.push(`💼 ДЕТАЛИЗАЦИЯ ПО СЧЕТАМ:`);
@@ -663,6 +692,7 @@ function buildDetailedDetailReport(now) {
             lines.push(`   Расходы:  ${fmt(accStats.totalExpense)}`);
             lines.push(`   Траты:    ${fmt(accStats.totalSpend)}`);
             lines.push(`   Выручка:  ${fmt(accStats.revenue)}`);
+            lines.push(`   Маржа:    ${fmt(accStats.margin)}`);
             lines.push('');
         });
         grandTotal.income += holderTotal.income;
@@ -670,6 +700,7 @@ function buildDetailedDetailReport(now) {
         grandTotal.spend += holderTotal.spend;
         grandTotal.turnover += holderTotal.turnover;
         grandTotal.revenue += holderTotal.revenue;
+        grandTotal.margin += holderTotal.margin;
     });
     lines.push('═══════════════════════════════');
     lines.push('   ОБЩИЙ ИТОГ ЗА ПЕРИОД');
@@ -680,6 +711,7 @@ function buildDetailedDetailReport(now) {
     lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
     lines.push(`🛍️ Общие траты: ${fmt(grandTotal.spend)}`);
     lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
+    lines.push(`📈 Маржинальная прибыль: ${fmt(grandTotal.margin)}`);
     lines.push('');
     lines.push('═══════════════════════════════');
     lines.push('        Findr • Решения для бизнеса');
@@ -722,6 +754,9 @@ function buildDetailedReport(s, now, title) {
     lines.push(`💰 Выручка: ${fmt(s.revenue)}`);
     lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
     lines.push('');
+    lines.push(`📈 Маржинальная прибыль: ${fmt(s.margin)}`);
+    lines.push('   (выручка − траты)');
+    lines.push('');
     lines.push('───────────────────────────────');
     lines.push('   БАЛАНСЫ И КАПИТАЛ');
     lines.push('───────────────────────────────');
@@ -746,6 +781,7 @@ function buildDetailedReportForSaved(r, now) {
     const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
     const spend = r.spend || 0;
+    const margin = r.margin !== undefined ? r.margin : (r.revenue || 0) - spend;
     let lines = [];
     lines.push('═══════════════════════════════');
     lines.push('   ЗАФИКСИРОВАННЫЙ ОТЧЁТ');
@@ -772,6 +808,9 @@ function buildDetailedReportForSaved(r, now) {
     lines.push('');
     lines.push(`💰 Выручка: ${fmt(r.revenue)}`);
     lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
+    lines.push('');
+    lines.push(`📈 Маржинальная прибыль: ${fmt(margin)}`);
+    lines.push('   (выручка − траты)');
     lines.push('');
     lines.push('───────────────────────────────');
     lines.push('   БАЛАНСЫ И КАПИТАЛ');
