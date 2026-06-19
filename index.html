@@ -21,6 +21,7 @@
     --ios-green: #34C759;
     --ios-red: #FF3B30;
     --ios-orange: #FF9500;
+    --ios-purple: #AF52DE;
     --ios-gray: #8E8E93;
     --ios-light-gray: #C7C7CC;
     --ios-separator: rgba(120, 120, 128, 0.2);
@@ -50,13 +51,19 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; color: var(--ios-text-secondary); font-size: 0.9rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .balance-edit-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.2); }
-.balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; position: relative; z-index: 2; }
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+.balance-value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; position: relative; z-index: 2; margin-top: 4px; }
+.balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.balance-plus-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 59, 48, 0.12); border: 1px solid rgba(255, 59, 48, 0.25); color: var(--ios-red); font-size: 1.5rem; font-weight: 300; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; line-height: 1; flex-shrink: 0; }
+.balance-plus-btn:active { transform: scale(0.9); background: rgba(255, 59, 48, 0.2); }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
 .stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
 .stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .stat-icon { font-size: 0.9rem; }
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.spend-block { background: rgba(175, 82, 222, 0.08); border: 1px solid rgba(175, 82, 222, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+.spend-value { font-size: 1.1rem; font-weight: 600; color: var(--ios-purple); font-variant-numeric: tabular-nums; }
 .account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.2s ease; }
 .account-chip:active { transform: scale(0.98); opacity: 0.8; }
 .account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -82,64 +89,18 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
 
-/* ===== ИСПРАВЛЕННАЯ НИЖНЯЯ ПАНЕЛЬ ===== */
 .bottom-nav { 
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    right: 0; 
-    background: rgba(28, 28, 30, 0.92); 
-    backdrop-filter: blur(30px); 
-    -webkit-backdrop-filter: blur(30px); 
+    position: fixed; bottom: 0; left: 0; right: 0; 
+    background: rgba(28, 28, 30, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); 
     border-top: 1px solid var(--ios-separator); 
-    display: flex; 
-    justify-content: space-around; 
-    align-items: stretch;
-    padding: 6px 0 max(6px, env(safe-area-inset-bottom)); 
-    z-index: 1000; 
+    display: flex; justify-content: space-around; align-items: stretch;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; 
 }
-.nav-item { 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center;
-    gap: 2px; 
-    padding: 4px 2px; 
-    cursor: pointer; 
-    transition: all 0.2s ease; 
-    min-height: 48px;
-}
-.nav-icon { 
-    font-size: 22px; 
-    line-height: 1;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.45;
-    transition: all 0.2s ease; 
-}
-.nav-item.active .nav-icon { 
-    opacity: 1; 
-    transform: scale(1.05); 
-}
-.nav-label { 
-    font-size: 10px; 
-    font-weight: 500; 
-    color: var(--ios-text-secondary); 
-    transition: color 0.2s ease; 
-    letter-spacing: 0.01em;
-    height: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-}
-.nav-item.active .nav-label { 
-    color: var(--ios-blue); 
-    font-weight: 600;
-}
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.2s ease; min-height: 48px; }
+.nav-icon { font-size: 22px; line-height: 1; height: 26px; display: flex; align-items: center; justify-content: center; opacity: 0.45; transition: all 0.2s ease; }
+.nav-item.active .nav-icon { opacity: 1; transform: scale(1.05); }
+.nav-label { font-size: 10px; font-weight: 500; color: var(--ios-text-secondary); transition: color 0.2s ease; letter-spacing: 0.01em; height: 14px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.nav-item.active .nav-label { color: var(--ios-blue); font-weight: 600; }
 
 .sheet-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
@@ -223,6 +184,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .text-red { color: var(--ios-red); }
 .text-blue { color: var(--ios-blue); }
 .text-orange { color: var(--ios-orange); }
+.text-purple { color: var(--ios-purple); }
 .mb-10 { margin-bottom: 10px; }
 .mb-12 { margin-bottom: 12px; }
 .mb-16 { margin-bottom: 16px; }
@@ -239,15 +201,29 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
 <div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
-<div class="balance-card"><div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div><div class="balance-value" id="balanceDisplay">0 ₽</div><div class="sync-badge" id="syncBadge">☁️ подключение...</div></div>
+<div class="balance-card">
+  <div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div>
+  <div class="balance-value-row">
+    <div class="balance-value" id="balanceDisplay">0 ₽</div>
+    <button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата">＋</button>
+  </div>
+  <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
+</div>
 <div class="stats-grid">
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
+<div class="spend-block">
+  <div class="spend-label">🛍️ Траты</div>
+  <div class="spend-value" id="statSpend">0 ₽</div>
+</div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
-<div class="quick-actions"><button class="action-btn action-income" onclick="doTransaction('income')"><span>＋</span> Доход</button><button class="action-btn action-expense" onclick="doTransaction('expense')"><span>−</span> Расход</button></div>
+<div class="quick-actions">
+  <button class="action-btn action-income" onclick="doTransaction('income')">in</button>
+  <button class="action-btn action-expense" onclick="doTransaction('expense')">out</button>
+</div>
 <div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
 <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
@@ -258,6 +234,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
 <div class="summary-item" style="grid-column:span 2;"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
@@ -309,6 +286,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
 </nav>
 </div>
+
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
 <div class="sheet-handle"></div>
@@ -322,6 +300,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="accountTree"></div>
 <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
+
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
 <div class="sheet-handle"></div>
@@ -331,6 +310,22 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="setting-group"><div class="setting-label">📝 Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
 <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
 <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
+</div>
+
+<div class="sheet-overlay" id="quickExpenseOverlay" onclick="closeQuickExpense()"></div>
+<div class="bottom-sheet" id="quickExpenseSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">＋ Быстрая трата</div>
+<div class="setting-group">
+  <div class="setting-label">Сумма (₽)</div>
+  <input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+</div>
+<div class="setting-group">
+  <div class="setting-label">Примечание (необязательно)</div>
+  <input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button>
+<button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button>
 </div>
 
 <script>
@@ -408,22 +403,110 @@ let useFirebase = false, userRef = null, saveTimeout = null, isSyncing = false;
 const getUserId = () => { const tid = tg?.initDataUnsafe?.user?.id; if (tid) return 'tg_' + tid; let id = localStorage.getItem('fl_uid'); if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); } return id; };
 const UID = getUserId();
 const initFB = () => { try { const cfg = { apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", authDomain: "financesimple-7c73a.firebaseapp.com", databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", projectId: "financesimple-7c73a", storageBucket: "financesimple-7c73a.firebasestorage.app", messagingSenderId: "1072812838336", appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" }; if (!firebase.apps.length) firebase.initializeApp(cfg); userRef = firebase.database().ref(`users/${UID}`); useFirebase = true; } catch(e){ useFirebase = false; } };
-const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
+const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, incomePercent, expensePercent, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
 const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; } updateSync('syncing'); userRef.once('value').then(snap => { const d = snap.val(); if (d && d.holders) { holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId; capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; renderAll(); updateSync('synced'); } else { loadLocal(); renderAll(); if (isOnline) saveServer(); } }).catch(() => { loadLocal(); renderAll(); updateSync('offline'); }); };
 const updateSync = (s) => { const el = document.getElementById('syncBadge'); const map = { syncing: { t: '☁️ синхронизация...', c: 'syncing' }, synced: { t: '☁️ сохранено', c: 'synced' }, offline: { t: '💾 локально', c: '' }, error: { t: '⚠️ ошибка', c: '' }, local: { t: '💾 локально', c: '' } }; const m = map[s] || map.syncing; el.textContent = m.t; el.className = 'sync-badge ' + m.c; };
 
 const getHolder = () => holders[activeHolderId];
 const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
 const filterTx = (txs, period) => { if (!txs || period === 'all') return txs || []; const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let start; if (period === 'today') start = today; else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); } else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= start); };
-const calcAcc = (acc, period) => { let inc = 0, exp = 0; if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, revenue: 0, turnover: 0 }; const txs = filterTx(acc.transactions, period); txs.forEach(t => { if (!t || typeof t.amount !== 'number') return; if (t.type === 'income') inc += t.amount; else if (t.type === 'expense') exp += t.amount; }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp }; };
-const calcAll = () => { let inc = 0, exp = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; bal += a.balance || 0; }); }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
+
+// ===== ИЗМЕНЁННЫЙ CALCACC — ТРАТЫ ОТДЕЛЬНО =====
+const calcAcc = (acc, period) => { 
+    let inc = 0, exp = 0, spend = 0; 
+    if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, turnover: 0 }; 
+    const txs = filterTx(acc.transactions, period); 
+    txs.forEach(t => { 
+        if (!t || typeof t.amount !== 'number') return; 
+        if (t.type === 'income') inc += t.amount; 
+        else if (t.type === 'expense') exp += t.amount; 
+        else if (t.type === 'spend') spend += t.amount; 
+    }); 
+    const rev = inc * (incomePercent/100) + exp * (expensePercent/100); 
+    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, turnover: inc + exp }; 
+};
+
+const calcAll = () => { 
+    let inc = 0, exp = 0, spend = 0, bal = 0; 
+    Object.values(holders).forEach(h => { 
+        if (!h?.accounts) return; 
+        Object.values(h.accounts).forEach(a => { 
+            if (!a) return; 
+            const s = calcAcc(a); 
+            inc += s.totalIncome; 
+            exp += s.totalExpense; 
+            spend += s.totalSpend; 
+            bal += a.balance || 0; 
+        }); 
+    }); 
+    const rev = inc * (incomePercent/100) + exp * (expensePercent/100); 
+    return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; 
+};
 
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); };
-const renderHome = () => { const acc = getAccount(); const h = getHolder(); const nameEl = document.getElementById('accountName'); if (!acc || !h) { nameEl.textContent = '📂 Выберите счёт'; document.getElementById('balanceDisplay').textContent = '0 ₽'; ['statTurnover','statIncome','statExpense','statRevenue'].forEach(id => document.getElementById(id).textContent = '0 ₽'); document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; return; } nameEl.textContent = `${h.name} → ${acc.name}`; document.getElementById('balanceDisplay').textContent = fmt(acc.balance); const s = calcAcc(acc); document.getElementById('statTurnover').textContent = fmt(s.turnover); document.getElementById('statIncome').textContent = fmt(s.totalIncome); document.getElementById('statExpense').textContent = fmt(s.totalExpense); document.getElementById('statRevenue').textContent = fmt(s.revenue); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach(t => { if (!t) return; const d = new Date(t.date); const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; list.appendChild(item); }); document.getElementById('resetBtn').style.display = 'block'; } saveLocal(); };
+const renderHome = () => { 
+    const acc = getAccount(); 
+    const h = getHolder(); 
+    const nameEl = document.getElementById('accountName'); 
+    if (!acc || !h) { 
+        nameEl.textContent = '📂 Выберите счёт'; 
+        document.getElementById('balanceDisplay').textContent = '0 ₽'; 
+        ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => document.getElementById(id).textContent = '0 ₽'); 
+        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
+        document.getElementById('resetBtn').style.display = 'none'; 
+        return; 
+    } 
+    nameEl.textContent = `${h.name} → ${acc.name}`; 
+    document.getElementById('balanceDisplay').textContent = fmt(acc.balance); 
+    const s = calcAcc(acc); 
+    document.getElementById('statTurnover').textContent = fmt(s.turnover); 
+    document.getElementById('statIncome').textContent = fmt(s.totalIncome); 
+    document.getElementById('statExpense').textContent = fmt(s.totalExpense); 
+    document.getElementById('statRevenue').textContent = fmt(s.revenue); 
+    document.getElementById('statSpend').textContent = fmt(s.totalSpend); 
+    const list = document.getElementById('txList'); 
+    if (!acc.transactions?.length) { 
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; 
+        document.getElementById('resetBtn').style.display = 'none'; 
+    } else { 
+        list.innerHTML = ''; 
+        acc.transactions.slice().reverse().forEach(t => { 
+            if (!t) return; 
+            const d = new Date(t.date); 
+            const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); 
+            let cls, sign, desc; 
+            if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } 
+            else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } 
+            else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } 
+            else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } 
+            else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } 
+            else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } 
+            const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; 
+            const item = document.createElement('div'); 
+            item.className = 'tx-item'; 
+            item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; 
+            list.appendChild(item); 
+        }); 
+        document.getElementById('resetBtn').style.display = 'block'; 
+    } 
+    saveLocal(); 
+};
 
 window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций для обнуления'); haptic('warning'); return; } haptic('warning'); const doReset = () => { acc.balance = 0; acc.transactions = []; haptic('success'); renderAll(); saveLocal(); saveServer(); showToast('✅', 'История операций обнулена'); }; if (tg?.showConfirm) { tg.showConfirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`, (confirmed) => { if (confirmed) doReset(); }); } else { if (confirm(`Обнулить баланс и историю счёта "${acc.name}"?\n\n💾 Зафиксированные отчёты и капитал останутся.`)) doReset(); } };
 
-const refreshReport = () => { const s = calcAll(); document.getElementById('sumTurnover').textContent = fmt(s.turnover); document.getElementById('sumRevenue').textContent = fmt(s.revenue); document.getElementById('sumIncome').textContent = fmt(s.totalIncome); document.getElementById('sumExpense').textContent = fmt(s.totalExpense); document.getElementById('sumBalance').textContent = fmt(s.totalBalance); document.getElementById('sumCapital').textContent = fmt(capital); document.getElementById('sumSite').textContent = fmt(s.siteBalance); renderReportsList(); checkLastFixed(); };
+const refreshReport = () => { 
+    const s = calcAll(); 
+    document.getElementById('sumTurnover').textContent = fmt(s.turnover); 
+    document.getElementById('sumRevenue').textContent = fmt(s.revenue); 
+    document.getElementById('sumIncome').textContent = fmt(s.totalIncome); 
+    document.getElementById('sumExpense').textContent = fmt(s.totalExpense); 
+    document.getElementById('sumSpend').textContent = fmt(s.totalSpend); 
+    document.getElementById('sumBalance').textContent = fmt(s.totalBalance); 
+    document.getElementById('sumCapital').textContent = fmt(capital); 
+    document.getElementById('sumSite').textContent = fmt(s.siteBalance); 
+    renderReportsList(); 
+    checkLastFixed(); 
+};
 const renderReport = refreshReport;
 const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')">📤</button><button class="report-action edit" onclick="editReport('${key}')">✏️</button><button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmtShort(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmtShort(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmtShort(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmtShort(r.expense)}</span></div></div>`; list.appendChild(card); }); };
 const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'block'; } else { badge.style.display = 'none'; } };
@@ -435,11 +518,70 @@ const refreshSettings = () => { document.getElementById('setCapital').value = ca
 
 const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
 
+// ===== БЫСТРАЯ ТРАТА — БЕЗ КАПИТАЛИЗАЦИИ =====
+window.openQuickExpense = () => {
+  if (!getAccount()) { showToast('⚠️', 'Выберите счёт'); return; }
+  document.getElementById('quickExpenseAmount').value = '';
+  document.getElementById('quickExpenseNote').value = '';
+  document.getElementById('quickExpenseOverlay').classList.add('active');
+  document.getElementById('quickExpenseSheet').classList.add('active');
+  haptic('light');
+  setTimeout(() => document.getElementById('quickExpenseAmount').focus(), 400);
+};
+window.closeQuickExpense = () => {
+  document.getElementById('quickExpenseOverlay').classList.remove('active');
+  document.getElementById('quickExpenseSheet').classList.remove('active');
+};
+window.submitQuickExpense = () => {
+  const acc = getAccount();
+  if (!acc) return;
+  const amountStr = document.getElementById('quickExpenseAmount').value;
+  const note = document.getElementById('quickExpenseNote').value.trim();
+  if (!amountStr || isNaN(parseFloat(amountStr)) || parseFloat(amountStr) <= 0) {
+    showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return;
+  }
+  const amount = parseFloat(amountStr);
+  if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; }
+
+  acc.balance -= amount;
+  if (!acc.transactions) acc.transactions = [];
+  // Тип 'spend' — не учитывается в обороте/расходах и не даёт капитализации
+  acc.transactions.push({ type: 'spend', amount: amount, desc: note || 'Трата', date: new Date().toISOString() });
+
+  haptic('success');
+  renderAll();
+  saveLocal();
+  saveServer();
+  closeQuickExpense();
+  showToast('✅', note ? `Трата "${note}" учтена` : 'Трата учтена');
+};
+
 window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
 window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
 window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance < -999999999 || newBalance > 999999999) { showToast('⚠️', 'Сумма вне допустимого диапазона'); haptic('error'); return; } if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; const desc = comment || 'Корректировка баланса'; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: desc, date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс изменён на ${fmt(newBalance)}`); };
 
-const doFixReport = () => { const s = calcAll(); const now = new Date(); const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, revenue: s.revenue, balance: s.totalBalance, capital, siteBalance: s.siteBalance }; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('✅', 'Отчёт сохранён'); };
+const doFixReport = () => { 
+    const s = calcAll(); 
+    const now = new Date(); 
+    const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); 
+    savedReports[key] = { 
+        date: now.toISOString(), 
+        turnover: s.turnover, 
+        income: s.totalIncome, 
+        expense: s.totalExpense, 
+        spend: s.totalSpend, 
+        revenue: s.revenue, 
+        balance: s.totalBalance, 
+        capital, 
+        siteBalance: s.siteBalance 
+    }; 
+    saveLocal(); 
+    saveServer(); 
+    renderReportsList(); 
+    checkLastFixed(); 
+    haptic('success'); 
+    showToast('✅', 'Отчёт сохранён'); 
+};
 
 function buildDetailedDetailReport(now) {
     const periodNames = { today: 'Сегодня', week: 'Последние 7 дней', month: 'Последний месяц', all: 'Всё время' };
@@ -474,7 +616,7 @@ function buildDetailedDetailReport(now) {
     lines.push(`🔵 Баланс на сайте: ${fmt(s.siteBalance)}`);
     lines.push('   (капитал − баланс на счетах)');
     lines.push('');
-    let grandTotal = { income: 0, expense: 0, turnover: 0, revenue: 0 };
+    let grandTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0 };
     holderKeys.forEach((hid, holderIndex) => {
         const h = holders[hid];
         if (!h || !h.accounts) return;
@@ -485,13 +627,14 @@ function buildDetailedDetailReport(now) {
         lines.push(`   Счетов: ${accountCount}`);
         lines.push('═══════════════════════════════');
         lines.push('');
-        let holderTotal = { income: 0, expense: 0, turnover: 0, revenue: 0, balance: 0 };
+        let holderTotal = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, balance: 0 };
         accKeys.forEach(aid => {
             const acc = h.accounts[aid];
             if (!acc) return;
             const accStats = calcAcc(acc, detailPeriod);
             holderTotal.income += accStats.totalIncome;
             holderTotal.expense += accStats.totalExpense;
+            holderTotal.spend += accStats.totalSpend;
             holderTotal.turnover += accStats.turnover;
             holderTotal.revenue += accStats.revenue;
             holderTotal.balance += acc.balance || 0;
@@ -501,6 +644,7 @@ function buildDetailedDetailReport(now) {
         lines.push(`   Оборот:   ${fmt(holderTotal.turnover)}`);
         lines.push(`   Доходы:   ${fmt(holderTotal.income)}`);
         lines.push(`   Расходы:  ${fmt(holderTotal.expense)}`);
+        lines.push(`   Траты:    ${fmt(holderTotal.spend)}`);
         lines.push(`   Выручка:  ${fmt(holderTotal.revenue)}`);
         lines.push(`   Баланс:   ${fmt(holderTotal.balance)}`);
         lines.push('');
@@ -517,11 +661,13 @@ function buildDetailedDetailReport(now) {
             lines.push(`   Оборот:   ${fmt(accStats.turnover)}`);
             lines.push(`   Доходы:   ${fmt(accStats.totalIncome)}`);
             lines.push(`   Расходы:  ${fmt(accStats.totalExpense)}`);
+            lines.push(`   Траты:    ${fmt(accStats.totalSpend)}`);
             lines.push(`   Выручка:  ${fmt(accStats.revenue)}`);
             lines.push('');
         });
         grandTotal.income += holderTotal.income;
         grandTotal.expense += holderTotal.expense;
+        grandTotal.spend += holderTotal.spend;
         grandTotal.turnover += holderTotal.turnover;
         grandTotal.revenue += holderTotal.revenue;
     });
@@ -532,6 +678,7 @@ function buildDetailedDetailReport(now) {
     lines.push(`💹 Общий оборот: ${fmt(grandTotal.turnover)}`);
     lines.push(`🟢 Общие доходы: ${fmt(grandTotal.income)}`);
     lines.push(`🔴 Общие расходы: ${fmt(grandTotal.expense)}`);
+    lines.push(`🛍️ Общие траты: ${fmt(grandTotal.spend)}`);
     lines.push(`💰 Общая выручка: ${fmt(grandTotal.revenue)}`);
     lines.push('');
     lines.push('═══════════════════════════════');
@@ -569,6 +716,9 @@ function buildDetailedReport(s, now, title) {
     lines.push(`🔴 Расходы: ${fmt(s.totalExpense)}`);
     lines.push('   (все списания со счетов)');
     lines.push('');
+    lines.push(`🛍️ Траты: ${fmt(s.totalSpend)}`);
+    lines.push('   (личные траты, без капитализации)');
+    lines.push('');
     lines.push(`💰 Выручка: ${fmt(s.revenue)}`);
     lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
     lines.push('');
@@ -595,6 +745,7 @@ function buildDetailedReportForSaved(r, now) {
     const d = new Date(r.date);
     const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    const spend = r.spend || 0;
     let lines = [];
     lines.push('═══════════════════════════════');
     lines.push('   ЗАФИКСИРОВАННЫЙ ОТЧЁТ');
@@ -615,6 +766,9 @@ function buildDetailedReportForSaved(r, now) {
     lines.push('');
     lines.push(`🔴 Расходы: ${fmt(r.expense)}`);
     lines.push('   (все списания со счетов)');
+    lines.push('');
+    lines.push(`🛍️ Траты: ${fmt(spend)}`);
+    lines.push('   (личные траты, без капитализации)');
     lines.push('');
     lines.push(`💰 Выручка: ${fmt(r.revenue)}`);
     lines.push(`   (доход × ${incomePercent}% + расход × ${expensePercent}%)`);
