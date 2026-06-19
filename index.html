@@ -37,7 +37,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; }
 
-/* ===== NOISE TEXTURE (macOS Big Sur style) ===== */
 .noise-overlay {
     position: fixed;
     inset: 0;
@@ -48,7 +47,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* ===== SPLASH ===== */
 #splash { position: fixed; inset: 0; z-index: 10000; background: linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--spring-smooth), visibility 0.6s; }
 #splash.hide { opacity: 0; visibility: hidden; }
 #splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
@@ -79,7 +77,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
 
-/* ===== BALANCE CARD С ПРОГРЕСС-КОЛЬЦОМ ===== */
 .balance-card-wrapper {
     position: relative;
     margin-bottom: 16px;
@@ -344,7 +341,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .holder-summary { background: rgba(90, 200, 250, 0.08); border: 1px solid rgba(90, 200, 250, 0.2); border-radius: 12px; padding: 12px; margin-top: 8px; }
 .holder-summary-title { font-size: 0.7rem; color: var(--ios-teal); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 8px; text-align: center; }
 
-/* ===== СТРАНИЦА ЦЕЛИ ===== */
 .goal-page-header { text-align: center; margin-bottom: 20px; }
 .goal-ring-wrapper { position: relative; width: 220px; height: 220px; margin: 0 auto 24px; }
 .goal-ring-wrapper svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -405,7 +401,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </head>
 <body>
 
-<!-- NOISE TEXTURE OVERLAY -->
 <div class="noise-overlay"></div>
 
 <div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
@@ -641,6 +636,59 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
+// ===== АНИМАЦИЯ ЧИСЕЛ =====
+const previousValues = new Map();
+
+function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+}
+
+function animateValue(element, newValue, formatter, duration = 600) {
+    const elementId = element.id || element.dataset.animId;
+    if (!elementId) {
+        element.textContent = formatter(newValue);
+        return;
+    }
+    
+    const startValue = previousValues.get(elementId) || 0;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutCubic(progress);
+        
+        const currentValue = startValue + (newValue - startValue) * easedProgress;
+        element.textContent = formatter(currentValue);
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            previousValues.set(elementId, newValue);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
+// Инициализация анимации для элементов
+function initAnimatedElements() {
+    const elements = [
+        'balanceDisplay', 'statTurnover', 'statIncome', 'statExpense', 'statRevenue',
+        'statSpend', 'statMargin', 'sumTurnover', 'sumRevenue', 'sumIncome',
+        'sumExpense', 'sumSpend', 'sumBalance', 'sumCapital', 'sumSite', 'sumMargin',
+        'detBalance', 'detCapital', 'detSite', 'detSpend', 'detRevenue', 'detMargin',
+        'goalCurrentRevenue', 'goalTarget', 'goalRemaining', 'goalPercent'
+    ];
+    
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            previousValues.set(id, 0);
+        }
+    });
+};
+
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
     if (!canvas) return;
@@ -785,7 +833,6 @@ const calcAll = () => {
     return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: margin, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; 
 };
 
-// ===== ПРОГРЕСС-КОЛЬЦО НА ГЛАВНОЙ (исправлено) =====
 function updateMiniRing() {
     const s = calcAll();
     const container = document.getElementById('miniRingContainer');
@@ -794,13 +841,10 @@ function updateMiniRing() {
     const label = document.getElementById('miniRingLabel');
     if (!bg || !ring || !container) return;
     
-    // Получаем реальные размеры контейнера
     const rect = container.getBoundingClientRect();
     const w = rect.width;
     const h = rect.height;
-    const rx = 22;
     
-    // Обновляем размеры rect в SVG
     bg.setAttribute('width', w - 3);
     bg.setAttribute('height', h - 3);
     ring.setAttribute('width', w - 3);
@@ -847,7 +891,8 @@ function updateGoalPage() {
     
     if (!ring) return;
     
-    currentEl.textContent = fmt(s.revenue);
+    // Анимация чисел
+    animateValue(currentEl, s.revenue, fmt);
     
     if (goalTarget > 0) {
         const progress = Math.min(s.revenue / goalTarget, 1);
@@ -867,12 +912,12 @@ function updateGoalPage() {
         ring.style.stroke = color;
         
         const percent = Math.round(progress * 100);
-        percentEl.textContent = percent;
+        animateValue(percentEl, percent, (n) => Math.round(n).toString());
         percentEl.style.color = color;
         
-        targetEl.textContent = fmt(goalTarget);
+        animateValue(targetEl, goalTarget, fmt);
         const remaining = Math.max(goalTarget - s.revenue, 0);
-        remainingEl.textContent = remaining > 0 ? fmt(remaining) : '✓';
+        animateValue(remainingEl, remaining, (n) => remaining > 0 ? fmt(n) : '✓');
         remainingEl.className = 'goal-stat-value ' + (remaining > 0 ? 'text-red' : 'text-green');
         
         if (progress >= 1) {
@@ -921,7 +966,6 @@ function renderGoalHistory() {
     container.innerHTML = '';
     
     goalHistory.slice().reverse().forEach((item, reverseIdx) => {
-        // Индекс в оригинальном массиве (для удаления)
         const realIdx = goalHistory.length - 1 - reverseIdx;
         const d = new Date(item.date);
         const dateStr = `${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}`;
@@ -1031,10 +1075,10 @@ const renderHome = () => {
     const nameEl = document.getElementById('accountName'); 
     if (!acc || !h) { 
         nameEl.textContent = '📂 Выберите счёт'; 
-        document.getElementById('balanceDisplay').textContent = '0 ₽'; 
-        ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => document.getElementById(id).textContent = '0 ₽'); 
+        animateValue(document.getElementById('balanceDisplay'), 0, fmt);
+        ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => animateValue(document.getElementById(id), 0, fmt));
         const marginEl = document.getElementById('statMargin');
-        marginEl.textContent = '0 ₽';
+        animateValue(marginEl, 0, fmt);
         marginEl.classList.remove('negative');
         document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
@@ -1042,15 +1086,15 @@ const renderHome = () => {
         return; 
     } 
     nameEl.textContent = `${h.name} → ${acc.name}`; 
-    document.getElementById('balanceDisplay').textContent = fmt(acc.balance); 
+    animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt);
     const s = calcAcc(acc); 
-    document.getElementById('statTurnover').textContent = fmt(s.turnover); 
-    document.getElementById('statIncome').textContent = fmt(s.totalIncome); 
-    document.getElementById('statExpense').textContent = fmt(s.totalExpense); 
-    document.getElementById('statRevenue').textContent = fmt(s.revenue); 
-    document.getElementById('statSpend').textContent = fmt(s.totalSpend); 
+    animateValue(document.getElementById('statTurnover'), s.turnover, fmt);
+    animateValue(document.getElementById('statIncome'), s.totalIncome, fmt);
+    animateValue(document.getElementById('statExpense'), s.totalExpense, fmt);
+    animateValue(document.getElementById('statRevenue'), s.revenue, fmt);
+    animateValue(document.getElementById('statSpend'), s.totalSpend, fmt);
     const marginEl = document.getElementById('statMargin');
-    marginEl.textContent = fmt(s.margin);
+    animateValue(marginEl, s.margin, fmt);
     if (s.margin < 0) marginEl.classList.add('negative');
     else marginEl.classList.remove('negative');
     const list = document.getElementById('txList'); 
@@ -1086,16 +1130,16 @@ window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!
 
 const refreshReport = () => { 
     const s = calcAll(); 
-    document.getElementById('sumTurnover').textContent = fmt(s.turnover); 
-    document.getElementById('sumRevenue').textContent = fmt(s.revenue); 
-    document.getElementById('sumIncome').textContent = fmt(s.totalIncome); 
-    document.getElementById('sumExpense').textContent = fmt(s.totalExpense); 
-    document.getElementById('sumSpend').textContent = fmt(s.totalSpend); 
-    document.getElementById('sumBalance').textContent = fmt(s.totalBalance); 
-    document.getElementById('sumCapital').textContent = fmt(capital); 
-    document.getElementById('sumSite').textContent = fmt(s.siteBalance); 
+    animateValue(document.getElementById('sumTurnover'), s.turnover, fmt);
+    animateValue(document.getElementById('sumRevenue'), s.revenue, fmt);
+    animateValue(document.getElementById('sumIncome'), s.totalIncome, fmt);
+    animateValue(document.getElementById('sumExpense'), s.totalExpense, fmt);
+    animateValue(document.getElementById('sumSpend'), s.totalSpend, fmt);
+    animateValue(document.getElementById('sumBalance'), s.totalBalance, fmt);
+    animateValue(document.getElementById('sumCapital'), capital, fmt);
+    animateValue(document.getElementById('sumSite'), s.siteBalance, fmt);
     const marginEl = document.getElementById('sumMargin');
-    marginEl.textContent = fmt(s.margin);
+    animateValue(marginEl, s.margin, fmt);
     if (s.margin < 0) marginEl.classList.add('negative');
     else marginEl.classList.remove('negative');
     renderReportsList(); 
@@ -1149,13 +1193,13 @@ const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().rev
 
 const refreshDetail = () => { 
     const s = calcAll(); 
-    document.getElementById('detBalance').textContent = fmt(s.totalBalance); 
-    document.getElementById('detCapital').textContent = fmt(capital); 
-    document.getElementById('detSite').textContent = fmt(s.siteBalance); 
-    document.getElementById('detSpend').textContent = fmt(s.totalSpend); 
-    document.getElementById('detRevenue').textContent = fmt(s.revenue); 
+    animateValue(document.getElementById('detBalance'), s.totalBalance, fmt);
+    animateValue(document.getElementById('detCapital'), capital, fmt);
+    animateValue(document.getElementById('detSite'), s.siteBalance, fmt);
+    animateValue(document.getElementById('detSpend'), s.totalSpend, fmt);
+    animateValue(document.getElementById('detRevenue'), s.revenue, fmt);
     const marginEl = document.getElementById('detMargin');
-    marginEl.textContent = fmt(s.margin);
+    animateValue(marginEl, s.margin, fmt);
     if (s.margin < 0) marginEl.classList.add('negative');
     else marginEl.classList.remove('negative');
     renderDetailTree(); 
@@ -1584,12 +1628,14 @@ document.getElementById('amountInput').addEventListener('keypress', e => { if (e
 window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
 
-// Пересчёт кольца при изменении размера окна
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => { updateMiniRing(); }, 100);
 });
+
+// Инициализация анимации при загрузке
+initAnimatedElements();
 
 initFB();
 loadServer();
