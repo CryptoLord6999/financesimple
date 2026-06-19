@@ -147,7 +147,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 .spend-block { background: rgba(175, 82, 222, 0.08); border: 1px solid rgba(175, 82, 222, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s var(--spring-bounce); }
 .spend-block:active { transform: scale(0.98); }
-.spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+.spend-label { font-size: 0.7rem; color: var(--ios-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; display: flex; align-items: center; gap: 4px; }
 .spend-value { font-size: 1.1rem; font-weight: 600; color: var(--ios-purple); font-variant-numeric: tabular-nums; }
 
 .margin-block { background: rgba(90, 200, 250, 0.08); border: 1px solid rgba(90, 200, 250, 0.2); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s var(--spring-bounce); }
@@ -159,7 +159,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 .account-chip { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: 1px solid var(--ios-separator); transition: all 0.3s var(--spring-bounce); }
 .account-chip:active { transform: scale(0.95); opacity: 0.8; }
-.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.account-chip-name { font-size: 0.85rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; }
 .account-chip-arrow { color: var(--ios-blue); font-size: 1rem; transition: transform 0.3s var(--spring-bounce); }
 .account-chip:active .account-chip-arrow { transform: translateX(4px); }
 
@@ -175,7 +175,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .action-expense { background: var(--ios-red); color: white; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
 
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
-.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; }
+.section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 6px; }
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s var(--spring-bounce); opacity: 0.7; }
 .reset-btn:active { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); transform: scale(0.9); }
 
@@ -234,7 +234,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .action-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; border-bottom: 1px solid var(--ios-separator); }
 .action-item:last-child { border-bottom: none; }
 .action-item:active { background: rgba(120, 120, 128, 0.15); transform: scale(0.98); }
-.action-item-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+.action-item-icon { width: 20px; height: 20px; flex-shrink: 0; }
 .action-item-text { flex: 1; font-size: 0.9rem; font-weight: 500; }
 .action-item-arrow { color: var(--ios-text-secondary); font-size: 0.9rem; }
 
@@ -255,7 +255,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .toast.out { animation: toastOut 0.3s var(--spring-smooth) forwards; }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes toastOut { to { opacity: 0; transform: translateY(-20px) scale(0.95); } }
-.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-icon { width: 20px; height: 20px; flex-shrink: 0; }
 .toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
 
 .btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -304,7 +304,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .sync-badge.synced { color: var(--ios-green); }
 
 .empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
-.empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5; }
+.empty-icon { width: 48px; height: 48px; margin: 0 auto 10px; opacity: 0.5; }
 .empty-text { font-size: 0.85rem; }
 
 .text-green { color: var(--ios-green); }
@@ -408,7 +408,13 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
-<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName">📂 Выберите счёт</span><span class="account-chip-arrow">›</span></div>
+<div class="account-chip" onclick="openAccountSheet()">
+    <span class="account-chip-name">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        Выберите счёт
+    </span>
+    <svg class="account-chip-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</div>
 
 <div class="balance-card-wrapper">
     <div class="progress-ring-container" id="miniRingContainer">
@@ -419,70 +425,174 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
         <div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div>
     </div>
     <div class="balance-card">
-      <div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()">✏️</button></div>
+      <div class="balance-header">
+          <div class="balance-label">Текущий баланс</div>
+          <button class="balance-edit-btn" onclick="openEditBalance()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+      </div>
       <div class="balance-value-row">
         <div class="balance-value" id="balanceDisplay">0 ₽</div>
-        <button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата">＋</button>
+        <button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
       </div>
-      <div class="sync-badge" id="syncBadge">☁️ подключение...</div>
+      <div class="sync-badge" id="syncBadge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 0 1 9-9"></path></svg>
+          подключение...
+      </div>
     </div>
 </div>
 
 <div class="stats-grid">
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
+<div class="stat-card">
+    <div class="stat-header">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="stat-name">Оборот</span>
+    </div>
+    <div class="stat-value text-blue" id="statTurnover">0 ₽</div>
+</div>
+<div class="stat-card">
+    <div class="stat-header">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="stat-name">Доход</span>
+    </div>
+    <div class="stat-value text-green" id="statIncome">0 ₽</div>
+</div>
+<div class="stat-card">
+    <div class="stat-header">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="stat-name">Расход</span>
+    </div>
+    <div class="stat-value text-red" id="statExpense">0 ₽</div>
+</div>
+<div class="stat-card">
+    <div class="stat-header">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <span class="stat-name">Выручка</span>
+    </div>
+    <div class="stat-value text-orange" id="statRevenue">0 ₽</div>
+</div>
 </div>
 <div class="spend-block">
-  <div class="spend-label">🛍️ Траты</div>
-  <div class="spend-value" id="statSpend">0 ₽</div>
+    <div class="spend-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        Траты
+    </div>
+    <div class="spend-value" id="statSpend">0 ₽</div>
 </div>
 <div class="margin-block">
-  <div class="margin-label">
-    <span>📈 Маржинальная прибыль</span>
-    <span class="margin-sub">выручка − траты</span>
-  </div>
-  <div class="margin-value" id="statMargin">0 ₽</div>
+    <div class="margin-label">
+        <span>Маржинальная прибыль</span>
+        <span class="margin-sub">выручка − траты</span>
+    </div>
+    <div class="margin-value" id="statMargin">0 ₽</div>
 </div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
-  <button class="action-btn action-income" onclick="doTransaction('income')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12L12 5L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Доход
-  </button>
-  <button class="action-btn action-expense" onclick="doTransaction('expense')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12L12 19L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Расход
-  </button>
+    <button class="action-btn action-income" onclick="doTransaction('income')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+        Доход
+    </button>
+    <button class="action-btn action-expense" onclick="doTransaction('expense')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        Расход
+    </button>
 </div>
-<div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
-<div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
+<div class="section-header">
+    <div class="section-title">История операций</div>
+    <button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button>
+</div>
+<div class="tx-list" id="txList">
+    <div class="empty-state">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <div class="empty-text">Нет операций</div>
+    </div>
+</div>
 </div></div>
 
 <div class="page" id="page-report"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-    <defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
-    <rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
-    <path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  Отчёт
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
+        <path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Отчёт
 </div>
-<div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
-<div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🟢 Доходы</div><div class="summary-val text-green" id="sumIncome">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🔴 Расходы</div><div class="summary-val text-red" id="sumExpense">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="sumSpend">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="sumBalance">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="sumCapital">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
-<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
-</div></div>
-<button class="btn btn-primary mb-12" onclick="doFixReport()">📌 Зафиксировать</button>
-<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">📤 Поделиться</button>
-<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">✅ Последний: <span id="lastFixedDate"></span></div>
+<div class="summary-block">
+    <div class="summary-title">Сводка по всем счетам</div>
+    <div class="summary-grid">
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-sum-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Оборот
+            </div>
+            <div class="summary-val text-blue" id="sumTurnover">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-sum-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-sum-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
+                Выручка
+            </div>
+            <div class="summary-val text-orange" id="sumRevenue">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-sum-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Доходы
+            </div>
+            <div class="summary-val text-green" id="sumIncome">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-sum-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Расходы
+            </div>
+            <div class="summary-val text-red" id="sumExpense">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-balance" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-sum-balance)" stroke-width="2.5"/><path d="M12 8v8M8 12h8" stroke="url(#grad-sum-balance)" stroke-width="2.5" stroke-linecap="round"/></svg>
+                Баланс
+            </div>
+            <div class="summary-val" id="sumBalance">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-sum-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-sum-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Капитал
+            </div>
+            <div class="summary-val text-blue" id="sumCapital">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-site" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-sum-site)" stroke-width="2.5"/><path d="M3 9h18M9 21V9" stroke="url(#grad-sum-site)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                На сайте
+            </div>
+            <div class="summary-val text-orange" id="sumSite">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-sum-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3v18h18" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14l4-4 4 4 6-6" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Маржа
+            </div>
+            <div class="summary-val text-teal" id="sumMargin">0 ₽</div>
+        </div>
+    </div>
+</div>
+<button class="btn btn-primary mb-12" onclick="doFixReport()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 12"></path><path d="M12 12L12 22"></path><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" fill="none"/></svg>
+    Зафиксировать
+</button>
+<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+    Поделиться
+</button>
+<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    Последний: <span id="lastFixedDate"></span>
+</div>
 <div class="section-title">Зафиксированные отчёты</div>
 <div id="reportsList"></div>
 </div></div>
@@ -490,13 +600,13 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="page" id="page-goal"><div class="page-content">
 <div class="goal-page-header">
     <div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-        <defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
-        <circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
-        <circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
-        <circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
-      </svg>
-      Цель по выручке
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+            <defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
+            <circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
+            <circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
+            <circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
+        </svg>
+        Цель по выручке
     </div>
     <div style="font-size:0.75rem;color:var(--ios-text-secondary);">Отслеживайте прогресс достижения цели</div>
 </div>
@@ -533,8 +643,14 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     </div>
 </div>
 
-<button class="btn btn-primary" onclick="openSetGoal()">🎯 Установить цель</button>
-<button class="btn btn-secondary" onclick="resetGoal()" style="margin-top:8px;">Сбросить цель</button>
+<button class="btn btn-primary" onclick="openSetGoal()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    Установить цель
+</button>
+<button class="btn btn-secondary" onclick="resetGoal()" style="margin-top:8px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+    Сбросить цель
+</button>
 
 <div class="goal-history-title">История целей</div>
 <div id="goalHistory"></div>
@@ -542,24 +658,60 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 <div class="page" id="page-detail"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-    <defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
-    <path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  Детализация
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+        <path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Детализация
 </div>
 
 <div class="summary-block">
-  <div class="summary-title">Общие показатели</div>
-  <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
-    <div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
-    <div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
-    <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
-    <div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="detSpend">0 ₽</div></div>
-    <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="detRevenue">0 ₽</div></div>
-    <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="detMargin">0 ₽</div></div>
-  </div>
+    <div class="summary-title">Общие показатели</div>
+    <div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-balance" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-det-balance)" stroke-width="2.5"/><path d="M12 8v8M8 12h8" stroke="url(#grad-det-balance)" stroke-width="2.5" stroke-linecap="round"/></svg>
+                Баланс
+            </div>
+            <div class="summary-val" id="detBalance">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-det-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-det-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Капитал
+            </div>
+            <div class="summary-val text-blue" id="detCapital">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-site" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-det-site)" stroke-width="2.5"/><path d="M3 9h18M9 21V9" stroke="url(#grad-det-site)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                На сайте
+            </div>
+            <div class="summary-val text-orange" id="detSite">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-spend" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="url(#grad-det-spend)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Траты
+            </div>
+            <div class="summary-val text-purple" id="detSpend">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-det-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-det-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg>
+                Выручка
+            </div>
+            <div class="summary-val text-orange" id="detRevenue">0 ₽</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-det-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3V21H21" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Маржа
+            </div>
+            <div class="summary-val text-teal" id="detMargin">0 ₽</div>
+        </div>
+    </div>
 </div>
 
 <div class="period-row" id="periodRow">
@@ -569,65 +721,155 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
 </div>
 <div id="detailTree"></div>
-<button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;">📤 Поделиться детализацией</button>
+<button class="btn btn-secondary" onclick="doShareDetail()" style="margin-top:16px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+    Поделиться детализацией
+</button>
 </div></div>
 
 <div class="page" id="page-adjust"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-    <defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
-    <path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  Корректировка
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
+        <path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Корректировка
 </div>
-<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
-<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">📝 Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
-<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">✓ Применить</button>
+<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+    Счёт: Основной
+</div>
+<div class="setting-group">
+    <div class="setting-label">Новый баланс (₽)</div>
+    <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
+    <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
+</div>
+<div class="setting-group">
+    <div class="setting-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-adj-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-adj-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-adj-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Капитал (₽)
+    </div>
+    <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
+    <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
+</div>
+<div class="setting-group">
+    <div class="setting-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-adj-comment" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="url(#grad-adj-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="url(#grad-adj-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Комментарий
+    </div>
+    <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    Применить
+</button>
 </div></div>
 
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-    <defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
-    <circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
-    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
-  </svg>
-  Настройки
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
+        <circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
+        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    Настройки
 </div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
-<div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
-<div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
-<div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
-<div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">💜 Капитал += Выручка</span></div></div>
-<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">✓ Сохранить</button>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    <span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
+</div>
+<div class="setting-group">
+    <div class="setting-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-set-capital" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-set-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-set-capital)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Капитал (₽)
+    </div>
+    <input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
+    <div class="setting-hint">Общий для всех счетов</div>
+</div>
+<div class="setting-group">
+    <div class="setting-label">% от доходов</div>
+    <input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
+</div>
+<div class="setting-group">
+    <div class="setting-label">% от расходов</div>
+    <input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
+</div>
+<div class="report-card" style="background:rgba(0,122,255,0.08);">
+    <div class="setting-label" style="margin-bottom:6px;">Формула</div>
+    <div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
+        Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br>
+        <span style="color:var(--ios-blue);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-formula" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#grad-formula)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#grad-formula)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Капитал += Выручка
+        </span>
+    </div>
+</div>
+<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    Сохранить
+</button>
 </div></div>
 </div>
 
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="home" onclick="switchPage('home')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Главная</span></div>
-<div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Отчёт</span></div>
-<div class="nav-item" data-page="goal" onclick="switchPage('goal')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="nav-label">Цель</span></div>
-<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Детали</span></div>
-<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Коррекция</span></div>
-<div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
+<div class="nav-item active" data-page="home" onclick="switchPage('home')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span class="nav-label">Главная</span>
+</div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+    <span class="nav-label">Отчёт</span>
+</div>
+<div class="nav-item" data-page="goal" onclick="switchPage('goal')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+    <span class="nav-label">Цель</span>
+</div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+    <span class="nav-label">Детали</span>
+</div>
+<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+    <span class="nav-label">Коррекция</span>
+</div>
+<div class="nav-item" data-page="settings" onclick="switchPage('settings')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    <span class="nav-label">Настройки</span>
+</div>
 </nav>
 </div>
 
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title">Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div>
-<div class="actions-menu" id="actionsMenu">
-<div class="action-item" onclick="createHolder()"><span class="action-item-icon">👤</span><span class="action-item-text">Создать держателя</span><span class="action-item-arrow">›</span></div>
-<div class="action-item" onclick="createAccount()"><span class="action-item-icon">💼</span><span class="action-item-text">Создать счёт</span><span class="action-item-arrow">›</span></div>
-<div class="action-item" onclick="toggleEditMode()"><span class="action-item-icon">✏️</span><span class="action-item-text">Редактировать названия</span><span class="action-item-arrow">›</span></div>
+<div class="sheet-header">
+    <div style="width:36px;"></div>
+    <div class="sheet-title">Выбор счёта</div>
+    <button class="sheet-menu-btn" onclick="toggleActionsMenu()">
+        <div class="hamburger-icon"><span></span><span></span><span></span></div>
+    </button>
 </div>
-<input type="text" id="accountSearch" class="setting-input" placeholder="🔍 Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);" oninput="renderAccountTree()">
+<div class="actions-menu" id="actionsMenu">
+    <div class="action-item" onclick="createHolder()">
+        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span class="action-item-text">Создать держателя</span>
+        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </div>
+    <div class="action-item" onclick="createAccount()">
+        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        <span class="action-item-text">Создать счёт</span>
+        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </div>
+    <div class="action-item" onclick="toggleEditMode()">
+        <svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        <span class="action-item-text">Редактировать названия</span>
+        <svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </div>
+</div>
+<input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);">
 <div id="accountTree"></div>
 <button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
 </div>
@@ -635,25 +877,41 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">✏️ Редактировать баланс</div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span>Введите новый баланс счёта. Будет создана корректирующая операция.</span></div>
-<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">📝 Комментарий (необязательно)</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
-<button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">✓ Сохранить</button>
+<div class="sheet-title">Редактировать баланс</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    <span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
+</div>
+<div class="setting-group">
+    <div class="setting-label">Новый баланс (₽)</div>
+    <input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+    <div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div>
+</div>
+<div class="setting-group">
+    <div class="setting-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle;"><defs><linearGradient id="grad-edit-comment" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="url(#grad-edit-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="url(#grad-edit-comment)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Комментарий (необязательно)
+    </div>
+    <input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    Сохранить
+</button>
 <button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
 </div>
 
 <div class="sheet-overlay" id="quickExpenseOverlay" onclick="closeQuickExpense()"></div>
 <div class="bottom-sheet" id="quickExpenseSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">＋ Быстрая трата</div>
+<div class="sheet-title">Быстрая трата</div>
 <div class="setting-group">
-  <div class="setting-label">Сумма (₽)</div>
-  <input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+    <div class="setting-label">Сумма (₽)</div>
+    <input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
 </div>
 <div class="setting-group">
-  <div class="setting-label">Примечание (необязательно)</div>
-  <input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
+    <div class="setting-label">Примечание (необязательно)</div>
+    <input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
 </div>
 <button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button>
 <button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button>
@@ -662,9 +920,9 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 <div class="sheet-overlay" id="setGoalOverlay" onclick="closeSetGoal()"></div>
 <div class="bottom-sheet" id="setGoalSheet">
 <div class="sheet-handle"></div>
-<div class="sheet-title">🎯 Установить цель по выручке</div>
+<div class="sheet-title">Установить цель по выручке</div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
-    <span style="font-size:1.1rem;">💡</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
     <span>Укажите желаемую выручку. Прогресс будет отображаться на главной странице и в разделе «Цель».</span>
 </div>
 <div class="setting-group">
@@ -672,7 +930,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     <input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0">
     <div class="setting-hint">Текущая выручка: <span id="goalCurrentHint">0 ₽</span></div>
 </div>
-<button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">✓ Установить цель</button>
+<button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    Установить цель
+</button>
 <button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button>
 </div>
 
@@ -1115,18 +1376,18 @@ const renderHome = () => {
     const h = getHolder(); 
     const nameEl = document.getElementById('accountName'); 
     if (!acc || !h) { 
-        nameEl.textContent = '📂 Выберите счёт'; 
+        nameEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> Выберите счёт';
         animateValue(document.getElementById('balanceDisplay'), 0, fmt);
         ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => animateValue(document.getElementById(id), 0, fmt));
         const marginEl = document.getElementById('statMargin');
         animateValue(marginEl, 0, fmt);
         marginEl.classList.remove('negative');
-        document.getElementById('txList').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет счетов</div></div>'; 
+        document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
         updateMiniRing();
         return; 
     } 
-    nameEl.textContent = `${h.name} → ${acc.name}`; 
+    nameEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> ${h.name} → ${acc.name}`;
     animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt);
     const s = calcAcc(acc); 
     animateValue(document.getElementById('statTurnover'), s.turnover, fmt);
@@ -1140,7 +1401,7 @@ const renderHome = () => {
     else marginEl.classList.remove('negative');
     const list = document.getElementById('txList'); 
     if (!acc.transactions?.length) { 
-        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div>'; 
+        list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div>'; 
         document.getElementById('resetBtn').style.display = 'none'; 
     } else { 
         list.innerHTML = ''; 
@@ -1151,7 +1412,6 @@ const renderHome = () => {
             let cls, sign, desc; 
             if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } 
             else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } 
-            else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } 
             else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } 
             else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } 
             else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } 
@@ -1192,7 +1452,7 @@ const renderReportsList = () => {
     const list = document.getElementById('reportsList'); 
     const keys = Object.keys(savedReports).sort().reverse(); 
     if (!keys.length) { 
-        list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет отчётов</div></div>'; 
+        list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет отчётов</div></div>'; 
         return; 
     } 
     list.innerHTML = ''; 
@@ -1213,9 +1473,15 @@ const renderReportsList = () => {
                     <div class="report-time">${timeStr}</div>
                 </div>
                 <div class="report-actions">
-                    <button class="report-action share" onclick="shareReport('${key}')">📤</button>
-                    <button class="report-action edit" onclick="editReport('${key}')">✏️</button>
-                    <button class="report-action delete" onclick="deleteReport('${key}')">🗑️</button>
+                    <button class="report-action share" onclick="shareReport('${key}')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    </button>
+                    <button class="report-action edit" onclick="editReport('${key}')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="report-action delete" onclick="deleteReport('${key}')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
                 </div>
             </div>
             <div class="report-stats">
@@ -1258,7 +1524,7 @@ const renderDetailTree = () => {
     container.innerHTML = ''; 
     const keys = Object.keys(holders); 
     if (!keys.length) { 
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет держателей</div></div>'; 
+        container.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет держателей</div></div>'; 
         return; 
     } 
     keys.forEach(hid => { 
@@ -1274,16 +1540,14 @@ const renderDetailTree = () => {
         head.onclick = () => window.toggleHolderExpand(hid);
         head.innerHTML = `
             <div class="holder-head-left">
-                <span style="font-size:1.1rem;">👤</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <div class="holder-head-info">
                     <div class="holder-name">${h.name}</div>
                     <div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div>
                 </div>
             </div>
             <div class="holder-chevron ${isExpanded ? 'expanded' : ''}">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
         `; 
         block.appendChild(head); 
@@ -1311,7 +1575,10 @@ const renderDetailTree = () => {
             row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);'; 
             row.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="font-weight:500;">💼 ${a.name}</span>
+                    <span style="font-weight:500;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        ${a.name}
+                    </span>
                     <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
@@ -1350,7 +1617,7 @@ const renderDetailTree = () => {
     }); 
 };
 
-const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').textContent = `${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
+const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Счёт: ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
 const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
 
 const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (amount > 999999999) { showToast('⚠️', 'Сумма слишком велика'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: `Капитализация`, date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
