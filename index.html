@@ -141,7 +141,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 .stat-card { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); transition: transform 0.3s var(--spring-bounce); }
 .stat-card:active { transform: scale(0.95); }
 .stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-.stat-icon { font-size: 0.9rem; }
+.stat-icon { width: 18px; height: 18px; flex-shrink: 0; }
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
 .stat-value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 
@@ -197,7 +197,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
 .nav-item:active { transform: scale(0.88); }
-.nav-icon { font-size: 22px; line-height: 1; height: 26px; display: flex; align-items: center; justify-content: center; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
+.nav-icon { width: 22px; height: 22px; line-height: 1; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.15) translateY(-2px); }
 .nav-item.active::before {
     content: '';
@@ -321,7 +321,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 .detail-metric { text-align: center; padding: 8px 4px; background: rgba(120, 120, 128, 0.08); border-radius: 8px; transition: transform 0.3s var(--spring-bounce); }
 .detail-metric:active { transform: scale(0.95); }
-.detail-metric-icon { font-size: 1rem; margin-bottom: 2px; }
+.detail-metric-icon { width: 18px; height: 18px; margin: 0 auto 2px; }
 .detail-metric-label { font-size: 0.55rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; margin-bottom: 3px; }
 .detail-metric-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
@@ -429,10 +429,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div>
 
 <div class="stats-grid">
-<div class="stat-card"><div class="stat-header"><span class="stat-icon">💹</span><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><span class="stat-icon">🟢</span><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><span class="stat-icon">🔴</span><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><span class="stat-icon">💰</span><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
 <div class="spend-block">
   <div class="spend-label">🛍️ Траты</div>
@@ -447,15 +447,28 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
-  <button class="action-btn action-income" onclick="doTransaction('income')">in</button>
-  <button class="action-btn action-expense" onclick="doTransaction('expense')">out</button>
+  <button class="action-btn action-income" onclick="doTransaction('income')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12L12 5L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Доход
+  </button>
+  <button class="action-btn action-expense" onclick="doTransaction('expense')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12L12 19L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Расход
+  </button>
 </div>
 <div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
 <div class="tx-list" id="txList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Нет операций</div></div></div>
 </div></div>
 
 <div class="page" id="page-report"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📊 Отчёт</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+    <rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
+    <path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Отчёт
+</div>
 <div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
@@ -476,7 +489,15 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 
 <div class="page" id="page-goal"><div class="page-content">
 <div class="goal-page-header">
-    <div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">🎯 Цель по выручке</div>
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+        <defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
+        <circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
+        <circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
+        <circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
+      </svg>
+      Цель по выручке
+    </div>
     <div style="font-size:0.75rem;color:var(--ios-text-secondary);">Отслеживайте прогресс достижения цели</div>
 </div>
 
@@ -520,7 +541,14 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div></div>
 
 <div class="page" id="page-detail"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">📈 Детализация</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+    <path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Детализация
+</div>
 
 <div class="summary-block">
   <div class="summary-title">Общие показатели</div>
@@ -545,7 +573,16 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div></div>
 
 <div class="page" id="page-adjust"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">✏️ Корректировка</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
+    <path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Корректировка
+</div>
 <div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;">💼 Счёт: Основной</div>
 <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
 <div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
@@ -554,7 +591,14 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div></div>
 
 <div class="page" id="page-settings"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">⚙️ Настройки</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+    <defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
+    <circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
+    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  Настройки
+</div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><span style="font-size:1.1rem;">💡</span><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
 <div class="setting-group"><div class="setting-label">💜 Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
 <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
@@ -565,12 +609,12 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 </div>
 
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">Главная</span></div>
-<div class="nav-item" data-page="report" onclick="switchPage('report')"><span class="nav-icon">📊</span><span class="nav-label">Отчёт</span></div>
-<div class="nav-item" data-page="goal" onclick="switchPage('goal')"><span class="nav-icon">🎯</span><span class="nav-label">Цель</span></div>
-<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><span class="nav-icon">📈</span><span class="nav-label">Детали</span></div>
-<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><span class="nav-icon">✏️</span><span class="nav-label">Коррекция</span></div>
-<div class="nav-item" data-page="settings" onclick="switchPage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Настройки</span></div>
+<div class="nav-item active" data-page="home" onclick="switchPage('home')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Главная</span></div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Отчёт</span></div>
+<div class="nav-item" data-page="goal" onclick="switchPage('goal')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="nav-label">Цель</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Детали</span></div>
+<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Коррекция</span></div>
+<div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
 </nav>
 </div>
 
@@ -636,7 +680,6 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 const tg = window.Telegram?.WebApp;
 if (tg) { try { tg.ready(); tg.expand(); } catch(e){} }
 
-// ===== АНИМАЦИЯ ЧИСЕЛ =====
 const previousValues = new Map();
 
 function easeOutCubic(t) {
@@ -671,7 +714,6 @@ function animateValue(element, newValue, formatter, duration = 600) {
     requestAnimationFrame(update);
 }
 
-// Инициализация анимации для элементов
 function initAnimatedElements() {
     const elements = [
         'balanceDisplay', 'statTurnover', 'statIncome', 'statExpense', 'statRevenue',
@@ -891,7 +933,6 @@ function updateGoalPage() {
     
     if (!ring) return;
     
-    // Анимация чисел
     animateValue(currentEl, s.revenue, fmt);
     
     if (goalTarget > 0) {
@@ -1274,12 +1315,12 @@ const renderDetailTree = () => {
                     <span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
-                    <div class="detail-metric"><div class="detail-metric-icon">💹</div><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(s.turnover)}</div></div>
-                    <div class="detail-metric"><div class="detail-metric-icon">🟢</div><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(s.totalIncome)}</div></div>
-                    <div class="detail-metric"><div class="detail-metric-icon">🔴</div><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(s.totalExpense)}</div></div>
-                    <div class="detail-metric"><div class="detail-metric-icon">💰</div><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(s.revenue)}</div></div>
-                    <div class="detail-metric"><div class="detail-metric-icon">🛍️</div><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(s.totalSpend)}</div></div>
-                    <div class="detail-metric"><div class="detail-metric-icon">📈</div><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(s.margin)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-det-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(s.turnover)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-det-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(s.totalIncome)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-det-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(s.totalExpense)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-det-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-det-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(s.revenue)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-spend" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="url(#grad-det-spend)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(s.totalSpend)}</div></div>
+                    <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-det-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3V21H21" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-det-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(s.margin)}</div></div>
                 </div>`; 
             inner.appendChild(row); 
         }); 
@@ -1289,12 +1330,12 @@ const renderDetailTree = () => {
         summary.innerHTML = `
             <div class="holder-summary-title">📊 Итого по держателю</div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
-                <div class="detail-metric"><div class="detail-metric-icon">💹</div><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(holderTotal.turnover)}</div></div>
-                <div class="detail-metric"><div class="detail-metric-icon">🟢</div><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(holderTotal.income)}</div></div>
-                <div class="detail-metric"><div class="detail-metric-icon">🔴</div><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(holderTotal.expense)}</div></div>
-                <div class="detail-metric"><div class="detail-metric-icon">💰</div><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(holderTotal.revenue)}</div></div>
-                <div class="detail-metric"><div class="detail-metric-icon">🛍️</div><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(holderTotal.spend)}</div></div>
-                <div class="detail-metric"><div class="detail-metric-icon">📈</div><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(holderTotal.margin)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-sum-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(holderTotal.turnover)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-sum-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(holderTotal.income)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-sum-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(holderTotal.expense)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-sum-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-sum-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(holderTotal.revenue)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-spend" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="url(#grad-sum-spend)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(holderTotal.spend)}</div></div>
+                <div class="detail-metric"><svg class="detail-metric-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-sum-margin" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5AC8FA"/><stop offset="100%" style="stop-color:#007AFF"/></linearGradient></defs><path d="M3 3V21H21" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-sum-margin)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(holderTotal.margin)}</div></div>
             </div>
             <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(90,200,250,0.2);text-align:center;">
                 <span style="font-size:0.65rem;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;">Общий баланс</span>
@@ -1634,7 +1675,6 @@ window.addEventListener('resize', () => {
     resizeTimer = setTimeout(() => { updateMiniRing(); }, 100);
 });
 
-// Инициализация анимации при загрузке
 initAnimatedElements();
 
 initFB();
