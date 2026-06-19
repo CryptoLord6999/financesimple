@@ -106,7 +106,65 @@ transform: translateX(30%) scale(0.95);
 .page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
 .page.exit-right { opacity: 0; transform: translateX(30%) scale(0.95); }
 .page::-webkit-scrollbar { display: none; }
-.page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; }
+.page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; position: relative; }
+
+/* Pull-to-Refresh */
+.pull-refresh {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--ios-separator);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s var(--spring-bounce);
+    z-index: 100;
+}
+.pull-refresh.active {
+    opacity: 1;
+}
+.pull-refresh.refreshing {
+    animation: refreshSpin 1s linear infinite;
+}
+@keyframes refreshSpin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* Swipe Actions */
+.tx-item-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-ios-sm);
+    margin-bottom: 8px;
+}
+.tx-item-swipe {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    background: var(--ios-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transform: translateX(100%);
+    transition: transform 0.3s var(--spring-bounce);
+}
+.tx-item-wrapper.swiped .tx-item-swipe {
+    transform: translateX(0);
+}
+
 .balance-card-wrapper { position: relative; margin-bottom: 16px; }
 .progress-ring-container { position: absolute; inset: -3px; pointer-events: none; z-index: 3; }
 .progress-ring-container svg { width: 100%; height: 100%; }
@@ -119,7 +177,9 @@ border-radius: var(--radius-ios);
 padding: 24px;
 position: relative;
 overflow: hidden;
-transition: transform 0.4s var(--spring-bounce), background 0.3s ease;
+transition: transform 0.4s var(--spring-bounce);
+transform-style: preserve-3d;
+perspective: 1000px;
 }
 .balance-card:active { transform: scale(0.98); }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
@@ -167,8 +227,9 @@ transition: transform 0.4s var(--spring-bounce), background 0.3s ease;
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s var(--spring-bounce); opacity: 0.7; }
 .reset-btn:active { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); transform: scale(0.9); }
 .tx-list { display: flex; flex-direction: column; gap: 8px; }
-.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.2s var(--spring-bounce); }
+.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.3s var(--spring-bounce); position: relative; z-index: 2; touch-action: pan-y; }
 .tx-item:active { transform: scale(0.98); }
+.tx-item.swiping { transition: none; }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .tx-info { flex: 1; min-width: 0; }
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -362,6 +423,36 @@ transition: all 0.3s var(--spring-bounce);
 line-height: 1;
 }
 .goal-history-delete:active { transform: scale(0.85); background: rgba(255, 59, 48, 0.25); }
+
+/* Confetti */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    overflow: hidden;
+}
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--ios-blue);
+    animation: confettiFall 3s ease-out forwards;
+}
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
@@ -374,6 +465,12 @@ line-height: 1;
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
+<div class="pull-refresh" id="pullRefresh">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"></polyline>
+        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+    </svg>
+</div>
 <div class="account-chip" onclick="openAccountSheet()">
 <span class="account-chip-name" id="accountName">
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
@@ -389,7 +486,7 @@ line-height: 1;
 </svg>
 <div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div>
 </div>
-<div class="balance-card">
+<div class="balance-card" id="balanceCard">
 <div class="balance-header">
 <div class="balance-label">Текущий баланс</div>
 <button class="balance-edit-btn" onclick="openEditBalance()">
@@ -433,11 +530,11 @@ line-height: 1;
 </div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
-<button class="action-btn action-income" onclick="doTransaction('income')">
+<button class="action-btn action-income" id="btnIncome" onclick="doTransaction('income')">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
 Доход
 </button>
-<button class="action-btn action-expense" onclick="doTransaction('expense')">
+<button class="action-btn action-expense" id="btnExpense" onclick="doTransaction('expense')">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
 Расход
 </button>
@@ -800,14 +897,18 @@ line-height: 1;
 </button>
 <button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button>
 </div>
+
+<!-- Confetti Container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
 <script>
 const tg = window.Telegram?.WebApp;
 if (tg) { 
     try { 
         tg.ready(); 
         tg.expand(); 
-        applyTheme(); // Apply theme on start
-        tg.onEvent('themeChanged', applyTheme); // Listen to TG theme changes
+        applyTheme();
+        tg.onEvent('themeChanged', applyTheme);
     } catch(e){} 
 }
 
@@ -909,6 +1010,258 @@ window.setTheme = (mode) => {
     applyTheme();
     haptic('light');
 };
+
+// --- 3D TILT EFFECT ---
+function init3DTilt() {
+    const card = document.getElementById('balanceCard');
+    if (!card) return;
+    
+    let isTilting = false;
+    
+    card.addEventListener('mousemove', (e) => {
+        if (isTilting) return;
+        isTilting = true;
+        
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        
+        requestAnimationFrame(() => { isTilting = false; });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    });
+    
+    // Touch support
+    card.addEventListener('touchmove', (e) => {
+        if (isTilting) return;
+        isTilting = true;
+        
+        const touch = e.touches[0];
+        const rect = card.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 15;
+        const rotateY = (centerX - x) / 15;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        
+        requestAnimationFrame(() => { isTilting = false; });
+    }, { passive: true });
+    
+    card.addEventListener('touchend', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    });
+}
+
+// --- MAGNETIC BUTTONS ---
+function initMagneticButtons() {
+    const buttons = document.querySelectorAll('#btnIncome, #btnExpense');
+    
+    buttons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.05)`;
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+}
+
+// --- PULL TO REFRESH ---
+function initPullToRefresh() {
+    const page = document.getElementById('page-home');
+    const content = page.querySelector('.page-content');
+    const refreshIndicator = document.getElementById('pullRefresh');
+    
+    let startY = 0;
+    let currentY = 0;
+    let isPulling = false;
+    let isRefreshing = false;
+    
+    page.addEventListener('touchstart', (e) => {
+        if (page.scrollTop === 0 && !isRefreshing) {
+            startY = e.touches[0].clientY;
+            isPulling = true;
+        }
+    }, { passive: true });
+    
+    page.addEventListener('touchmove', (e) => {
+        if (!isPulling || isRefreshing) return;
+        currentY = e.touches[0].clientY;
+        const diff = currentY - startY;
+        
+        if (diff > 0) {
+            const pullDistance = Math.min(diff * 0.5, 80);
+            refreshIndicator.style.top = `${pullDistance - 60}px`;
+            refreshIndicator.classList.add('active');
+            
+            if (pullDistance > 60) {
+                refreshIndicator.style.transform = 'translateX(-50%) scale(1.2)';
+            } else {
+                refreshIndicator.style.transform = 'translateX(-50%) scale(1)';
+            }
+        }
+    }, { passive: true });
+    
+    page.addEventListener('touchend', () => {
+        if (!isPulling || isRefreshing) return;
+        isPulling = false;
+        
+        const diff = currentY - startY;
+        if (diff > 60) {
+            isRefreshing = true;
+            refreshIndicator.classList.add('refreshing');
+            refreshIndicator.style.top = '10px';
+            haptic('light');
+            
+            setTimeout(() => {
+                renderAll();
+                if (useFirebase) loadServer();
+                
+                refreshIndicator.classList.remove('refreshing', 'active');
+                refreshIndicator.style.top = '-60px';
+                isRefreshing = false;
+                haptic('success');
+                showToast('✅', 'Данные обновлены');
+            }, 1000);
+        } else {
+            refreshIndicator.classList.remove('active');
+            refreshIndicator.style.top = '-60px';
+        }
+        
+        startY = 0;
+        currentY = 0;
+    });
+}
+
+// --- SWIPE ACTIONS ---
+function initSwipeGesture(wrapper, item) {
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    item.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        item.classList.add('swiping');
+    }, { passive: true });
+    
+    item.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = startX - currentX;
+        
+        if (diff > 0) {
+            const translateX = Math.min(diff, 80);
+            item.style.transform = `translateX(-${translateX}px)`;
+        }
+    }, { passive: true });
+    
+    item.addEventListener('touchend', () => {
+        isDragging = false;
+        item.classList.remove('swiping');
+        const diff = startX - currentX;
+        
+        if (diff > 40) {
+            wrapper.classList.add('swiped');
+            item.style.transform = 'translateX(-80px)';
+            haptic('light');
+        } else {
+            wrapper.classList.remove('swiped');
+            item.style.transform = '';
+        }
+    });
+}
+
+window.deleteTransaction = (index) => {
+    const acc = getAccount();
+    if (!acc || !acc.transactions) return;
+    
+    const realIndex = acc.transactions.length - 1 - index;
+    if (realIndex < 0 || realIndex >= acc.transactions.length) return;
+    
+    const tx = acc.transactions[realIndex];
+    const confirmDelete = () => {
+        if (tx.type === 'income') {
+            acc.balance -= tx.amount;
+            const revTx = acc.transactions.find(t => 
+                t.type === 'revenue' && 
+                Math.abs(t.amount - tx.amount * (incomePercent/100)) < 0.01
+            );
+            if (revTx) {
+                capital -= revTx.amount;
+                acc.transactions = acc.transactions.filter(t => t !== revTx);
+            }
+        } else if (tx.type === 'expense') {
+            acc.balance += tx.amount;
+            const revTx = acc.transactions.find(t => 
+                t.type === 'revenue' && 
+                Math.abs(t.amount - tx.amount * (expensePercent/100)) < 0.01
+            );
+            if (revTx) {
+                capital -= revTx.amount;
+                acc.transactions = acc.transactions.filter(t => t !== revTx);
+            }
+        } else if (tx.type === 'spend') {
+            // Just delete
+        } else if (tx.type === 'adjustment') {
+            acc.balance -= tx.amount;
+        } else if (tx.type === 'revenue') {
+            capital -= tx.amount;
+        }
+        
+        acc.transactions.splice(realIndex, 1);
+        renderAll();
+        saveServer();
+        haptic('success');
+        showToast('🗑️', 'Операция удалена');
+    };
+    
+    if (tg?.showConfirm) {
+        tg.showConfirm('Удалить операцию?', c => { if (c) confirmDelete(); });
+    } else {
+        if (confirm('Удалить операцию?')) confirmDelete();
+    }
+};
+
+// --- CONFETTI ---
+function showConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#007AFF', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5AC8FA'];
+    
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        container.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 4000);
+    }
+    
+    haptic('success');
+}
 
 (function initSplash() {
     const canvas = document.getElementById('splashCanvas');
@@ -1071,11 +1424,18 @@ function updateMiniRing() {
         label.textContent = percent + '%';
         label.style.display = 'block';
         label.style.color = color;
+        
+        // Show confetti when goal is reached
+        if (progress >= 1 && !window.confettiShown) {
+            window.confettiShown = true;
+            showConfetti();
+        }
     } else {
         ring.style.strokeDasharray = '1';
         ring.style.strokeDashoffset = '1';
         ring.style.stroke = 'rgba(255,255,255,0.1)';
         label.style.display = 'none';
+        window.confettiShown = false;
     }
 }
 
@@ -1257,7 +1617,7 @@ const renderHome = () => {
         document.getElementById('resetBtn').style.display = 'none';
     } else {
         list.innerHTML = '';
-        acc.transactions.slice().reverse().forEach(t => {
+        acc.transactions.slice().reverse().forEach((t, index) => {
             if (!t) return;
             const d = new Date(t.date);
             const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
@@ -1269,10 +1629,24 @@ const renderHome = () => {
             else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
             else { cls = ''; sign = ''; desc = t.desc || 'Операция'; }
             const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`;
+            
+            const itemWrapper = document.createElement('div');
+            itemWrapper.className = 'tx-item-wrapper';
+            
+            const swipeAction = document.createElement('div');
+            swipeAction.className = 'tx-item-swipe';
+            swipeAction.innerHTML = '🗑️ Удалить';
+            swipeAction.onclick = () => deleteTransaction(index);
+            
             const item = document.createElement('div');
             item.className = 'tx-item';
             item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;
-            list.appendChild(item);
+            
+            itemWrapper.appendChild(swipeAction);
+            itemWrapper.appendChild(item);
+            list.appendChild(itemWrapper);
+            
+            initSwipeGesture(itemWrapper, item);
         });
         document.getElementById('resetBtn').style.display = 'block';
     }
@@ -1783,10 +2157,17 @@ window.addEventListener('resize', () => {
 });
 
 // INIT
-applyTheme(); // Ensure theme is applied immediately
+applyTheme();
 initAnimatedElements();
 initFB();
 loadServer();
+
+// Init premium effects after DOM is ready
+setTimeout(() => {
+    init3DTilt();
+    initMagneticButtons();
+    initPullToRefresh();
+}, 500);
 </script>
 </body>
 </html>
