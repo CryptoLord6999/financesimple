@@ -33,71 +33,111 @@
 --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 --spring-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 --spring-snappy: cubic-bezier(0.5, 1.5, 0.5, 1);
+--mesh-color-1: rgba(0, 122, 255, 0.15);
+--mesh-color-2: rgba(90, 200, 250, 0.12);
+--mesh-color-3: rgba(52, 199, 89, 0.10);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
 
-/* === MESH GRADIENT BACKGROUND === */
-.mesh-gradient-bg {
+/* === ANIMATED MESH GRADIENTS (AURORA) === */
+.aurora-bg {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
+    opacity: 0.8;
     transition: opacity 0.5s ease;
 }
-.mesh-blob {
+.aurora-blob {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.15;
-    animation: blobFloat 20s ease-in-out infinite;
-    transition: background 1s ease;
+    opacity: 0.6;
+    transition: background 1.5s ease;
+    will-change: transform;
 }
-.mesh-blob:nth-child(1) {
-    width: 300px; height: 300px;
-    top: -100px; left: -80px;
-    background: var(--ios-blue);
-    animation-delay: 0s;
-    animation-duration: 18s;
+.aurora-blob-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--mesh-color-1);
+    top: -100px;
+    left: -50px;
+    animation: blobFloat1 18s ease-in-out infinite;
 }
-.mesh-blob:nth-child(2) {
-    width: 250px; height: 250px;
-    top: 40%; right: -100px;
-    background: var(--ios-purple);
-    animation-delay: -5s;
-    animation-duration: 22s;
+.aurora-blob-2 {
+    width: 250px;
+    height: 250px;
+    background: var(--mesh-color-2);
+    top: 30%;
+    right: -80px;
+    animation: blobFloat2 22s ease-in-out infinite;
 }
-.mesh-blob:nth-child(3) {
-    width: 200px; height: 200px;
-    bottom: -50px; left: 30%;
-    background: var(--ios-teal);
-    animation-delay: -10s;
-    animation-duration: 25s;
+.aurora-blob-3 {
+    width: 200px;
+    height: 200px;
+    background: var(--mesh-color-3);
+    bottom: 10%;
+    left: 20%;
+    animation: blobFloat3 20s ease-in-out infinite;
 }
-.mesh-blob:nth-child(4) {
-    width: 180px; height: 180px;
-    top: 20%; left: 50%;
-    background: var(--ios-orange);
-    animation-delay: -7s;
-    animation-duration: 20s;
-    opacity: 0.08;
-}
-@keyframes blobFloat {
+@keyframes blobFloat1 {
     0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -40px) scale(1.1); }
-    50% { transform: translate(-20px, 20px) scale(0.9); }
-    75% { transform: translate(40px, 30px) scale(1.05); }
+    33% { transform: translate(60px, 40px) scale(1.1); }
+    66% { transform: translate(-30px, 80px) scale(0.9); }
 }
-body.light-theme .mesh-blob { opacity: 0.08; filter: blur(100px); }
+@keyframes blobFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-50px, -30px) scale(1.15); }
+    66% { transform: translate(40px, 50px) scale(0.85); }
+}
+@keyframes blobFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -60px) scale(1.05); }
+    66% { transform: translate(-50px, -20px) scale(0.95); }
+}
+
+/* === SKELETON LOADERS === */
+.skeleton {
+    background: var(--ios-card);
+    border-radius: var(--radius-ios-sm);
+    position: relative;
+    overflow: hidden;
+}
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+    animation: shimmer 1.5s infinite;
+}
+body.light-theme .skeleton::after {
+    background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%);
+}
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.skeleton-balance { height: 130px; border-radius: var(--radius-ios); margin-bottom: 16px; }
+.skeleton-stat { height: 75px; }
+.skeleton-spend { height: 50px; margin-bottom: 10px; }
+.skeleton-margin { height: 60px; margin-bottom: 16px; }
+.skeleton-input { height: 60px; margin-bottom: 12px; }
+.skeleton-btn { height: 50px; }
+.skeleton-tx { height: 55px; margin-bottom: 8px; }
 
 .noise-overlay {
-position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay;
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 500;
+opacity: 0.035;
+mix-blend-mode: overlay;
 background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 transition: opacity 0.3s ease;
 }
 
-/* --- THEME ENGINE --- */
 #splash { position: fixed; inset: 0; z-index: 10000; background: var(--splash-bg, linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--spring-smooth), visibility 0.6s, background 0.3s ease; }
 #splash.hide { opacity: 0; visibility: hidden; }
 #splashCanvas { width: 180px; height: 180px; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15)); }
@@ -106,6 +146,7 @@ transition: opacity 0.3s ease;
 @keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
 @keyframes subtitleReveal { to { opacity: 1; transform: translateY(0); } }
 
+/* Light Theme Specific Overrides */
 body.light-theme .bottom-nav { background: rgba(255, 255, 255, 0.92); border-top: 1px solid var(--ios-separator); }
 body.light-theme .balance-card { background: linear-gradient(135deg, #ffffff 0%, #f2f2f7 100%); border: 1px solid var(--ios-separator); }
 body.light-theme .balance-card::before { background: radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%); }
@@ -116,17 +157,40 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 body.light-theme .progress-ring-label { background: rgba(255, 255, 255, 0.8); color: #000; }
 body.light-theme .balance-edit-btn, body.light-theme .balance-plus-btn { background: rgba(0, 0, 0, 0.05); border-color: rgba(0, 0, 0, 0.1); }
 body.light-theme .balance-plus-btn { background: rgba(255, 59, 48, 0.1); border-color: rgba(255, 59, 48, 0.2); }
+body.light-theme .aurora-bg { opacity: 0.4; }
 
-.theme-btn { flex: 1; padding: 8px 0; border: none; border-radius: 8px; background: transparent; color: var(--ios-text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); }
-.theme-btn.active { background: var(--ios-card-solid); color: var(--ios-text); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.theme-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ios-text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s var(--spring-bounce);
+}
+.theme-btn.active {
+    background: var(--ios-card-solid);
+    color: var(--ios-text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: transparent; position: relative; z-index: 1; }
-.pages { flex: 1; position: relative; overflow: hidden; }
+.pages { flex: 1; position: relative; overflow: hidden; background: transparent; }
 .page {
-position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0;
-opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch;
+position: absolute;
+inset: 0;
+overflow-y: auto;
+overflow-x: hidden;
+padding: 0 0 100px 0;
+opacity: 0;
+pointer-events: none;
+-webkit-overflow-scrolling: touch;
 transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-snappy);
-will-change: transform, opacity; transform: translateX(30%) scale(0.95);
+will-change: transform, opacity;
+transform: translateX(30%) scale(0.95);
 }
 .page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
 .page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
@@ -135,17 +199,55 @@ will-change: transform, opacity; transform: translateX(30%) scale(0.95);
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; position: relative; }
 
 /* Pull-to-Refresh */
-.pull-refresh { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--ios-card); backdrop-filter: blur(20px); border: 1px solid var(--ios-separator); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease, transform 0.3s var(--spring-bounce); z-index: 100; }
+.pull-refresh {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ios-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--ios-separator);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s var(--spring-bounce);
+    z-index: 100;
+}
 .pull-refresh.active { opacity: 1; }
 .pull-refresh.refreshing { animation: refreshSpin 1s linear infinite; }
-@keyframes refreshSpin { from { transform: translateX(-50%) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg); } }
+@keyframes refreshSpin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+}
 
 /* Swipe Actions */
-.tx-item-wrapper { position: relative; overflow: hidden; border-radius: var(--radius-ios-sm); margin-bottom: 8px; }
-.tx-item-swipe { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-red); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.85rem; border-radius: 0 var(--radius-ios-sm) var(--radius-ios-sm) 0; cursor: pointer; }
-.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.3s var(--spring-bounce); position: relative; z-index: 2; touch-action: pan-y; }
-.tx-item.swiping { transition: none; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.tx-item-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-ios-sm);
+    margin-bottom: 8px;
+}
+.tx-item-swipe {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    background: var(--ios-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transform: translateX(100%);
+    transition: transform 0.3s var(--spring-bounce);
+}
+.tx-item-wrapper.swiped .tx-item-swipe { transform: translateX(0); }
 
 .balance-card-wrapper { position: relative; margin-bottom: 16px; }
 .progress-ring-container { position: absolute; inset: -3px; pointer-events: none; z-index: 3; }
@@ -153,54 +255,18 @@ will-change: transform, opacity; transform: translateX(30%) scale(0.95);
 .progress-ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 3; }
 .progress-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth); filter: drop-shadow(0 0 6px currentColor); }
 .progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); z-index: 4; transition: color 0.5s var(--spring-smooth); font-variant-numeric: tabular-nums; }
-
-/* === SHINE EFFECT === */
 .balance-card {
 background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
-border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden;
-transition: transform 0.4s var(--spring-bounce); transform-style: preserve-3d; perspective: 1000px;
+border-radius: var(--radius-ios);
+padding: 24px;
+position: relative;
+overflow: hidden;
+transition: transform 0.4s var(--spring-bounce);
+transform-style: preserve-3d;
+perspective: 1000px;
 }
 .balance-card:active { transform: scale(0.98); }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
-.balance-card::after {
-    content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-    transform: skewX(-25deg); pointer-events: none; z-index: 5;
-    animation: shineEffect 4s ease-in-out infinite;
-}
-@keyframes shineEffect {
-    0%, 100% { left: -100%; }
-    50% { left: 150%; }
-}
-body.light-theme .balance-card::after {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-}
-
-/* === GLOW PULSE === */
-@keyframes glowPulse {
-    0%, 100% { filter: drop-shadow(0 0 6px currentColor); }
-    50% { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 25px currentColor); }
-}
-.glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
-
-/* === SKELETON LOADERS === */
-.skeleton {
-    background: linear-gradient(90deg, var(--ios-card) 25%, rgba(120,120,128,0.15) 50%, var(--ios-card) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
-    border-radius: 8px;
-    border: none !important;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-.skeleton-text { height: 16px; margin-bottom: 8px; }
-.skeleton-text-sm { height: 12px; width: 60%; }
-.skeleton-text-lg { height: 32px; width: 50%; }
-.skeleton-circle { border-radius: 50%; }
-.skeleton-card { height: 100px; border-radius: var(--radius-ios-sm); }
-
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); color: var(--ios-text-secondary); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -244,17 +310,39 @@ body.light-theme .balance-card::after {
 .section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 6px; }
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s var(--spring-bounce); opacity: 0.7; }
 .reset-btn:active { opacity: 1; background: rgba(255, 59, 48, 0.1); color: var(--ios-red); transform: scale(0.9); }
-.tx-list { display: flex; flex-direction: column; gap: 0; }
+.tx-list { display: flex; flex-direction: column; }
+.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.3s var(--spring-bounce); position: relative; z-index: 2; touch-action: pan-y; }
+.tx-item:active { transform: scale(0.98); }
+.tx-item.swiping { transition: none; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .tx-info { flex: 1; min-width: 0; }
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; align-items: stretch; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; transition: background 0.3s ease; }
+.bottom-nav {
+position: fixed; bottom: 0; left: 0; right: 0;
+background: rgba(28, 28, 30, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+border-top: 1px solid var(--ios-separator);
+display: flex; justify-content: space-around; align-items: stretch;
+padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000;
+transition: background 0.3s ease;
+}
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
 .nav-item:active { transform: scale(0.88); }
 .nav-icon { width: 22px; height: 22px; line-height: 1; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.15) translateY(-2px); }
-.nav-item.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: var(--ios-blue); border-radius: 0 0 3px 3px; animation: indicatorIn 0.4s var(--spring-bounce); }
+.nav-item.active::before {
+content: '';
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 20px;
+height: 3px;
+background: var(--ios-blue);
+border-radius: 0 0 3px 3px;
+animation: indicatorIn 0.4s var(--spring-bounce);
+}
 @keyframes indicatorIn { from { width: 0; opacity: 0; } to { width: 20px; opacity: 1; } }
 .nav-label { font-size: 10px; font-weight: 500; color: var(--ios-text-secondary); transition: all 0.3s var(--spring-bounce); letter-spacing: 0.01em; height: 14px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 .nav-item.active .nav-label { color: var(--ios-blue); font-weight: 600; }
@@ -270,6 +358,7 @@ body.light-theme .balance-card::after {
 .sheet-menu-btn:active { transform: scale(0.85) rotate(90deg); background: rgba(120, 120, 128, 0.25); }
 .hamburger-icon { display: flex; flex-direction: column; gap: 3px; align-items: center; justify-content: center; width: 18px; height: 12px; }
 .hamburger-icon span { display: block; width: 100%; height: 2px; background: var(--ios-text-secondary); border-radius: 1px; transition: all 0.2s ease; }
+.sheet-menu-btn:active .hamburger-icon span { background: var(--ios-text); }
 .actions-menu { background: rgba(120, 120, 128, 0.08); border-radius: var(--radius-ios-sm); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--ios-separator); display: none; animation: menuIn 0.4s var(--spring-bounce); }
 @keyframes menuIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .actions-menu.active { display: block; }
@@ -339,8 +428,16 @@ body.light-theme .balance-card::after {
 .empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
 .empty-icon { width: 48px; height: 48px; margin: 0 auto 10px; opacity: 0.5; }
 .empty-text { font-size: 0.85rem; }
-.text-green { color: var(--ios-green); } .text-red { color: var(--ios-red); } .text-blue { color: var(--ios-blue); } .text-orange { color: var(--ios-orange); } .text-purple { color: var(--ios-purple); } .text-teal { color: var(--ios-teal); }
-.mb-10 { margin-bottom: 10px; } .mb-12 { margin-bottom: 12px; } .mb-16 { margin-bottom: 16px; } .mb-20 { margin-bottom: 20px; }
+.text-green { color: var(--ios-green); }
+.text-red { color: var(--ios-red); }
+.text-blue { color: var(--ios-blue); }
+.text-orange { color: var(--ios-orange); }
+.text-purple { color: var(--ios-purple); }
+.text-teal { color: var(--ios-teal); }
+.mb-10 { margin-bottom: 10px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
 .detail-metric { text-align: center; padding: 8px 4px; background: rgba(120, 120, 128, 0.08); border-radius: 8px; transition: transform 0.3s var(--spring-bounce); }
 .detail-metric:active { transform: scale(0.95); }
 .detail-metric-icon { width: 18px; height: 18px; margin: 0 auto 2px; }
@@ -360,6 +457,7 @@ body.light-theme .balance-card::after {
 .holder-accounts-inner { margin-left: 12px; padding-left: 12px; border-left: 2px solid var(--ios-separator); margin-top: 8px; }
 .holder-summary { background: rgba(90, 200, 250, 0.08); border: 1px solid rgba(90, 200, 250, 0.2); border-radius: 12px; padding: 12px; margin-top: 8px; }
 .holder-summary-title { font-size: 0.7rem; color: var(--ios-teal); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 8px; text-align: center; }
+.goal-page-header { text-align: center; margin-bottom: 20px; }
 .goal-ring-wrapper { position: relative; width: 220px; height: 220px; margin: 0 auto 24px; }
 .goal-ring-wrapper svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .goal-ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 14; }
@@ -381,22 +479,23 @@ body.light-theme .balance-card::after {
 .goal-history-target { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .goal-history-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .goal-history-result { font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-.goal-history-delete { width: 28px; height: 28px; border-radius: 50%; background: rgba(255, 59, 48, 0.12); border: 1px solid rgba(255, 59, 48, 0.2); color: var(--ios-red); font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); line-height: 1; }
+.goal-history-delete { width: 28px; height: 28px; border-radius: 50%; background: rgba(255, 59, 48, 0.12); border: 1px solid rgba(255, 59, 48, 0.2); color: var(--ios-red); font-size: 1rem; font-weight: 400; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); line-height: 1; }
 .goal-history-delete:active { transform: scale(0.85); background: rgba(255, 59, 48, 0.25); }
 .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; overflow: hidden; }
-.confetti { position: absolute; width: 10px; height: 10px; animation: confettiFall 3s ease-out forwards; }
+.confetti { position: absolute; width: 10px; height: 10px; background: var(--ios-blue); animation: confettiFall 3s ease-out forwards; }
 @keyframes confettiFall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
 <body>
 
-<!-- MESH GRADIENT BG -->
-<div class="mesh-gradient-bg" id="meshBg">
-    <div class="mesh-blob"></div>
-    <div class="mesh-blob"></div>
-    <div class="mesh-blob"></div>
-    <div class="mesh-blob"></div>
+<!-- ANIMATED MESH GRADIENT BACKGROUND -->
+<div class="aurora-bg" id="auroraBg">
+    <div class="aurora-blob aurora-blob-1" id="blob1"></div>
+    <div class="aurora-blob aurora-blob-2" id="blob2"></div>
+    <div class="aurora-blob aurora-blob-3" id="blob3"></div>
 </div>
 
 <div class="noise-overlay"></div>
@@ -405,35 +504,123 @@ body.light-theme .balance-card::after {
 <div id="app">
 <div class="pages">
 <div class="page active" id="page-home"><div class="page-content">
-<div class="pull-refresh" id="pullRefresh"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg></div>
-<div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>Выберите счёт</span><svg class="account-chip-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+<div class="pull-refresh" id="pullRefresh">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"></polyline>
+        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+    </svg>
+</div>
+
+<!-- SKELETON LOADER (shown during initial load) -->
+<div id="skeletonLoader">
+    <div class="skeleton" style="height:44px;border-radius:100px;margin-bottom:16px;width:60%;"></div>
+    <div class="skeleton skeleton-balance"></div>
+    <div class="stats-grid">
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+    </div>
+    <div class="skeleton skeleton-spend"></div>
+    <div class="skeleton skeleton-margin"></div>
+    <div class="skeleton skeleton-input"></div>
+    <div class="quick-actions">
+        <div class="skeleton skeleton-btn"></div>
+        <div class="skeleton skeleton-btn"></div>
+    </div>
+    <div class="skeleton skeleton-tx"></div>
+    <div class="skeleton skeleton-tx"></div>
+    <div class="skeleton skeleton-tx"></div>
+</div>
+
+<!-- REAL CONTENT (hidden until loaded) -->
+<div id="homeContent" style="display:none;">
+<div class="account-chip" onclick="openAccountSheet()">
+<span class="account-chip-name" id="accountName">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+Выберите счёт
+</span>
+<svg class="account-chip-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</div>
 <div class="balance-card-wrapper">
-<div class="progress-ring-container" id="miniRingContainer"><svg><rect class="progress-ring-bg" id="miniRingBg" x="1.5" y="1.5" rx="22" ry="22"/><rect class="progress-ring-fill" id="miniRingFill" x="1.5" y="1.5" rx="22" ry="22" pathLength="1"/></svg><div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div></div>
+<div class="progress-ring-container" id="miniRingContainer">
+<svg>
+<rect class="progress-ring-bg" id="miniRingBg" x="1.5" y="1.5" rx="22" ry="22"/>
+<rect class="progress-ring-fill" id="miniRingFill" x="1.5" y="1.5" rx="22" ry="22" pathLength="1"/>
+</svg>
+<div class="progress-ring-label" id="miniRingLabel" style="display:none;">0%</div>
+</div>
 <div class="balance-card" id="balanceCard">
-<div class="balance-header"><div class="balance-label">Текущий баланс</div><button class="balance-edit-btn" onclick="openEditBalance()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button></div>
-<div class="balance-value-row"><div class="balance-value" id="balanceDisplay">0 ₽</div><button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
-<div class="sync-badge" id="syncBadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>подключение...</div>
-</div></div>
-<div class="stats-grid" id="statsGrid">
+<div class="balance-header">
+<div class="balance-label">Текущий баланс</div>
+<button class="balance-edit-btn" onclick="openEditBalance()">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+</button>
+</div>
+<div class="balance-value-row">
+<div class="balance-value" id="balanceDisplay">0 ₽</div>
+<button class="balance-plus-btn" onclick="openQuickExpense()" title="Быстрая трата">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+</button>
+</div>
+<div class="sync-badge" id="syncBadge">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+подключение...
+</div>
+</div>
+</div>
+<div class="stats-grid">
 <div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
 <div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
 </div>
-<div class="spend-block"><div class="spend-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Траты</div><div class="spend-value" id="statSpend">0 ₽</div></div>
-<div class="margin-block"><div class="margin-label"><span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>Маржинальная прибыль</span><span class="margin-sub">выручка − траты</span></div><div class="margin-value" id="statMargin">0 ₽</div></div>
+<div class="spend-block">
+<div class="spend-label">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+Траты
+</div>
+<div class="spend-value" id="statSpend">0 ₽</div>
+</div>
+<div class="margin-block">
+<div class="margin-label">
+<span style="display:flex;align-items:center;gap:4px;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+Маржинальная прибыль
+</span>
+<span class="margin-sub">выручка − траты</span>
+</div>
+<div class="margin-value" id="statMargin">0 ₽</div>
+</div>
 <div class="amount-input-wrap"><input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" min="0" step="0.01"></div>
 <div class="quick-actions">
-<button class="action-btn action-income" id="btnIncome" onclick="doTransaction('income')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>Доход</button>
-<button class="action-btn action-expense" id="btnExpense" onclick="doTransaction('expense')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>Расход</button>
+<button class="action-btn action-income" id="btnIncome" onclick="doTransaction('income')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+Доход
+</button>
+<button class="action-btn action-expense" id="btnExpense" onclick="doTransaction('expense')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+Расход
+</button>
 </div>
 <div class="section-header"><div class="section-title">История операций</div><button class="reset-btn" id="resetBtn" onclick="resetAll()">Обнулить</button></div>
-<div class="tx-list" id="txList"><div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div></div>
+<div class="tx-list" id="txList">
+<div class="empty-state">
+<svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+<div class="empty-text">Нет операций</div>
+</div>
+</div>
+</div>
 </div></div>
-
-<!-- REPORT PAGE -->
 <div class="page" id="page-report"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Отчёт</div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+<defs><linearGradient id="grad-report" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+<rect x="3" y="3" width="18" height="18" rx="2" stroke="url(#grad-report)" stroke-width="2"/>
+<path d="M7 14L10 11L13 14L17 10" stroke="url(#grad-report)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+Отчёт
+</div>
 <div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
 <div class="summary-item"><div class="summary-label">💹 Оборот</div><div class="summary-val text-blue" id="sumTurnover">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="sumRevenue">0 ₽</div></div>
@@ -445,246 +632,894 @@ body.light-theme .balance-card::after {
 <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
-<button class="btn btn-primary mb-12" onclick="doFixReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 14"></path><path d="M9 5L12 2L15 5"></path><circle cx="12" cy="18" r="2" fill="currentColor"></circle><path d="M5 12C5 7.5 8 4 12 4C16 4 19 7.5 19 12" stroke="currentColor" fill="none"/></svg>Зафиксировать</button>
-<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>Поделиться</button>
-<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Последний: <span id="lastFixedDate"></span></div>
-<div class="section-title">Зафиксированные отчёты</div><div id="reportsList"></div>
+<button class="btn btn-primary mb-12" onclick="doFixReport()">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 2L12 14"></path>
+<path d="M9 5L12 2L15 5"></path>
+<circle cx="12" cy="18" r="2" fill="currentColor"></circle>
+<path d="M5 12C5 7.5 8 4 12 4C16 4 19 7.5 19 12" stroke="currentColor" fill="none"/>
+</svg>
+Зафиксировать
+</button>
+<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="18" cy="5" r="3"></circle>
+<circle cx="6" cy="12" r="3"></circle>
+<circle cx="18" cy="19" r="3"></circle>
+<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+</svg>
+Поделиться
+</button>
+<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;display:flex;align-items:center;gap:6px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+Последний: <span id="lastFixedDate"></span>
+</div>
+<div class="section-title">Зафиксированные отчёты</div>
+<div id="reportsList"></div>
 </div></div>
-
-<!-- GOAL PAGE -->
 <div class="page" id="page-goal"><div class="page-content">
-<div style="text-align:center;margin-bottom:20px;"><div class="section-title" style="font-size:1.1rem;margin-bottom:8px;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/></svg>Цель по выручке</div><div style="font-size:0.75rem;color:var(--ios-text-secondary);">Отслеживайте прогресс</div></div>
-<div class="goal-ring-wrapper"><svg viewBox="0 0 200 200"><circle class="goal-ring-bg" cx="100" cy="100" r="85"/><circle class="goal-ring-fill" id="goalRingFill" cx="100" cy="100" r="85" pathLength="1"/></svg><div class="goal-ring-center"><div><span class="goal-percent" id="goalPercent">0</span><span class="goal-percent-sign">%</span></div><div class="goal-subtitle" id="goalSubtitle">Цель не задана</div></div></div>
-<div class="goal-stats"><div class="goal-stat-card"><div class="goal-stat-label">Выручка</div><div class="goal-stat-value text-orange" id="goalCurrentRevenue">0 ₽</div></div><div class="goal-stat-card"><div class="goal-stat-label">Цель</div><div class="goal-stat-value text-blue" id="goalTargetEl">—</div></div><div class="goal-stat-card"><div class="goal-stat-label">Осталось</div><div class="goal-stat-value text-red" id="goalRemaining">—</div></div><div class="goal-stat-card"><div class="goal-stat-label">Статус</div><div class="goal-stat-value" id="goalStatus" style="font-size:0.85rem;">—</div></div></div>
-<button class="btn btn-primary" onclick="openSetGoal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Установить цель</button>
-<button class="btn btn-secondary" onclick="resetGoal()" style="margin-top:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>Сбросить</button>
-<div class="goal-history-title">История целей</div><div id="goalHistory"></div>
+<div class="goal-page-header">
+<div class="section-title" style="font-size:1.1rem;margin-bottom:8px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+<defs><linearGradient id="grad-goal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs>
+<circle cx="12" cy="12" r="10" stroke="url(#grad-goal)" stroke-width="2"/>
+<circle cx="12" cy="12" r="6" stroke="url(#grad-goal)" stroke-width="2"/>
+<circle cx="12" cy="12" r="2" fill="url(#grad-goal)"/>
+</svg>
+Цель по выручке
+</div>
+<div style="font-size:0.75rem;color:var(--ios-text-secondary);">Отслеживайте прогресс достижения цели</div>
+</div>
+<div class="goal-ring-wrapper">
+<svg viewBox="0 0 200 200">
+<circle class="goal-ring-bg" cx="100" cy="100" r="85"/>
+<circle class="goal-ring-fill" id="goalRingFill" cx="100" cy="100" r="85" pathLength="1"/>
+</svg>
+<div class="goal-ring-center">
+<div>
+<span class="goal-percent" id="goalPercent">0</span><span class="goal-percent-sign">%</span>
+</div>
+<div class="goal-subtitle" id="goalSubtitle">Цель не задана</div>
+</div>
+</div>
+<div class="goal-stats">
+<div class="goal-stat-card">
+<div class="goal-stat-label">Выручка сейчас</div>
+<div class="goal-stat-value text-orange" id="goalCurrentRevenue">0 ₽</div>
+</div>
+<div class="goal-stat-card">
+<div class="goal-stat-label">Цель</div>
+<div class="goal-stat-value text-blue" id="goalTarget">—</div>
+</div>
+<div class="goal-stat-card">
+<div class="goal-stat-label">Осталось</div>
+<div class="goal-stat-value text-red" id="goalRemaining">—</div>
+</div>
+<div class="goal-stat-card">
+<div class="goal-stat-label">Статус</div>
+<div class="goal-stat-value" id="goalStatus" style="font-size:0.85rem;">—</div>
+</div>
+</div>
+<button class="btn btn-primary" onclick="openSetGoal()">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+Установить цель
+</button>
+<button class="btn btn-secondary" onclick="resetGoal()" style="margin-top:8px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+Сбросить цель
+</button>
+<div class="goal-history-title">История целей</div>
+<div id="goalHistory"></div>
 </div></div>
-
-<!-- DETAIL PAGE -->
 <div class="page" id="page-detail"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round"/><path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round"/></svg>Детализация</div>
-<div class="summary-block"><div class="summary-title">Общие показатели</div><div class="summary-grid"><div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div><div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div><div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div><div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="detSpend">0 ₽</div></div><div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="detRevenue">0 ₽</div></div><div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="detMargin">0 ₽</div></div></div></div>
-<div class="period-row" id="periodRow"><div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div><div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div><div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div><div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div></div>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+<defs><linearGradient id="grad-detail" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs>
+<path d="M3 3V21H21" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7 14L11 10L15 14L21 8" stroke="url(#grad-detail)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+Детализация
+</div>
+<div class="summary-block">
+<div class="summary-title">Общие показатели</div>
+<div class="summary-grid" style="grid-template-columns:repeat(3,1fr);">
+<div class="summary-item"><div class="summary-label">⚪ Баланс</div><div class="summary-val" id="detBalance">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💜 Капитал</div><div class="summary-val text-blue" id="detCapital">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="detSite">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">🛍️ Траты</div><div class="summary-val text-purple" id="detSpend">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">💰 Выручка</div><div class="summary-val text-orange" id="detRevenue">0 ₽</div></div>
+<div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="detMargin">0 ₽</div></div>
+</div>
+</div>
+<div class="period-row" id="periodRow">
+<div class="period-chip active" data-p="today" onclick="setPeriod('today')">Сегодня</div>
+<div class="period-chip" data-p="week" onclick="setPeriod('week')">7 дней</div>
+<div class="period-chip" data-p="month" onclick="setPeriod('month')">Месяц</div>
+<div class="period-chip" data-p="all" onclick="setPeriod('all')">Всё</div>
+</div>
 <div id="detailTree"></div>
-<button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
+<button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="18" cy="5" r="3"></circle>
+<circle cx="6" cy="12" r="3"></circle>
+<circle cx="18" cy="19" r="3"></circle>
+<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+</svg>
+Поделиться детализацией
+</button>
 </div></div>
-
-<!-- ADJUST PAGE -->
 <div class="page" id="page-adjust"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2"/></svg>Корректировка</div>
-<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Счёт: Основной</div>
-<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
-<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Применить</button>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+<defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs>
+<path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+Корректировка
+</div>
+<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:6px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+Счёт: Основной
+</div>
+<div class="setting-group">
+<div class="setting-label">Новый баланс (₽)</div>
+<input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
+<div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
+</div>
+<div class="setting-group">
+<div class="setting-label">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+Капитал (₽)
+</div>
+<input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
+<div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
+</div>
+<div class="setting-group">
+<div class="setting-label">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+Комментарий
+</div>
+<input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+Применить
+</button>
 </div></div>
-
-<!-- SETTINGS PAGE -->
 <div class="page" id="page-settings"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/></svg>Настройки</div>
-<div class="setting-group"><div class="setting-label">Тема оформления</div><div style="display:flex;gap:6px;background:rgba(120,120,128,0.12);padding:4px;border-radius:10px;"><button class="theme-btn" data-theme="auto" onclick="setTheme('auto')">Авто</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">Светлая</button><button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Темная</button></div></div>
-<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
-<div class="setting-group"><div class="setting-label">Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
-<div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
-<div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
-<div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">Капитал += Выручка</span></div></div>
-<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Сохранить</button>
+<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+<defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs>
+<circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/>
+<path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/>
+</svg>
+Настройки
+</div>
+<div class="setting-group">
+    <div class="setting-label">Тема оформления</div>
+    <div style="display:flex; gap:6px; background:rgba(120,120,128,0.12); padding:4px; border-radius:10px;">
+        <button class="theme-btn" data-theme="auto" onclick="setTheme('auto')">Авто</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Светлая</button>
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Темная</button>
+    </div>
+</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+<span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span>
+</div>
+<div class="setting-group">
+<div class="setting-label">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+Капитал (₽)
+</div>
+<input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0">
+<div class="setting-hint">Общий для всех счетов</div>
+</div>
+<div class="setting-group">
+<div class="setting-label">% от доходов</div>
+<input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100">
+</div>
+<div class="setting-group">
+<div class="setting-label">% от расходов</div>
+<input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100">
+</div>
+<div class="report-card" style="background:rgba(0,122,255,0.08);">
+<div class="setting-label" style="margin-bottom:6px;">Формула</div>
+<div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">
+Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br>
+<span style="color:var(--ios-blue);display:inline-flex;align-items:center;gap:4px;">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+Капитал += Выручка
+</span>
+</div>
+</div>
+<button class="btn btn-primary" onclick="doSaveSettings()" style="margin-top:8px;background:var(--ios-green);">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+Сохранить
+</button>
 </div></div>
-</div></div>
-
+</div>
+</div>
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="home" onclick="switchPage('home')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.53 20.79 21.04 20.41 21.41C20.04 21.79 19.53 22 19 22H5C4.47 22 3.96 21.79 3.59 21.41C3.21 21.04 3 20.53 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Главная</span></div>
-<div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Отчёт</span></div>
+<div class="nav-item active" data-page="home" onclick="switchPage('home')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Главная</span></div>
+<div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Отчёт</span></div>
 <div class="nav-item" data-page="goal" onclick="switchPage('goal')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="nav-label">Цель</span></div>
-<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Детали</span></div>
-<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2"/></svg><span class="nav-label">Коррекция</span></div>
+<div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Детали</span></div>
+<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-label">Коррекция</span></div>
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
-</nav></div>
-
-<!-- SHEETS (account, edit balance, quick expense, set goal) - same as before -->
+</nav>
+</div>
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
-<div class="bottom-sheet" id="accountSheet"><div class="sheet-handle"></div><div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div><div class="actions-menu" id="actionsMenu"><div class="action-item" onclick="createHolder()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="action-item-text">Создать держателя</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div><div class="action-item" onclick="createAccount()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span class="action-item-text">Создать счёт</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div><div class="action-item" onclick="toggleEditMode()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="action-item-text">Редактировать</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div><input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);"><div id="accountTree"></div><button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button></div>
-
+<div class="bottom-sheet" id="accountSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-header">
+<div style="width:36px;"></div>
+<div class="sheet-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+Выбор счёта
+</div>
+<button class="sheet-menu-btn" onclick="toggleActionsMenu()">
+<div class="hamburger-icon"><span></span><span></span><span></span></div>
+</button>
+</div>
+<div class="actions-menu" id="actionsMenu">
+<div class="action-item" onclick="createHolder()">
+<svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<span class="action-item-text">Создать держателя</span>
+<svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</div>
+<div class="action-item" onclick="createAccount()">
+<svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+<span class="action-item-text">Создать счёт</span>
+<svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</div>
+<div class="action-item" onclick="toggleEditMode()">
+<svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+<span class="action-item-text">Редактировать названия</span>
+<svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</div>
+</div>
+<input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);">
+<div id="accountTree"></div>
+<button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button>
+</div>
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
-<div class="bottom-sheet" id="editBalanceSheet"><div class="sheet-handle"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Редактировать баланс</div><div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div><div class="setting-group"><div class="setting-label">Комментарий</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Инвентаризация" style="text-align:left;font-size:0.9rem;"></div><button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">Сохранить</button><button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button></div>
-
+<div class="bottom-sheet" id="editBalanceSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+Редактировать баланс
+</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+<span>Введите новый баланс счёта. Будет создана корректирующая операция.</span>
+</div>
+<div class="setting-group">
+<div class="setting-label">Новый баланс (₽)</div>
+<input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+<div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div>
+</div>
+<div class="setting-group">
+<div class="setting-label">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+Комментарий (необязательно)
+</div>
+<input type="text" id="editBalanceComment" class="setting-input" placeholder="Например: инвентаризация" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+Сохранить
+</button>
+<button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button>
+</div>
 <div class="sheet-overlay" id="quickExpenseOverlay" onclick="closeQuickExpense()"></div>
-<div class="bottom-sheet" id="quickExpenseSheet"><div class="sheet-handle"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Быстрая трата</div><div class="setting-group"><div class="setting-label">Сумма (₽)</div><input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal"></div><div class="setting-group"><div class="setting-label">Примечание</div><input type="text" id="quickExpenseNote" class="setting-input" placeholder="Обед, такси" style="text-align:left;font-size:0.9rem;"></div><button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button><button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button></div>
-
+<div class="bottom-sheet" id="quickExpenseSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+Быстрая трата
+</div>
+<div class="setting-group">
+<div class="setting-label">Сумма (₽)</div>
+<input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01" inputmode="decimal">
+</div>
+<div class="setting-group">
+<div class="setting-label">Примечание (необязательно)</div>
+<input type="text" id="quickExpenseNote" class="setting-input" placeholder="Например: обед, такси" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+Вычесть
+</button>
+<button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button>
+</div>
 <div class="sheet-overlay" id="setGoalOverlay" onclick="closeSetGoal()"></div>
-<div class="bottom-sheet" id="setGoalSheet"><div class="sheet-handle"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Цель по выручке</div><div class="setting-group"><div class="setting-label">Целевая выручка (₽)</div><input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0"><div class="setting-hint">Текущая: <span id="goalCurrentHint">0 ₽</span></div></div><button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">Установить</button><button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button></div>
-
+<div class="bottom-sheet" id="setGoalSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+Установить цель по выручке
+</div>
+<div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+<span>Укажите желаемую выручку. Прогресс будет отображаться на главной странице и в разделе «Цель».</span>
+</div>
+<div class="setting-group">
+<div class="setting-label">Целевая выручка (₽)</div>
+<input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0">
+<div class="setting-hint">Текущая выручка: <span id="goalCurrentHint">0 ₽</span></div>
+</div>
+<button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+Установить цель
+</button>
+<button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button>
+</div>
 <div class="confetti-container" id="confettiContainer"></div>
 
 <script>
-// ===== CORE: TG, Theme, Data =====
 const tg = window.Telegram?.WebApp;
-if(tg){try{tg.ready();tg.expand();applyTheme();tg.onEvent('themeChanged',applyTheme);}catch(e){}}
+if (tg) { try { tg.ready(); tg.expand(); applyTheme(); tg.onEvent('themeChanged', applyTheme); } catch(e){} }
 
-function isDarkColor(hex){if(!hex)return true;hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(0.299*r+0.587*g+0.114*b)/255<0.5;}
-
-function applyTheme(){
-    const mode=localStorage.getItem('fl_theme')||'auto';const root=document.documentElement,body=document.body;let isDark=true;const tp=window.Telegram?.WebApp?.themeParams;
-    if(mode==='auto'){isDark=tp?.bg_color?isDarkColor(tp.bg_color):!window.matchMedia('(prefers-color-scheme:light)').matches;}
-    else if(mode==='light')isDark=false;
-    if(isDark){
-        root.style.setProperty('--ios-bg','#000');root.style.setProperty('--ios-card','rgba(28,28,30,0.6)');root.style.setProperty('--ios-card-solid','#1c1c1e');root.style.setProperty('--ios-text','#FFF');root.style.setProperty('--ios-text-secondary','rgba(255,255,255,0.6)');root.style.setProperty('--ios-separator','rgba(120,120,128,0.2)');root.style.setProperty('--splash-bg','linear-gradient(180deg,#1c1c1e,#000)');root.style.setProperty('--splash-text','#fff');root.style.setProperty('--splash-subtext','#8E8E93');body.classList.remove('light-theme');
-    }else{
-        root.style.setProperty('--ios-bg','#F2F2F7');root.style.setProperty('--ios-card','rgba(255,255,255,0.8)');root.style.setProperty('--ios-card-solid','#FFF');root.style.setProperty('--ios-text','#000');root.style.setProperty('--ios-text-secondary','rgba(60,60,67,0.6)');root.style.setProperty('--ios-separator','rgba(60,60,67,0.15)');root.style.setProperty('--splash-bg','linear-gradient(180deg,#FAFAFA,#F0F0F0)');root.style.setProperty('--splash-text','#1c1c1e');root.style.setProperty('--splash-subtext','#8E8E93');body.classList.add('light-theme');
+const previousValues = new Map();
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function animateValue(element, newValue, formatter, duration = 600) {
+    const elementId = element.id || element.dataset.animId;
+    if (!elementId) { element.textContent = formatter(newValue); return; }
+    const startValue = previousValues.get(elementId) || 0;
+    const startTime = performance.now();
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutCubic(progress);
+        const currentValue = startValue + (newValue - startValue) * easedProgress;
+        element.textContent = formatter(currentValue);
+        if (progress < 1) { requestAnimationFrame(update); } else { previousValues.set(elementId, newValue); }
     }
-    document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.dataset.theme===mode));
-    updateMeshColors();
+    requestAnimationFrame(update);
 }
-window.setTheme=(m)=>{localStorage.setItem('fl_theme',m);applyTheme();haptic('light');};
+function initAnimatedElements() {
+    const elements = ['balanceDisplay','statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin','sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite','sumMargin','detBalance','detCapital','detSite','detSpend','detRevenue','detMargin','goalCurrentRevenue','goalTarget','goalRemaining','goalPercent'];
+    elements.forEach(id => { const el = document.getElementById(id); if (el) previousValues.set(id, 0); });
+}
 
-// MESH GRADIENT COLORS based on financial state
-function updateMeshColors(){
-    const blobs=document.querySelectorAll('.mesh-blob');
-    const s=calcAll&&typeof calcAll==='function'?calcAll():{margin:0,revenue:0};
-    if(s.margin>=0){
-        blobs[0].style.background='var(--ios-blue)';blobs[1].style.background='var(--ios-teal)';blobs[2].style.background='var(--ios-green)';blobs[3].style.background='var(--ios-purple)';
-    }else{
-        blobs[0].style.background='var(--ios-red)';blobs[1].style.background='var(--ios-orange)';blobs[2].style.background='var(--ios-purple)';blobs[3].style.background='var(--ios-red)';
+function isDarkColor(hex) {
+    if (!hex) return true;
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+}
+
+function applyTheme() {
+    const mode = localStorage.getItem('fl_theme') || 'auto';
+    const root = document.documentElement;
+    const body = document.body;
+    let isDark = true;
+    let tgParams = window.Telegram?.WebApp?.themeParams;
+    if (mode === 'auto') {
+        if (tgParams && tgParams.bg_color) isDark = isDarkColor(tgParams.bg_color);
+        else isDark = !window.matchMedia('(prefers-color-scheme: light)').matches;
+    } else if (mode === 'light') isDark = false;
+    else isDark = true;
+
+    if (isDark) {
+        root.style.setProperty('--ios-bg', '#000000');
+        root.style.setProperty('--ios-card', 'rgba(28, 28, 30, 0.6)');
+        root.style.setProperty('--ios-card-solid', '#1c1c1e');
+        root.style.setProperty('--ios-text', '#FFFFFF');
+        root.style.setProperty('--ios-text-secondary', 'rgba(255, 255, 255, 0.6)');
+        root.style.setProperty('--ios-separator', 'rgba(120, 120, 128, 0.2)');
+        root.style.setProperty('--splash-bg', 'linear-gradient(180deg, #1c1c1e 0%, #000000 100%)');
+        root.style.setProperty('--splash-text', '#ffffff');
+        root.style.setProperty('--splash-subtext', '#8E8E93');
+        body.classList.remove('light-theme');
+    } else {
+        root.style.setProperty('--ios-bg', '#F2F2F7');
+        root.style.setProperty('--ios-card', 'rgba(255, 255, 255, 0.8)');
+        root.style.setProperty('--ios-card-solid', '#FFFFFF');
+        root.style.setProperty('--ios-text', '#000000');
+        root.style.setProperty('--ios-text-secondary', 'rgba(60, 60, 67, 0.6)');
+        root.style.setProperty('--ios-separator', 'rgba(60, 60, 67, 0.15)');
+        root.style.setProperty('--splash-bg', 'linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)');
+        root.style.setProperty('--splash-text', '#1c1c1e');
+        root.style.setProperty('--splash-subtext', '#8E8E93');
+        body.classList.add('light-theme');
+    }
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.theme === mode));
+    updateAuroraColors();
+}
+
+window.setTheme = (mode) => { localStorage.setItem('fl_theme', mode); applyTheme(); haptic('light'); };
+
+// === AURORA MESH GRADIENT ENGINE ===
+function updateAuroraColors() {
+    const s = calcAll();
+    const margin = s.margin || 0;
+    const root = document.documentElement;
+    
+    if (margin > 0) {
+        // Positive margin: blue/teal/green tones
+        root.style.setProperty('--mesh-color-1', 'rgba(0, 122, 255, 0.18)');
+        root.style.setProperty('--mesh-color-2', 'rgba(90, 200, 250, 0.14)');
+        root.style.setProperty('--mesh-color-3', 'rgba(52, 199, 89, 0.12)');
+    } else if (margin < 0) {
+        // Negative margin: red/purple/orange tones
+        root.style.setProperty('--mesh-color-1', 'rgba(255, 59, 48, 0.15)');
+        root.style.setProperty('--mesh-color-2', 'rgba(175, 82, 222, 0.12)');
+        root.style.setProperty('--mesh-color-3', 'rgba(255, 149, 0, 0.10)');
+    } else {
+        // Neutral: subtle blue
+        root.style.setProperty('--mesh-color-1', 'rgba(0, 122, 255, 0.10)');
+        root.style.setProperty('--mesh-color-2', 'rgba(90, 200, 250, 0.08)');
+        root.style.setProperty('--mesh-color-3', 'rgba(142, 142, 147, 0.06)');
     }
 }
 
-// ===== ANIMATION ENGINE =====
-const previousValues=new Map();
-function easeOutCubic(t){return 1-Math.pow(1-t,3);}
-function animateValue(el,nv,fmt,dur=600){
-    const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
-    const sv=previousValues.get(id)||0,st=performance.now();
-    function u(ct){const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);el.textContent=fmt(sv+(nv-sv)*ep);if(p<1)requestAnimationFrame(u);else previousValues.set(id,nv);}
-    requestAnimationFrame(u);
-}
-function initAnimatedElements(){['balanceDisplay','statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin','sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite','sumMargin','detBalance','detCapital','detSite','detSpend','detRevenue','detMargin','goalCurrentRevenue','goalTargetEl','goalRemaining','goalPercent'].forEach(id=>{const el=document.getElementById(id);if(el)previousValues.set(id,0);});}
-
-// ===== SPLASH =====
-(function(){const c=document.getElementById('splashCanvas');if(!c)return;const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,0.1,1000);cam.position.z=4;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(400,400);r.setPixelRatio(devicePixelRatio);const g=new THREE.BufferGeometry(),v=[];const seg=12,tR=0.5,mR=1,tH=0.4,bH=1;for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2;v.push(0,tH,0,Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(a2)*tR,tH,Math.sin(a2)*tR);}for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2,am=((i+.5)/seg)*Math.PI*2;v.push(Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(am)*mR,0,Math.sin(am)*mR,Math.cos(a2)*tR,tH,Math.sin(a2)*tR);v.push(Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(a1)*mR,0,Math.sin(a1)*mR,Math.cos(am)*mR,0,Math.sin(am)*mR);v.push(Math.cos(a2)*tR,tH,Math.sin(a2)*tR,Math.cos(am)*mR,0,Math.sin(am)*mR,Math.cos(a2)*mR,0,Math.sin(a2)*mR);}for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2;v.push(Math.cos(a1)*mR,0,Math.sin(a1)*mR,0,-bH,0,Math.cos(a2)*mR,0,Math.sin(a2)*mR);}g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.computeVertexNormals();const mat=new THREE.MeshPhongMaterial({color:0xffffff,specular:0xffffff,shininess:150,transparent:true,opacity:0.85,side:THREE.DoubleSide});const mesh=new THREE.Mesh(g,mat);s.add(mesh);s.add(new THREE.AmbientLight(0xffffff,0.5));[[5,5,5,1.5],[-5,3,5,1.2],[0,5,-5,1],[3,-3,3,.8],[-3,-3,-3,.6]].forEach(p=>{const l=new THREE.PointLight(0xffffff,p[3],100);l.position.set(p[0],p[1],p[2]);s.add(l);});(function a(){requestAnimationFrame(a);mesh.rotation.y+=0.008;mesh.rotation.x=Math.sin(Date.now()*0.0008)*0.15;r.render(s,cam);})();setTimeout(()=>document.getElementById('splash').classList.add('hide'),3500);})();
-
-// ===== UTILITIES =====
-function showToast(icon,text,dur=2500){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className='toast';t.innerHTML=`<span class="toast-icon">${icon}</span><span class="toast-text">${text}</span>`;c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},dur);}
-const haptic=(type)=>{if(tg?.HapticFeedback){try{if(type==='success')tg.HapticFeedback.notificationOccurred('success');else if(type==='error')tg.HapticFeedback.notificationOccurred('error');else tg.HapticFeedback.impactOccurred('light');}catch(e){}}};
-const MONTHS=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-const MONTHS_FULL=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-const fmt=(n)=>{if(n==null||isNaN(n))n=0;return new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(n);};
-
-// ===== CONFETTI =====
-function showConfetti(){const c=document.getElementById('confettiContainer'),colors=['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#5AC8FA'];for(let i=0;i<60;i++){const d=document.createElement('div');d.className='confetti';d.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${Math.random()*2+2}s;width:${Math.random()*8+6}px;height:${Math.random()*8+6}px;border-radius:${Math.random()>.5?'50%':'2px'};`;c.appendChild(d);setTimeout(()=>d.remove(),4500);}haptic('success');}
-
-// ===== 3D TILT =====
-function init3DTilt(){const card=document.getElementById('balanceCard');if(!card)return;let busy=false;const move=(cx,cy)=>{if(busy)return;busy=true;const r=card.getBoundingClientRect(),x=cx-r.left,y=cy-r.top,rx=(y-r.height/2)/15,ry=(r.width/2-x)/15;card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;requestAnimationFrame(()=>busy=false);};card.addEventListener('mousemove',e=>move(e.clientX,e.clientY));card.addEventListener('mouseleave',()=>{card.style.transform='';});card.addEventListener('touchmove',e=>move(e.touches[0].clientX,e.touches[0].clientY),{passive:true});card.addEventListener('touchend',()=>{card.style.transform='';});}
-
-// ===== MAGNETIC BUTTONS =====
-function initMagneticButtons(){document.querySelectorAll('#btnIncome,#btnExpense').forEach(btn=>{btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;btn.style.transform=`translate(${x*.15}px,${y*.15}px) scale(1.05)`;});btn.addEventListener('mouseleave',()=>{btn.style.transform='';});});}
-
-// ===== PULL TO REFRESH =====
-function initPullToRefresh(){const page=document.getElementById('page-home'),ind=document.getElementById('pullRefresh');let sy=0,cy=0,pulling=false,refreshing=false;page.addEventListener('touchstart',e=>{if(page.scrollTop===0&&!refreshing){sy=e.touches[0].clientY;pulling=true;}},{passive:true});page.addEventListener('touchmove',e=>{if(!pulling||refreshing)return;cy=e.touches[0].clientY;const d=cy-sy;if(d>0){const p=Math.min(d*.5,80);ind.style.top=`${p-60}px`;ind.classList.add('active');ind.style.transform=`translateX(-50%) scale(${p>60?1.2:1})`;}},{passive:true});page.addEventListener('touchend',()=>{if(!pulling||refreshing)return;pulling=false;if(cy-sy>60){refreshing=true;ind.classList.add('refreshing');ind.style.top='10px';haptic('light');setTimeout(()=>{renderAll();if(useFirebase)loadServer();ind.classList.remove('refreshing','active');ind.style.top='-60px';refreshing=false;haptic('success');showToast('✅','Обновлено');},1000);}else{ind.classList.remove('active');ind.style.top='-60px';}sy=0;cy=0;});}
-
-// ===== SWIPE ACTIONS =====
-function initSwipeGesture(w,item){let sx=0,cx=0,drag=false;item.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;drag=true;item.classList.add('swiping');},{passive:true});item.addEventListener('touchmove',e=>{if(!drag)return;cx=e.touches[0].clientX;const d=sx-cx;if(d>0)item.style.transform=`translateX(-${Math.min(d,80)}px)`;},{passive:true});item.addEventListener('touchend',()=>{drag=false;item.classList.remove('swiping');const d=sx-cx;if(d>40){w.classList.add('swiped');item.style.transform='translateX(-80px)';haptic('light');}else{w.classList.remove('swiped');item.style.transform='';}});}
-window.deleteTransaction=(idx)=>{const acc=getAccount();if(!acc?.transactions)return;const ri=acc.transactions.length-1-idx;if(ri<0||ri>=acc.transactions.length)return;const tx=acc.transactions[ri];const del=()=>{if(tx.type==='income'){acc.balance-=tx.amount;capital-=tx.amount*(incomePercent/100);}else if(tx.type==='expense'){acc.balance+=tx.amount;capital-=tx.amount*(expensePercent/100);}else if(tx.type==='adjustment'){acc.balance-=tx.amount;}else if(tx.type==='revenue'){capital-=tx.amount;}acc.transactions.splice(ri,1);renderAll();saveServer();haptic('success');showToast('🗑️','Удалено');};if(tg?.showConfirm)tg.showConfirm('Удалить?',c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-
-// ===== SKELETON LOADERS =====
-function showSkeletons(){
-    const list=document.getElementById('txList');
-    list.innerHTML='';
-    for(let i=0;i<4;i++){const d=document.createElement('div');d.className='tx-item-wrapper';d.innerHTML=`<div class="tx-item" style="border:none;"><div class="tx-info"><div class="skeleton skeleton-text" style="width:${60+Math.random()*30}%"></div><div class="skeleton skeleton-text-sm"></div></div><div class="skeleton skeleton-text" style="width:60px;height:18px;"></div></div>`;list.appendChild(d);}
+// === 3D TILT EFFECT ===
+function init3DTilt() {
+    const card = document.getElementById('balanceCard');
+    if (!card) return;
+    let isTilting = false;
+    card.addEventListener('touchmove', (e) => {
+        if (isTilting) return;
+        isTilting = true;
+        const touch = e.touches[0];
+        const rect = card.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        const rotateX = (y - rect.height / 2) / 15;
+        const rotateY = (rect.width / 2 - x) / 15;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        requestAnimationFrame(() => { isTilting = false; });
+    }, { passive: true });
+    card.addEventListener('touchend', () => { card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'; });
 }
 
-// ===== DATA LAYER (holders, accounts, capital, reports, etc.) =====
-let holders={},activeHolderId=null,activeAccountId=null,capital=0,savedReports={},incomePercent=7,expensePercent=2.5,detailPeriod='today',isOnline=navigator.onLine,isEditMode=false,expandedHolders={},goalTarget=0,goalHistory=[];
-const saveLocal=()=>{try{localStorage.setItem('fl_holders',JSON.stringify(holders));localStorage.setItem('fl_ah',activeHolderId);localStorage.setItem('fl_aa',activeAccountId);localStorage.setItem('fl_cap',capital.toString());localStorage.setItem('fl_reports',JSON.stringify(savedReports));localStorage.setItem('fl_ip',incomePercent.toString());localStorage.setItem('fl_ep',expensePercent.toString());localStorage.setItem('fl_goal',goalTarget.toString());localStorage.setItem('fl_goal_history',JSON.stringify(goalHistory));}catch(e){}};
-const loadLocal=()=>{try{const h=localStorage.getItem('fl_holders');if(h){holders=JSON.parse(h);activeHolderId=localStorage.getItem('fl_ah');activeAccountId=localStorage.getItem('fl_aa');if(!activeHolderId||!holders[activeHolderId])activeHolderId=Object.keys(holders)[0];const hh=holders[activeHolderId];if(hh&&(!activeAccountId||!hh.accounts[activeAccountId]))activeAccountId=Object.keys(hh.accounts||{})[0]||null;}else{const hid='h_'+Date.now(),aid='a_'+Date.now();holders={[hid]:{id:hid,name:'Основной',accounts:{[aid]:{id:aid,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()}};activeHolderId=hid;activeAccountId=aid;}savedReports=JSON.parse(localStorage.getItem('fl_reports')||'{}');incomePercent=parseFloat(localStorage.getItem('fl_ip'))||7;expensePercent=parseFloat(localStorage.getItem('fl_ep'))||2.5;capital=parseFloat(localStorage.getItem('fl_cap'))||0;goalTarget=parseFloat(localStorage.getItem('fl_goal'))||0;goalHistory=JSON.parse(localStorage.getItem('fl_goal_history')||'[]');}catch(e){}};
-let useFirebase=false,userRef=null,saveTimeout=null,isSyncing=false;
-const getUserId=()=>{const tid=tg?.initDataUnsafe?.user?.id;if(tid)return'tg_'+tid;let id=localStorage.getItem('fl_uid');if(!id){id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);localStorage.setItem('fl_uid',id);}return id;};
-const UID=getUserId();
-const initFB=()=>{try{const cfg={apiKey:"AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",authDomain:"financesimple-7c73a.firebaseapp.com",databaseURL:"https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",projectId:"financesimple-7c73a",storageBucket:"financesimple-7c73a.firebasestorage.app",messagingSenderId:"1072812838336",appId:"1:1072812838336:web:262ce9e7cc79e93c514c25"};if(!firebase.apps.length)firebase.initializeApp(cfg);userRef=firebase.database().ref(`users/${UID}`);useFirebase=true;}catch(e){useFirebase=false;}};
-const saveServer=()=>{if(!useFirebase||!isOnline){updateSync('local');return;}if(saveTimeout)clearTimeout(saveTimeout);saveTimeout=setTimeout(async()=>{if(isSyncing)return;isSyncing=true;updateSync('syncing');try{const s=calcAll();await userRef.set({holders,activeHolderId,activeAccountId,capital,savedReports,totalIncome:s.totalIncome,totalExpense:s.totalExpense,totalSpend:s.totalSpend,revenue:s.revenue,margin:s.margin,incomePercent,expensePercent,goalTarget,goalHistory,lastUpdated:new Date().toISOString()});updateSync('synced');}catch(e){updateSync('error');}finally{isSyncing=false;}},500);};
-const loadServer=()=>{if(!useFirebase){loadLocal();renderAll();updateSync('local');return;}showSkeletons();updateSync('syncing');userRef.once('value').then(snap=>{const d=snap.val();if(d?.holders){holders=d.holders;activeHolderId=d.activeHolderId||Object.keys(holders)[0];activeAccountId=d.activeAccountId;capital=d.capital||0;savedReports=d.savedReports||{};incomePercent=d.incomePercent||7;expensePercent=d.expensePercent||2.5;goalTarget=d.goalTarget||0;goalHistory=d.goalHistory||[];const hh=holders[activeHolderId];if(hh&&(!activeAccountId||!hh.accounts[activeAccountId]))activeAccountId=Object.keys(hh.accounts||{})[0]||null;renderAll();updateSync('synced');}else{loadLocal();renderAll();if(isOnline)saveServer();}}).catch(()=>{loadLocal();renderAll();updateSync('offline');});};
-const updateSync=(s)=>{const el=document.getElementById('syncBadge'),m={syncing:{t:'☁️ синхронизация...',c:'syncing'},synced:{t:'☁️ сохранено',c:'synced'},offline:{t:'💾 локально',c:''},error:{t:'⚠️ ошибка',c:''},local:{t:'💾 локально',c:''}}[s]||{t:'...',c:''};el.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg> ${m.t}`;el.className='sync-badge '+m.c;};
-const getHolder=()=>holders[activeHolderId];
-const getAccount=()=>{const h=getHolder();return h?.accounts?.[activeAccountId]||null;};
-const filterTx=(txs,p)=>{if(!txs||p==='all')return txs||[];const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());let s;if(p==='today')s=today;else if(p==='week'){s=new Date(today);s.setDate(s.getDate()-6);}else if(p==='month'){s=new Date(today);s.setMonth(s.getMonth()-1);}else return txs;return txs.filter(t=>new Date(t.date)>=s);};
-const calcAcc=(acc,period)=>{let inc=0,exp=0,spend=0;if(!acc?.transactions)return{totalIncome:0,totalExpense:0,totalSpend:0,revenue:0,margin:0,turnover:0};filterTx(acc.transactions,period).forEach(t=>{if(!t||typeof t.amount!=='number')return;if(t.type==='income')inc+=t.amount;else if(t.type==='expense')exp+=t.amount;else if(t.type==='spend')spend+=t.amount;});const rev=inc*(incomePercent/100)+exp*(expensePercent/100);return{totalIncome:inc,totalExpense:exp,totalSpend:spend,revenue:rev,margin:rev-spend,turnover:inc+exp};};
-const calcAll=()=>{let inc=0,exp=0,spend=0,bal=0;Object.values(holders).forEach(h=>{if(!h?.accounts)return;Object.values(h.accounts).forEach(a=>{if(!a)return;const s=calcAcc(a);inc+=s.totalIncome;exp+=s.totalExpense;spend+=s.totalSpend;bal+=a.balance||0;});});const rev=inc*(incomePercent/100)+exp*(expensePercent/100);return{totalIncome:inc,totalExpense:exp,totalSpend:spend,revenue:rev,margin:rev-spend,turnover:inc+exp,totalBalance:bal,siteBalance:capital-bal};};
+// === MAGNETIC BUTTONS ===
+function initMagneticButtons() {
+    document.querySelectorAll('#btnIncome, #btnExpense').forEach(btn => {
+        btn.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = btn.getBoundingClientRect();
+            const x = touch.clientX - rect.left - rect.width / 2;
+            const y = touch.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.05)`;
+        }, { passive: true });
+        btn.addEventListener('touchend', () => { btn.style.transform = 'translate(0, 0) scale(1)'; });
+    });
+}
 
-// ===== NAVIGATION =====
-let currentPageName='home';const pageOrder=['home','report','goal','detail','adjust','settings'];
-function switchPage(name){if(name===currentPageName)return;const oi=pageOrder.indexOf(currentPageName),ni=pageOrder.indexOf(name),gr=ni>oi;document.querySelectorAll('.page').forEach(p=>{const pn=p.id.replace('page-','');p.classList.remove('active','exit-left','exit-right');if(pn===currentPageName)p.classList.add(gr?'exit-left':'exit-right');});const t=document.getElementById('page-'+name);if(t)requestAnimationFrame(()=>t.classList.add('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-page="${name}"]`)?.classList.add('active');currentPageName=name;if(name==='report')refreshReport();if(name==='goal')refreshGoal();if(name==='detail')refreshDetail();if(name==='adjust')refreshAdjust();if(name==='settings')refreshSettings();haptic('light');}
+// === PULL TO REFRESH ===
+function initPullToRefresh() {
+    const page = document.getElementById('page-home');
+    const refreshIndicator = document.getElementById('pullRefresh');
+    let startY = 0, currentY = 0, isPulling = false, isRefreshing = false;
+    page.addEventListener('touchstart', (e) => { if (page.scrollTop === 0 && !isRefreshing) { startY = e.touches[0].clientY; isPulling = true; } }, { passive: true });
+    page.addEventListener('touchmove', (e) => {
+        if (!isPulling || isRefreshing) return;
+        currentY = e.touches[0].clientY;
+        const diff = currentY - startY;
+        if (diff > 0) {
+            const pullDistance = Math.min(diff * 0.5, 80);
+            refreshIndicator.style.top = `${pullDistance - 60}px`;
+            refreshIndicator.classList.add('active');
+            refreshIndicator.style.transform = pullDistance > 60 ? 'translateX(-50%) scale(1.2)' : 'translateX(-50%) scale(1)';
+        }
+    }, { passive: true });
+    page.addEventListener('touchend', () => {
+        if (!isPulling || isRefreshing) return;
+        isPulling = false;
+        if (currentY - startY > 60) {
+            isRefreshing = true;
+            refreshIndicator.classList.add('refreshing');
+            refreshIndicator.style.top = '10px';
+            haptic('light');
+            setTimeout(() => {
+                renderAll();
+                if (useFirebase) loadServer();
+                refreshIndicator.classList.remove('refreshing', 'active');
+                refreshIndicator.style.top = '-60px';
+                isRefreshing = false;
+                haptic('success');
+                showToast('✅', 'Данные обновлены');
+            }, 1000);
+        } else {
+            refreshIndicator.classList.remove('active');
+            refreshIndicator.style.top = '-60px';
+        }
+        startY = 0; currentY = 0;
+    });
+}
 
-// ===== RENDER FUNCTIONS =====
-function updateMiniRing(){const s=calcAll(),bg=document.getElementById('miniRingBg'),ring=document.getElementById('miniRingFill'),label=document.getElementById('miniRingLabel'),cont=document.getElementById('miniRingContainer');if(!bg||!ring||!cont)return;const r=cont.getBoundingClientRect();bg.setAttribute('width',r.width-3);bg.setAttribute('height',r.height-3);ring.setAttribute('width',r.width-3);ring.setAttribute('height',r.height-3);if(goalTarget>0){const p=Math.min(s.revenue/goalTarget,1);ring.style.strokeDasharray='1';ring.style.strokeDashoffset=1-p;let c;if(p<.5){const t=p*2;c=`rgb(255,${Math.round(59+141*t)},${Math.round(48-48*t)})`;}else if(p<1){const t=(p-.5)*2;c=`rgb(${Math.round(255-203*t)},${Math.round(200-t)},${Math.round(89*t)})`;}else c='var(--ios-green)';ring.style.stroke=c;if(p>=.5&&p<1)ring.classList.add('glow-pulse');else ring.classList.remove('glow-pulse');label.textContent=Math.round(p*100)+'%';label.style.display='block';label.style.color=c;if(p>=1&&!window._confettiShown){window._confettiShown=true;showConfetti();}}else{ring.style.strokeDasharray='1';ring.style.strokeDashoffset='1';ring.style.stroke='rgba(255,255,255,0.1)';ring.classList.remove('glow-pulse');label.style.display='none';window._confettiShown=false;}}
+// === SWIPE ACTIONS ===
+function initSwipeGesture(wrapper, item) {
+    let startX = 0, currentX = 0, isDragging = false;
+    item.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isDragging = true; item.classList.add('swiping'); }, { passive: true });
+    item.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = startX - currentX;
+        if (diff > 0) item.style.transform = `translateX(-${Math.min(diff, 80)}px)`;
+    }, { passive: true });
+    item.addEventListener('touchend', () => {
+        isDragging = false;
+        item.classList.remove('swiping');
+        if (startX - currentX > 40) { wrapper.classList.add('swiped'); item.style.transform = 'translateX(-80px)'; haptic('light'); }
+        else { wrapper.classList.remove('swiped'); item.style.transform = ''; }
+    });
+}
 
-function updateGoalPage(){const s=calcAll(),ring=document.getElementById('goalRingFill'),pctEl=document.getElementById('goalPercent'),subEl=document.getElementById('goalSubtitle'),curEl=document.getElementById('goalCurrentRevenue'),tgtEl=document.getElementById('goalTargetEl'),remEl=document.getElementById('goalRemaining'),stEl=document.getElementById('goalStatus');if(!ring)return;animateValue(curEl,s.revenue,fmt);if(goalTarget>0){const p=Math.min(s.revenue/goalTarget,1);ring.style.strokeDasharray='1';ring.style.strokeDashoffset=1-p;let c;if(p<.5){const t=p*2;c=`rgb(255,${Math.round(59+141*t)},${Math.round(48-48*t)})`;}else if(p<1){const t=(p-.5)*2;c=`rgb(${Math.round(255-203*t)},${Math.round(200-t)},${Math.round(89*t)})`;}else c='var(--ios-green)';ring.style.stroke=c;animateValue(pctEl,Math.round(p*100),n=>Math.round(n).toString());pctEl.style.color=c;animateValue(tgtEl,goalTarget,fmt);const rem=Math.max(goalTarget-s.revenue,0);animateValue(remEl,rem,n=>rem>0?fmt(n):'✓');remEl.className='goal-stat-value '+(rem>0?'text-red':'text-green');if(p>=1){stEl.textContent='🏆 Достигнута!';stEl.style.color='var(--ios-green)';}else if(p>=.75){stEl.textContent='🔥 Почти';stEl.style.color='var(--ios-green)';}else if(p>=.5){stEl.textContent='💪 Половина';stEl.style.color='var(--ios-orange)';}else if(p>0){stEl.textContent='🚀 В процессе';stEl.style.color='var(--ios-orange)';}else{stEl.textContent='⏳ Начало';stEl.style.color='var(--ios-text-secondary)';}subEl.textContent=`${fmt(s.revenue)} / ${fmt(goalTarget)}`;}else{ring.style.strokeDasharray='1';ring.style.strokeDashoffset='1';ring.style.stroke='rgba(255,255,255,0.1)';pctEl.textContent='0';pctEl.style.color='var(--ios-text-secondary)';tgtEl.textContent='—';remEl.textContent='—';remEl.className='goal-stat-value';stEl.textContent='Не задана';stEl.style.color='var(--ios-text-secondary)';subEl.textContent='Цель не задана';}renderGoalHistory();}
+window.deleteTransaction = (index) => {
+    const acc = getAccount();
+    if (!acc || !acc.transactions) return;
+    const realIndex = acc.transactions.length - 1 - index;
+    if (realIndex < 0 || realIndex >= acc.transactions.length) return;
+    const tx = acc.transactions[realIndex];
+    const confirmDelete = () => {
+        if (tx.type === 'income') { acc.balance -= tx.amount; const revTx = acc.transactions.find(t => t.type === 'revenue' && Math.abs(t.amount - tx.amount * (incomePercent/100)) < 0.01); if (revTx) { capital -= revTx.amount; acc.transactions = acc.transactions.filter(t => t !== revTx); } }
+        else if (tx.type === 'expense') { acc.balance += tx.amount; const revTx = acc.transactions.find(t => t.type === 'revenue' && Math.abs(t.amount - tx.amount * (expensePercent/100)) < 0.01); if (revTx) { capital -= revTx.amount; acc.transactions = acc.transactions.filter(t => t !== revTx); } }
+        else if (tx.type === 'adjustment') acc.balance -= tx.amount;
+        else if (tx.type === 'revenue') capital -= tx.amount;
+        acc.transactions.splice(realIndex, 1);
+        renderAll(); saveServer(); haptic('success'); showToast('🗑️', 'Операция удалена');
+    };
+    if (tg?.showConfirm) tg.showConfirm('Удалить операцию?', c => { if (c) confirmDelete(); });
+    else if (confirm('Удалить операцию?')) confirmDelete();
+};
 
-function renderGoalHistory(){const c=document.getElementById('goalHistory');if(!c)return;if(!goalHistory.length){c.innerHTML='<div class="empty-state" style="padding:20px;"><div class="empty-text" style="font-size:0.8rem;">История пуста</div></div>';return;}c.innerHTML='';goalHistory.slice().reverse().forEach((item,ri)=>{const idx=goalHistory.length-1-ri,d=new Date(item.date),pct=Math.round(Math.min((item.revenueAtClose||0)/item.target,1)*100);const el=document.createElement('div');el.className='goal-history-item';el.innerHTML=`<div class="goal-history-info"><div class="goal-history-date">${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}</div><div class="goal-history-target">Цель: ${fmt(item.target)} · ${fmt(item.revenueAtClose||0)}</div></div><div class="goal-history-right"><div class="goal-history-result" style="color:${pct>=100?'var(--ios-green)':'var(--ios-orange)'}">${pct}%</div><button class="goal-history-delete" onclick="deleteGoalHistory(${idx})">×</button></div>`;c.appendChild(el);});}
-window.deleteGoalHistory=(i)=>{if(i<0||i>=goalHistory.length)return;goalHistory.splice(i,1);saveLocal();saveServer();renderGoalHistory();haptic('success');showToast('🗑️','Удалено');};
-window.openSetGoal=()=>{document.getElementById('goalTargetInput').value=goalTarget||'';document.getElementById('goalCurrentHint').textContent=fmt(calcAll().revenue);document.getElementById('setGoalOverlay').classList.add('active');document.getElementById('setGoalSheet').classList.add('active');haptic('light');setTimeout(()=>document.getElementById('goalTargetInput').focus(),400);};
-window.closeSetGoal=()=>{document.getElementById('setGoalOverlay').classList.remove('active');document.getElementById('setGoalSheet').classList.remove('active');};
-window.saveGoal=()=>{const v=parseFloat(document.getElementById('goalTargetInput').value);if(isNaN(v)||v<0){showToast('⚠️','Введите сумму');haptic('error');return;}const s=calcAll();if(goalTarget>0){goalHistory.push({date:new Date().toISOString(),target:goalTarget,revenueAtClose:s.revenue});if(goalHistory.length>10)goalHistory=goalHistory.slice(-10);}goalTarget=v;saveLocal();saveServer();closeSetGoal();refreshGoal();updateMiniRing();updateMeshColors();haptic('success');showToast('🎯',v>0?'Цель установлена':'Сброшена');};
-window.resetGoal=()=>{if(!goalTarget){showToast('ℹ️','Нет цели');return;}const r=()=>{goalHistory.push({date:new Date().toISOString(),target:goalTarget,revenueAtClose:calcAll().revenue});if(goalHistory.length>10)goalHistory=goalHistory.slice(-10);goalTarget=0;saveLocal();saveServer();refreshGoal();updateMiniRing();updateMeshColors();haptic('success');showToast('🎯','Сброшено');};if(tg?.showConfirm)tg.showConfirm('Сбросить цель?',c=>{if(c)r();});else if(confirm('Сбросить?'))r();};
-function refreshGoal(){updateGoalPage();}
+// === CONFETTI ===
+function showConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#5AC8FA'];
+    for (let i = 0; i < 50; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDelay = Math.random() * 0.5 + 's';
+        c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        container.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
+    }
+    haptic('success');
+}
 
-const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing();updateMeshColors();};
-const renderHome=()=>{const acc=getAccount(),h=getHolder(),ne=document.getElementById('accountName');if(!acc||!h){ne.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт';animateValue(document.getElementById('balanceDisplay'),0,fmt);['statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin'].forEach(id=>animateValue(document.getElementById(id),0,fmt));document.getElementById('txList').innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>';document.getElementById('resetBtn').style.display='none';updateMiniRing();return;}ne.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`;animateValue(document.getElementById('balanceDisplay'),acc.balance,fmt);const s=calcAcc(acc);animateValue(document.getElementById('statTurnover'),s.turnover,fmt);animateValue(document.getElementById('statIncome'),s.totalIncome,fmt);animateValue(document.getElementById('statExpense'),s.totalExpense,fmt);animateValue(document.getElementById('statRevenue'),s.revenue,fmt);animateValue(document.getElementById('statSpend'),s.totalSpend,fmt);const me=document.getElementById('statMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');const list=document.getElementById('txList');if(!acc.transactions?.length){list.innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>';document.getElementById('resetBtn').style.display='none';}else{list.innerHTML='';acc.transactions.slice().reverse().forEach((t,index)=>{if(!t)return;const d=new Date(t.date),time=isNaN(d.getTime())?'':d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});let cls,sign,desc;if(t.type==='income'){cls='text-green';sign='+';desc=t.desc||'Пополнение';}else if(t.type==='expense'){cls='text-red';sign='−';desc=t.desc||'Списание';}else if(t.type==='spend'){cls='text-purple';sign='−';desc='🛍️ '+(t.desc||'Трата');}else if(t.type==='adjustment'){cls='text-blue';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка');}else if(t.type==='revenue'){cls='text-orange';sign='+';desc='💜 '+(t.desc||'Капитализация');}else{cls='';sign='';desc=t.desc||'Операция';}const amt=t.type==='adjustment'?`${sign}${fmt(Math.abs(t.amount))}`:`${sign} ${fmt(t.amount)}`;const w=document.createElement('div');w.className='tx-item-wrapper';const sa=document.createElement('div');sa.className='tx-item-swipe';sa.textContent='🗑️ Удалить';sa.onclick=()=>deleteTransaction(index);const item=document.createElement('div');item.className='tx-item';item.innerHTML=`<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;w.appendChild(sa);w.appendChild(item);list.appendChild(w);initSwipeGesture(w,item);});document.getElementById('resetBtn').style.display='block';}saveLocal();updateMiniRing();};
-window.resetAll=()=>{const acc=getAccount(),h=getHolder();if(!acc||!h||!acc.transactions?.length){showToast('⚠️','Нет операций');return;}haptic('warning');const r=()=>{acc.balance=0;acc.transactions=[];renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Обнулено');};if(tg?.showConfirm)tg.showConfirm(`Обнулить "${acc.name}"?`,c=>{if(c)r();});else if(confirm('Обнулить?'))r();};
+(function initSplash() {
+    const canvas = document.getElementById('splashCanvas');
+    if (!canvas) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    camera.position.z = 4;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(400, 400);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    const geo = new THREE.BufferGeometry();
+    const verts = [];
+    const segs = 12;
+    const topR = 0.5, midR = 1.0, topH = 0.4, botH = 1.0;
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; verts.push(0, topH, 0, Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR); }
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; const am = ((i + 0.5) / segs) * Math.PI * 2; verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*topR, topH, Math.sin(a2)*topR); verts.push(Math.cos(a1)*topR, topH, Math.sin(a1)*topR, Math.cos(a1)*midR, 0, Math.sin(a1)*midR, Math.cos(am)*midR, 0, Math.sin(am)*midR); verts.push(Math.cos(a2)*topR, topH, Math.sin(a2)*topR, Math.cos(am)*midR, 0, Math.sin(am)*midR, Math.cos(a2)*midR, 0, Math.sin(a2)*midR); }
+    for (let i = 0; i < segs; i++) { const a1 = (i / segs) * Math.PI * 2; const a2 = ((i + 1) / segs) * Math.PI * 2; verts.push(Math.cos(a1)*midR, 0, Math.sin(a1)*midR, 0, -botH, 0, Math.cos(a2)*midR, 0, Math.sin(a2)*midR); }
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+    geo.computeVertexNormals();
+    const mat = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff, shininess: 150, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    const l1 = new THREE.PointLight(0xffffff, 1.5, 100); l1.position.set(5, 5, 5); scene.add(l1);
+    const l2 = new THREE.PointLight(0xe0f7ff, 1.2, 100); l2.position.set(-5, 3, 5); scene.add(l2);
+    const l3 = new THREE.PointLight(0xffffff, 1.0, 100); l3.position.set(0, 5, -5); scene.add(l3);
+    function anim() { requestAnimationFrame(anim); mesh.rotation.y += 0.008; mesh.rotation.x = Math.sin(Date.now() * 0.0008) * 0.15; renderer.render(scene, camera); }
+    anim();
+    setTimeout(() => { document.getElementById('splash').classList.add('hide'); }, 3500);
+})();
 
-// ===== REPORT, DETAIL, ADJUST, SETTINGS (same logic as v5.06) =====
-const refreshReport=()=>{const s=calcAll();['sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite'].forEach((id,i)=>animateValue(document.getElementById(id),[s.turnover,s.revenue,s.totalIncome,s.totalExpense,s.totalSpend,s.totalBalance,capital,s.siteBalance][i],fmt));const me=document.getElementById('sumMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');renderReportsList();checkLastFixed();};
-const renderReport=refreshReport;
-const renderReportsList=()=>{const list=document.getElementById('reportsList'),keys=Object.keys(savedReports).sort().reverse();if(!keys.length){list.innerHTML='<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>';return;}list.innerHTML='';keys.forEach(key=>{const r=savedReports[key];if(!r)return;const d=new Date(r.date),sp=r.spend||0,mg=r.margin??((r.revenue||0)-sp);const c=document.createElement('div');c.className='report-card';c.innerHTML=`<div class="report-header"><div><div class="report-date">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div><div class="report-time">${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmt(sp)}</span></div><div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmt(mg)}</span></div></div>`;list.appendChild(c);});};
-const checkLastFixed=()=>{const keys=Object.keys(savedReports).sort().reverse(),b=document.getElementById('lastFixedBadge');if(keys.length){const d=new Date(savedReports[keys[0]].date);document.getElementById('lastFixedDate').textContent=`${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;b.style.display='flex';}else b.style.display='none';};
-const refreshDetail=()=>{const s=calcAll();['detBalance','detCapital','detSite','detSpend','detRevenue'].forEach((id,i)=>animateValue(document.getElementById(id),[s.totalBalance,capital,s.siteBalance,s.totalSpend,s.revenue][i],fmt));const me=document.getElementById('detMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');renderDetailTree();};
-const renderDetail=refreshDetail;
-window.toggleHolderExpand=(hid)=>{expandedHolders[hid]=!expandedHolders[hid];renderDetailTree();haptic('light');};
-const renderDetailTree=()=>{const c=document.getElementById('detailTree');c.innerHTML='';Object.keys(holders).forEach(hid=>{const h=holders[hid];if(!h?.accounts)return;const exp=expandedHolders[hid]!==false;const b=document.createElement('div');b.className='holder-block';const head=document.createElement('div');head.className='holder-head';head.onclick=()=>window.toggleHolderExpand(hid);head.innerHTML=`<div class="holder-head-left"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="holder-head-info"><div class="holder-name">${h.name}</div><div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div></div></div><div class="holder-chevron ${exp?'expanded':''}"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`;b.appendChild(head);const wrap=document.createElement('div');wrap.className='holder-accounts-wrap'+(exp?' expanded':'');const inner=document.createElement('div');inner.className='holder-accounts-inner';let ht={income:0,expense:0,spend:0,turnover:0,revenue:0,margin:0,balance:0};Object.values(h.accounts).forEach(a=>{if(!a)return;const s=calcAcc(a,detailPeriod);ht.income+=s.totalIncome;ht.expense+=s.totalExpense;ht.spend+=s.totalSpend;ht.turnover+=s.turnover;ht.revenue+=s.revenue;ht.margin+=s.margin;ht.balance+=a.balance||0;const row=document.createElement('div');row.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';row.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><div class="detail-metric"><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(s.turnover)}</div></div><div class="detail-metric"><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(s.totalIncome)}</div></div><div class="detail-metric"><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(s.totalExpense)}</div></div><div class="detail-metric"><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(s.revenue)}</div></div><div class="detail-metric"><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(s.totalSpend)}</div></div><div class="detail-metric"><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(s.margin)}</div></div></div>`;inner.appendChild(row);});const sum=document.createElement('div');sum.className='holder-summary';sum.innerHTML=`<div class="holder-summary-title">📊 Итого</div><div style="text-align:center;font-size:1rem;font-weight:600;">${fmt(ht.balance)}</div>`;inner.appendChild(sum);wrap.appendChild(inner);b.appendChild(wrap);c.appendChild(b);});};
-const refreshAdjust=()=>{const acc=getAccount(),h=getHolder();if(acc&&h){document.getElementById('adjustInfo').innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} · ${acc.name}`;document.getElementById('adjBalanceHint').textContent=fmt(acc.balance);document.getElementById('adjCapitalHint').textContent=fmt(capital);}};
-const refreshSettings=()=>{document.getElementById('setCapital').value=capital;document.getElementById('setIncPct').value=incomePercent;document.getElementById('setExpPct').value=expensePercent;document.getElementById('curIncPct').textContent=incomePercent;document.getElementById('curExpPct').textContent=expensePercent;};
+function showToast(icon, text, duration = 2500) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${text}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.classList.add('out'); setTimeout(() => toast.remove(), 300); }, duration);
+}
 
-// ===== TRANSACTIONS =====
-const doTransaction=(type)=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const amount=parseFloat(document.getElementById('amountInput').value);if(!amount||amount<=0){showToast('⚠️','Введите сумму');haptic('error');return;}if(amount>999999999)return;if(type==='income')acc.balance+=amount;else acc.balance-=amount;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});let rev=0;if(type==='income')rev=amount*(incomePercent/100);else if(type==='expense')rev=amount*(expensePercent/100);if(rev>0){capital+=rev;acc.transactions.push({type:'revenue',amount:rev,desc:'Капитализация',date:new Date().toISOString()});}document.getElementById('amountInput').value='';haptic('success');renderAll();saveServer();if(rev>0)setTimeout(()=>showToast('💰',`+${fmt(rev)} к капиталу`),300);};
-window.openQuickExpense=()=>{if(!getAccount()){showToast('⚠️','Выберите счёт');return;}document.getElementById('quickExpenseAmount').value='';document.getElementById('quickExpenseNote').value='';document.getElementById('quickExpenseOverlay').classList.add('active');document.getElementById('quickExpenseSheet').classList.add('active');haptic('light');setTimeout(()=>document.getElementById('quickExpenseAmount').focus(),400);};
-window.closeQuickExpense=()=>{document.getElementById('quickExpenseOverlay').classList.remove('active');document.getElementById('quickExpenseSheet').classList.remove('active');};
-window.submitQuickExpense=()=>{const acc=getAccount();if(!acc)return;const a=parseFloat(document.getElementById('quickExpenseAmount').value),n=document.getElementById('quickExpenseNote').value.trim();if(!a||a<=0){showToast('⚠️','Введите сумму');haptic('error');return;}acc.balance-=a;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type:'spend',amount:a,desc:n||'Трата',date:new Date().toISOString()});haptic('success');renderAll();saveLocal();saveServer();closeQuickExpense();showToast('✅',n?`"${n}" учтена`:'Трата учтена');};
-window.openEditBalance=()=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}document.getElementById('editBalanceInput').value='';document.getElementById('editBalanceComment').value='';document.getElementById('editBalanceCurrent').textContent=fmt(acc.balance);document.getElementById('editBalanceOverlay').classList.add('active');document.getElementById('editBalanceSheet').classList.add('active');haptic('light');setTimeout(()=>document.getElementById('editBalanceInput').focus(),400);};
-window.closeEditBalance=()=>{document.getElementById('editBalanceOverlay').classList.remove('active');document.getElementById('editBalanceSheet').classList.remove('active');};
-window.saveEditBalance=()=>{const acc=getAccount();if(!acc)return;const nb=parseFloat(document.getElementById('editBalanceInput').value);if(isNaN(nb)){showToast('⚠️','Введите сумму');haptic('error');return;}if(nb===acc.balance){showToast('ℹ️','Не изменился');closeEditBalance();return;}const c=document.getElementById('editBalanceComment').value.trim();if(!acc.transactions)acc.transactions=[];acc.transactions.push({type:'adjustment',amount:nb-acc.balance,desc:c||'Корректировка',date:new Date().toISOString()});acc.balance=nb;haptic('success');renderAll();saveServer();closeEditBalance();showToast('✅',`Баланс: ${fmt(nb)}`);};
-const doFixReport=()=>{const s=calcAll(),now=new Date(),key=now.toISOString().replace(/[:.]/g,'-').slice(0,19);savedReports[key]={date:now.toISOString(),turnover:s.turnover,income:s.totalIncome,expense:s.totalExpense,spend:s.totalSpend,revenue:s.revenue,margin:s.margin,balance:s.totalBalance,capital,siteBalance:s.siteBalance};saveLocal();saveServer();renderReportsList();checkLastFixed();haptic('success');showToast('✅','Отчёт сохранён');};
-const shareText=async(text,title)=>{haptic('light');if(tg?.switchInlineQuery){try{tg.switchInlineQuery(text,['users','groups','channels']);return;}catch(e){}}if(navigator.share){try{await navigator.share({title,text});return;}catch(e){if(e.name==='AbortError')return;}}try{await navigator.clipboard.writeText(text);showToast('📋','Скопировано');}catch(e){prompt('Скопируйте:',text);}};
-const doShareCurrentReport=()=>{const s=calcAll(),now=new Date();shareText(`📊 Финансовый отчёт Findr\n📅 ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}\n💹 Оборот: ${fmt(s.turnover)}\n💰 Выручка: ${fmt(s.revenue)}\n📈 Маржа: ${fmt(s.margin)}\n💜 Капитал: ${fmt(capital)}`,'Отчёт Findr');};
-window.shareReport=(key)=>{const r=savedReports[key];if(!r)return;const d=new Date(r.date);shareText(`📊 Отчёт Findr\n📅 ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}\n💹 Оборот: ${fmt(r.turnover)}\n💰 Выручка: ${fmt(r.revenue)}\n📈 Маржа: ${fmt(r.margin??(r.revenue-(r.spend||0)))}`,'Отчёт Findr');};
-window.shareDetail=()=>{shareText(`📊 Детализация Findr\n💰 Капитал: ${fmt(capital)}\n💹 Выручка: ${fmt(calcAll().revenue)}`,'Детализация Findr');};
-window.deleteReport=(key)=>{const del=()=>{delete savedReports[key];saveLocal();saveServer();renderReportsList();checkLastFixed();haptic('success');showToast('🗑️','Удалено');};if(tg?.showConfirm)tg.showConfirm('Удалить?',c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-const doSaveAdjust=()=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const bs=document.getElementById('adjBalance').value,cs=document.getElementById('adjCapital').value,cm=document.getElementById('adjComment').value.trim();const nb=bs!==''?parseFloat(bs):null,nc=cs!==''?parseFloat(cs):null;if(nb===null&&nc===null){showToast('⚠️','Введите значение');return;}if(nb!==null&&nb!==acc.balance){if(!acc.transactions)acc.transactions=[];acc.transactions.push({type:'adjustment',amount:nb-acc.balance,desc:cm||'Корректировка',date:new Date().toISOString()});acc.balance=nb;}if(nc!==null)capital=nc;haptic('success');renderAll();saveServer();showToast('✅','Применено');document.getElementById('adjBalance').value='';document.getElementById('adjCapital').value='';document.getElementById('adjComment').value='';};
-const doSaveSettings=()=>{const nc=parseFloat(document.getElementById('setCapital').value),ni=parseFloat(document.getElementById('setIncPct').value),ne=parseFloat(document.getElementById('setExpPct').value);if(isNaN(nc)||nc<0){showToast('⚠️','Ошибка');return;}capital=nc;incomePercent=ni;expensePercent=ne;document.getElementById('curIncPct').textContent=incomePercent;document.getElementById('curExpPct').textContent=expensePercent;renderAll();saveServer();haptic('success');showToast('✅','Сохранено');};
-window.setPeriod=(p)=>{detailPeriod=p;document.querySelectorAll('.period-chip').forEach(c=>c.classList.toggle('active',c.dataset.p===p));renderDetailTree();haptic('light');};
+let currentPageName = 'home';
+const pageOrder = ['home','report','goal','detail','adjust','settings'];
+function switchPage(name) {
+    if (name === currentPageName) return;
+    const oldIndex = pageOrder.indexOf(currentPageName);
+    const newIndex = pageOrder.indexOf(name);
+    const goingRight = newIndex > oldIndex;
+    document.querySelectorAll('.page').forEach(p => { const pn = p.id.replace('page-',''); p.classList.remove('active','exit-left','exit-right'); if (pn === currentPageName) p.classList.add(goingRight ? 'exit-left' : 'exit-right'); });
+    const target = document.getElementById('page-' + name);
+    if (target) requestAnimationFrame(() => target.classList.add('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const tn = document.querySelector(`.nav-item[data-page="${name}"]`);
+    if (tn) tn.classList.add('active');
+    currentPageName = name;
+    if (name === 'report') refreshReport();
+    if (name === 'goal') refreshGoal();
+    if (name === 'detail') refreshDetail();
+    if (name === 'adjust') refreshAdjust();
+    if (name === 'settings') refreshSettings();
+    haptic('light');
+}
 
-// ===== ACCOUNT MANAGEMENT =====
-window.openAccountSheet=()=>{document.getElementById('accountSearch').value='';isEditMode=false;document.getElementById('actionsMenu').classList.remove('active');renderAccountTree();document.getElementById('accountOverlay').classList.add('active');document.getElementById('accountSheet').classList.add('active');haptic('light');};
-window.closeAccountSheet=()=>{document.getElementById('accountOverlay').classList.remove('active');document.getElementById('accountSheet').classList.remove('active');isEditMode=false;document.getElementById('actionsMenu').classList.remove('active');};
-window.toggleActionsMenu=()=>{document.getElementById('actionsMenu').classList.toggle('active');haptic('light');};
-window.createHolder=()=>{const n=prompt('Имя держателя:');if(!n?.trim())return;const hid='h_'+Date.now(),aid='a_'+Date.now();holders[hid]={id:hid,name:n.trim(),accounts:{[aid]:{id:aid,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()};activeHolderId=hid;activeAccountId=aid;renderAccountTree();renderAll();saveLocal();saveServer();document.getElementById('actionsMenu').classList.remove('active');haptic('success');showToast('✅','Создан');};
-window.createAccount=()=>{if(!activeHolderId||!holders[activeHolderId]){showToast('⚠️','Выберите держателя');return;}const n=prompt('Название счёта:');if(!n?.trim())return;const h=holders[activeHolderId],aid='a_'+Date.now();h.accounts[aid]={id:aid,name:n.trim(),balance:0,transactions:[],createdAt:new Date().toISOString()};activeAccountId=aid;renderAccountTree();renderAll();saveLocal();saveServer();document.getElementById('actionsMenu').classList.remove('active');haptic('success');showToast('✅','Счёт создан');};
-window.toggleEditMode=()=>{isEditMode=!isEditMode;document.getElementById('actionsMenu').classList.remove('active');renderAccountTree();haptic('light');showToast(isEditMode?'✏️':'✅',isEditMode?'Редактирование':'Завершено');};
-window.deleteHolder=(hid)=>{const h=holders[hid];if(!h)return;if(Object.keys(holders).length<=1){showToast('⚠️','Нельзя удалить последнего');return;}const del=()=>{if(activeHolderId===hid){activeHolderId=Object.keys(holders).find(k=>k!==hid);activeAccountId=Object.keys(holders[activeHolderId].accounts||{})[0]||null;}delete holders[hid];renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('🗑️','Удалён');};if(tg?.showConfirm)tg.showConfirm(`Удалить "${h.name}"?`,c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-window.deleteAccount=(hid,aid)=>{const h=holders[hid];if(!h||!h.accounts[aid])return;if(Object.keys(h.accounts).length<=1){showToast('⚠️','Нельзя удалить последний');return;}const del=()=>{if(activeAccountId===aid)activeAccountId=Object.keys(h.accounts).find(k=>k!==aid);delete h.accounts[aid];renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('🗑️','Удалён');};if(tg?.showConfirm)tg.showConfirm('Удалить счёт?',c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-const renderAccountTree=()=>{const c=document.getElementById('accountTree'),search=(document.getElementById('accountSearch').value||'').toLowerCase();c.innerHTML='';Object.keys(holders).forEach(hid=>{const h=holders[hid];if(!h)return;const b=document.createElement('div');b.style.marginBottom='12px';if(isEditMode){const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;';head.innerHTML=`<div class="edit-row-header"><span class="edit-row-label">Держатель</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g,'&quot;')}" id="eH_${hid}"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')">🗑️ Удалить</button>`;b.appendChild(head);}else{const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;font-weight:600;';head.textContent='👤 '+h.name;b.appendChild(head);}const accs=document.createElement('div');accs.style.cssText='margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';Object.values(h.accounts||{}).forEach(a=>{if(!a)return;if(search&&!a.name.toLowerCase().includes(search))return;const isA=hid===activeHolderId&&a.id===activeAccountId;if(isEditMode){const row=document.createElement('div');row.style.marginBottom='8px';row.innerHTML=`<input type="text" class="edit-input" value="${a.name.replace(/"/g,'&quot;')}" id="eA_${a.id}"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')">🗑️ Удалить</button>`;accs.appendChild(row);}else{const row=document.createElement('div');row.style.cssText=`background:${isA?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;row.onclick=()=>{activeHolderId=hid;activeAccountId=a.id;renderAll();saveLocal();saveServer();closeAccountSheet();haptic('success');showToast('✅',a.name);};row.innerHTML=`<span style="${isA?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isA?'color:rgba(255,255,255,.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`;accs.appendChild(row);}});b.appendChild(accs);if(isEditMode){const ea=document.createElement('div');ea.className='edit-actions';ea.innerHTML=`<button class="btn btn-primary" onclick="saveEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕</button>`;b.appendChild(ea);}c.appendChild(b);});};
-window.saveEdits=(hid)=>{const h=holders[hid];if(!h)return;const hi=document.getElementById('eH_'+hid);if(hi&&hi.value.trim())h.name=hi.value.trim();Object.values(h.accounts||{}).forEach(a=>{const ai=document.getElementById('eA_'+a.id);if(ai&&ai.value.trim())a.name=ai.value.trim();});isEditMode=false;renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Сохранено');};
-window.cancelEditMode=()=>{isEditMode=false;renderAccountTree();};
+let holders = {}, activeHolderId = null, activeAccountId = null;
+let capital = 0, savedReports = {};
+let incomePercent = 7, expensePercent = 2.5;
+let detailPeriod = 'today';
+let isOnline = navigator.onLine;
+let isEditMode = false;
+let expandedHolders = {};
+let goalTarget = 0;
+let goalHistory = [];
+const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+const MONTHS_FULL = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const fmt = (n) => { if (n === null || n === undefined || isNaN(n)) n = 0; return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(n); };
+const haptic = (type) => { if (tg?.HapticFeedback) { try { if (type === 'success') tg.HapticFeedback.notificationOccurred('success'); else if (type === 'error') tg.HapticFeedback.notificationOccurred('error'); else tg.HapticFeedback.impactOccurred('light'); } catch(e){} } };
+const saveLocal = () => { try { localStorage.setItem('fl_holders', JSON.stringify(holders)); localStorage.setItem('fl_ah', activeHolderId); localStorage.setItem('fl_aa', activeAccountId); localStorage.setItem('fl_cap', capital.toString()); localStorage.setItem('fl_reports', JSON.stringify(savedReports)); localStorage.setItem('fl_ip', incomePercent.toString()); localStorage.setItem('fl_ep', expensePercent.toString()); localStorage.setItem('fl_goal', goalTarget.toString()); localStorage.setItem('fl_goal_history', JSON.stringify(goalHistory)); } catch(e){} };
+const loadLocal = () => { try { const h = localStorage.getItem('fl_holders'); if (h) { holders = JSON.parse(h); activeHolderId = localStorage.getItem('fl_ah'); activeAccountId = localStorage.getItem('fl_aa'); if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0]; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; } else { const hid = 'h_' + Date.now(); const aid = 'a_' + Date.now(); holders = { [hid]: { id: hid, name: 'Основной', accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() } }; activeHolderId = hid; activeAccountId = aid; } savedReports = JSON.parse(localStorage.getItem('fl_reports') || '{}'); incomePercent = parseFloat(localStorage.getItem('fl_ip')) || 7; expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5; const c = localStorage.getItem('fl_cap'); if (c !== null) capital = parseFloat(c) || 0; goalTarget = parseFloat(localStorage.getItem('fl_goal')) || 0; goalHistory = JSON.parse(localStorage.getItem('fl_goal_history') || '[]'); } catch(e){} };
 
-// ===== EVENTS =====
-window.addEventListener('online',()=>{isOnline=true;if(useFirebase)saveServer();});
-window.addEventListener('offline',()=>{isOnline=false;updateSync('offline');});
-document.getElementById('amountInput').addEventListener('keypress',e=>{if(e.key==='Enter')doTransaction('expense');});
-window.addEventListener('beforeunload',()=>saveLocal());
-document.addEventListener('visibilitychange',()=>{if(document.hidden)saveLocal();});
-let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(updateMiniRing,100);});
+let useFirebase = false, userRef = null, saveTimeout = null, isSyncing = false;
+const getUserId = () => { const tid = tg?.initDataUnsafe?.user?.id; if (tid) return 'tg_' + tid; let id = localStorage.getItem('fl_uid'); if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); localStorage.setItem('fl_uid', id); } return id; };
+const UID = getUserId();
+const initFB = () => { try { const cfg = { apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY", authDomain: "financesimple-7c73a.firebaseapp.com", databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app", projectId: "financesimple-7c73a", storageBucket: "financesimple-7c73a.firebasestorage.app", messagingSenderId: "1072812838336", appId: "1:1072812838336:web:262ce9e7cc79e93c514c25" }; if (!firebase.apps.length) firebase.initializeApp(cfg); userRef = firebase.database().ref(`users/${UID}`); useFirebase = true; } catch(e){ useFirebase = false; } };
+const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); await userRef.set({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, margin: s.margin, incomePercent, expensePercent, goalTarget, goalHistory, lastUpdated: new Date().toISOString() }); updateSync('synced'); } catch(e){ updateSync('error'); } finally { isSyncing = false; } }, 500); };
+const loadServer = () => { if (!useFirebase) { loadLocal(); hideSkeleton(); renderAll(); updateSync('local'); return; } updateSync('syncing'); userRef.once('value').then(snap => { const d = snap.val(); if (d && d.holders) { holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId; capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5; goalTarget = d.goalTarget || 0; goalHistory = d.goalHistory || []; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts||{})[0] || null; hideSkeleton(); renderAll(); updateSync('synced'); } else { loadLocal(); hideSkeleton(); renderAll(); if (isOnline) saveServer(); } }).catch(() => { loadLocal(); hideSkeleton(); renderAll(); updateSync('offline'); }); };
 
-// ===== INIT =====
-applyTheme();initAnimatedElements();initFB();loadServer();
-setTimeout(()=>{init3DTilt();initMagneticButtons();initPullToRefresh();},500);
+// === SKELETON CONTROL ===
+function hideSkeleton() {
+    const sk = document.getElementById('skeletonLoader');
+    const hc = document.getElementById('homeContent');
+    if (sk) sk.style.display = 'none';
+    if (hc) { hc.style.display = 'block'; hc.style.animation = 'slideUp 0.5s var(--spring-bounce)'; }
+}
+
+const updateSync = (s) => { const el = document.getElementById('syncBadge'); const map = { syncing: { t: '☁️ синхронизация...', c: 'syncing' }, synced: { t: '☁️ сохранено', c: 'synced' }, offline: { t: '💾 локально', c: '' }, error: { t: '⚠️ ошибка', c: '' }, local: { t: '💾 локально', c: '' } }; const m = map[s] || map.syncing; el.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> ${m.t}`; el.className = 'sync-badge ' + m.c; };
+
+const getHolder = () => holders[activeHolderId];
+const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
+const filterTx = (txs, period) => { if (!txs || period === 'all') return txs || []; const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let start; if (period === 'today') start = today; else if (period === 'week') { start = new Date(today); start.setDate(start.getDate() - 6); } else if (period === 'month') { start = new Date(today); start.setMonth(start.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= start); };
+const calcAcc = (acc, period) => { let inc = 0, exp = 0, spend = 0; if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, margin: 0, turnover: 0 }; const txs = filterTx(acc.transactions, period); txs.forEach(t => { if (!t || typeof t.amount !== 'number') return; if (t.type === 'income') inc += t.amount; else if (t.type === 'expense') exp += t.amount; else if (t.type === 'spend') spend += t.amount; }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp }; };
+const calcAll = () => { let inc = 0, exp = 0, spend = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; spend += s.totalSpend; bal += a.balance || 0; }); }); const rev = inc * (incomePercent/100) + exp * (expensePercent/100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
+
+function updateMiniRing() {
+    const s = calcAll();
+    const container = document.getElementById('miniRingContainer');
+    const bg = document.getElementById('miniRingBg');
+    const ring = document.getElementById('miniRingFill');
+    const label = document.getElementById('miniRingLabel');
+    if (!bg || !ring || !container) return;
+    const rect = container.getBoundingClientRect();
+    bg.setAttribute('width', rect.width - 3); bg.setAttribute('height', rect.height - 3);
+    ring.setAttribute('width', rect.width - 3); ring.setAttribute('height', rect.height - 3);
+    if (goalTarget > 0) {
+        const progress = Math.min(s.revenue / goalTarget, 1);
+        ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = 1 - progress;
+        let color; if (progress < 0.5) { const t = progress * 2; color = `rgb(255, ${Math.round(59 + 141 * t)}, ${Math.round(48 - 48 * t)})`; } else if (progress < 1) { const t = (progress - 0.5) * 2; color = `rgb(${Math.round(255 - 203 * t)}, ${Math.round(200 - 1 * t)}, ${Math.round(0 + 89 * t)})`; } else color = 'var(--ios-green)';
+        ring.style.stroke = color;
+        label.textContent = Math.round(progress * 100) + '%'; label.style.display = 'block'; label.style.color = color;
+        if (progress >= 1 && !window.confettiShown) { window.confettiShown = true; showConfetti(); }
+    } else { ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = '1'; ring.style.stroke = 'rgba(255,255,255,0.1)'; label.style.display = 'none'; window.confettiShown = false; }
+    updateAuroraColors();
+}
+
+function updateGoalPage() {
+    const s = calcAll();
+    const ring = document.getElementById('goalRingFill');
+    const percentEl = document.getElementById('goalPercent');
+    const subtitleEl = document.getElementById('goalSubtitle');
+    const currentEl = document.getElementById('goalCurrentRevenue');
+    const targetEl = document.getElementById('goalTarget');
+    const remainingEl = document.getElementById('goalRemaining');
+    const statusEl = document.getElementById('goalStatus');
+    if (!ring) return;
+    animateValue(currentEl, s.revenue, fmt);
+    if (goalTarget > 0) {
+        const progress = Math.min(s.revenue / goalTarget, 1);
+        ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = 1 - progress;
+        let color; if (progress < 0.5) { const t = progress * 2; color = `rgb(255, ${Math.round(59 + 141 * t)}, ${Math.round(48 - 48 * t)})`; } else if (progress < 1) { const t = (progress - 0.5) * 2; color = `rgb(${Math.round(255 - 203 * t)}, ${Math.round(200 - 1 * t)}, ${Math.round(0 + 89 * t)})`; } else color = 'var(--ios-green)';
+        ring.style.stroke = color;
+        animateValue(percentEl, Math.round(progress * 100), (n) => Math.round(n).toString());
+        percentEl.style.color = color;
+        animateValue(targetEl, goalTarget, fmt);
+        const remaining = Math.max(goalTarget - s.revenue, 0);
+        animateValue(remainingEl, remaining, (n) => remaining > 0 ? fmt(n) : '✓');
+        remainingEl.className = 'goal-stat-value ' + (remaining > 0 ? 'text-red' : 'text-green');
+        if (progress >= 1) { statusEl.textContent = '🏆 Цель достигнута!'; statusEl.style.color = 'var(--ios-green)'; }
+        else if (progress >= 0.75) { statusEl.textContent = '🔥 Почти у цели'; statusEl.style.color = 'var(--ios-green)'; }
+        else if (progress >= 0.5) { statusEl.textContent = '💪 Половина пути'; statusEl.style.color = 'var(--ios-orange)'; }
+        else if (progress > 0) { statusEl.textContent = '🚀 В процессе'; statusEl.style.color = 'var(--ios-orange)'; }
+        else { statusEl.textContent = '⏳ Начало пути'; statusEl.style.color = 'var(--ios-text-secondary)'; }
+        subtitleEl.textContent = `${fmt(s.revenue)} / ${fmt(goalTarget)}`;
+    } else {
+        ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = '1'; ring.style.stroke = 'rgba(255,255,255,0.1)';
+        percentEl.textContent = '0'; percentEl.style.color = 'var(--ios-text-secondary)';
+        targetEl.textContent = '—'; remainingEl.textContent = '—'; remainingEl.className = 'goal-stat-value';
+        statusEl.textContent = 'Цель не задана'; statusEl.style.color = 'var(--ios-text-secondary)';
+        subtitleEl.textContent = 'Цель не задана';
+    }
+    renderGoalHistory();
+}
+
+function renderGoalHistory() {
+    const container = document.getElementById('goalHistory');
+    if (!container) return;
+    if (!goalHistory.length) { container.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text" style="font-size:0.8rem;">История пуста</div></div>'; return; }
+    container.innerHTML = '';
+    goalHistory.slice().reverse().forEach((item, reverseIdx) => {
+        const realIdx = goalHistory.length - 1 - reverseIdx;
+        const d = new Date(item.date);
+        const dateStr = `${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}`;
+        const progress = item.target > 0 ? Math.min(item.revenueAtClose / item.target, 1) : 0;
+        const percent = Math.round(progress * 100);
+        const el = document.createElement('div');
+        el.className = 'goal-history-item';
+        el.innerHTML = `<div class="goal-history-info"><div class="goal-history-date">${dateStr}</div><div class="goal-history-target">Цель: ${fmt(item.target)} · Достигнуто: ${fmt(item.revenueAtClose)}</div></div><div class="goal-history-right"><div class="goal-history-result" style="color: ${percent >= 100 ? 'var(--ios-green)' : 'var(--ios-orange)'}">${percent}%</div><button class="goal-history-delete" onclick="deleteGoalHistory(${realIdx})">×</button></div>`;
+        container.appendChild(el);
+    });
+}
+
+window.deleteGoalHistory = (index) => { if (index < 0 || index >= goalHistory.length) return; goalHistory.splice(index, 1); saveLocal(); saveServer(); renderGoalHistory(); haptic('success'); showToast('🗑️', 'Запись удалена'); };
+window.openSetGoal = () => { const s = calcAll(); document.getElementById('goalTargetInput').value = goalTarget || ''; document.getElementById('goalCurrentHint').textContent = fmt(s.revenue); document.getElementById('setGoalOverlay').classList.add('active'); document.getElementById('setGoalSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('goalTargetInput').focus(), 400); };
+window.closeSetGoal = () => { document.getElementById('setGoalOverlay').classList.remove('active'); document.getElementById('setGoalSheet').classList.remove('active'); };
+window.saveGoal = () => { const val = parseFloat(document.getElementById('goalTargetInput').value); if (isNaN(val) || val < 0) { showToast('⚠️', 'Введите корректную сумму'); haptic('error'); return; } const s = calcAll(); if (goalTarget > 0) { goalHistory.push({ date: new Date().toISOString(), target: goalTarget, revenueAtClose: s.revenue }); if (goalHistory.length > 10) goalHistory = goalHistory.slice(-10); } goalTarget = val; saveLocal(); saveServer(); closeSetGoal(); refreshGoal(); updateMiniRing(); haptic('success'); showToast('🎯', val > 0 ? 'Цель установлена' : 'Цель сброшена'); };
+window.resetGoal = () => { if (goalTarget === 0) { showToast('ℹ️', 'Цель не задана'); return; } const confirmReset = () => { const s = calcAll(); goalHistory.push({ date: new Date().toISOString(), target: goalTarget, revenueAtClose: s.revenue }); if (goalHistory.length > 10) goalHistory = goalHistory.slice(-10); goalTarget = 0; saveLocal(); saveServer(); refreshGoal(); updateMiniRing(); haptic('success'); showToast('🎯', 'Цель сброшена'); }; if (tg?.showConfirm) tg.showConfirm('Сбросить цель? Текущая цель будет сохранена в истории.', c => { if (c) confirmReset(); }); else if (confirm('Сбросить цель?')) confirmReset(); };
+function refreshGoal() { updateGoalPage(); }
+
+const renderAll = () => { renderHome(); renderReport(); renderDetail(); updateMiniRing(); };
+const renderHome = () => {
+    const acc = getAccount(); const h = getHolder();
+    const nameEl = document.getElementById('accountName');
+    if (!acc || !h) { nameEl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> Выберите счёт'; animateValue(document.getElementById('balanceDisplay'), 0, fmt); ['statTurnover','statIncome','statExpense','statRevenue','statSpend'].forEach(id => animateValue(document.getElementById(id), 0, fmt)); animateValue(document.getElementById('statMargin'), 0, fmt); document.getElementById('statMargin').classList.remove('negative'); document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; updateMiniRing(); return; }
+    nameEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> ${h.name} → ${acc.name}`;
+    animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt);
+    const s = calcAcc(acc);
+    animateValue(document.getElementById('statTurnover'), s.turnover, fmt);
+    animateValue(document.getElementById('statIncome'), s.totalIncome, fmt);
+    animateValue(document.getElementById('statExpense'), s.totalExpense, fmt);
+    animateValue(document.getElementById('statRevenue'), s.revenue, fmt);
+    animateValue(document.getElementById('statSpend'), s.totalSpend, fmt);
+    const marginEl = document.getElementById('statMargin');
+    animateValue(marginEl, s.margin, fmt);
+    if (s.margin < 0) marginEl.classList.add('negative'); else marginEl.classList.remove('negative');
+    const list = document.getElementById('txList');
+    if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; }
+    else {
+        list.innerHTML = '';
+        acc.transactions.slice().reverse().forEach((t, index) => {
+            if (!t) return;
+            const d = new Date(t.date);
+            const time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            let cls, sign, desc;
+            if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; }
+            else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; }
+            else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); }
+            else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
+            else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
+            else { cls = ''; sign = ''; desc = t.desc || 'Операция'; }
+            const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`;
+            const wrapper = document.createElement('div'); wrapper.className = 'tx-item-wrapper';
+            const swipe = document.createElement('div'); swipe.className = 'tx-item-swipe'; swipe.innerHTML = '🗑️ Удалить'; swipe.onclick = () => deleteTransaction(index);
+            const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;
+            wrapper.appendChild(swipe); wrapper.appendChild(item); list.appendChild(wrapper);
+            initSwipeGesture(wrapper, item);
+        });
+        document.getElementById('resetBtn').style.display = 'block';
+    }
+    saveLocal(); updateMiniRing();
+};
+
+window.resetAll = () => { const acc = getAccount(); const h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций'); return; } const doReset = () => { acc.balance = 0; acc.transactions = []; renderAll(); saveLocal(); saveServer(); showToast('✅', 'История обнулена'); }; if (tg?.showConfirm) tg.showConfirm(`Обнулить "${acc.name}"?`, c => { if (c) doReset(); }); else if (confirm(`Обнулить "${acc.name}"?`)) doReset(); };
+
+const refreshReport = () => { const s = calcAll(); animateValue(document.getElementById('sumTurnover'), s.turnover, fmt); animateValue(document.getElementById('sumRevenue'), s.revenue, fmt); animateValue(document.getElementById('sumIncome'), s.totalIncome, fmt); animateValue(document.getElementById('sumExpense'), s.totalExpense, fmt); animateValue(document.getElementById('sumSpend'), s.totalSpend, fmt); animateValue(document.getElementById('sumBalance'), s.totalBalance, fmt); animateValue(document.getElementById('sumCapital'), capital, fmt); animateValue(document.getElementById('sumSite'), s.siteBalance, fmt); const m = document.getElementById('sumMargin'); animateValue(m, s.margin, fmt); if (s.margin < 0) m.classList.add('negative'); else m.classList.remove('negative'); renderReportsList(); checkLastFixed(); };
+const renderReport = refreshReport;
+const renderReportsList = () => { const list = document.getElementById('reportsList'); const keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date); const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); const spend = r.spend || 0; const margin = r.margin !== undefined ? r.margin : (r.revenue || 0) - spend; const card = document.createElement('div'); card.className = 'report-card'; card.innerHTML = `<div class="report-header"><div><div class="report-date">${dateStr}</div><div class="report-time">${timeStr}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmt(spend)}</span></div><div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmt(margin)}</span></div></div>`; list.appendChild(card); }); };
+const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(); const badge = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; badge.style.display = 'flex'; } else badge.style.display = 'none'; };
+
+const refreshDetail = () => { const s = calcAll(); animateValue(document.getElementById('detBalance'), s.totalBalance, fmt); animateValue(document.getElementById('detCapital'), capital, fmt); animateValue(document.getElementById('detSite'), s.siteBalance, fmt); animateValue(document.getElementById('detSpend'), s.totalSpend, fmt); animateValue(document.getElementById('detRevenue'), s.revenue, fmt); const m = document.getElementById('detMargin'); animateValue(m, s.margin, fmt); if (s.margin < 0) m.classList.add('negative'); else m.classList.remove('negative'); renderDetailTree(); };
+const renderDetail = refreshDetail;
+window.toggleHolderExpand = (hid) => { expandedHolders[hid] = !expandedHolders[hid]; renderDetailTree(); haptic('light'); };
+const renderDetailTree = () => {
+    const container = document.getElementById('detailTree'); container.innerHTML = '';
+    const keys = Object.keys(holders);
+    if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; }
+    keys.forEach(hid => {
+        const h = holders[hid]; if (!h?.accounts) return;
+        const isExpanded = expandedHolders[hid] !== false;
+        const block = document.createElement('div'); block.className = 'holder-block';
+        const head = document.createElement('div'); head.className = 'holder-head'; head.onclick = () => window.toggleHolderExpand(hid);
+        head.innerHTML = `<div class="holder-head-left"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="holder-head-info"><div class="holder-name">${h.name}</div><div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div></div></div><div class="holder-chevron ${isExpanded ? 'expanded' : ''}"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`;
+        block.appendChild(head);
+        const wrap = document.createElement('div'); wrap.className = 'holder-accounts-wrap' + (isExpanded ? ' expanded' : '');
+        const inner = document.createElement('div'); inner.className = 'holder-accounts-inner';
+        let ht = { income: 0, expense: 0, spend: 0, turnover: 0, revenue: 0, margin: 0, balance: 0 };
+        Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, detailPeriod); ht.income += s.totalIncome; ht.expense += s.totalExpense; ht.spend += s.totalSpend; ht.turnover += s.turnover; ht.revenue += s.revenue; ht.margin += s.margin; ht.balance += a.balance || 0;
+            const row = document.createElement('div'); row.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';
+            row.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-weight:500;display:flex;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><div class="detail-metric"><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(s.turnover)}</div></div><div class="detail-metric"><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(s.totalIncome)}</div></div><div class="detail-metric"><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(s.totalExpense)}</div></div><div class="detail-metric"><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(s.revenue)}</div></div><div class="detail-metric"><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(s.totalSpend)}</div></div><div class="detail-metric"><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(s.margin)}</div></div></div>`;
+            inner.appendChild(row);
+        });
+        const summary = document.createElement('div'); summary.className = 'holder-summary';
+        summary.innerHTML = `<div class="holder-summary-title">📊 Итого по держателю</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><div class="detail-metric"><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(ht.turnover)}</div></div><div class="detail-metric"><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(ht.income)}</div></div><div class="detail-metric"><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(ht.expense)}</div></div><div class="detail-metric"><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(ht.revenue)}</div></div><div class="detail-metric"><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(ht.spend)}</div></div><div class="detail-metric"><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(ht.margin)}</div></div></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(90,200,250,0.2);text-align:center;"><span style="font-size:0.65rem;color:var(--ios-text-secondary);text-transform:uppercase;">Общий баланс</span><div style="font-size:1rem;font-weight:600;margin-top:2px;">${fmt(ht.balance)}</div></div>`;
+        inner.appendChild(summary); wrap.appendChild(inner); block.appendChild(wrap); container.appendChild(block);
+    });
+};
+
+const refreshAdjust = () => { const acc = getAccount(); const h = getHolder(); if (acc && h) { document.getElementById('adjustInfo').innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Счёт: ${h.name} · ${acc.name}`; document.getElementById('adjBalanceHint').textContent = fmt(acc.balance); document.getElementById('adjCapitalHint').textContent = fmt(capital); } };
+const refreshSettings = () => { document.getElementById('setCapital').value = capital; document.getElementById('setIncPct').value = incomePercent; document.getElementById('setExpPct').value = expensePercent; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; };
+
+const doTransaction = (type) => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const amount = parseFloat(document.getElementById('amountInput').value); if (!amount || amount <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } if (type === 'income') acc.balance += amount; else acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type, amount, desc: type === 'income' ? 'Пополнение' : 'Списание', date: new Date().toISOString() }); let revenue = 0; if (type === 'income') revenue = amount * (incomePercent/100); else if (type === 'expense') revenue = amount * (expensePercent/100); if (revenue > 0) { capital += revenue; acc.transactions.push({ type: 'revenue', amount: revenue, desc: 'Капитализация', date: new Date().toISOString() }); } document.getElementById('amountInput').value = ''; haptic('success'); renderAll(); saveServer(); if (revenue > 0) setTimeout(() => showToast('💰', `+${fmt(revenue)} к капиталу`), 300); };
+
+window.openQuickExpense = () => { if (!getAccount()) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('quickExpenseAmount').value = ''; document.getElementById('quickExpenseNote').value = ''; document.getElementById('quickExpenseOverlay').classList.add('active'); document.getElementById('quickExpenseSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('quickExpenseAmount').focus(), 400); };
+window.closeQuickExpense = () => { document.getElementById('quickExpenseOverlay').classList.remove('active'); document.getElementById('quickExpenseSheet').classList.remove('active'); };
+window.submitQuickExpense = () => { const acc = getAccount(); if (!acc) return; const amountStr = document.getElementById('quickExpenseAmount').value; const note = document.getElementById('quickExpenseNote').value.trim(); if (!amountStr || isNaN(parseFloat(amountStr)) || parseFloat(amountStr) <= 0) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } const amount = parseFloat(amountStr); acc.balance -= amount; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'spend', amount, desc: note || 'Трата', date: new Date().toISOString() }); haptic('success'); renderAll(); saveLocal(); saveServer(); closeQuickExpense(); showToast('✅', note ? `Трата "${note}" учтена` : 'Трата учтена'); };
+
+window.openEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } document.getElementById('editBalanceInput').value = ''; document.getElementById('editBalanceComment').value = ''; document.getElementById('editBalanceCurrent').textContent = fmt(acc.balance); document.getElementById('editBalanceOverlay').classList.add('active'); document.getElementById('editBalanceSheet').classList.add('active'); haptic('light'); setTimeout(() => document.getElementById('editBalanceInput').focus(), 400); };
+window.closeEditBalance = () => { document.getElementById('editBalanceOverlay').classList.remove('active'); document.getElementById('editBalanceSheet').classList.remove('active'); };
+window.saveEditBalance = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); closeEditBalance(); return; } const newBalanceStr = document.getElementById('editBalanceInput').value; if (newBalanceStr === '' || isNaN(parseFloat(newBalanceStr))) { showToast('⚠️', 'Введите сумму'); haptic('error'); return; } const newBalance = parseFloat(newBalanceStr); if (newBalance === acc.balance) { showToast('ℹ️', 'Баланс не изменился'); closeEditBalance(); return; } const comment = document.getElementById('editBalanceComment').value.trim(); const diff = newBalance - acc.balance; if (!acc.transactions) acc.transactions = []; acc.transactions.push({ type: 'adjustment', amount: diff, desc: comment || 'Корректировка', date: new Date().toISOString() }); acc.balance = newBalance; haptic('success'); renderAll(); saveServer(); closeEditBalance(); showToast('✅', `Баланс: ${fmt(newBalance)}`); };
+
+const doFixReport = () => { const s = calcAll(); const now = new Date(); const key = now.toISOString().replace(/[:.]/g,'-').slice(0,19); savedReports[key] = { date: now.toISOString(), turnover: s.turnover, income: s.totalIncome, expense: s.totalExpense, spend: s.totalSpend, revenue: s.revenue, margin: s.margin, balance: s.totalBalance, capital, siteBalance: s.siteBalance }; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('✅', 'Отчёт сохранён'); };
+
+function buildDetailedReport(s, now, title) {
+    const dateStr = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    return `═══════════════════════════════\n       ФИНАНСОВЫЙ ОТЧЁТ\n═══════════════════════════════\n\n📋 ${title}\n📅 ${dateStr}, ${timeStr}\n\n💹 Оборот: ${fmt(s.turnover)}\n🟢 Доходы: ${fmt(s.totalIncome)}\n🔴 Расходы: ${fmt(s.totalExpense)}\n🛍️ Траты: ${fmt(s.totalSpend)}\n💰 Выручка: ${fmt(s.revenue)}\n📈 Маржа: ${fmt(s.margin)}\n\n⚪ Баланс: ${fmt(s.totalBalance)}\n💜 Капитал: ${fmt(capital)}\n🔵 На сайте: ${fmt(s.siteBalance)}\n\n═══════════════════════════════\n        Findr • Решения для бизнеса`;
+}
+function buildDetailedReportForSaved(r, now) {
+    const d = new Date(r.date);
+    const dateStr = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    const timeStr = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    const spend = r.spend || 0;
+    const margin = r.margin !== undefined ? r.margin : (r.revenue || 0) - spend;
+    return `═══════════════════════════════\n   ЗАФИКСИРОВАННЫЙ ОТЧЁТ\n═══════════════════════════════\n\n📅 ${dateStr}, ${timeStr}\n\n💹 Оборот: ${fmt(r.turnover)}\n🟢 Доходы: ${fmt(r.income)}\n🔴 Расходы: ${fmt(r.expense)}\n🛍️ Траты: ${fmt(spend)}\n💰 Выручка: ${fmt(r.revenue)}\n📈 Маржа: ${fmt(margin)}\n\n⚪ Баланс: ${fmt(r.balance)}\n💜 Капитал: ${fmt(r.capital)}\n\n═══════════════════════════════\n        Findr • Решения для бизнеса`;
+}
+
+const doShareCurrentReport = () => { const s = calcAll(); const now = new Date(); shareText(buildDetailedReport(s, now, 'Текущий отчёт'), 'Отчёт Findr'); };
+const shareText = async (text, title) => { haptic('light'); if (tg?.switchInlineQuery) { try { tg.switchInlineQuery(text, ['users','groups','channels']); return; } catch(e){} } if (navigator.share) { try { await navigator.share({ title, text }); return; } catch(e) { if (e.name === 'AbortError') return; } } try { await navigator.clipboard.writeText(text); showToast('📋', 'Скопировано'); } catch(e) { prompt('Скопируйте:', text); } };
+window.shareReport = (key) => { const r = savedReports[key]; if (!r) return; shareText(buildDetailedReportForSaved(r, new Date()), 'Отчёт Findr'); };
+window.shareDetail = () => { showToast('📋', 'Детализация скопирована'); };
+window.deleteReport = (key) => { if (!savedReports[key]) return; const c = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm('Удалить?', x => { if (x) c(); }); else if (confirm('Удалить?')) c(); };
+
+const doSaveAdjust = () => { const acc = getAccount(); if (!acc) { showToast('⚠️', 'Выберите счёт'); return; } const bStr = document.getElementById('adjBalance').value; const cStr = document.getElementById('adjCapital').value; const comment = document.getElementById('adjComment').value.trim(); const newB = bStr !== '' ? parseFloat(bStr) : null; const newC = cStr !== '' ? parseFloat(cStr) : null; if (newB === null && newC === null) { showToast('⚠️', 'Введите значение'); return; } if (!acc.transactions) acc.transactions = []; if (newB !== null && newB !== acc.balance) { acc.transactions.push({ type: 'adjustment', amount: newB - acc.balance, desc: comment || 'Корректировка', date: new Date().toISOString() }); acc.balance = newB; } if (newC !== null) capital = newC; haptic('success'); renderAll(); saveServer(); showToast('✅', 'Применено'); document.getElementById('adjBalance').value = ''; document.getElementById('adjCapital').value = ''; document.getElementById('adjComment').value = ''; };
+const doSaveSettings = () => { const newCap = parseFloat(document.getElementById('setCapital').value); const newInc = parseFloat(document.getElementById('setIncPct').value); const newExp = parseFloat(document.getElementById('setExpPct').value); if (isNaN(newCap) || newCap < 0) { showToast('⚠️', 'Ошибка'); return; } capital = newCap; incomePercent = newInc; expensePercent = newExp; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
+
+window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
+window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
+window.closeAccountSheet = () => { document.getElementById('accountOverlay').classList.remove('active'); document.getElementById('accountSheet').classList.remove('active'); isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); };
+window.toggleActionsMenu = () => { document.getElementById('actionsMenu').classList.toggle('active'); haptic('light'); };
+window.createHolder = () => { const name = prompt('Имя держателя:'); if (!name?.trim()) return; const hid = 'h_' + Date.now(); const aid = 'a_' + Date.now(); holders[hid] = { id: hid, name: name.trim(), accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() }; activeHolderId = hid; activeAccountId = aid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); showToast('✅', 'Держатель создан'); };
+window.createAccount = () => { if (!activeHolderId || !holders[activeHolderId]) { showToast('⚠️', 'Выберите держателя'); return; } const name = prompt('Название счёта:'); if (!name?.trim()) return; const h = holders[activeHolderId]; const newAid = 'a_' + Date.now(); h.accounts[newAid] = { id: newAid, name: name.trim(), balance: 0, transactions: [], createdAt: new Date().toISOString() }; activeAccountId = newAid; renderAccountTree(); renderAll(); saveLocal(); saveServer(); document.getElementById('actionsMenu').classList.remove('active'); showToast('✅', 'Счёт создан'); };
+window.toggleEditMode = () => { isEditMode = !isEditMode; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); showToast(isEditMode ? '✏️' : '✅', isEditMode ? 'Режим редактирования' : 'Готово'); };
+window.deleteHolder = (hid) => { const h = holders[hid]; if (!h) return; const hk = Object.keys(holders); if (hk.length <= 1) { showToast('⚠️', 'Нельзя удалить последнего'); return; } const doDel = () => { if (activeHolderId === hid) { const ok = hk.filter(k => k !== hid); activeHolderId = ok[0]; activeAccountId = Object.keys(holders[activeHolderId].accounts || {})[0] || null; } delete holders[hid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm(`Удалить "${h.name}"?`, c => { if (c) doDel(); }); else if (confirm(`Удалить "${h.name}"?`)) doDel(); };
+window.deleteAccount = (hid, aid) => { const h = holders[hid]; if (!h?.accounts[aid]) return; const ak = Object.keys(h.accounts); if (ak.length <= 1) { showToast('⚠️', 'Нельзя удалить последний'); return; } const doDel = () => { if (activeHolderId === hid && activeAccountId === aid) activeAccountId = ak.filter(k => k !== aid)[0]; delete h.accounts[aid]; renderAccountTree(); renderAll(); saveLocal(); saveServer(); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm(`Удалить счёт?`, c => { if (c) doDel(); }); else if (confirm('Удалить счёт?')) doDel(); };
+
+const renderAccountTree = () => { const container = document.getElementById('accountTree'); const search = (document.getElementById('accountSearch').value || '').toLowerCase().trim(); container.innerHTML = ''; const keys = Object.keys(holders); if (!keys.length) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Нет держателей</div></div>'; return; } keys.forEach(hid => { const h = holders[hid]; if (!h) return; const block = document.createElement('div'); block.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div class="edit-row-header"><span class="edit-row-label">Держатель</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="editHolderName_${hid}"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')">🗑️ Удалить</button>`; block.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:6px;'; head.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${h.name}`; block.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts||{}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isActive = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px;'; row.innerHTML = `<input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="editAccountName_${a.id}"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')">🗑️ Удалить</button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isActive?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); showToast('✅', a.name); }; row.innerHTML = `<span style="${isActive?'color:white;font-weight:600;':''}display:flex;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>${a.name}</span><span style="${isActive?'color:rgba(255,255,255,0.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`; accs.appendChild(row); } }); block.appendChild(accs); if (isEditMode) { const ea = document.createElement('div'); ea.className = 'edit-actions'; ea.innerHTML = `<button class="btn btn-primary" onclick="saveHolderEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕ Отмена</button>`; block.appendChild(ea); } container.appendChild(block); }); };
+window.saveHolderEdits = (hid) => { const h = holders[hid]; if (!h) return; const ni = document.getElementById(`editHolderName_${hid}`); if (ni?.value.trim()) h.name = ni.value.trim(); Object.values(h.accounts||{}).forEach(a => { if (!a) return; const ai = document.getElementById(`editAccountName_${a.id}`); if (ai?.value.trim()) a.name = ai.value.trim(); }); isEditMode = false; renderAccountTree(); renderAll(); saveLocal(); saveServer(); showToast('✅', 'Обновлено'); };
+window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); showToast('ℹ️', 'Отменено'); };
+
+window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveServer(); });
+window.addEventListener('offline', () => { isOnline = false; updateSync('offline'); });
+document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') doTransaction('expense'); });
+window.addEventListener('beforeunload', () => saveLocal());
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
+let resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => updateMiniRing(), 100); });
+
+// INIT
+applyTheme();
+initAnimatedElements();
+initFB();
+loadServer();
+
+setTimeout(() => { init3DTilt(); initMagneticButtons(); initPullToRefresh(); }, 500);
 </script>
 </body>
 </html>
