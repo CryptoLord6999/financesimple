@@ -270,14 +270,12 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .confetti { position: absolute; width: 10px; height: 10px; animation: confettiFall 3s ease-out forwards; }
 @keyframes confettiFall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-/* === ROLE BADGES === */
 .role-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
 .role-owner { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid rgba(255,215,0,0.3); }
 .role-admin { background: rgba(0,122,255,0.15); color: var(--ios-blue); border: 1px solid rgba(0,122,255,0.3); }
 .role-accountant { background: rgba(52,199,89,0.15); color: var(--ios-green); border: 1px solid rgba(52,199,89,0.3); }
 .role-viewer { background: rgba(142,142,147,0.15); color: var(--ios-gray); border: 1px solid rgba(142,142,147,0.3); }
 
-/* === TEAM SECTION === */
 .team-section { background: linear-gradient(135deg, rgba(0,122,255,0.06) 0%, rgba(175,82,222,0.06) 100%); border: 1px solid rgba(0,122,255,0.15); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; }
 .team-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 .team-member { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 8px; border: 1px solid var(--ios-separator); display: flex; align-items: center; gap: 12px; transition: transform 0.3s var(--spring-bounce); }
@@ -294,19 +292,16 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .team-btn { width: 34px; height: 34px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); }
 .team-btn:active { transform: scale(0.85); }
 .team-btn.edit-btn { background: rgba(0,122,255,0.12); color: var(--ios-blue); }
-.team-btn.remove-btn { background: rgba(255,59,48,0.12); color: var(--ios-red); }
 
-/* === INVITE SECTION === */
 .invite-section { background: rgba(120,120,128,0.06); border-radius: var(--radius-ios-sm); padding: 14px; margin-top: 12px; }
 .invite-role-selector { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
 .invite-role-btn { padding: 8px 14px; border-radius: 100px; border: 2px solid var(--ios-separator); background: transparent; color: var(--ios-text-secondary); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); display: flex; align-items: center; gap: 4px; }
 .invite-role-btn.selected { border-color: var(--ios-blue); background: rgba(0,122,255,0.12); color: var(--ios-blue); }
 .invite-role-btn:active { transform: scale(0.95); }
 .invite-link-box { background: var(--ios-card); border-radius: 10px; padding: 10px 12px; margin-top: 10px; display: none; border: 1px solid var(--ios-separator); }
-.invite-link-box.active { display: block; animation: slideUp 0.3s var(--spring-bounce); }
+.invite-link-box.active { display: block; }
 .invite-link-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 0.75rem; font-family: monospace; outline: none; word-break: break-all; }
 
-/* === ROLE CHANGE SHEET === */
 .role-option { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-ios-sm); border: 2px solid var(--ios-separator); margin-bottom: 8px; cursor: pointer; transition: all 0.3s var(--spring-bounce); background: var(--ios-card); }
 .role-option:active { transform: scale(0.98); }
 .role-option.selected { border-color: var(--ios-blue); background: rgba(0,122,255,0.08); }
@@ -317,7 +312,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .role-option-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--ios-separator); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s var(--spring-bounce); }
 .role-option.selected .role-option-check { background: var(--ios-blue); border-color: var(--ios-blue); }
 
-/* === CURRENT ROLE INDICATOR === */
 .my-role-badge { position: fixed; top: max(8px, env(safe-area-inset-top)); right: 12px; z-index: 999; padding: 4px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 600; backdrop-filter: blur(20px); display: none; }
 .my-role-badge.visible { display: flex; align-items: center; gap: 4px; animation: toastIn 0.5s var(--spring-bounce); }
 
@@ -329,7 +323,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="mesh-gradient-bg"><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div></div>
 <div class="noise-overlay"></div>
 
-<!-- MY ROLE INDICATOR -->
 <div class="my-role-badge" id="myRoleBadge"></div>
 
 <div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
@@ -337,7 +330,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 
 <div id="app">
 <div class="pages">
-<!-- HOME PAGE -->
 <div class="page active" id="page-home"><div class="page-content">
 <div class="pull-refresh" id="pullRefresh"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div>
 <div class="account-chip" onclick="openAccountSheet()"><span class="account-chip-name" id="accountName"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Выберите счёт</span><svg class="account-chip-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
@@ -365,7 +357,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="tx-list" id="txList"><div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div></div>
 </div></div>
 
-<!-- REPORT PAGE -->
 <div class="page" id="page-report"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><rect x="3" y="3" width="18" height="18" rx="2" stroke="var(--ios-blue)" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="var(--ios-blue)" stroke-width="2" stroke-linecap="round"/></svg>Отчёт</div>
 <div class="summary-block"><div class="summary-title">Сводка по всем счетам</div><div class="summary-grid">
@@ -381,11 +372,10 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 </div></div>
 <button class="btn btn-primary mb-12" id="fixReportBtn" onclick="doFixReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L12 14"/><path d="M9 5L12 2L15 5"/><circle cx="12" cy="18" r="2" fill="currentColor"/></svg>Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
-<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;display:none;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Последний: <span id="lastFixedDate"></span></div>
+<div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Последний: <span id="lastFixedDate"></span></div>
 <div class="section-title">Зафиксированные отчёты</div><div id="reportsList"></div>
 </div></div>
 
-<!-- GOAL PAGE -->
 <div class="page" id="page-goal"><div class="page-content">
 <div style="text-align:center;margin-bottom:20px;"><div class="section-title" style="font-size:1.1rem;margin-bottom:8px;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><circle cx="12" cy="12" r="10" stroke="var(--ios-orange)" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="var(--ios-orange)" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="var(--ios-orange)"/></svg>Цель по выручке</div></div>
 <div class="goal-ring-wrapper"><svg viewBox="0 0 200 200"><circle class="goal-ring-bg" cx="100" cy="100" r="85"/><circle class="goal-ring-fill" id="goalRingFill" cx="100" cy="100" r="85" pathLength="1"/></svg><div class="goal-ring-center"><div><span class="goal-percent" id="goalPercent">0</span><span class="goal-percent-sign">%</span></div><div class="goal-subtitle" id="goalSubtitle">Цель не задана</div></div></div>
@@ -400,7 +390,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="goal-history-title">История целей</div><div id="goalHistory"></div>
 </div></div>
 
-<!-- DETAIL PAGE -->
 <div class="page" id="page-detail"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><path d="M3 3V21H21" stroke="var(--ios-blue)" stroke-width="2" stroke-linecap="round"/><path d="M7 14L11 10L15 14L21 8" stroke="var(--ios-blue)" stroke-width="2" stroke-linecap="round"/></svg>Детализация</div>
 <div class="summary-block"><div class="summary-title">Общие показатели</div><div class="summary-grid">
@@ -416,11 +405,9 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
 </div></div>
 
-<!-- SETTINGS PAGE -->
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><circle cx="12" cy="12" r="3" stroke="var(--ios-gray)" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="var(--ios-gray)" stroke-width="2" stroke-linecap="round"/></svg>Настройки</div>
 
-<!-- TEAM ACCESS SECTION -->
 <div class="team-section" id="teamSection">
     <div class="team-title">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ios-blue)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -428,7 +415,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
     </div>
     <div id="teamMembersList"></div>
     
-    <!-- INVITE SECTION (only for owner) -->
     <div id="inviteSection" style="display:none;">
         <button class="btn btn-primary" onclick="showInviteSection()" style="margin-top:12px;background:var(--ios-blue);">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
@@ -476,7 +462,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
 </nav></div>
 
-<!-- ACCOUNT SHEET -->
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet"><div class="sheet-handle"></div><div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div>
 <div class="actions-menu" id="actionsMenu">
@@ -486,27 +471,23 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 </div>
 <input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);"><div id="accountTree"></div><button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button></div>
 
-<!-- EDIT BALANCE SHEET -->
 <div class="sheet-overlay" id="editBalanceOverlay" onclick="closeEditBalance()"></div>
 <div class="bottom-sheet" id="editBalanceSheet"><div class="sheet-handle"></div><div class="sheet-title">Редактировать баланс</div>
 <div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="editBalanceInput" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="editBalanceCurrent">0 ₽</span></div></div>
 <div class="setting-group"><div class="setting-label">Комментарий</div><input type="text" id="editBalanceComment" class="setting-input" placeholder="Инвентаризация" style="text-align:left;font-size:0.9rem;"></div>
 <button class="btn btn-primary" onclick="saveEditBalance()" style="margin-top:8px;">Сохранить</button><button class="btn btn-secondary" onclick="closeEditBalance()" style="margin-top:8px;">Отмена</button></div>
 
-<!-- QUICK EXPENSE SHEET -->
 <div class="sheet-overlay" id="quickExpenseOverlay" onclick="closeQuickExpense()"></div>
 <div class="bottom-sheet" id="quickExpenseSheet"><div class="sheet-handle"></div><div class="sheet-title">Быстрая трата</div>
 <div class="setting-group"><div class="setting-label">Сумма (₽)</div><input type="number" id="quickExpenseAmount" class="setting-input" placeholder="0" step="0.01"></div>
 <div class="setting-group"><div class="setting-label">Примечание</div><input type="text" id="quickExpenseNote" class="setting-input" placeholder="Обед, такси" style="text-align:left;font-size:0.9rem;"></div>
 <button class="btn btn-primary" onclick="submitQuickExpense()" style="margin-top:8px;background:var(--ios-red);">Вычесть</button><button class="btn btn-secondary" onclick="closeQuickExpense()" style="margin-top:8px;">Отмена</button></div>
 
-<!-- SET GOAL SHEET -->
 <div class="sheet-overlay" id="setGoalOverlay" onclick="closeSetGoal()"></div>
 <div class="bottom-sheet" id="setGoalSheet"><div class="sheet-handle"></div><div class="sheet-title">Цель по выручке</div>
 <div class="setting-group"><div class="setting-label">Целевая выручка (₽)</div><input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0"><div class="setting-hint">Текущая: <span id="goalCurrentHint">0 ₽</span></div></div>
 <button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">Установить</button><button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button></div>
 
-<!-- EDIT PERMISSIONS SHEET (УЛУЧШЕННАЯ) -->
 <div class="sheet-overlay" id="permOverlay" onclick="closePermSheet()"></div>
 <div class="bottom-sheet" id="permSheet">
     <div class="sheet-handle"></div>
@@ -514,46 +495,27 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Права доступа
     </div>
-    
-    <!-- Member info -->
     <div id="permMemberInfo" style="background:var(--ios-card);border-radius:var(--radius-ios-sm);padding:14px;margin-bottom:16px;border:1px solid var(--ios-separator);display:flex;align-items:center;gap:12px;"></div>
-    
-    <!-- Name edit -->
     <div class="setting-group" style="margin-bottom:12px;">
         <div class="setting-label">Имя партнёра</div>
         <input type="text" id="permMemberName" class="setting-input" placeholder="Введите имя" style="text-align:left;font-size:0.95rem;">
     </div>
-    
-    <!-- Role selection -->
     <div style="font-size:0.75rem;font-weight:600;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Выберите роль:</div>
-    
     <div class="role-option" data-role="admin" onclick="selectPermRole('admin')">
         <div class="role-option-icon" style="background:linear-gradient(135deg,var(--ios-blue),var(--ios-teal));">🛡️</div>
-        <div class="role-option-info">
-            <div class="role-option-name">Админ</div>
-            <div class="role-option-desc">Полный доступ кроме управления командой</div>
-        </div>
+        <div class="role-option-info"><div class="role-option-name">Админ</div><div class="role-option-desc">Полный доступ кроме управления командой</div></div>
         <div class="role-option-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
-    
     <div class="role-option" data-role="accountant" onclick="selectPermRole('accountant')">
         <div class="role-option-icon" style="background:linear-gradient(135deg,var(--ios-green),#30D158);">📊</div>
-        <div class="role-option-info">
-            <div class="role-option-name">Бухгалтер</div>
-            <div class="role-option-desc">Добавление транзакций и просмотр данных</div>
-        </div>
+        <div class="role-option-info"><div class="role-option-name">Бухгалтер</div><div class="role-option-desc">Добавление транзакций и просмотр данных</div></div>
         <div class="role-option-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
-    
     <div class="role-option" data-role="viewer" onclick="selectPermRole('viewer')">
         <div class="role-option-icon" style="background:linear-gradient(135deg,var(--ios-gray),#AEAEB2);">👁️</div>
-        <div class="role-option-info">
-            <div class="role-option-name">Наблюдатель</div>
-            <div class="role-option-desc">Только просмотр без возможности изменять</div>
-        </div>
+        <div class="role-option-info"><div class="role-option-name">Наблюдатель</div><div class="role-option-desc">Только просмотр без возможности изменять</div></div>
         <div class="role-option-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
-    
     <div style="display:flex;gap:8px;margin-top:16px;">
         <button class="btn btn-primary" onclick="savePermissions()" style="flex:2;background:var(--ios-blue);">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -571,7 +533,7 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <script>
 // ===== CORE =====
 const tg = window.Telegram?.WebApp;
-if(tg){try{tg.ready();tg.expand();applyTheme();tg.onEvent('themeChanged',applyTheme);}catch(e){}}
+if(tg){try{tg.ready();tg.expand();}catch(e){}}
 
 function isDarkColor(hex){if(!hex)return true;hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(0.299*r+0.587*g+0.114*b)/255<0.5;}
 
@@ -585,6 +547,7 @@ function applyTheme(){
     updateMeshColors();
 }
 window.setTheme=(m)=>{localStorage.setItem('fl_theme',m);applyTheme();haptic('light');};
+if(tg){try{applyTheme();tg.onEvent('themeChanged',applyTheme);}catch(e){}}
 
 function updateMeshColors(){const blobs=document.querySelectorAll('.mesh-blob');const s=calcAll&&typeof calcAll==='function'?calcAll():{margin:0};if(s.margin>=0){blobs[0].style.background='var(--ios-blue)';blobs[1].style.background='var(--ios-teal)';blobs[2].style.background='var(--ios-green)';blobs[3].style.background='var(--ios-purple)';}else{blobs[0].style.background='var(--ios-red)';blobs[1].style.background='var(--ios-orange)';blobs[2].style.background='var(--ios-purple)';blobs[3].style.background='var(--ios-red)';}}
 
@@ -663,8 +626,6 @@ function updateUIByRole() {
     document.getElementById('saveSettingsBtn').style.display = settings ? '' : 'none';
     document.getElementById('setIncPct').disabled = !settings;
     document.getElementById('setExpPct').disabled = !settings;
-    
-    // Invite section only for owner
     document.getElementById('inviteSection').style.display = canManageTeam() ? '' : 'none';
     
     updateMyRoleBadge();
@@ -693,7 +654,7 @@ function generateInviteLink() {
     if (!canManageTeam()) { showToast('⚠️', 'Только владелец может приглашать'); return; }
     
     const token = Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
-    const baseUrl = window.location.href.split('?')[0];
+    const baseUrl = window.location.href.split('?')[0].split('#')[0];
     const inviteLink = `${baseUrl}?invite=${token}&owner=${UID}&role=${selectedInviteRole}`;
     
     if (useFirebase) {
@@ -702,14 +663,17 @@ function generateInviteLink() {
             role: selectedInviteRole,
             createdAt: new Date().toISOString(),
             used: false
+        }).then(() => {
+            document.getElementById('inviteLinkInput').value = inviteLink;
+            document.getElementById('inviteRoleLabel').textContent = ROLE_INFO[selectedInviteRole].name;
+            document.getElementById('inviteLinkBox').classList.add('active');
+            haptic('success');
+            showToast('🔗', 'Ссылка создана');
+        }).catch(err => {
+            showToast('⚠️', 'Ошибка создания ссылки');
+            console.error(err);
         });
     }
-    
-    document.getElementById('inviteLinkInput').value = inviteLink;
-    document.getElementById('inviteRoleLabel').textContent = ROLE_INFO[selectedInviteRole].name;
-    document.getElementById('inviteLinkBox').classList.add('active');
-    haptic('success');
-    showToast('🔗', 'Ссылка создана');
 }
 
 function copyInviteLink() {
@@ -725,45 +689,117 @@ function shareInviteLink() {
     shareText(`🤝 Приглашение в Findr\n\nРоль: ${role}\n${link}`, 'Приглашение Findr');
 }
 
+// ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ ПРОВЕРКИ ПРИГЛАШЕНИЯ =====
 function checkInviteAccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const inviteToken = urlParams.get('invite');
     const ownerUid = urlParams.get('owner');
     const invitedRole = urlParams.get('role') || 'viewer';
     
-    if (!inviteToken || !ownerUid) return false;
+    if (!inviteToken || !ownerUid) {
+        return false; // Нет приглашения — обычный режим
+    }
     
-    if (useFirebase) {
-        firebase.database().ref(`invites/${inviteToken}`).once('value').then(snap => {
-            const invite = snap.val();
-            if (invite && !invite.used && invite.ownerUid === ownerUid) {
-                firebase.database().ref(`invites/${inviteToken}`).update({ used: true, usedBy: UID, usedAt: new Date().toISOString() });
-                
-                const userName = tg?.initDataUnsafe?.user?.first_name || 'Партнёр';
-                firebase.database().ref(`users/${ownerUid}/team/${UID}`).set({
-                    role: invite.role || invitedRole,
-                    name: userName,
-                    addedAt: new Date().toISOString(),
-                    addedBy: ownerUid
-                });
-                
-                localStorage.setItem('fl_viewing_owner', ownerUid);
-                showToast('✅', `Доступ получен! Роль: ${ROLE_INFO[invite.role || invitedRole].name}`);
-                setTimeout(() => { window.location.href = window.location.href.split('?')[0]; }, 1500);
-            } else {
-                showAccessDenied('Ссылка недействительна или уже использована');
-            }
-        }).catch(() => showAccessDenied('Ошибка проверки'));
+    // СРАЗУ сохраняем viewing_owner, чтобы Firebase работал правильно
+    localStorage.setItem('fl_viewing_owner', ownerUid);
+    
+    if (!useFirebase) {
+        showToast('⚠️', 'Firebase не инициализирован');
         return true;
     }
-    return false;
+    
+    // Проверяем invite в Firebase
+    firebase.database().ref(`invites/${inviteToken}`).once('value').then(snap => {
+        const invite = snap.val();
+        
+        if (!invite) {
+            showToast('⚠️', 'Ссылка недействительна');
+            cleanUrlAndReload();
+            return;
+        }
+        
+        if (invite.ownerUid !== ownerUid) {
+            showToast('⚠️', 'Неверная ссылка');
+            cleanUrlAndReload();
+            return;
+        }
+        
+        // Если invite уже использован ТЕКУЩИМ пользователем — просто продолжаем
+        if (invite.used && invite.usedBy === UID) {
+            showToast('✅', `Добро пожаловать! Роль: ${ROLE_INFO[invite.role || invitedRole].name}`);
+            cleanUrlAndReload();
+            return;
+        }
+        
+        // Если invite уже использован ДРУГИМ пользователем
+        if (invite.used) {
+            showToast('⚠️', 'Ссылка уже использована');
+            cleanUrlAndReload();
+            return;
+        }
+        
+        // Новый invite — принимаем его
+        const userName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Партнёр';
+        
+        // Обновляем invite как использованный
+        const inviteUpdates = {
+            used: true,
+            usedBy: UID,
+            usedAt: new Date().toISOString()
+        };
+        
+        // Добавляем пользователя в команду владельца
+        const teamData = {
+            role: invite.role || invitedRole,
+            name: userName,
+            addedAt: new Date().toISOString(),
+            addedBy: ownerUid,
+            uid: UID
+        };
+        
+        // Выполняем оба обновления
+        Promise.all([
+            firebase.database().ref(`invites/${inviteToken}`).update(inviteUpdates),
+            firebase.database().ref(`users/${ownerUid}/team/${UID}`).set(teamData)
+        ]).then(() => {
+            showToast('✅', `Доступ получен! Роль: ${ROLE_INFO[invite.role || invitedRole].icon} ${ROLE_INFO[invite.role || invitedRole].name}`);
+            haptic('success');
+            cleanUrlAndReload();
+        }).catch(err => {
+            console.error('Invite error:', err);
+            showToast('⚠️', 'Ошибка принятия приглашения');
+            cleanUrlAndReload();
+        });
+    }).catch(err => {
+        console.error('Invite check error:', err);
+        showToast('⚠️', 'Ошибка проверки ссылки');
+        cleanUrlAndReload();
+    });
+    
+    return true;
 }
 
-function showAccessDenied(msg) {
-    const o = document.createElement('div');
-    o.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;';
-    o.innerHTML = `<div style="font-size:4rem;margin-bottom:20px;">🚫</div><div style="font-size:1.5rem;font-weight:700;margin-bottom:12px;">Доступ запрещён</div><div style="font-size:0.9rem;color:var(--ios-text-secondary);margin-bottom:24px;">${msg}</div><button class="btn btn-primary" onclick="this.parentElement.remove()" style="max-width:200px;">Понятно</button>`;
-    document.body.appendChild(o);
+// Очищаем URL от параметров приглашения и перезагружаем
+function cleanUrlAndReload() {
+    // Убираем query params из URL
+    const cleanUrl = window.location.href.split('?')[0].split('#')[0];
+    
+    // Используем replaceState чтобы не добавлять запись в историю
+    try {
+        window.history.replaceState({}, '', cleanUrl);
+    } catch(e) {
+        // Fallback — полная перезагрузка
+        setTimeout(() => {
+            window.location.href = cleanUrl;
+        }, 1500);
+        return;
+    }
+    
+    // Перезагружаем данные после небольшой задержки
+    setTimeout(() => {
+        loadServer();
+        loadTeamMembers();
+    }, 500);
 }
 
 // ===== TEAM MANAGEMENT =====
@@ -773,9 +809,21 @@ function loadTeamMembers() {
     
     firebase.database().ref(`users/${viewingOwner}/team`).on('value', snap => {
         teamMembers = snap.val() || {};
-        currentUserRole = (viewingOwner === UID) ? 'owner' : (teamMembers[UID]?.role || 'viewer');
+        
+        // Определяем роль текущего пользователя
+        if (viewingOwner === UID) {
+            currentUserRole = 'owner';
+        } else if (teamMembers[UID]) {
+            currentUserRole = teamMembers[UID].role || 'viewer';
+        } else {
+            currentUserRole = 'viewer';
+        }
+        
         renderTeamMembers();
         updateUIByRole();
+    }, err => {
+        console.error('loadTeamMembers error:', err);
+        showToast('⚠️', 'Ошибка загрузки команды');
     });
 }
 
@@ -785,34 +833,38 @@ function renderTeamMembers() {
     
     let html = '';
     
-    // Owner
-    const ownerName = tg?.initDataUnsafe?.user?.first_name || 'Вы';
+    // Владелец
+    const ownerName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Вы';
+    const viewingOwner = localStorage.getItem('fl_viewing_owner') || UID;
+    const isOwner = (viewingOwner === UID);
+    
     html += `<div class="team-member">
         <div class="team-avatar owner-av">👑</div>
         <div class="team-info">
-            <div class="team-name">${ownerName} <span style="font-size:0.7rem;color:var(--ios-text-secondary);">(вы)</span></div>
+            <div class="team-name">${ownerName} ${isOwner ? '<span style="font-size:0.7rem;color:var(--ios-text-secondary);">(вы)</span>' : '<span style="font-size:0.7rem;color:var(--ios-text-secondary);">(владелец)</span>'}</div>
             <div class="team-meta"><span class="role-badge role-owner">👑 Владелец</span></div>
         </div>
     </div>`;
     
-    // Members
+    // Участники команды
     Object.entries(teamMembers).forEach(([uid, data]) => {
         const info = ROLE_INFO[data.role] || ROLE_INFO.viewer;
         const name = data.name || 'Партнёр';
         const initial = name.charAt(0).toUpperCase();
         const avClass = data.role + '-av';
         const addedDate = data.addedAt ? new Date(data.addedAt).toLocaleDateString('ru-RU') : '';
+        const isYou = (uid === UID);
         
         html += `<div class="team-member">
             <div class="team-avatar ${avClass}">${initial}</div>
             <div class="team-info">
-                <div class="team-name">${name}</div>
+                <div class="team-name">${name} ${isYou ? '<span style="font-size:0.7rem;color:var(--ios-text-secondary);">(вы)</span>' : ''}</div>
                 <div class="team-meta">
                     <span class="role-badge ${info.class}">${info.icon} ${info.name}</span>
                     ${addedDate ? `<span style="margin-left:4px;">· ${addedDate}</span>` : ''}
                 </div>
             </div>
-            ${canManageTeam() ? `<div class="team-actions">
+            ${canManageTeam() && !isYou ? `<div class="team-actions">
                 <button class="team-btn edit-btn" onclick="openPermSheet('${uid}')" title="Изменить права">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </button>
@@ -850,7 +902,6 @@ function openPermSheet(uid) {
     
     document.getElementById('permMemberName').value = member.name || '';
     
-    // Highlight current role
     document.querySelectorAll('.role-option').forEach(opt => {
         opt.classList.toggle('selected', opt.dataset.role === selectedPermRole);
     });
@@ -881,9 +932,7 @@ function savePermissions() {
     const viewingOwner = localStorage.getItem('fl_viewing_owner') || UID;
     const newName = document.getElementById('permMemberName').value.trim();
     
-    const updates = {
-        role: selectedPermRole
-    };
+    const updates = { role: selectedPermRole };
     if (newName) updates.name = newName;
     
     firebase.database().ref(`users/${viewingOwner}/team/${currentPermUid}`).update(updates)
@@ -893,7 +942,8 @@ function savePermissions() {
             showToast('✅', `Права изменены: ${info.icon} ${info.name}`);
             closePermSheet();
         })
-        .catch(() => {
+        .catch(err => {
+            console.error(err);
             haptic('error');
             showToast('⚠️', 'Ошибка сохранения');
         });
@@ -910,7 +960,8 @@ function removeMemberFromPerm() {
                 showToast('🗑️', 'Участник удалён');
                 closePermSheet();
             })
-            .catch(() => {
+            .catch(err => {
+                console.error(err);
                 haptic('error');
                 showToast('⚠️', 'Ошибка удаления');
             });
@@ -924,13 +975,140 @@ function removeMemberFromPerm() {
 let holders={},activeHolderId=null,activeAccountId=null,capital=0,savedReports={},incomePercent=7,expensePercent=2.5,detailPeriod='today',isOnline=navigator.onLine,isEditMode=false,expandedHolders={},goalTarget=0,goalHistory=[];
 const saveLocal=()=>{try{localStorage.setItem('fl_holders',JSON.stringify(holders));localStorage.setItem('fl_ah',activeHolderId);localStorage.setItem('fl_aa',activeAccountId);localStorage.setItem('fl_cap',capital.toString());localStorage.setItem('fl_reports',JSON.stringify(savedReports));localStorage.setItem('fl_ip',incomePercent.toString());localStorage.setItem('fl_ep',expensePercent.toString());localStorage.setItem('fl_goal',goalTarget.toString());localStorage.setItem('fl_goal_history',JSON.stringify(goalHistory));}catch(e){}};
 const loadLocal=()=>{try{const h=localStorage.getItem('fl_holders');if(h){holders=JSON.parse(h);activeHolderId=localStorage.getItem('fl_ah');activeAccountId=localStorage.getItem('fl_aa');if(!activeHolderId||!holders[activeHolderId])activeHolderId=Object.keys(holders)[0];const hh=holders[activeHolderId];if(hh&&(!activeAccountId||!hh.accounts[activeAccountId]))activeAccountId=Object.keys(hh.accounts||{})[0]||null;}else{const hid='h_'+Date.now(),aid='a_'+Date.now();holders={[hid]:{id:hid,name:'Основной',accounts:{[aid]:{id:aid,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()}};activeHolderId=hid;activeAccountId=aid;}savedReports=JSON.parse(localStorage.getItem('fl_reports')||'{}');incomePercent=parseFloat(localStorage.getItem('fl_ip'))||7;expensePercent=parseFloat(localStorage.getItem('fl_ep'))||2.5;capital=parseFloat(localStorage.getItem('fl_cap'))||0;goalTarget=parseFloat(localStorage.getItem('fl_goal'))||0;goalHistory=JSON.parse(localStorage.getItem('fl_goal_history')||'[]');}catch(e){}};
+
 let useFirebase=false,userRef=null,saveTimeout=null,isSyncing=false;
-const getUserId=()=>{const tid=tg?.initDataUnsafe?.user?.id;if(tid)return'tg_'+tid;let id=localStorage.getItem('fl_uid');if(!id){id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);localStorage.setItem('fl_uid',id);}return id;};
+
+const getUserId=()=>{
+    const tid=tg?.initDataUnsafe?.user?.id;
+    if(tid)return'tg_'+tid;
+    let id=localStorage.getItem('fl_uid');
+    if(!id){id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);localStorage.setItem('fl_uid',id);}
+    return id;
+};
 const UID=getUserId();
-const initFB=()=>{try{const cfg={apiKey:"AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",authDomain:"financesimple-7c73a.firebaseapp.com",databaseURL:"https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",projectId:"financesimple-7c73a",storageBucket:"financesimple-7c73a.firebasestorage.app",messagingSenderId:"1072812838336",appId:"1:1072812838336:web:262ce9e7cc79e93c514c25"};if(!firebase.apps.length)firebase.initializeApp(cfg);userRef=firebase.database().ref(`users/${UID}`);useFirebase=true;}catch(e){useFirebase=false;}};
-const saveServer=()=>{if(!useFirebase||!isOnline){updateSync('local');return;}if(saveTimeout)clearTimeout(saveTimeout);saveTimeout=setTimeout(async()=>{if(isSyncing)return;isSyncing=true;updateSync('syncing');try{const s=calcAll();const vo=localStorage.getItem('fl_viewing_owner')||UID;await firebase.database().ref(`users/${vo}`).update({holders,activeHolderId,activeAccountId,capital,savedReports,totalIncome:s.totalIncome,totalExpense:s.totalExpense,totalSpend:s.totalSpend,revenue:s.revenue,margin:s.margin,incomePercent,expensePercent,goalTarget,goalHistory,lastUpdated:new Date().toISOString()});updateSync('synced');}catch(e){updateSync('error');}finally{isSyncing=false;}},500);};
-const loadServer=()=>{if(!useFirebase){loadLocal();renderAll();updateSync('local');return;}showSkeletons();updateSync('syncing');const vo=localStorage.getItem('fl_viewing_owner')||UID;firebase.database().ref(`users/${vo}`).once('value').then(snap=>{const d=snap.val();if(d?.holders){holders=d.holders;activeHolderId=d.activeHolderId||Object.keys(holders)[0];activeAccountId=d.activeAccountId;capital=d.capital||0;savedReports=d.savedReports||{};incomePercent=d.incomePercent||7;expensePercent=d.expensePercent||2.5;goalTarget=d.goalTarget||0;goalHistory=d.goalHistory||[];const hh=holders[activeHolderId];if(hh&&(!activeAccountId||!hh.accounts[activeAccountId]))activeAccountId=Object.keys(hh.accounts||{})[0]||null;renderAll();updateSync('synced');}else{loadLocal();renderAll();if(isOnline)saveServer();}}).catch(()=>{loadLocal();renderAll();updateSync('offline');});};
+
+// ===== ИСПРАВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ FIREBASE =====
+const initFB=()=>{
+    try{
+        const cfg={
+            apiKey:"AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
+            authDomain:"financesimple-7c73a.firebaseapp.com",
+            databaseURL:"https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId:"financesimple-7c73a",
+            storageBucket:"financesimple-7c73a.firebasestorage.app",
+            messagingSenderId:"1072812838336",
+            appId:"1:1072812838336:web:262ce9e7cc79e93c514c25"
+        };
+        if(!firebase.apps.length)firebase.initializeApp(cfg);
+        
+        // ВАЖНО: используем viewing_owner, а не UID
+        const viewingOwner = localStorage.getItem('fl_viewing_owner') || UID;
+        userRef = firebase.database().ref(`users/${viewingOwner}`);
+        useFirebase = true;
+        console.log('Firebase init OK. viewingOwner:', viewingOwner, 'UID:', UID);
+    }catch(e){
+        console.error('Firebase init error:', e);
+        useFirebase=false;
+    }
+};
+
+// ===== ИСПРАВЛЕННЫЙ SAVE SERVER =====
+const saveServer=()=>{
+    if(!useFirebase||!isOnline){updateSync('local');return;}
+    if(saveTimeout)clearTimeout(saveTimeout);
+    saveTimeout=setTimeout(async()=>{
+        if(isSyncing)return;
+        isSyncing=true;
+        updateSync('syncing');
+        try{
+            const s=calcAll();
+            // ВАЖНО: пишем в узел владельца, а не партнёра
+            const viewingOwner = localStorage.getItem('fl_viewing_owner') || UID;
+            const ref = firebase.database().ref(`users/${viewingOwner}`);
+            
+            await ref.update({
+                holders,
+                activeHolderId,
+                activeAccountId,
+                capital,
+                savedReports,
+                totalIncome:s.totalIncome,
+                totalExpense:s.totalExpense,
+                totalSpend:s.totalSpend,
+                revenue:s.revenue,
+                margin:s.margin,
+                incomePercent,
+                expensePercent,
+                goalTarget,
+                goalHistory,
+                lastUpdated:new Date().toISOString(),
+                lastUpdatedBy: UID
+            });
+            updateSync('synced');
+        }catch(e){
+            console.error('saveServer error:', e);
+            updateSync('error');
+        }finally{
+            isSyncing=false;
+        }
+    },500);
+};
+
+// ===== ИСПРАВЛЕННЫЙ LOAD SERVER =====
+const loadServer=()=>{
+    if(!useFirebase){
+        loadLocal();
+        renderAll();
+        updateSync('local');
+        return;
+    }
+    
+    showSkeletons();
+    updateSync('syncing');
+    
+    // ВАЖНО: читаем из узла владельца
+    const viewingOwner = localStorage.getItem('fl_viewing_owner') || UID;
+    const ref = firebase.database().ref(`users/${viewingOwner}`);
+    
+    ref.once('value').then(snap=>{
+        const d=snap.val();
+        console.log('loadServer data:', d ? 'OK' : 'EMPTY', 'viewingOwner:', viewingOwner);
+        
+        if(d?.holders){
+            holders=d.holders;
+            activeHolderId=d.activeHolderId||Object.keys(holders)[0];
+            activeAccountId=d.activeAccountId;
+            capital=d.capital||0;
+            savedReports=d.savedReports||{};
+            incomePercent=d.incomePercent||7;
+            expensePercent=d.expensePercent||2.5;
+            goalTarget=d.goalTarget||0;
+            goalHistory=d.goalHistory||[];
+            
+            const hh=holders[activeHolderId];
+            if(hh&&(!activeAccountId||!hh.accounts[activeAccountId])){
+                activeAccountId=Object.keys(hh.accounts||{})[0]||null;
+            }
+            
+            renderAll();
+            updateSync('synced');
+        }else{
+            // Нет данных — загружаем локальные и сохраняем
+            loadLocal();
+            renderAll();
+            if(isOnline) saveServer();
+        }
+    }).catch(err=>{
+        console.error('loadServer error:', err);
+        loadLocal();
+        renderAll();
+        updateSync('offline');
+        showToast('⚠️', 'Ошибка загрузки данных');
+    });
+};
+
 const updateSync=(s)=>{const el=document.getElementById('syncBadge'),m={syncing:{t:'☁️ синхронизация...',c:'syncing'},synced:{t:'☁️ сохранено',c:'synced'},offline:{t:'💾 локально',c:''},error:{t:'⚠️ ошибка',c:''},local:{t:'💾 локально',c:''}}[s]||{t:'...',c:''};el.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg> ${m.t}`;el.className='sync-badge '+m.c;};
+
 const getHolder=()=>holders[activeHolderId];
 const getAccount=()=>{const h=getHolder();return h?.accounts?.[activeAccountId]||null;};
 const filterTx=(txs,p)=>{if(!txs||p==='all')return txs||[];const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());let s;if(p==='today')s=today;else if(p==='week'){s=new Date(today);s.setDate(s.getDate()-6);}else if(p==='month'){s=new Date(today);s.setMonth(s.getMonth()-1);}else return txs;return txs.filter(t=>new Date(t.date)>=s);};
@@ -1008,10 +1186,18 @@ window.addEventListener('beforeunload',()=>saveLocal());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveLocal();});
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(updateMiniRing,100);});
 
-// ===== INIT =====
-applyTheme();initAnimatedElements();initFB();
+// ===== ИНИЦИАЛИЗАЦИЯ (ПРАВИЛЬНЫЙ ПОРЯДОК!) =====
+applyTheme();
+initAnimatedElements();
 
-if(!checkInviteAccess()){
+// 1. СНАЧАЛА инициализируем Firebase
+initFB();
+
+// 2. ПОТОМ проверяем invite-ссылку
+const hasInvite = checkInviteAccess();
+
+// 3. Если нет invite — загружаем данные как обычно
+if (!hasInvite) {
     loadServer();
     loadTeamMembers();
 }
