@@ -289,6 +289,19 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 .generated-code-box { background: linear-gradient(135deg, rgba(52,199,89,0.1) 0%, rgba(90,200,250,0.1) 100%); border: 2px solid rgba(52,199,89,0.3); border-radius: var(--radius-ios-sm); padding: 20px; margin: 12px 0; text-align: center; }
 .generated-code-value { font-size: 2.5rem; font-weight: 800; letter-spacing: 0.2em; font-variant-numeric: tabular-nums; color: var(--ios-green); font-family: 'Inter', monospace; margin: 8px 0; }
 .generated-code-ttl { font-size: 0.75rem; color: var(--ios-text-secondary); }
+/* === НОВАЯ ГРУППА КНОПОК ОТЧЁТА === */
+.report-actions-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.report-actions-group .btn {
+  width: auto;
+  min-width: 260px;
+  max-width: 320px;
+}
 ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
@@ -362,14 +375,16 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
 
-<!-- НОВАЯ КНОПКА КОРРЕКТИРОВКИ КАПИТАЛА -->
-<button class="btn btn-secondary mb-12" onclick="openCapitalAdjustment()" style="border-color:rgba(175,82,222,0.3);color:var(--ios-purple);">
+<!-- СГРУППИРОВАННЫЕ КНОПКИ -->
+<div class="report-actions-group">
+<button class="btn btn-secondary" onclick="openCapitalAdjustment()" style="border-color:rgba(175,82,222,0.3);color:var(--ios-purple);">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
 Корректировка капитала
 </button>
+<button class="btn btn-primary" id="fixReportBtn" onclick="doFixReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L12 14"/><path d="M9 5L12 2L15 5"/><circle cx="12" cy="18" r="2" fill="currentColor"/></svg>Зафиксировать</button>
+<button class="btn btn-secondary" onclick="doShareCurrentReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
+</div>
 
-<button class="btn btn-primary mb-12" id="fixReportBtn" onclick="doFixReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L12 14"/><path d="M9 5L12 2L15 5"/><circle cx="12" cy="18" r="2" fill="currentColor"/></svg>Зафиксировать</button>
-<button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
 <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Последний: <span id="lastFixedDate"></span></div>
 <div class="section-title">Зафиксированные отчёты</div><div id="reportsList"></div>
 </div></div>
@@ -402,7 +417,6 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 </div></div>
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><circle cx="12" cy="12" r="3" stroke="var(--ios-gray)" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="var(--ios-gray)" stroke-width="2" stroke-linecap="round"/></svg>Настройки</div>
-<!-- БЛОК КОДА ДОСТУПА -->
 <div class="team-section" id="accessCodeSection" style="display:none;">
 <div class="team-title">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ios-green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -425,16 +439,12 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <button class="btn btn-secondary" onclick="shareAccessCode()" style="flex:1;">📤 Отправить</button>
 </div>
 </div>
-
-<!-- БЛОК КОМАНДЫ И ДОСТУПА -->
 <div class="team-section" id="teamSection">
 <div class="team-title">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ios-blue)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 Команда и доступ
 </div>
 <div id="teamMembersList"></div>
-
-<!-- Форма приглашения -->
 <div id="inviteSection" style="display:none;">
 <button class="btn btn-primary" onclick="showInviteSection()" style="margin-top:12px;background:var(--ios-blue);">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
@@ -461,14 +471,11 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 </div>
 </div>
 </div>
-
-<!-- СПИСОК АКТИВНЫХ ПРИГЛАШЕНИЙ -->
 <div style="margin-top:20px;">
 <div style="font-size:0.75rem;font-weight:600;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Активные приглашения</div>
 <div id="pendingInvitesList"></div>
 </div>
 </div>
-
 <div class="setting-group"><div class="setting-label">Тема оформления</div><div style="display:flex;gap:6px;background:rgba(120,120,128,0.12);padding:4px;border-radius:10px;"><button class="theme-btn" data-theme="auto" onclick="setTheme('auto')">Авто</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">Светлая</button><button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Темная</button></div></div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
 <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
@@ -507,7 +514,7 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <div class="setting-group"><div class="setting-label">Целевая выручка (₽)</div><input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0"><div class="setting-hint">Текущая: <span id="goalCurrentHint">0 ₽</span></div></div>
 <button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">Установить</button><button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button></div>
 
-<!-- НОВОЕ ОКНО КОРРЕКТИРОВКИ КАПИТАЛА -->
+<!-- ОКНО КОРРЕКТИРОВКИ КАПИТАЛА (ОБНОВЛЁННОЕ) -->
 <div class="sheet-overlay" id="capitalAdjOverlay" onclick="closeCapitalAdjustment()"></div>
 <div class="bottom-sheet" id="capitalAdjSheet">
 <div class="sheet-handle"></div>
@@ -517,15 +524,15 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <div style="font-size:1.2rem;font-weight:700;color:var(--ios-blue);text-align:center;" id="currentCapitalDisplay">0 ₽</div>
 </div>
 <div class="setting-group">
-<div class="setting-label">Сумма корректировки (₽)</div>
-<input type="number" id="capitalAdjAmount" class="setting-input" placeholder="Например: 5000 или -2000" step="0.01">
-<div class="setting-hint">Введите положительное число для увеличения, отрицательное — для уменьшения</div>
+<div class="setting-label">Новое значение капитала (₽)</div>
+<input type="number" id="capitalAdjAmount" class="setting-input" placeholder="Например: 50000" step="0.01" min="0">
+<div class="setting-hint">Капитал будет установлен на введённое значение</div>
 </div>
 <div class="setting-group">
-<div class="setting-label">Комментарий</div>
+<div class="setting-label">Комментарий (необязательно)</div>
 <input type="text" id="capitalAdjComment" class="setting-input" placeholder="Например: Внесение наличных" style="text-align:left;font-size:0.9rem;">
 </div>
-<button class="btn btn-primary" onclick="saveCapitalAdjustment()" style="margin-top:8px;background:var(--ios-purple);">Применить</button>
+<button class="btn btn-primary" onclick="saveCapitalAdjustment()" style="margin-top:8px;background:var(--ios-purple);">Установить</button>
 <button class="btn btn-secondary" onclick="closeCapitalAdjustment()" style="margin-top:8px;">Отмена</button>
 </div>
 
@@ -560,7 +567,6 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 // ===== CORE =====
 const tg = window.Telegram?.WebApp;
 if(tg){try{tg.ready();tg.expand();}catch(e){}}
-// ===== ОПРЕДЕЛЕНИЕ РЕЖИМА =====
 let isTelegram = false;
 let isPWA = false;
 function detectEnvironment() {
@@ -580,14 +586,11 @@ updateMeshColors();
 window.setTheme=(m)=>{localStorage.setItem('fl_theme',m);applyTheme();haptic('light');};
 if(tg){try{applyTheme();tg.onEvent('themeChanged',applyTheme);}catch(e){}}
 function updateMeshColors(){const blobs=document.querySelectorAll('.mesh-blob');const s=calcAll&&typeof calcAll==='function'?calcAll():{margin:0};if(s.margin>=0){blobs[0].style.background='var(--ios-blue)';blobs[1].style.background='var(--ios-teal)';blobs[2].style.background='var(--ios-green)';blobs[3].style.background='var(--ios-purple)';}else{blobs[0].style.background='var(--ios-red)';blobs[1].style.background='var(--ios-orange)';blobs[2].style.background='var(--ios-purple)';blobs[3].style.background='var(--ios-red)';}}
-// ===== ANIMATION =====
 const previousValues=new Map();
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function animateValue(el,nv,fmt,dur=600){const id=el.id;if(!id){el.textContent=fmt(nv);return;}const sv=previousValues.get(id)||0,st=performance.now();function u(ct){const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);el.textContent=fmt(sv+(nv-sv)*ep);if(p<1)requestAnimationFrame(u);else previousValues.set(id,nv);}requestAnimationFrame(u);}
 function initAnimatedElements(){['balanceDisplay','statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin','sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite','sumMargin','detBalance','detCapital','detSite','detSpend','detRevenue','detMargin','goalCurrentRevenue','goalTargetEl','goalRemaining','goalPercent'].forEach(id=>{const el=document.getElementById(id);if(el)previousValues.set(id,0);});}
-// ===== SPLASH =====
 (function(){const c=document.getElementById('splashCanvas');if(!c)return;const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,0.1,1000);cam.position.z=4;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(400,400);r.setPixelRatio(devicePixelRatio);const g=new THREE.BufferGeometry(),v=[];const seg=12,tR=0.5,mR=1,tH=0.4,bH=1;for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2;v.push(0,tH,0,Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(a2)*tR,tH,Math.sin(a2)*tR);}for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2,am=((i+.5)/seg)*Math.PI*2;v.push(Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(am)*mR,0,Math.sin(am)*mR,Math.cos(a2)*tR,tH,Math.sin(a2)*tR);v.push(Math.cos(a1)*tR,tH,Math.sin(a1)*tR,Math.cos(a1)*mR,0,Math.sin(a1)*mR,Math.cos(am)*mR,0,Math.sin(am)*mR);v.push(Math.cos(a2)*tR,tH,Math.sin(a2)*tR,Math.cos(am)*mR,0,Math.sin(am)*mR,Math.cos(a2)*mR,0,Math.sin(a2)*mR);}for(let i=0;i<seg;i++){const a1=(i/seg)*Math.PI*2,a2=((i+1)/seg)*Math.PI*2;v.push(Math.cos(a1)*mR,0,Math.sin(a1)*mR,0,-bH,0,Math.cos(a2)*mR,0,Math.sin(a2)*mR);}g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.computeVertexNormals();const mat=new THREE.MeshPhongMaterial({color:0xffffff,specular:0xffffff,shininess:150,transparent:true,opacity:0.85,side:THREE.DoubleSide});const mesh=new THREE.Mesh(g,mat);s.add(mesh);s.add(new THREE.AmbientLight(0xffffff,0.5));[[5,5,5,1.5],[-5,3,5,1.2],[0,5,-5,1],[3,-3,3,.8],[-3,-3,-3,.6]].forEach(p=>{const l=new THREE.PointLight(0xffffff,p[3],100);l.position.set(p[0],p[1],p[2]);s.add(l);});(function a(){requestAnimationFrame(a);mesh.rotation.y+=0.008;mesh.rotation.x=Math.sin(Date.now()*0.0008)*0.15;r.render(s,cam);})();setTimeout(()=>document.getElementById('splash').classList.add('hide'),3500);})();
-// ===== UTILS =====
 function showToast(icon,text,dur=2500){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className='toast';t.innerHTML=`<span class="toast-icon">${icon}</span><span class="toast-text">${text}</span>`;c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},dur);}
 const haptic=(type)=>{if(tg?.HapticFeedback){try{if(type==='success')tg.HapticFeedback.notificationOccurred('success');else if(type==='error')tg.HapticFeedback.notificationOccurred('error');else tg.HapticFeedback.impactOccurred('light');}catch(e){}}};
 const MONTHS=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
@@ -597,7 +600,6 @@ function showConfetti(){const c=document.getElementById('confettiContainer'),col
 function initPullToRefresh(){const page=document.getElementById('page-home'),ind=document.getElementById('pullRefresh');let sy=0,cy=0,pulling=false,refreshing=false;page.addEventListener('touchstart',e=>{if(page.scrollTop===0&&!refreshing){sy=e.touches[0].clientY;pulling=true;}},{passive:true});page.addEventListener('touchmove',e=>{if(!pulling||refreshing)return;cy=e.touches[0].clientY;const d=cy-sy;if(d>0){const p=Math.min(d*.5,80);ind.style.top=`${p-60}px`;ind.classList.add('active');}},{passive:true});page.addEventListener('touchend',()=>{if(!pulling||refreshing)return;pulling=false;if(cy-sy>60){refreshing=true;ind.classList.add('refreshing');ind.style.top='10px';setTimeout(()=>{renderAll();loadServer();ind.classList.remove('refreshing','active');ind.style.top='-60px';refreshing=false;showToast('✅','Обновлено');},1000);}else{ind.classList.remove('active');ind.style.top='-60px';}sy=0;cy=0;});}
 function initSwipeGesture(w,item){let sx=0,cx=0,drag=false;item.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;drag=true;item.classList.add('swiping');},{passive:true});item.addEventListener('touchmove',e=>{if(!drag)return;cx=e.touches[0].clientX;const d=sx-cx;if(d>0)item.style.transform=`translateX(-${Math.min(d,80)}px)`;},{passive:true});item.addEventListener('touchend',()=>{drag=false;item.classList.remove('swiping');const d=sx-cx;if(d>40){w.classList.add('swiped');item.style.transform='translateX(-80px)';}else{w.classList.remove('swiped');item.style.transform='';}});}
 function showSkeletons(){const list=document.getElementById('txList');list.innerHTML='';for(let i=0;i<4;i++){const d=document.createElement('div');d.className='tx-item-wrapper';d.innerHTML=`<div class="tx-item" style="border:none;"><div class="tx-info"><div class="skeleton skeleton-text" style="width:${60+Math.random()*30}%"></div><div class="skeleton skeleton-text-sm"></div></div><div class="skeleton skeleton-text" style="width:60px;height:18px;"></div></div>`;list.appendChild(d);}}
-// ===== FIREBASE + STABLE UID =====
 let useFirebase = false;
 let userRef = null;
 let dataListener = null;
@@ -652,7 +654,6 @@ useFirebase = false;
 firebaseUid = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 }
-// ===== ACCESS CODE SYSTEM =====
 function generateAccessCode() {
 if (!useFirebase || !firebaseUid) { showToast('⚠️', 'Firebase не подключён'); return; }
 const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -689,7 +690,6 @@ function shareAccessCode() {
 if (!currentAccessCode) return;
 shareText(`🔐 Код доступа Findr: ${currentAccessCode.code}\nВведите его в PWA для подключения.\nКод действителен 10 минут.`, 'Код доступа Findr');
 }
-// ===== PWA ACCESS CODE VERIFICATION =====
 function showAccessCodeModal() {
 document.getElementById('accessCodeModal').classList.add('active');
 setTimeout(() => document.getElementById('accessCodeInput').focus(), 300);
@@ -716,7 +716,6 @@ else {
 localStorage.setItem('fl_viewing_owner', data.ownerUid);
 await firebase.database().ref(`accessCodes/${code}/used`).set(true);
 await firebase.database().ref(`accessCodes/${code}/usedBy`).set(firebaseUid);
-
 const userName = tg?.initDataUnsafe?.user?.first_name || 'PWA User';
 await firebase.database().ref(`users/${data.ownerUid}/team/${firebaseUid}`).set({
 role: 'admin',
@@ -726,14 +725,12 @@ addedBy: data.ownerUid,
 uid: firebaseUid,
 viaCode: true
 });
-
 haptic('success'); hideAccessCodeModal(); showToast('✅', 'Аккаунт подключён (Роль: Админ)');
 setupUserRef(); subscribeToData(); loadTeamMembers(); loadPendingInvites();
 }
 } catch(err) { errorEl.textContent = 'Ошибка проверки'; haptic('error'); }
 btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Подключить';
 }
-// ===== TEAM ACCESS SYSTEM =====
 let currentUserRole = 'owner';
 let teamMembers = {};
 let currentPermUid = null;
@@ -773,7 +770,6 @@ document.getElementById('inviteSection').style.display = canManageTeam() ? '' : 
 document.getElementById('accessCodeSection').style.display = (canManageTeam() && isTelegram) ? '' : 'none';
 updateMyRoleBadge();
 }
-// ===== INVITE SYSTEM =====
 function showInviteSection() {
 const form = document.getElementById('inviteForm');
 form.style.display = form.style.display === 'none' ? '' : 'none';
@@ -799,7 +795,6 @@ const inviteData = { ownerUid: firebaseUid, role: selectedInviteRole, createdAt:
 const updates = {};
 updates[`invites/${token}`] = inviteData;
 updates[`users/${firebaseUid}/invites/${token}`] = { role: selectedInviteRole, createdAt: inviteData.createdAt, used: false };
-
 firebase.database().ref().update(updates).then(() => {
 document.getElementById('inviteLinkInput').value = inviteLink;
 document.getElementById('inviteRoleLabel').textContent = ROLE_INFO[selectedInviteRole].name;
@@ -885,7 +880,6 @@ renderAll(); updateSync('realtime');
 } else { loadLocal(); renderAll(); saveServer(); }
 }, err => { loadLocal(); renderAll(); updateSync('offline'); });
 }
-// ===== DATA LAYER =====
 let holders = {}, activeHolderId = null, activeAccountId = null, capital = 0, savedReports = {};
 let incomePercent = 7, expensePercent = 2.5, detailPeriod = 'today';
 let isOnline = navigator.onLine, isEditMode = false, expandedHolders = {};
@@ -900,7 +894,6 @@ const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAcc
 const filterTx = (txs, p) => { if (!txs || p === 'all') return txs || []; const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); let s; if (p === 'today') s = today; else if (p === 'week') { s = new Date(today); s.setDate(s.getDate() - 6); } else if (p === 'month') { s = new Date(today); s.setMonth(s.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= s); };
 const calcAcc = (acc, period) => { let inc = 0, exp = 0, spend = 0; if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, margin: 0, turnover: 0 }; filterTx(acc.transactions, period).forEach(t => { if (!t || typeof t.amount !== 'number') return; if (t.type === 'income') inc += t.amount; else if (t.type === 'expense') exp += t.amount; else if (t.type === 'spend') spend += t.amount; }); const rev = inc * (incomePercent / 100) + exp * (expensePercent / 100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp }; };
 const calcAll = () => { let inc = 0, exp = 0, spend = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; spend += s.totalSpend; bal += a.balance || 0; }); }); const rev = inc * (incomePercent / 100) + exp * (expensePercent / 100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
-// ===== TEAM MANAGEMENT =====
 function loadTeamMembers() {
 if (!useFirebase) return;
 const viewingOwner = getViewingOwner();
@@ -966,8 +959,6 @@ firebase.database().ref(`users/${viewingOwner}/team/${currentPermUid}`).remove()
 };
 if (tg?.showConfirm) tg.showConfirm('Удалить участника?', c => { if (c) doRemove(); }); else if (confirm('Удалить?')) doRemove();
 }
-
-// ===== PENDING INVITES MANAGEMENT =====
 let pendingInvites = {};
 function loadPendingInvites() {
 if (!useFirebase) return;
@@ -1002,7 +993,7 @@ updates[`users/${firebaseUid}/invites/${token}`] = null;
 firebase.database().ref().update(updates).then(() => { haptic('success'); showToast('🗑️', 'Приглашение удалено'); }).catch(() => showToast('⚠️', 'Ошибка'));
 };
 
-// ===== CAPITAL ADJUSTMENT =====
+// ===== КОРРЕКТИРОВКА КАПИТАЛА (НОВАЯ ЛОГИКА) =====
 window.openCapitalAdjustment = () => {
 if (!canEdit()) return;
 document.getElementById('currentCapitalDisplay').textContent = fmt(capital);
@@ -1019,9 +1010,9 @@ document.getElementById('capitalAdjSheet').classList.remove('active');
 };
 window.saveCapitalAdjustment = () => {
 if (!canEdit()) return;
-const amount = parseFloat(document.getElementById('capitalAdjAmount').value);
-if (isNaN(amount) || amount === 0) {
-showToast('⚠️', 'Введите ненулевую сумму');
+const newCapital = parseFloat(document.getElementById('capitalAdjAmount').value);
+if (isNaN(newCapital) || newCapital < 0) {
+showToast('⚠️', 'Введите корректную сумму');
 haptic('error');
 return;
 }
@@ -1032,13 +1023,22 @@ showToast('⚠️', 'Выберите счёт для записи');
 return;
 }
 
-capital += amount;
+const delta = newCapital - capital;
+if (delta === 0) {
+showToast('ℹ️', 'Капитал не изменился');
+closeCapitalAdjustment();
+return;
+}
+
+// Устанавливаем новое значение капитала
+capital = newCapital;
 
 if (!acc.transactions) acc.transactions = [];
 acc.transactions.push({
 type: 'capital_adj',
-amount: amount,
-desc: comment || 'Корректировка капитала',
+amount: delta, // дельта для возможности отката
+newCapital: newCapital, // новое значение для отображения
+desc: comment || `Капитал → ${fmt(newCapital)}`,
 date: new Date().toISOString()
 });
 
@@ -1046,10 +1046,9 @@ haptic('success');
 renderAll();
 saveServer();
 closeCapitalAdjustment();
-showToast('✅', `Капитал изменен на ${fmt(amount)}`);
+showToast('✅', `Капитал установлен: ${fmt(newCapital)}`);
 };
 
-// ===== NAVIGATION =====
 let currentPageName = 'home';
 const pageOrder = ['home', 'report', 'goal', 'detail', 'settings'];
 function switchPage(name) {
@@ -1064,7 +1063,6 @@ currentPageName = name;
 if (name === 'report') refreshReport(); if (name === 'goal') refreshGoal(); if (name === 'detail') refreshDetail(); if (name === 'settings') refreshSettings();
 haptic('light');
 }
-// ===== RENDER =====
 function updateMiniRing() { const s = calcAll(), bg = document.getElementById('miniRingBg'), ring = document.getElementById('miniRingFill'), label = document.getElementById('miniRingLabel'), cont = document.getElementById('miniRingContainer'); if (!bg || !ring || !cont) return; const r = cont.getBoundingClientRect(); bg.setAttribute('width', r.width - 3); bg.setAttribute('height', r.height - 3); ring.setAttribute('width', r.width - 3); ring.setAttribute('height', r.height - 3); if (goalTarget > 0) { const p = Math.min(s.revenue / goalTarget, 1); ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = 1 - p; let c; if (p < .5) { const t = p * 2; c = `rgb(255,${Math.round(59 + 141 * t)},${Math.round(48 - 48 * t)})`; } else if (p < 1) { const t = (p - .5) * 2; c = `rgb(${Math.round(255 - 203 * t)},${Math.round(200 - t)},${Math.round(89 * t)})`; } else c = 'var(--ios-green)'; ring.style.stroke = c; if (p >= .5 && p < 1) ring.classList.add('glow-pulse'); else ring.classList.remove('glow-pulse'); label.textContent = Math.round(p * 100) + '%'; label.style.display = 'block'; label.style.color = c; if (p >= 1 && !window._confettiShown) { window._confettiShown = true; showConfetti(); } } else { ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = '1'; ring.style.stroke = 'rgba(255,255,255,0.1)'; ring.classList.remove('glow-pulse'); label.style.display = 'none'; window._confettiShown = false; } }
 function updateGoalPage() { const s = calcAll(), ring = document.getElementById('goalRingFill'), pctEl = document.getElementById('goalPercent'), subEl = document.getElementById('goalSubtitle'), curEl = document.getElementById('goalCurrentRevenue'), tgtEl = document.getElementById('goalTargetEl'), remEl = document.getElementById('goalRemaining'), stEl = document.getElementById('goalStatus'); if (!ring) return; animateValue(curEl, s.revenue, fmt); if (goalTarget > 0) { const p = Math.min(s.revenue / goalTarget, 1); ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = 1 - p; let c; if (p < .5) { const t = p * 2; c = `rgb(255,${Math.round(59 + 141 * t)},${Math.round(48 - 48 * t)})`; } else if (p < 1) { const t = (p - .5) * 2; c = `rgb(${Math.round(255 - 203 * t)},${Math.round(200 - t)},${Math.round(89 * t)})`; } else c = 'var(--ios-green)'; ring.style.stroke = c; animateValue(pctEl, Math.round(p * 100), n => Math.round(n).toString()); pctEl.style.color = c; animateValue(tgtEl, goalTarget, fmt); const rem = Math.max(goalTarget - s.revenue, 0); animateValue(remEl, rem, n => rem > 0 ? fmt(n) : '✓'); remEl.className = 'goal-stat-value ' + (rem > 0 ? 'text-red' : 'text-green'); if (p >= 1) { stEl.textContent = '🏆 Достигнута!'; stEl.style.color = 'var(--ios-green)'; } else if (p >= .75) { stEl.textContent = '🔥 Почти'; stEl.style.color = 'var(--ios-green)'; } else if (p >= .5) { stEl.textContent = '💪 Половина'; stEl.style.color = 'var(--ios-orange)'; } else if (p > 0) { stEl.textContent = '🚀 В процессе'; stEl.style.color = 'var(--ios-orange)'; } else { stEl.textContent = '⏳ Начало'; stEl.style.color = 'var(--ios-text-secondary)'; } subEl.textContent = `${fmt(s.revenue)} / ${fmt(goalTarget)}`; } else { ring.style.strokeDasharray = '1'; ring.style.strokeDashoffset = '1'; ring.style.stroke = 'rgba(255,255,255,0.1)'; pctEl.textContent = '0'; pctEl.style.color = 'var(--ios-text-secondary)'; tgtEl.textContent = '—'; remEl.textContent = '—'; remEl.className = 'goal-stat-value'; stEl.textContent = 'Не задана'; stEl.style.color = 'var(--ios-text-secondary)'; subEl.textContent = 'Цель не задана'; } renderGoalHistory(); }
 function renderGoalHistory() { const c = document.getElementById('goalHistory'); if (!c) return; if (!goalHistory.length) { c.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text" style="font-size:0.8rem;">История пуста</div></div>'; return; } c.innerHTML = ''; goalHistory.slice().reverse().forEach((item, ri) => { const idx = goalHistory.length - 1 - ri, d = new Date(item.date), pct = Math.round(Math.min((item.revenueAtClose || 0) / item.target, 1) * 100); const el = document.createElement('div'); el.className = 'goal-history-item'; el.innerHTML = `<div class="goal-history-info"><div class="goal-history-date">${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}</div><div class="goal-history-target">Цель: ${fmt(item.target)} · ${fmt(item.revenueAtClose || 0)}</div></div><div class="goal-history-right"><div class="goal-history-result" style="color:${pct >= 100 ? 'var(--ios-green)' : 'var(--ios-orange)'}">${pct}%</div><button class="goal-history-delete" onclick="deleteGoalHistory(${idx})">×</button></div>`; c.appendChild(el); }); }
@@ -1075,7 +1073,68 @@ window.saveGoal = () => { if (!canEdit()) return; const v = parseFloat(document.
 window.resetGoal = () => { if (!canEdit()) return; if (!goalTarget) { showToast('ℹ️', 'Нет цели'); return; } const r = () => { goalHistory.push({ date: new Date().toISOString(), target: goalTarget, revenueAtClose: calcAll().revenue }); if (goalHistory.length > 10) goalHistory = goalHistory.slice(-10); goalTarget = 0; saveLocal(); saveServer(); refreshGoal(); updateMiniRing(); updateMeshColors(); haptic('success'); showToast('🎯', 'Сброшено'); }; if (tg?.showConfirm) tg.showConfirm('Сбросить цель?', c => { if (c) r(); }); else if (confirm('Сбросить?')) r(); };
 function refreshGoal() { updateGoalPage(); }
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); updateMiniRing(); updateMeshColors(); };
-const renderHome = () => { const acc = getAccount(), h = getHolder(), ne = document.getElementById('accountName'); if (!acc || !h) { ne.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт'; animateValue(document.getElementById('balanceDisplay'), 0, fmt); ['statTurnover', 'statIncome', 'statExpense', 'statRevenue', 'statSpend', 'statMargin'].forEach(id => animateValue(document.getElementById(id), 0, fmt)); document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; updateMiniRing(); return; } ne.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`; animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt); const s = calcAcc(acc); animateValue(document.getElementById('statTurnover'), s.turnover, fmt); animateValue(document.getElementById('statIncome'), s.totalIncome, fmt); animateValue(document.getElementById('statExpense'), s.totalExpense, fmt); animateValue(document.getElementById('statRevenue'), s.revenue, fmt); animateValue(document.getElementById('statSpend'), s.totalSpend, fmt); const me = document.getElementById('statMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach((t, index) => { if (!t) return; const d = new Date(t.date), time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else if (t.type === 'capital_adj') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '💜 ✏️ ' + (t.desc || 'Корректировка капитала'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' || t.type === 'capital_adj' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const w = document.createElement('div'); w.className = 'tx-item-wrapper'; const sa = document.createElement('div'); sa.className = 'tx-item-swipe'; sa.textContent = '🗑️ Удалить'; sa.onclick = () => deleteTransaction(index); const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; w.appendChild(sa); w.appendChild(item); list.appendChild(w); initSwipeGesture(w, item); }); document.getElementById('resetBtn').style.display = canDelete() ? 'block' : 'none'; } saveLocal(); updateMiniRing(); };
+const renderHome = () => {
+const acc = getAccount(), h = getHolder(), ne = document.getElementById('accountName');
+if (!acc || !h) {
+ne.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт';
+animateValue(document.getElementById('balanceDisplay'), 0, fmt);
+['statTurnover', 'statIncome', 'statExpense', 'statRevenue', 'statSpend', 'statMargin'].forEach(id => animateValue(document.getElementById(id), 0, fmt));
+document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>';
+document.getElementById('resetBtn').style.display = 'none';
+updateMiniRing();
+return;
+}
+ne.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`;
+animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt);
+const s = calcAcc(acc);
+animateValue(document.getElementById('statTurnover'), s.turnover, fmt);
+animateValue(document.getElementById('statIncome'), s.totalIncome, fmt);
+animateValue(document.getElementById('statExpense'), s.totalExpense, fmt);
+animateValue(document.getElementById('statRevenue'), s.revenue, fmt);
+animateValue(document.getElementById('statSpend'), s.totalSpend, fmt);
+const me = document.getElementById('statMargin');
+animateValue(me, s.margin, fmt);
+s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative');
+const list = document.getElementById('txList');
+if (!acc.transactions?.length) {
+list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>';
+document.getElementById('resetBtn').style.display = 'none';
+} else {
+list.innerHTML = '';
+acc.transactions.slice().reverse().forEach((t, index) => {
+if (!t) return;
+const d = new Date(t.date), time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+let cls, sign, desc;
+if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; }
+else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; }
+else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); }
+else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); }
+else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); }
+else if (t.type === 'capital_adj') { 
+cls = 'text-blue'; 
+sign = t.amount >= 0 ? '+' : ''; 
+// Отображаем новое значение капитала
+desc = '💜 ✏️ ' + (t.desc || `Капитал → ${fmt(t.newCapital || 0)}`); 
+}
+else { cls = ''; sign = ''; desc = t.desc || 'Операция'; }
+const amt = t.type === 'adjustment' || t.type === 'capital_adj' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`;
+const w = document.createElement('div');
+w.className = 'tx-item-wrapper';
+const sa = document.createElement('div');
+sa.className = 'tx-item-swipe';
+sa.textContent = '🗑️ Удалить';
+sa.onclick = () => deleteTransaction(index);
+const item = document.createElement('div');
+item.className = 'tx-item';
+item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;
+w.appendChild(sa); w.appendChild(item); list.appendChild(w);
+initSwipeGesture(w, item);
+});
+document.getElementById('resetBtn').style.display = canDelete() ? 'block' : 'none';
+}
+saveLocal();
+updateMiniRing();
+};
 window.resetAll = () => { if (!canDelete()) return; const acc = getAccount(), h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций'); return; } haptic('warning'); const r = () => { acc.balance = 0; acc.transactions = []; renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Обнулено'); }; if (tg?.showConfirm) tg.showConfirm(`Обнулить "${acc.name}"?`, c => { if (c) r(); }); else if (confirm('Обнулить?')) r(); };
 window.deleteTransaction = (idx) => { if (!canEdit()) return; const acc = getAccount(); if (!acc?.transactions) return; const ri = acc.transactions.length - 1 - idx; if (ri < 0 || ri >= acc.transactions.length) return; const tx = acc.transactions[ri]; const del = () => { if (tx.type === 'income') { acc.balance -= tx.amount; capital -= tx.amount * (incomePercent / 100); } else if (tx.type === 'expense') { acc.balance += tx.amount; capital -= tx.amount * (expensePercent / 100); } else if (tx.type === 'adjustment') { acc.balance -= tx.amount; } else if (tx.type === 'revenue') { capital -= tx.amount; } else if (tx.type === 'capital_adj') { capital -= tx.amount; } acc.transactions.splice(ri, 1); renderAll(); saveServer(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm('Удалить?', c => { if (c) del(); }); else if (confirm('Удалить?')) del(); };
 const refreshReport = () => { const s = calcAll(); ['sumTurnover', 'sumRevenue', 'sumIncome', 'sumExpense', 'sumSpend', 'sumBalance', 'sumCapital', 'sumSite'].forEach((id, i) => animateValue(document.getElementById(id), [s.turnover, s.revenue, s.totalIncome, s.totalExpense, s.totalSpend, s.totalBalance, capital, s.siteBalance][i], fmt)); const me = document.getElementById('sumMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); renderReportsList(); checkLastFixed(); };
@@ -1102,7 +1161,6 @@ window.shareDetail = () => { shareText(`📊 Детализация Findr\n💰 
 window.deleteReport = (key) => { if (!canDelete()) return; const del = () => { delete savedReports[key]; saveLocal(); saveServer(); renderReportsList(); checkLastFixed(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm('Удалить?', c => { if (c) del(); }); else if (confirm('Удалить?')) del(); };
 const doSaveSettings = () => { if (!canChangeSettings()) return; const ni = parseFloat(document.getElementById('setIncPct').value); const ne = parseFloat(document.getElementById('setExpPct').value); if (isNaN(ni) || isNaN(ne)) { showToast('⚠️', 'Ошибка'); return; } incomePercent = ni; expensePercent = ne; document.getElementById('curIncPct').textContent = incomePercent; document.getElementById('curExpPct').textContent = expensePercent; renderAll(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.setPeriod = (p) => { detailPeriod = p; document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c.dataset.p === p)); renderDetailTree(); haptic('light'); };
-// ===== ACCOUNT MANAGEMENT =====
 window.openAccountSheet = () => { document.getElementById('accountSearch').value = ''; isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); renderAccountTree(); document.getElementById('accountOverlay').classList.add('active'); document.getElementById('accountSheet').classList.add('active'); haptic('light'); };
 window.closeAccountSheet = () => { document.getElementById('accountOverlay').classList.remove('active'); document.getElementById('accountSheet').classList.remove('active'); isEditMode = false; document.getElementById('actionsMenu').classList.remove('active'); };
 window.toggleActionsMenu = () => { document.getElementById('actionsMenu').classList.toggle('active'); haptic('light'); };
@@ -1114,7 +1172,6 @@ window.deleteAccount = (hid, aid) => { if (!canDelete()) return; const h = holde
 const renderAccountTree = () => { const c = document.getElementById('accountTree'), search = (document.getElementById('accountSearch').value || '').toLowerCase(); c.innerHTML = ''; Object.keys(holders).forEach(hid => { const h = holders[hid]; if (!h) return; const b = document.createElement('div'); b.style.marginBottom = '12px'; if (isEditMode) { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;'; head.innerHTML = `<div style="font-size:0.7rem;color:var(--ios-text-secondary);text-transform:uppercase;margin-bottom:6px;">Держатель</div><input type="text" class="edit-input" value="${h.name.replace(/"/g, '&quot;')}" id="eH_${hid}"><button class="btn btn-secondary" onclick="deleteHolder('${hid}')" style="margin-top:8px;color:var(--ios-red);border-color:rgba(255,59,48,0.3);">🗑️ Удалить</button>`; b.appendChild(head); } else { const head = document.createElement('div'); head.style.cssText = 'background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;font-weight:600;'; head.textContent = '👤 ' + h.name; b.appendChild(head); } const accs = document.createElement('div'); accs.style.cssText = 'margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;'; Object.values(h.accounts || {}).forEach(a => { if (!a) return; if (search && !a.name.toLowerCase().includes(search)) return; const isA = hid === activeHolderId && a.id === activeAccountId; if (isEditMode) { const row = document.createElement('div'); row.style.marginBottom = '8px'; row.innerHTML = `<input type="text" class="edit-input" value="${a.name.replace(/"/g, '&quot;')}" id="eA_${a.id}"><button class="btn btn-secondary" onclick="deleteAccount('${hid}','${a.id}')" style="margin-top:6px;color:var(--ios-red);border-color:rgba(255,59,48,0.3);font-size:0.8rem;">🗑️ Удалить</button>`; accs.appendChild(row); } else { const row = document.createElement('div'); row.style.cssText = `background:${isA ? 'var(--ios-blue)' : 'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`; row.onclick = () => { activeHolderId = hid; activeAccountId = a.id; renderAll(); saveLocal(); saveServer(); closeAccountSheet(); haptic('success'); showToast('✅', a.name); }; row.innerHTML = `<span style="${isA ? 'color:white;font-weight:600;' : ''}">💼 ${a.name}</span><span style="${isA ? 'color:rgba(255,255,255,.7);' : 'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`; accs.appendChild(row); } }); b.appendChild(accs); if (isEditMode) { const ea = document.createElement('div'); ea.style.cssText = 'display:flex;gap:8px;margin-top:12px;'; ea.innerHTML = `<button class="btn btn-primary" onclick="saveEdits('${hid}')" style="flex:1;padding:10px;font-size:0.85rem;">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()" style="flex:1;padding:10px;font-size:0.85rem;">✕</button>`; b.appendChild(ea); } c.appendChild(b); }); };
 window.saveEdits = (hid) => { if (!canEdit()) return; const h = holders[hid]; if (!h) return; const hi = document.getElementById('eH_' + hid); if (hi && hi.value.trim()) h.name = hi.value.trim(); Object.values(h.accounts || {}).forEach(a => { const ai = document.getElementById('eA_' + a.id); if (ai && ai.value.trim()) a.name = ai.value.trim(); }); isEditMode = false; renderAccountTree(); renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Сохранено'); };
 window.cancelEditMode = () => { isEditMode = false; renderAccountTree(); };
-// ===== EVENTS =====
 window.addEventListener('online', () => { isOnline = true; if (useFirebase) saveServer(); });
 window.addEventListener('offline', () => { isOnline = false; updateSync('offline'); });
 document.getElementById('amountInput').addEventListener('keypress', e => { if (e.key === 'Enter') doTransaction('expense'); });
@@ -1123,7 +1180,6 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveL
 let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(updateMiniRing, 100); });
 document.getElementById('accessCodeInput').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); });
 document.getElementById('accessCodeInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyAccessCode(); });
-// ===== ИНИЦИАЛИЗАЦИЯ =====
 applyTheme(); initAnimatedElements();
 (async () => {
 detectEnvironment(); await initFB(); setupUserRef();
