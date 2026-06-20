@@ -38,39 +38,16 @@
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
 
 /* === MESH GRADIENT BACKGROUND === */
-.mesh-gradient-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-    transition: opacity 0.5s ease;
-}
-.mesh-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.15;
-    animation: blobFloat 20s ease-in-out infinite;
-    transition: background 1s ease;
-}
+.mesh-gradient-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; transition: opacity 0.5s ease; }
+.mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; animation: blobFloat 20s ease-in-out infinite; transition: background 1s ease; }
 .mesh-blob:nth-child(1) { width: 300px; height: 300px; top: -100px; left: -80px; background: var(--ios-blue); animation-delay: 0s; animation-duration: 18s; }
 .mesh-blob:nth-child(2) { width: 250px; height: 250px; top: 40%; right: -100px; background: var(--ios-purple); animation-delay: -5s; animation-duration: 22s; }
 .mesh-blob:nth-child(3) { width: 200px; height: 200px; bottom: -50px; left: 30%; background: var(--ios-teal); animation-delay: -10s; animation-duration: 25s; }
 .mesh-blob:nth-child(4) { width: 180px; height: 180px; top: 20%; left: 50%; background: var(--ios-orange); animation-delay: -7s; animation-duration: 20s; opacity: 0.08; }
-@keyframes blobFloat {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -40px) scale(1.1); }
-    50% { transform: translate(-20px, 20px) scale(0.9); }
-    75% { transform: translate(40px, 30px) scale(1.05); }
-}
+@keyframes blobFloat { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(30px, -40px) scale(1.1); } 50% { transform: translate(-20px, 20px) scale(0.9); } 75% { transform: translate(40px, 30px) scale(1.05); } }
 body.light-theme .mesh-blob { opacity: 0.08; filter: blur(100px); }
 
-.noise-overlay {
-position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay;
-background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-transition: opacity 0.3s ease;
-}
+.noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); transition: opacity 0.3s ease; }
 
 /* --- THEME ENGINE --- */
 #splash { position: fixed; inset: 0; z-index: 10000; background: var(--splash-bg, linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--spring-smooth), visibility 0.6s, background 0.3s ease; }
@@ -97,12 +74,7 @@ body.light-theme .balance-plus-btn { background: rgba(255, 59, 48, 0.1); border-
 
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: transparent; position: relative; z-index: 1; }
 .pages { flex: 1; position: relative; overflow: hidden; }
-.page {
-position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0;
-opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch;
-transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-snappy);
-will-change: transform, opacity; transform: translateX(30%) scale(0.95);
-}
+.page { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0; opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-snappy); will-change: transform, opacity; transform: translateX(30%) scale(0.95); }
 .page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
 .page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
 .page.exit-right { opacity: 0; transform: translateX(30%) scale(0.95); }
@@ -130,88 +102,27 @@ will-change: transform, opacity; transform: translateX(30%) scale(0.95);
 .progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); z-index: 4; transition: color 0.5s var(--spring-smooth); font-variant-numeric: tabular-nums; }
 
 /* === SHINE EFFECT === */
-.balance-card {
-background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
-border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden;
-transition: transform 0.4s var(--spring-bounce); transform-style: preserve-3d; perspective: 1000px;
-}
+.balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden; transition: transform 0.4s var(--spring-bounce); transform-style: preserve-3d; perspective: 1000px; }
 .balance-card:active { transform: scale(0.98); }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
-.balance-card::after {
-    content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-    transform: skewX(-25deg); pointer-events: none; z-index: 5;
-    animation: shineEffect 4s ease-in-out infinite;
-}
-@keyframes shineEffect {
-    0%, 100% { left: -100%; }
-    50% { left: 150%; }
-}
-body.light-theme .balance-card::after {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-}
+.balance-card::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: skewX(-25deg); pointer-events: none; z-index: 5; animation: shineEffect 4s ease-in-out infinite; }
+@keyframes shineEffect { 0%, 100% { left: -100%; } 50% { left: 150%; } }
+body.light-theme .balance-card::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); }
 
 /* === GLOW PULSE === */
-@keyframes glowPulse {
-    0%, 100% { filter: drop-shadow(0 0 6px currentColor); }
-    50% { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 25px currentColor); }
-}
+@keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 6px currentColor); } 50% { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 25px currentColor); } }
 .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
 
 /* === SKELETON LOADERS === */
-.skeleton {
-    background: linear-gradient(90deg, var(--ios-card) 25%, rgba(120,120,128,0.15) 50%, var(--ios-card) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
-    border-radius: 8px;
-    border: none !important;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
+.skeleton { background: linear-gradient(90deg, var(--ios-card) 25%, rgba(120,120,128,0.15) 50%, var(--ios-card) 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 8px; border: none !important; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .skeleton-text { height: 16px; margin-bottom: 8px; }
 .skeleton-text-sm { height: 12px; width: 60%; }
 .skeleton-text-lg { height: 32px; width: 50%; }
-.skeleton-circle { border-radius: 50%; }
-.skeleton-card { height: 100px; border-radius: var(--radius-ios-sm); }
-
-/* === SLOT MACHINE NUMBERS === */
-.slot-container {
-    display: inline-flex;
-    overflow: hidden;
-    height: 1.1em;
-    line-height: 1.1;
-}
-.slot-digit {
-    display: inline-block;
-    animation: slotSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform-origin: center;
-}
-@keyframes slotSpin {
-    0% { transform: translateY(100%); opacity: 0; }
-    50% { transform: translateY(-20%); opacity: 0.5; }
-    100% { transform: translateY(0); opacity: 1; }
-}
 
 /* === PARTICLE EFFECTS === */
-.particle {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    border-radius: 50%;
-    animation: particleFly 0.8s ease-out forwards;
-}
-@keyframes particleFly {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(var(--tx), var(--ty)) scale(0);
-        opacity: 0;
-    }
-}
+.particle { position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; animation: particleFly 0.8s ease-out forwards; }
+@keyframes particleFly { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
 
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
@@ -293,15 +204,6 @@ body.light-theme .balance-card::after {
 .action-item-arrow { color: var(--ios-text-secondary); }
 .edit-input { width: 100%; background: rgba(120, 120, 128, 0.1); border: 1px solid var(--ios-separator); border-radius: 8px; padding: 8px 12px; color: var(--ios-text); font-size: 0.85rem; outline: none; transition: all 0.3s var(--spring-smooth); }
 .edit-input:focus { border-color: var(--ios-blue); background: rgba(0, 122, 255, 0.1); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15); }
-.edit-actions { display: flex; gap: 8px; margin-top: 12px; }
-.edit-actions .btn { flex: 1; padding: 10px; font-size: 0.85rem; }
-.delete-btn-inline { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px 14px; background: rgba(255, 59, 48, 0.12); border: 1px solid rgba(255, 59, 48, 0.25); border-radius: 8px; color: var(--ios-red); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); margin-top: 8px; }
-.delete-btn-inline:active { transform: scale(0.95); background: rgba(255, 59, 48, 0.2); }
-.delete-btn-account { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px 12px; background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); border-radius: 8px; color: var(--ios-red); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); margin-top: 6px; }
-.delete-btn-account:active { transform: scale(0.95); background: rgba(255, 59, 48, 0.18); }
-.edit-row-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.edit-row-label { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-.edit-row-badge { font-size: 0.6rem; color: var(--ios-text-secondary); background: rgba(120, 120, 128, 0.15); padding: 2px 8px; border-radius: 100px; font-weight: 500; }
 .toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 .toast { background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; animation: toastIn 0.5s var(--spring-bounce); pointer-events: auto; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); transition: background 0.3s ease; }
 .toast.out { animation: toastOut 0.3s var(--spring-smooth) forwards; }
@@ -322,7 +224,6 @@ body.light-theme .balance-card::after {
 .report-action { width: 30px; height: 30px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); }
 .report-action:active { transform: scale(0.8); }
 .report-action.share { background: rgba(0, 122, 255, 0.15); color: var(--ios-blue); }
-.report-action.edit { background: rgba(255, 149, 0, 0.15); color: var(--ios-orange); }
 .report-action.delete { background: rgba(255, 59, 48, 0.15); color: var(--ios-red); }
 .report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .report-stat { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; background: rgba(120, 120, 128, 0.06); border-radius: 8px; }
@@ -398,6 +299,50 @@ body.light-theme .balance-card::after {
 .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; overflow: hidden; }
 .confetti { position: absolute; width: 10px; height: 10px; animation: confettiFall 3s ease-out forwards; }
 @keyframes confettiFall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+/* === SETTINGS ADJUST BLOCK === */
+.adjust-settings-block {
+    background: linear-gradient(135deg, rgba(175, 82, 222, 0.08) 0%, rgba(90, 200, 250, 0.08) 100%);
+    border: 1px solid rgba(175, 82, 222, 0.2);
+    border-radius: var(--radius-ios);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.adjust-settings-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ios-text);
+}
+.adjust-current-info {
+    background: rgba(120, 120, 128, 0.08);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.adjust-current-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.adjust-current-label {
+    font-size: 0.65rem;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.adjust-current-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
@@ -482,22 +427,61 @@ body.light-theme .balance-card::after {
 <button class="btn btn-secondary" onclick="shareDetail()" style="margin-top:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
 </div></div>
 
-<!-- ADJUST PAGE -->
-<div class="page" id="page-adjust"><div class="page-content">
-<div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-adjust" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE"/><stop offset="100%" style="stop-color:#BF5AF2"/></linearGradient></defs><path d="M11 4H4V11H11V4Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M13 4H20V11H13V4Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M11 13H4V20H11V13Z" stroke="url(#grad-adjust)" stroke-width="2"/><path d="M13 13H20V20H13V13Z" stroke="url(#grad-adjust)" stroke-width="2"/></svg>Корректировка</div>
-<div id="adjustInfo" style="background:rgba(120,120,128,0.12);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Счёт: Основной</div>
-<div class="setting-group"><div class="setting-label">Новый баланс (₽)</div><input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">Капитал (₽)</div><input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01"><div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div></div>
-<div class="setting-group"><div class="setting-label">Комментарий</div><input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;"></div>
-<button class="btn btn-primary" onclick="doSaveAdjust()" style="margin-top:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>Применить</button>
-</div></div>
-
-<!-- SETTINGS PAGE -->
+<!-- SETTINGS PAGE (с блоком корректировки) -->
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><defs><linearGradient id="grad-settings" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8E8E93"/><stop offset="100%" style="stop-color:#AEAEB2"/></linearGradient></defs><circle cx="12" cy="12" r="3" stroke="url(#grad-settings)" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#grad-settings)" stroke-width="2" stroke-linecap="round"/></svg>Настройки</div>
+
+<!-- БЛОК КОРРЕКТИРОВКИ (бывшая отдельная страница) -->
+<div class="adjust-settings-block">
+    <div class="adjust-settings-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ios-purple);">
+            <path d="M11 4H4V11H11V4Z" stroke="var(--ios-purple)"/>
+            <path d="M13 4H20V11H13V4Z" stroke="var(--ios-purple)"/>
+            <path d="M11 13H4V20H11V13Z" stroke="var(--ios-purple)"/>
+            <path d="M13 13H20V20H13V13Z" stroke="var(--ios-purple)"/>
+        </svg>
+        Корректировка
+    </div>
+    <div class="adjust-current-info">
+        <div class="adjust-current-item">
+            <div class="adjust-current-label">Счёт</div>
+            <div class="adjust-current-value" id="settingsAccountName" style="font-size:0.8rem;">—</div>
+        </div>
+        <div class="adjust-current-item">
+            <div class="adjust-current-label">Баланс</div>
+            <div class="adjust-current-value text-blue" id="settingsCurrentBalance">0 ₽</div>
+        </div>
+        <div class="adjust-current-item">
+            <div class="adjust-current-label">Капитал</div>
+            <div class="adjust-current-value text-orange" id="settingsCurrentCapital">0 ₽</div>
+        </div>
+        <div class="adjust-current-item">
+            <div class="adjust-current-label">На сайте</div>
+            <div class="adjust-current-value text-teal" id="settingsCurrentSite">0 ₽</div>
+        </div>
+    </div>
+    <div class="setting-group" style="margin-bottom:10px;">
+        <div class="setting-label">Новый баланс (₽)</div>
+        <input type="number" id="adjBalance" class="setting-input" placeholder="0" step="0.01">
+        <div class="setting-hint">Текущий: <span id="adjBalanceHint">0 ₽</span></div>
+    </div>
+    <div class="setting-group" style="margin-bottom:10px;">
+        <div class="setting-label">Новый капитал (₽)</div>
+        <input type="number" id="adjCapital" class="setting-input" placeholder="0" step="0.01">
+        <div class="setting-hint">Текущий: <span id="adjCapitalHint">0 ₽</span></div>
+    </div>
+    <div class="setting-group" style="margin-bottom:12px;">
+        <div class="setting-label">Комментарий</div>
+        <input type="text" id="adjComment" class="setting-input" placeholder="Например: пересчёт" style="text-align:left;font-size:0.9rem;">
+    </div>
+    <button class="btn btn-primary" onclick="doSaveAdjust()" style="background:var(--ios-purple);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Применить корректировку
+    </button>
+</div>
+
 <div class="setting-group"><div class="setting-label">Тема оформления</div><div style="display:flex;gap:6px;background:rgba(120,120,128,0.12);padding:4px;border-radius:10px;"><button class="theme-btn" data-theme="auto" onclick="setTheme('auto')">Авто</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">Светлая</button><button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Темная</button></div></div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
-<div class="setting-group"><div class="setting-label">Капитал (₽)</div><input type="number" id="setCapital" class="setting-input" placeholder="100000" step="1" min="0"><div class="setting-hint">Общий для всех счетов</div></div>
 <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
 <div class="setting-group"><div class="setting-label">% от расходов</div><input type="number" id="setExpPct" class="setting-input" placeholder="2.5" step="0.1" min="0" max="100"></div>
 <div class="report-card" style="background:rgba(0,122,255,0.08);"><div class="setting-label" style="margin-bottom:6px;">Формула</div><div style="font-size:0.8rem;color:var(--ios-text-secondary);line-height:1.6;">Выручка = (Доход × <span id="curIncPct">7</span>%) + (Расход × <span id="curExpPct">2.5</span>%)<br><span style="color:var(--ios-blue);">Капитал += Выручка</span></div></div>
@@ -510,7 +494,6 @@ body.light-theme .balance-card::after {
 <div class="nav-item" data-page="report" onclick="switchPage('report')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Отчёт</span></div>
 <div class="nav-item" data-page="goal" onclick="switchPage('goal')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="nav-label">Цель</span></div>
 <div class="nav-item" data-page="detail" onclick="switchPage('detail')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 14L11 10L15 14L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Детали</span></div>
-<div class="nav-item" data-page="adjust" onclick="switchPage('adjust')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M11 4H4V11H11V4Z" stroke="currentColor" stroke-width="2"/><path d="M13 4H20V11H13V4Z" stroke="currentColor" stroke-width="2"/><path d="M11 13H4V20H11V13Z" stroke="currentColor" stroke-width="2"/><path d="M13 13H20V20H13V13Z" stroke="currentColor" stroke-width="2"/></svg><span class="nav-label">Коррекция</span></div>
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
 </nav></div>
 
@@ -564,14 +547,12 @@ function updateMeshColors(){
 // ===== ANIMATION ENGINE =====
 const previousValues=new Map();
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
-
 function animateValue(el,nv,fmt,dur=600){
     const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
     const sv=previousValues.get(id)||0,st=performance.now();
     function u(ct){const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);el.textContent=fmt(sv+(nv-sv)*ep);if(p<1)requestAnimationFrame(u);else previousValues.set(id,nv);}
     requestAnimationFrame(u);
 }
-
 function initAnimatedElements(){['balanceDisplay','statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin','sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite','sumMargin','detBalance','detCapital','detSite','detSpend','detRevenue','detMargin','goalCurrentRevenue','goalTargetEl','goalRemaining','goalPercent'].forEach(id=>{const el=document.getElementById(id);if(el)previousValues.set(id,0);});}
 
 // ===== SPLASH =====
@@ -602,7 +583,6 @@ function createParticles(x,y,color){
         setTimeout(()=>p.remove(),800);
     }
 }
-
 document.addEventListener('click',(e)=>{
     const btn=e.target.closest('.action-btn');
     if(btn){
@@ -652,8 +632,8 @@ const calcAcc=(acc,period)=>{let inc=0,exp=0,spend=0;if(!acc?.transactions)retur
 const calcAll=()=>{let inc=0,exp=0,spend=0,bal=0;Object.values(holders).forEach(h=>{if(!h?.accounts)return;Object.values(h.accounts).forEach(a=>{if(!a)return;const s=calcAcc(a);inc+=s.totalIncome;exp+=s.totalExpense;spend+=s.totalSpend;bal+=a.balance||0;});});const rev=inc*(incomePercent/100)+exp*(expensePercent/100);return{totalIncome:inc,totalExpense:exp,totalSpend:spend,revenue:rev,margin:rev-spend,turnover:inc+exp,totalBalance:bal,siteBalance:capital-bal};};
 
 // ===== NAVIGATION =====
-let currentPageName='home';const pageOrder=['home','report','goal','detail','adjust','settings'];
-function switchPage(name){if(name===currentPageName)return;const oi=pageOrder.indexOf(currentPageName),ni=pageOrder.indexOf(name),gr=ni>oi;document.querySelectorAll('.page').forEach(p=>{const pn=p.id.replace('page-','');p.classList.remove('active','exit-left','exit-right');if(pn===currentPageName)p.classList.add(gr?'exit-left':'exit-right');});const t=document.getElementById('page-'+name);if(t)requestAnimationFrame(()=>t.classList.add('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-page="${name}"]`)?.classList.add('active');currentPageName=name;if(name==='report')refreshReport();if(name==='goal')refreshGoal();if(name==='detail')refreshDetail();if(name==='adjust')refreshAdjust();if(name==='settings')refreshSettings();haptic('light');}
+let currentPageName='home';const pageOrder=['home','report','goal','detail','settings'];
+function switchPage(name){if(name===currentPageName)return;const oi=pageOrder.indexOf(currentPageName),ni=pageOrder.indexOf(name),gr=ni>oi;document.querySelectorAll('.page').forEach(p=>{const pn=p.id.replace('page-','');p.classList.remove('active','exit-left','exit-right');if(pn===currentPageName)p.classList.add(gr?'exit-left':'exit-right');});const t=document.getElementById('page-'+name);if(t)requestAnimationFrame(()=>t.classList.add('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-page="${name}"]`)?.classList.add('active');currentPageName=name;if(name==='report')refreshReport();if(name==='goal')refreshGoal();if(name==='detail')refreshDetail();if(name==='settings')refreshSettings();haptic('light');}
 
 // ===== RENDER FUNCTIONS =====
 function updateMiniRing(){const s=calcAll(),bg=document.getElementById('miniRingBg'),ring=document.getElementById('miniRingFill'),label=document.getElementById('miniRingLabel'),cont=document.getElementById('miniRingContainer');if(!bg||!ring||!cont)return;const r=cont.getBoundingClientRect();bg.setAttribute('width',r.width-3);bg.setAttribute('height',r.height-3);ring.setAttribute('width',r.width-3);ring.setAttribute('height',r.height-3);if(goalTarget>0){const p=Math.min(s.revenue/goalTarget,1);ring.style.strokeDasharray='1';ring.style.strokeDashoffset=1-p;let c;if(p<.5){const t=p*2;c=`rgb(255,${Math.round(59+141*t)},${Math.round(48-48*t)})`;}else if(p<1){const t=(p-.5)*2;c=`rgb(${Math.round(255-203*t)},${Math.round(200-t)},${Math.round(89*t)})`;}else c='var(--ios-green)';ring.style.stroke=c;if(p>=.5&&p<1)ring.classList.add('glow-pulse');else ring.classList.remove('glow-pulse');label.textContent=Math.round(p*100)+'%';label.style.display='block';label.style.color=c;if(p>=1&&!window._confettiShown){window._confettiShown=true;showConfetti();}}else{ring.style.strokeDasharray='1';ring.style.strokeDashoffset='1';ring.style.stroke='rgba(255,255,255,0.1)';ring.classList.remove('glow-pulse');label.style.display='none';window._confettiShown=false;}}
@@ -672,7 +652,7 @@ const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing()
 const renderHome=()=>{const acc=getAccount(),h=getHolder(),ne=document.getElementById('accountName');if(!acc||!h){ne.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт';animateValue(document.getElementById('balanceDisplay'),0,fmt);['statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin'].forEach(id=>animateValue(document.getElementById(id),0,fmt));document.getElementById('txList').innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>';document.getElementById('resetBtn').style.display='none';updateMiniRing();return;}ne.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`;animateValue(document.getElementById('balanceDisplay'),acc.balance,fmt);const s=calcAcc(acc);animateValue(document.getElementById('statTurnover'),s.turnover,fmt);animateValue(document.getElementById('statIncome'),s.totalIncome,fmt);animateValue(document.getElementById('statExpense'),s.totalExpense,fmt);animateValue(document.getElementById('statRevenue'),s.revenue,fmt);animateValue(document.getElementById('statSpend'),s.totalSpend,fmt);const me=document.getElementById('statMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');const list=document.getElementById('txList');if(!acc.transactions?.length){list.innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>';document.getElementById('resetBtn').style.display='none';}else{list.innerHTML='';acc.transactions.slice().reverse().forEach((t,index)=>{if(!t)return;const d=new Date(t.date),time=isNaN(d.getTime())?'':d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});let cls,sign,desc;if(t.type==='income'){cls='text-green';sign='+';desc=t.desc||'Пополнение';}else if(t.type==='expense'){cls='text-red';sign='−';desc=t.desc||'Списание';}else if(t.type==='spend'){cls='text-purple';sign='−';desc='🛍️ '+(t.desc||'Трата');}else if(t.type==='adjustment'){cls='text-blue';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка');}else if(t.type==='revenue'){cls='text-orange';sign='+';desc='💜 '+(t.desc||'Капитализация');}else{cls='';sign='';desc=t.desc||'Операция';}const amt=t.type==='adjustment'?`${sign}${fmt(Math.abs(t.amount))}`:`${sign} ${fmt(t.amount)}`;const w=document.createElement('div');w.className='tx-item-wrapper';const sa=document.createElement('div');sa.className='tx-item-swipe';sa.textContent='🗑️ Удалить';sa.onclick=()=>deleteTransaction(index);const item=document.createElement('div');item.className='tx-item';item.innerHTML=`<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;w.appendChild(sa);w.appendChild(item);list.appendChild(w);initSwipeGesture(w,item);});document.getElementById('resetBtn').style.display='block';}saveLocal();updateMiniRing();};
 window.resetAll=()=>{const acc=getAccount(),h=getHolder();if(!acc||!h||!acc.transactions?.length){showToast('⚠️','Нет операций');return;}haptic('warning');const r=()=>{acc.balance=0;acc.transactions=[];renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Обнулено');};if(tg?.showConfirm)tg.showConfirm(`Обнулить "${acc.name}"?`,c=>{if(c)r();});else if(confirm('Обнулить?'))r();};
 
-// ===== REPORT, DETAIL, ADJUST, SETTINGS =====
+// ===== REPORT, DETAIL, SETTINGS =====
 const refreshReport=()=>{const s=calcAll();['sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite'].forEach((id,i)=>animateValue(document.getElementById(id),[s.turnover,s.revenue,s.totalIncome,s.totalExpense,s.totalSpend,s.totalBalance,capital,s.siteBalance][i],fmt));const me=document.getElementById('sumMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');renderReportsList();checkLastFixed();};
 const renderReport=refreshReport;
 const renderReportsList=()=>{const list=document.getElementById('reportsList'),keys=Object.keys(savedReports).sort().reverse();if(!keys.length){list.innerHTML='<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>';return;}list.innerHTML='';keys.forEach(key=>{const r=savedReports[key];if(!r)return;const d=new Date(r.date),sp=r.spend||0,mg=r.margin??((r.revenue||0)-sp);const c=document.createElement('div');c.className='report-card';c.innerHTML=`<div class="report-header"><div><div class="report-date">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div><div class="report-time">${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmt(sp)}</span></div><div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmt(mg)}</span></div></div>`;list.appendChild(c);});};
@@ -681,8 +661,33 @@ const refreshDetail=()=>{const s=calcAll();['detBalance','detCapital','detSite',
 const renderDetail=refreshDetail;
 window.toggleHolderExpand=(hid)=>{expandedHolders[hid]=!expandedHolders[hid];renderDetailTree();haptic('light');};
 const renderDetailTree=()=>{const c=document.getElementById('detailTree');c.innerHTML='';Object.keys(holders).forEach(hid=>{const h=holders[hid];if(!h?.accounts)return;const exp=expandedHolders[hid]!==false;const b=document.createElement('div');b.className='holder-block';const head=document.createElement('div');head.className='holder-head';head.onclick=()=>window.toggleHolderExpand(hid);head.innerHTML=`<div class="holder-head-left"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="holder-head-info"><div class="holder-name">${h.name}</div><div class="holder-accounts-count">${Object.keys(h.accounts).length} сч.</div></div></div><div class="holder-chevron ${exp?'expanded':''}"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`;b.appendChild(head);const wrap=document.createElement('div');wrap.className='holder-accounts-wrap'+(exp?' expanded':'');const inner=document.createElement('div');inner.className='holder-accounts-inner';let ht={income:0,expense:0,spend:0,turnover:0,revenue:0,margin:0,balance:0};Object.values(h.accounts).forEach(a=>{if(!a)return;const s=calcAcc(a,detailPeriod);ht.income+=s.totalIncome;ht.expense+=s.totalExpense;ht.spend+=s.totalSpend;ht.turnover+=s.turnover;ht.revenue+=s.revenue;ht.margin+=s.margin;ht.balance+=a.balance||0;const row=document.createElement('div');row.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--ios-separator);';row.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-weight:500;">💼 ${a.name}</span><span style="color:var(--ios-text-secondary);font-size:0.8rem;">${fmt(a.balance)}</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"><div class="detail-metric"><div class="detail-metric-label">Оборот</div><div class="detail-metric-value text-blue">${fmt(s.turnover)}</div></div><div class="detail-metric"><div class="detail-metric-label">Доход</div><div class="detail-metric-value text-green">${fmt(s.totalIncome)}</div></div><div class="detail-metric"><div class="detail-metric-label">Расход</div><div class="detail-metric-value text-red">${fmt(s.totalExpense)}</div></div><div class="detail-metric"><div class="detail-metric-label">Выручка</div><div class="detail-metric-value text-orange">${fmt(s.revenue)}</div></div><div class="detail-metric"><div class="detail-metric-label">Траты</div><div class="detail-metric-value text-purple">${fmt(s.totalSpend)}</div></div><div class="detail-metric"><div class="detail-metric-label">Маржа</div><div class="detail-metric-value text-teal">${fmt(s.margin)}</div></div></div>`;inner.appendChild(row);});const sum=document.createElement('div');sum.className='holder-summary';sum.innerHTML=`<div class="holder-summary-title">📊 Итого</div><div style="text-align:center;font-size:1rem;font-weight:600;">${fmt(ht.balance)}</div>`;inner.appendChild(sum);wrap.appendChild(inner);b.appendChild(wrap);c.appendChild(b);});};
-const refreshAdjust=()=>{const acc=getAccount(),h=getHolder();if(acc&&h){document.getElementById('adjustInfo').innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} · ${acc.name}`;document.getElementById('adjBalanceHint').textContent=fmt(acc.balance);document.getElementById('adjCapitalHint').textContent=fmt(capital);}};
-const refreshSettings=()=>{document.getElementById('setCapital').value=capital;document.getElementById('setIncPct').value=incomePercent;document.getElementById('setExpPct').value=expensePercent;document.getElementById('curIncPct').textContent=incomePercent;document.getElementById('curExpPct').textContent=expensePercent;};
+
+// ===== SETTINGS + ADJUST (объединённая функция) =====
+const refreshSettings=()=>{
+    const acc=getAccount(),h=getHolder();
+    document.getElementById('setIncPct').value=incomePercent;
+    document.getElementById('setExpPct').value=expensePercent;
+    document.getElementById('curIncPct').textContent=incomePercent;
+    document.getElementById('curExpPct').textContent=expensePercent;
+    
+    // Обновляем блок корректировки
+    const s=calcAll();
+    if(acc&&h){
+        document.getElementById('settingsAccountName').textContent=`${h.name} → ${acc.name}`;
+        document.getElementById('settingsCurrentBalance').textContent=fmt(acc.balance);
+        document.getElementById('settingsCurrentCapital').textContent=fmt(capital);
+        document.getElementById('settingsCurrentSite').textContent=fmt(s.siteBalance);
+        document.getElementById('adjBalanceHint').textContent=fmt(acc.balance);
+        document.getElementById('adjCapitalHint').textContent=fmt(capital);
+    }else{
+        document.getElementById('settingsAccountName').textContent='—';
+        document.getElementById('settingsCurrentBalance').textContent='0 ₽';
+        document.getElementById('settingsCurrentCapital').textContent='0 ₽';
+        document.getElementById('settingsCurrentSite').textContent='0 ₽';
+        document.getElementById('adjBalanceHint').textContent='0 ₽';
+        document.getElementById('adjCapitalHint').textContent='0 ₽';
+    }
+};
 
 // ===== TRANSACTIONS =====
 const doTransaction=(type)=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const amount=parseFloat(document.getElementById('amountInput').value);if(!amount||amount<=0){showToast('⚠️','Введите сумму');haptic('error');return;}if(amount>999999999)return;if(type==='income')acc.balance+=amount;else acc.balance-=amount;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});let rev=0;if(type==='income')rev=amount*(incomePercent/100);else if(type==='expense')rev=amount*(expensePercent/100);if(rev>0){capital+=rev;acc.transactions.push({type:'revenue',amount:rev,desc:'Капитализация',date:new Date().toISOString()});}document.getElementById('amountInput').value='';haptic('success');renderAll();saveServer();if(rev>0)setTimeout(()=>showToast('💰',`+${fmt(rev)} к капиталу`),300);};
@@ -698,8 +703,47 @@ const doShareCurrentReport=()=>{const s=calcAll(),now=new Date();shareText(`📊
 window.shareReport=(key)=>{const r=savedReports[key];if(!r)return;const d=new Date(r.date);shareText(`📊 Отчёт Findr\n📅 ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}\n💹 Оборот: ${fmt(r.turnover)}\n💰 Выручка: ${fmt(r.revenue)}\n📈 Маржа: ${fmt(r.margin??(r.revenue-(r.spend||0)))}`,'Отчёт Findr');};
 window.shareDetail=()=>{shareText(`📊 Детализация Findr\n💰 Капитал: ${fmt(capital)}\n💹 Выручка: ${fmt(calcAll().revenue)}`,'Детализация Findr');};
 window.deleteReport=(key)=>{const del=()=>{delete savedReports[key];saveLocal();saveServer();renderReportsList();checkLastFixed();haptic('success');showToast('🗑️','Удалено');};if(tg?.showConfirm)tg.showConfirm('Удалить?',c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-const doSaveAdjust=()=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const bs=document.getElementById('adjBalance').value,cs=document.getElementById('adjCapital').value,cm=document.getElementById('adjComment').value.trim();const nb=bs!==''?parseFloat(bs):null,nc=cs!==''?parseFloat(cs):null;if(nb===null&&nc===null){showToast('⚠️','Введите значение');return;}if(nb!==null&&nb!==acc.balance){if(!acc.transactions)acc.transactions=[];acc.transactions.push({type:'adjustment',amount:nb-acc.balance,desc:cm||'Корректировка',date:new Date().toISOString()});acc.balance=nb;}if(nc!==null)capital=nc;haptic('success');renderAll();saveServer();showToast('✅','Применено');document.getElementById('adjBalance').value='';document.getElementById('adjCapital').value='';document.getElementById('adjComment').value='';};
-const doSaveSettings=()=>{const nc=parseFloat(document.getElementById('setCapital').value),ni=parseFloat(document.getElementById('setIncPct').value),ne=parseFloat(document.getElementById('setExpPct').value);if(isNaN(nc)||nc<0){showToast('⚠️','Ошибка');return;}capital=nc;incomePercent=ni;expensePercent=ne;document.getElementById('curIncPct').textContent=incomePercent;document.getElementById('curExpPct').textContent=expensePercent;renderAll();saveServer();haptic('success');showToast('✅','Сохранено');};
+
+// ===== КОРРЕКТИРОВКА (теперь в настройках) =====
+const doSaveAdjust=()=>{
+    const acc=getAccount();
+    if(!acc){showToast('⚠️','Выберите счёт');return;}
+    const bs=document.getElementById('adjBalance').value;
+    const cs=document.getElementById('adjCapital').value;
+    const cm=document.getElementById('adjComment').value.trim();
+    const nb=bs!==''?parseFloat(bs):null;
+    const nc=cs!==''?parseFloat(cs):null;
+    if(nb===null&&nc===null){showToast('⚠️','Введите значение');return;}
+    if(nb!==null&&nb!==acc.balance){
+        if(!acc.transactions)acc.transactions=[];
+        acc.transactions.push({type:'adjustment',amount:nb-acc.balance,desc:cm||'Корректировка',date:new Date().toISOString()});
+        acc.balance=nb;
+    }
+    if(nc!==null)capital=nc;
+    haptic('success');
+    renderAll();
+    refreshSettings();
+    saveServer();
+    showToast('✅','Корректировка применена');
+    document.getElementById('adjBalance').value='';
+    document.getElementById('adjCapital').value='';
+    document.getElementById('adjComment').value='';
+};
+
+const doSaveSettings=()=>{
+    const ni=parseFloat(document.getElementById('setIncPct').value);
+    const ne=parseFloat(document.getElementById('setExpPct').value);
+    if(isNaN(ni)||isNaN(ne)){showToast('⚠️','Ошибка');return;}
+    incomePercent=ni;
+    expensePercent=ne;
+    document.getElementById('curIncPct').textContent=incomePercent;
+    document.getElementById('curExpPct').textContent=expensePercent;
+    renderAll();
+    saveServer();
+    haptic('success');
+    showToast('✅','Сохранено');
+};
+
 window.setPeriod=(p)=>{detailPeriod=p;document.querySelectorAll('.period-chip').forEach(c=>c.classList.toggle('active',c.dataset.p===p));renderDetailTree();haptic('light');};
 
 // ===== ACCOUNT MANAGEMENT =====
@@ -711,7 +755,7 @@ window.createAccount=()=>{if(!activeHolderId||!holders[activeHolderId]){showToas
 window.toggleEditMode=()=>{isEditMode=!isEditMode;document.getElementById('actionsMenu').classList.remove('active');renderAccountTree();haptic('light');showToast(isEditMode?'✏️':'✅',isEditMode?'Редактирование':'Завершено');};
 window.deleteHolder=(hid)=>{const h=holders[hid];if(!h)return;if(Object.keys(holders).length<=1){showToast('⚠️','Нельзя удалить последнего');return;}const del=()=>{if(activeHolderId===hid){activeHolderId=Object.keys(holders).find(k=>k!==hid);activeAccountId=Object.keys(holders[activeHolderId].accounts||{})[0]||null;}delete holders[hid];renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('🗑️','Удалён');};if(tg?.showConfirm)tg.showConfirm(`Удалить "${h.name}"?`,c=>{if(c)del();});else if(confirm('Удалить?'))del();};
 window.deleteAccount=(hid,aid)=>{const h=holders[hid];if(!h||!h.accounts[aid])return;if(Object.keys(h.accounts).length<=1){showToast('⚠️','Нельзя удалить последний');return;}const del=()=>{if(activeAccountId===aid)activeAccountId=Object.keys(h.accounts).find(k=>k!==aid);delete h.accounts[aid];renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('🗑️','Удалён');};if(tg?.showConfirm)tg.showConfirm('Удалить счёт?',c=>{if(c)del();});else if(confirm('Удалить?'))del();};
-const renderAccountTree=()=>{const c=document.getElementById('accountTree'),search=(document.getElementById('accountSearch').value||'').toLowerCase();c.innerHTML='';Object.keys(holders).forEach(hid=>{const h=holders[hid];if(!h)return;const b=document.createElement('div');b.style.marginBottom='12px';if(isEditMode){const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;';head.innerHTML=`<div class="edit-row-header"><span class="edit-row-label">Держатель</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g,'&quot;')}" id="eH_${hid}"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')">🗑️ Удалить</button>`;b.appendChild(head);}else{const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;font-weight:600;';head.textContent='👤 '+h.name;b.appendChild(head);}const accs=document.createElement('div');accs.style.cssText='margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';Object.values(h.accounts||{}).forEach(a=>{if(!a)return;if(search&&!a.name.toLowerCase().includes(search))return;const isA=hid===activeHolderId&&a.id===activeAccountId;if(isEditMode){const row=document.createElement('div');row.style.marginBottom='8px';row.innerHTML=`<input type="text" class="edit-input" value="${a.name.replace(/"/g,'&quot;')}" id="eA_${a.id}"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')">🗑️ Удалить</button>`;accs.appendChild(row);}else{const row=document.createElement('div');row.style.cssText=`background:${isA?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;row.onclick=()=>{activeHolderId=hid;activeAccountId=a.id;renderAll();saveLocal();saveServer();closeAccountSheet();haptic('success');showToast('✅',a.name);};row.innerHTML=`<span style="${isA?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isA?'color:rgba(255,255,255,.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`;accs.appendChild(row);}});b.appendChild(accs);if(isEditMode){const ea=document.createElement('div');ea.className='edit-actions';ea.innerHTML=`<button class="btn btn-primary" onclick="saveEdits('${hid}')">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()">✕</button>`;b.appendChild(ea);}c.appendChild(b);});};
+const renderAccountTree=()=>{const c=document.getElementById('accountTree'),search=(document.getElementById('accountSearch').value||'').toLowerCase();c.innerHTML='';Object.keys(holders).forEach(hid=>{const h=holders[hid];if(!h)return;const b=document.createElement('div');b.style.marginBottom='12px';if(isEditMode){const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px;border:1px solid var(--ios-separator);margin-bottom:8px;';head.innerHTML=`<div class="edit-row-header"><span class="edit-row-label">Держатель</span></div><input type="text" class="edit-input" value="${h.name.replace(/"/g,'&quot;')}" id="eH_${hid}"><button class="delete-btn-inline" onclick="deleteHolder('${hid}')" style="margin-top:8px;">🗑️ Удалить</button>`;b.appendChild(head);}else{const head=document.createElement('div');head.style.cssText='background:var(--ios-card);border-radius:12px;padding:12px 14px;border:1px solid var(--ios-separator);margin-bottom:8px;font-weight:600;';head.textContent='👤 '+h.name;b.appendChild(head);}const accs=document.createElement('div');accs.style.cssText='margin-left:12px;padding-left:12px;border-left:2px solid var(--ios-separator);margin-top:8px;';Object.values(h.accounts||{}).forEach(a=>{if(!a)return;if(search&&!a.name.toLowerCase().includes(search))return;const isA=hid===activeHolderId&&a.id===activeAccountId;if(isEditMode){const row=document.createElement('div');row.style.marginBottom='8px';row.innerHTML=`<input type="text" class="edit-input" value="${a.name.replace(/"/g,'&quot;')}" id="eA_${a.id}"><button class="delete-btn-account" onclick="deleteAccount('${hid}','${a.id}')" style="margin-top:6px;">🗑️ Удалить</button>`;accs.appendChild(row);}else{const row=document.createElement('div');row.style.cssText=`background:${isA?'var(--ios-blue)':'var(--ios-card)'};border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--ios-separator);cursor:pointer;display:flex;justify-content:space-between;align-items:center;`;row.onclick=()=>{activeHolderId=hid;activeAccountId=a.id;renderAll();saveLocal();saveServer();closeAccountSheet();haptic('success');showToast('✅',a.name);};row.innerHTML=`<span style="${isA?'color:white;font-weight:600;':''}">💼 ${a.name}</span><span style="${isA?'color:rgba(255,255,255,.7);':'color:var(--ios-text-secondary);'}">${fmt(a.balance)}</span>`;accs.appendChild(row);}});b.appendChild(accs);if(isEditMode){const ea=document.createElement('div');ea.style.cssText='display:flex;gap:8px;margin-top:12px;';ea.innerHTML=`<button class="btn btn-primary" onclick="saveEdits('${hid}')" style="flex:1;padding:10px;font-size:0.85rem;">✓ Сохранить</button><button class="btn btn-secondary" onclick="cancelEditMode()" style="flex:1;padding:10px;font-size:0.85rem;">✕</button>`;b.appendChild(ea);}c.appendChild(b);});};
 window.saveEdits=(hid)=>{const h=holders[hid];if(!h)return;const hi=document.getElementById('eH_'+hid);if(hi&&hi.value.trim())h.name=hi.value.trim();Object.values(h.accounts||{}).forEach(a=>{const ai=document.getElementById('eA_'+a.id);if(ai&&ai.value.trim())a.name=ai.value.trim();});isEditMode=false;renderAccountTree();renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Сохранено');};
 window.cancelEditMode=()=>{isEditMode=false;renderAccountTree();};
 
