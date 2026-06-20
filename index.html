@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
 <title>Findr</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -21,12 +24,11 @@
 --radius-ios: 20px; --radius-ios-sm: 12px;
 --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 --spring-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
---spring-snappy: cubic-bezier(0.5, 1.5, 0.5, 1);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
+html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; }
 .mesh-gradient-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; animation: blobFloat 20s ease-in-out infinite; transition: background 1s ease; }
+.mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; animation: blobFloat 20s ease-in-out infinite; }
 .mesh-blob:nth-child(1) { width: 300px; height: 300px; top: -100px; left: -80px; background: var(--ios-blue); animation-duration: 18s; }
 .mesh-blob:nth-child(2) { width: 250px; height: 250px; top: 40%; right: -100px; background: var(--ios-purple); animation-delay: -5s; animation-duration: 22s; }
 .mesh-blob:nth-child(3) { width: 200px; height: 200px; bottom: -50px; left: 30%; background: var(--ios-teal); animation-delay: -10s; animation-duration: 25s; }
@@ -34,7 +36,7 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
 @keyframes blobFloat { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(30px, -40px) scale(1.1); } 50% { transform: translate(-20px, 20px) scale(0.9); } 75% { transform: translate(40px, 30px) scale(1.05); } }
 body.light-theme .mesh-blob { opacity: 0.08; filter: blur(100px); }
 .noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-#splash { position: fixed; inset: 0; z-index: 10000; background: var(--splash-bg, linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--spring-smooth), visibility 0.6s; }
+#splash { position: fixed; inset: 0; z-index: 10000; background: var(--splash-bg, linear-gradient(180deg, #FAFAFA 0%, #F0F0F0 100%)); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s, visibility 0.6s; }
 #splash.hide { opacity: 0; visibility: hidden; }
 #splashCanvas { width: 180px; height: 180px; }
 .splash-title { font-size: 2.5rem; font-weight: 700; color: var(--splash-text, #1c1c1e); margin-top: 1.5rem; opacity: 0; animation: titleReveal 1s var(--spring-bounce) 0.5s forwards; }
@@ -45,34 +47,33 @@ body.light-theme .bottom-nav { background: rgba(255,255,255,0.92); }
 body.light-theme .balance-card { background: linear-gradient(135deg, #fff 0%, #f2f2f7 100%); border: 1px solid var(--ios-separator); }
 body.light-theme .bottom-sheet { background: #fff; }
 body.light-theme .sheet-handle { background: #d1d1d6; }
-body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid var(--ios-separator); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
-.theme-btn { flex: 1; padding: 8px 0; border: none; border-radius: 8px; background: transparent; color: var(--ios-text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); }
-.theme-btn.active { background: var(--ios-card-solid); color: var(--ios-text); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid var(--ios-separator); }
+.theme-btn { flex: 1; padding: 8px 0; border: none; border-radius: 8px; background: transparent; color: var(--ios-text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+.theme-btn.active { background: var(--ios-card-solid); color: var(--ios-text); }
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: transparent; position: relative; z-index: 1; }
 .pages { flex: 1; position: relative; overflow: hidden; }
-.page { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0; opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-snappy); transform: translateX(30%) scale(0.95); }
+.page { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0; opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s, transform 0.5s; transform: translateX(30%) scale(0.95); }
 .page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
 .page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
 .page.exit-right { opacity: 0; transform: translateX(30%) scale(0.95); }
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; position: relative; }
-.pull-refresh { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--ios-card); backdrop-filter: blur(20px); border: 1px solid var(--ios-separator); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease, transform 0.3s var(--spring-bounce); z-index: 100; }
+.pull-refresh { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--ios-card); backdrop-filter: blur(20px); border: 1px solid var(--ios-separator); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 100; }
 .pull-refresh.active { opacity: 1; }
 .pull-refresh.refreshing { animation: refreshSpin 1s linear infinite; }
 @keyframes refreshSpin { from { transform: translateX(-50%) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg); } }
 .tx-item-wrapper { position: relative; overflow: hidden; border-radius: var(--radius-ios-sm); margin-bottom: 8px; }
 .tx-item-swipe { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-red); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.3s var(--spring-bounce); position: relative; z-index: 2; touch-action: pan-y; }
+.tx-item { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--ios-separator); animation: slideUp 0.5s var(--spring-bounce); transition: transform 0.3s; position: relative; z-index: 2; touch-action: pan-y; }
 .tx-item.swiping { transition: none; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .balance-card-wrapper { position: relative; margin-bottom: 16px; }
 .progress-ring-container { position: absolute; inset: -3px; pointer-events: none; z-index: 3; }
 .progress-ring-container svg { width: 100%; height: 100%; }
 .progress-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 3; }
-.progress-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth); filter: drop-shadow(0 0 6px currentColor); }
-.progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 4; font-variant-numeric: tabular-nums; }
-.balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden; transition: transform 0.4s var(--spring-bounce); }
+.progress-ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s, stroke 0.5s; filter: drop-shadow(0 0 6px currentColor); }
+.progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 4; }
+.balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden; transition: transform 0.4s; }
 .balance-card:active { transform: scale(0.98); }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0,122,255,0.1) 0%, transparent 70%); }
 .balance-card::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: skewX(-25deg); pointer-events: none; z-index: 5; animation: shineEffect 4s ease-in-out infinite; }
@@ -83,19 +84,14 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .skeleton-text { height: 16px; margin-bottom: 8px; }
 .skeleton-text-sm { height: 12px; width: 60%; }
-.particle { position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; animation: particleFly 0.8s ease-out forwards; }
-@keyframes particleFly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-.balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ios-text-secondary); backdrop-filter: blur(10px); }
-.balance-edit-btn:active { transform: scale(0.85) rotate(90deg); }
+.balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ios-text-secondary); }
 .balance-value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; position: relative; z-index: 2; margin-top: 4px; }
 .balance-value { font-size: 2.25rem; font-weight: 700; color: var(--ios-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
 .balance-plus-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,59,48,0.12); border: 1px solid rgba(255,59,48,0.25); color: var(--ios-red); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
-.balance-plus-btn:active { transform: scale(0.85) rotate(90deg); }
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
-.stat-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); transition: transform 0.3s var(--spring-bounce); }
-.stat-card:active { transform: scale(0.95); }
+.stat-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); }
 .stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .stat-icon { width: 18px; height: 18px; flex-shrink: 0; }
 .stat-name { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 500; }
@@ -117,28 +113,27 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .amount-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 1.75rem; font-weight: 600; text-align: center; padding: 14px; outline: none; font-variant-numeric: tabular-nums; }
 .amount-input::placeholder { color: var(--ios-text-secondary); }
 .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .action-btn:active { transform: scale(0.92); }
-.action-income { background: var(--ios-green); color: white; box-shadow: 0 4px 15px rgba(52,199,89,0.3); }
-.action-expense { background: var(--ios-red); color: white; box-shadow: 0 4px 15px rgba(255,59,48,0.3); }
+.action-income { background: var(--ios-green); color: white; }
+.action-expense { background: var(--ios-red); color: white; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
 .section-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .reset-btn { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; opacity: 0.7; }
-.reset-btn:active { opacity: 1; background: rgba(255,59,48,0.1); color: var(--ios-red); }
 .tx-list { display: flex; flex-direction: column; }
 .tx-info { flex: 1; min-width: 0; }
 .tx-desc { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tx-time { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .tx-amount { font-size: 0.95rem; font-weight: 600; white-space: nowrap; margin-left: 12px; font-variant-numeric: tabular-nums; }
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28,28,30,0.92); backdrop-filter: blur(30px); border-top: 1px solid var(--ios-separator); display: flex; justify-content: space-around; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; transition: all 0.3s var(--spring-bounce); min-height: 48px; position: relative; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px 2px; cursor: pointer; min-height: 48px; position: relative; }
 .nav-item:active { transform: scale(0.88); }
-.nav-icon { width: 22px; height: 22px; opacity: 0.45; transition: all 0.4s var(--spring-bounce); }
+.nav-icon { width: 22px; height: 22px; opacity: 0.45; transition: all 0.4s; }
 .nav-item.active .nav-icon { opacity: 1; transform: scale(1.15) translateY(-2px); }
 .nav-item.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: var(--ios-blue); border-radius: 0 0 3px 3px; }
 .nav-label { font-size: 10px; font-weight: 500; color: var(--ios-text-secondary); height: 14px; display: flex; align-items: center; }
 .nav-item.active .nav-label { color: var(--ios-blue); font-weight: 600; }
-.sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s var(--spring-smooth); }
+.sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
 .sheet-overlay.active { opacity: 1; visibility: visible; }
 .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1c1e; border-radius: 20px 20px 0 0; padding: 12px 16px max(16px, env(safe-area-inset-bottom)); z-index: 2001; transform: translateY(100%); transition: transform 0.5s var(--spring-bounce); max-height: 90vh; overflow-y: auto; }
 .bottom-sheet.active { transform: translateY(0); }
@@ -159,12 +154,12 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .edit-input:focus { border-color: var(--ios-blue); }
 .toast-container { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 .toast { background: rgba(28,28,30,0.95); backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; animation: toastIn 0.5s var(--spring-bounce); pointer-events: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-.toast.out { animation: toastOut 0.3s var(--spring-smooth) forwards; }
+.toast.out { animation: toastOut 0.3s forwards; }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes toastOut { to { opacity: 0; transform: translateY(-20px) scale(0.95); } }
 .toast-icon { width: 20px; height: 20px; flex-shrink: 0; }
 .toast-text { font-size: 0.85rem; flex: 1; font-weight: 500; }
-.btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn { padding: 13px 20px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn:active { transform: scale(0.94); }
 .btn-primary { background: var(--ios-blue); color: white; }
 .btn-secondary { background: rgba(120,120,128,0.12); color: var(--ios-blue); border: 1px solid rgba(0,122,255,0.2); }
@@ -174,7 +169,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .report-time { font-size: 0.7rem; color: var(--ios-text-secondary); margin-top: 2px; }
 .report-actions { display: flex; gap: 6px; }
 .report-action { width: 30px; height: 30px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.report-action:active { transform: scale(0.8); }
 .report-action.share { background: rgba(0,122,255,0.15); color: var(--ios-blue); }
 .report-action.delete { background: rgba(255,59,48,0.15); color: var(--ios-red); }
 .report-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -185,7 +179,6 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .summary-title { font-size: 0.75rem; font-weight: 600; text-align: center; margin-bottom: 12px; color: var(--ios-text-secondary); text-transform: uppercase; }
 .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .summary-item { text-align: center; padding: 10px 8px; background: rgba(120,120,128,0.08); border-radius: var(--radius-ios-sm); }
-.summary-item:active { transform: scale(0.95); }
 .summary-label { font-size: 0.6rem; color: var(--ios-text-secondary); text-transform: uppercase; font-weight: 500; }
 .summary-val { font-size: 0.95rem; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .period-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
@@ -199,15 +192,13 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .setting-hint { font-size: 0.65rem; color: var(--ios-text-secondary); margin-top: 4px; }
 .sync-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; color: var(--ios-text-secondary); padding: 4px 10px; background: rgba(120,120,128,0.12); border-radius: 100px; margin-top: 8px; font-weight: 500; }
 .sync-badge.syncing { color: var(--ios-orange); }
-.sync-badge.synced { color: var(--ios-green); }
-.sync-badge.realtime { color: var(--ios-green); }
+.sync-badge.synced, .sync-badge.realtime { color: var(--ios-green); }
 .empty-state { text-align: center; padding: 40px 20px; color: var(--ios-text-secondary); }
 .empty-icon { width: 48px; height: 48px; margin: 0 auto 10px; opacity: 0.5; }
 .empty-text { font-size: 0.85rem; }
 .text-green { color: var(--ios-green); } .text-red { color: var(--ios-red); } .text-blue { color: var(--ios-blue); } .text-orange { color: var(--ios-orange); } .text-purple { color: var(--ios-purple); } .text-teal { color: var(--ios-teal); }
 .mb-10 { margin-bottom: 10px; } .mb-12 { margin-bottom: 12px; } .mb-16 { margin-bottom: 16px; } .mb-20 { margin-bottom: 20px; }
 .detail-metric { text-align: center; padding: 8px 4px; background: rgba(120,120,128,0.08); border-radius: 8px; }
-.detail-metric:active { transform: scale(0.95); }
 .detail-metric-label { font-size: 0.55rem; color: var(--ios-text-secondary); text-transform: uppercase; font-weight: 500; margin-bottom: 3px; }
 .detail-metric-value { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .holder-block { margin-bottom: 12px; }
@@ -217,9 +208,9 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .holder-head-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .holder-name { font-weight: 600; font-size: 0.95rem; }
 .holder-accounts-count { font-size: 0.7rem; color: var(--ios-text-secondary); }
-.holder-chevron { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--ios-text-secondary); transition: transform 0.4s var(--spring-bounce); }
+.holder-chevron { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--ios-text-secondary); transition: transform 0.4s; }
 .holder-chevron.expanded { transform: rotate(180deg); }
-.holder-accounts-wrap { max-height: 0; overflow: hidden; transition: max-height 0.5s var(--spring-smooth); }
+.holder-accounts-wrap { max-height: 0; overflow: hidden; transition: max-height 0.5s; }
 .holder-accounts-wrap.expanded { max-height: 2000px; }
 .holder-accounts-inner { margin-left: 12px; padding-left: 12px; border-left: 2px solid var(--ios-separator); margin-top: 8px; }
 .holder-summary { background: rgba(90,200,250,0.08); border: 1px solid rgba(90,200,250,0.2); border-radius: 12px; padding: 12px; margin-top: 8px; }
@@ -227,14 +218,13 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .goal-ring-wrapper { position: relative; width: 220px; height: 220px; margin: 0 auto 24px; }
 .goal-ring-wrapper svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .goal-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 14; }
-.goal-ring-fill { fill: none; stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--spring-smooth), stroke 0.5s var(--spring-smooth); filter: drop-shadow(0 0 10px currentColor); }
+.goal-ring-fill { fill: none; stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset 1.2s, stroke 0.5s; filter: drop-shadow(0 0 10px currentColor); }
 .goal-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
 .goal-percent { font-size: 3rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
 .goal-percent-sign { font-size: 1.5rem; font-weight: 500; opacity: 0.6; margin-left: 2px; }
 .goal-subtitle { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
 .goal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .goal-stat-card { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 14px; border: 1px solid var(--ios-separator); text-align: center; }
-.goal-stat-card:active { transform: scale(0.95); }
 .goal-stat-label { font-size: 0.65rem; color: var(--ios-text-secondary); text-transform: uppercase; margin-bottom: 6px; }
 .goal-stat-value { font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .goal-history-title { font-size: 0.7rem; color: var(--ios-text-secondary); text-transform: uppercase; font-weight: 600; margin: 20px 0 10px; padding: 0 4px; }
@@ -256,29 +246,25 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .team-section { background: linear-gradient(135deg, rgba(0,122,255,0.06) 0%, rgba(175,82,222,0.06) 100%); border: 1px solid rgba(0,122,255,0.15); border-radius: var(--radius-ios); padding: 16px; margin-bottom: 16px; }
 .team-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 .team-member { background: var(--ios-card); backdrop-filter: blur(20px); border-radius: var(--radius-ios-sm); padding: 12px 14px; margin-bottom: 8px; border: 1px solid var(--ios-separator); display: flex; align-items: center; gap: 12px; }
-.team-member:active { transform: scale(0.98); }
 .team-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; color: white; flex-shrink: 0; }
 .team-avatar.owner-av { background: linear-gradient(135deg, #FFD700, #FFA500); }
 .team-avatar.admin-av { background: linear-gradient(135deg, var(--ios-blue), var(--ios-teal)); }
 .team-avatar.accountant-av { background: linear-gradient(135deg, var(--ios-green), #30D158); }
 .team-avatar.viewer-av { background: linear-gradient(135deg, var(--ios-gray), #AEAEB2); }
 .team-info { flex: 1; min-width: 0; }
-.team-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+.team-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
 .team-meta { font-size: 0.7rem; color: var(--ios-text-secondary); }
 .team-actions { display: flex; gap: 6px; flex-shrink: 0; }
 .team-btn { width: 34px; height: 34px; border-radius: 10px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.team-btn:active { transform: scale(0.85); }
 .team-btn.edit-btn { background: rgba(0,122,255,0.12); color: var(--ios-blue); }
 .invite-section { background: rgba(120,120,128,0.06); border-radius: var(--radius-ios-sm); padding: 14px; margin-top: 12px; }
 .invite-role-selector { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
-.invite-role-btn { padding: 8px 14px; border-radius: 100px; border: 2px solid var(--ios-separator); background: transparent; color: var(--ios-text-secondary); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); display: flex; align-items: center; gap: 4px; }
+.invite-role-btn { padding: 8px 14px; border-radius: 100px; border: 2px solid var(--ios-separator); background: transparent; color: var(--ios-text-secondary); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .invite-role-btn.selected { border-color: var(--ios-blue); background: rgba(0,122,255,0.12); color: var(--ios-blue); }
-.invite-role-btn:active { transform: scale(0.95); }
 .invite-link-box { background: var(--ios-card); border-radius: 10px; padding: 10px 12px; margin-top: 10px; display: none; border: 1px solid var(--ios-separator); }
 .invite-link-box.active { display: block; }
 .invite-link-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 0.75rem; font-family: monospace; outline: none; word-break: break-all; }
-.role-option { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-ios-sm); border: 2px solid var(--ios-separator); margin-bottom: 8px; cursor: pointer; transition: all 0.3s var(--spring-bounce); background: var(--ios-card); }
-.role-option:active { transform: scale(0.98); }
+.role-option { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-ios-sm); border: 2px solid var(--ios-separator); margin-bottom: 8px; cursor: pointer; background: var(--ios-card); }
 .role-option.selected { border-color: var(--ios-blue); background: rgba(0,122,255,0.08); }
 .role-option-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
 .role-option-info { flex: 1; }
@@ -287,9 +273,70 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .role-option-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--ios-separator); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .role-option.selected .role-option-check { background: var(--ios-blue); border-color: var(--ios-blue); }
 .my-role-badge { position: fixed; top: max(8px, env(safe-area-inset-top)); right: 12px; z-index: 999; padding: 4px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 600; backdrop-filter: blur(20px); display: none; }
-.my-role-badge.visible { display: flex; align-items: center; gap: 4px; animation: toastIn 0.5s var(--spring-bounce); }
-.pwa-notice { position: fixed; top: max(60px, calc(env(safe-area-inset-top) + 50px)); left: 16px; right: 16px; z-index: 998; background: rgba(255,149,0,0.15); border: 1px solid rgba(255,149,0,0.3); border-radius: 12px; padding: 12px 16px; font-size: 0.8rem; color: var(--ios-orange); display: none; align-items: center; gap: 8px; backdrop-filter: blur(20px); }
-.pwa-notice.visible { display: flex; animation: toastIn 0.5s var(--spring-bounce); }
+.my-role-badge.visible { display: flex; align-items: center; gap: 4px; animation: toastIn 0.5s; }
+
+/* === ACCESS CODE MODAL === */
+.access-code-modal {
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.access-code-modal.active { display: flex; animation: toastIn 0.4s var(--spring-bounce); }
+.access-code-content {
+    background: var(--ios-card-solid); border-radius: var(--radius-ios);
+    padding: 24px; max-width: 380px; width: 100%;
+    border: 1px solid var(--ios-separator);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.access-code-title {
+    font-size: 1.3rem; font-weight: 700; text-align: center;
+    margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.access-code-subtitle {
+    font-size: 0.85rem; color: var(--ios-text-secondary); text-align: center;
+    margin-bottom: 20px; line-height: 1.5;
+}
+.access-code-input-wrap {
+    background: rgba(120,120,128,0.1); border: 2px solid var(--ios-separator);
+    border-radius: var(--radius-ios-sm); padding: 4px; margin-bottom: 16px;
+    transition: border-color 0.3s;
+}
+.access-code-input-wrap:focus-within { border-color: var(--ios-blue); }
+.access-code-input {
+    width: 100%; background: transparent; border: none; color: var(--ios-text);
+    font-size: 2rem; font-weight: 700; text-align: center; padding: 16px;
+    outline: none; font-variant-numeric: tabular-nums; letter-spacing: 0.3em;
+    font-family: 'Inter', monospace;
+}
+.access-code-input::placeholder { color: var(--ios-text-secondary); opacity: 0.5; letter-spacing: 0.3em; }
+.access-code-error {
+    color: var(--ios-red); font-size: 0.8rem; text-align: center;
+    margin-bottom: 12px; min-height: 20px;
+}
+.access-code-hint {
+    background: rgba(0,122,255,0.1); border: 1px solid rgba(0,122,255,0.2);
+    border-radius: 10px; padding: 12px; margin-top: 16px;
+    font-size: 0.8rem; color: var(--ios-blue); line-height: 1.5;
+}
+.access-code-hint b { display: block; margin-bottom: 4px; }
+
+/* === GENERATED CODE DISPLAY === */
+.generated-code-box {
+    background: linear-gradient(135deg, rgba(52,199,89,0.1) 0%, rgba(90,200,250,0.1) 100%);
+    border: 2px solid rgba(52,199,89,0.3);
+    border-radius: var(--radius-ios-sm); padding: 20px; margin: 12px 0;
+    text-align: center;
+}
+.generated-code-value {
+    font-size: 2.5rem; font-weight: 800; letter-spacing: 0.2em;
+    font-variant-numeric: tabular-nums; color: var(--ios-green);
+    font-family: 'Inter', monospace; margin: 8px 0;
+}
+.generated-code-ttl {
+    font-size: 0.75rem; color: var(--ios-text-secondary);
+}
+
 ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
@@ -297,10 +344,30 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="mesh-gradient-bg"><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div></div>
 <div class="noise-overlay"></div>
 <div class="my-role-badge" id="myRoleBadge"></div>
-<div class="pwa-notice" id="pwaNotice">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-    <span>Режим PWA — для полной функциональности откройте через Telegram</span>
+
+<!-- ACCESS CODE MODAL -->
+<div class="access-code-modal" id="accessCodeModal">
+    <div class="access-code-content">
+        <div class="access-code-title">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--ios-blue)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Код доступа
+        </div>
+        <div class="access-code-subtitle">Введите 6-значный код, чтобы подключить этот_device к вашему аккаунту Findr</div>
+        <div class="access-code-input-wrap">
+            <input type="text" class="access-code-input" id="accessCodeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+        </div>
+        <div class="access-code-error" id="accessCodeError"></div>
+        <button class="btn btn-primary" onclick="verifyAccessCode()" id="accessCodeSubmitBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Подключить
+        </button>
+        <div class="access-code-hint">
+            <b>📱 Где взять код?</b>
+            Откройте Findr в Telegram → Настройки → "Код доступа для PWA" → скопируйте 6-значный код
+        </div>
+    </div>
 </div>
+
 <div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
 <div class="toast-container" id="toastContainer"></div>
 <div id="app">
@@ -382,6 +449,31 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 
 <div class="page" id="page-settings"><div class="page-content">
 <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;"><circle cx="12" cy="12" r="3" stroke="var(--ios-gray)" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="var(--ios-gray)" stroke-width="2" stroke-linecap="round"/></svg>Настройки</div>
+
+<!-- БЛОК КОДА ДОСТУПА (виден только владельцу) -->
+<div class="team-section" id="accessCodeSection" style="display:none;">
+    <div class="team-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ios-green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Код доступа для PWA
+    </div>
+    <div style="font-size:0.8rem;color:var(--ios-text-secondary);margin-bottom:12px;line-height:1.5;">
+        Используйте этот код, чтобы подключить приложение на домашнем экране (PWA) или на другом устройстве к вашему аккаунту.
+    </div>
+    <div class="generated-code-box" id="generatedCodeBox" style="display:none;">
+        <div style="font-size:0.7rem;color:var(--ios-text-secondary);text-transform:uppercase;letter-spacing:0.05em;">Ваш код доступа</div>
+        <div class="generated-code-value" id="generatedCodeValue">------</div>
+        <div class="generated-code-ttl" id="generatedCodeTtl">Истекает через: --:--</div>
+    </div>
+    <button class="btn btn-primary" id="generateCodeBtn" onclick="generateAccessCode()" style="background:var(--ios-green);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        <span id="generateCodeBtnText">Сгенерировать новый код</span>
+    </button>
+    <div style="display:flex;gap:8px;margin-top:10px;" id="codeActions" style="display:none;">
+        <button class="btn btn-secondary" onclick="copyAccessCode()" style="flex:1;">📋 Копировать</button>
+        <button class="btn btn-secondary" onclick="shareAccessCode()" style="flex:1;">📤 Отправить</button>
+    </div>
+</div>
+
 <div class="team-section" id="teamSection">
     <div class="team-title">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ios-blue)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -416,6 +508,7 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
         </div>
     </div>
 </div>
+
 <div class="setting-group"><div class="setting-label">Тема оформления</div><div style="display:flex;gap:6px;background:rgba(120,120,128,0.12);padding:4px;border-radius:10px;"><button class="theme-btn" data-theme="auto" onclick="setTheme('auto')">Авто</button><button class="theme-btn" data-theme="light" onclick="setTheme('light')">Светлая</button><button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Темная</button></div></div>
 <div style="background:rgba(0,122,255,0.12);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-blue);display:flex;gap:10px;align-items:flex-start;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span><b>Автокапитализация:</b> выручка автоматически добавляется к капиталу</span></div>
 <div class="setting-group"><div class="setting-label">% от доходов</div><input type="number" id="setIncPct" class="setting-input" placeholder="7" step="0.1" min="0" max="100"></div>
@@ -498,6 +591,16 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 const tg = window.Telegram?.WebApp;
 if(tg){try{tg.ready();tg.expand();}catch(e){}}
 
+// ===== ОПРЕДЕЛЕНИЕ РЕЖИМА =====
+let isTelegram = false;
+let isPWA = false;
+
+function detectEnvironment() {
+    isTelegram = !!(window.Telegram?.WebApp?.initDataUnsafe?.user?.id);
+    isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    console.log('[ENV] Telegram:', isTelegram, '| PWA:', isPWA);
+}
+
 function isDarkColor(hex){if(!hex)return true;hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(0.299*r+0.587*g+0.114*b)/255<0.5;}
 
 function applyTheme(){
@@ -532,51 +635,27 @@ const fmt=(n)=>{if(n==null||isNaN(n))n=0;return new Intl.NumberFormat('ru-RU',{s
 
 function showConfetti(){const c=document.getElementById('confettiContainer'),colors=['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#5AC8FA'];for(let i=0;i<60;i++){const d=document.createElement('div');d.className='confetti';d.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${Math.random()*2+2}s;width:${Math.random()*8+6}px;height:${Math.random()*8+6}px;border-radius:${Math.random()>.5?'50%':'2px'};`;c.appendChild(d);setTimeout(()=>d.remove(),4500);}haptic('success');}
 
-function createParticles(x,y,color){const colors=[color,'#007AFF','#34C759','#FF9500','#AF52DE'];for(let i=0;i<12;i++){const p=document.createElement('div');p.className='particle';const angle=(Math.PI*2*i)/12,distance=60+Math.random()*40;p.style.cssText=`left:${x}px;top:${y}px;width:${6+Math.random()*4}px;height:${6+Math.random()*4}px;background:${colors[Math.floor(Math.random()*colors.length)]};--tx:${Math.cos(angle)*distance}px;--ty:${Math.sin(angle)*distance}px;`;document.body.appendChild(p);setTimeout(()=>p.remove(),800);}}
-document.addEventListener('click',(e)=>{const btn=e.target.closest('.action-btn');if(btn){const rect=btn.getBoundingClientRect();createParticles(rect.left+rect.width/2,rect.top+rect.height/2,btn.classList.contains('action-income')?'#34C759':'#FF3B30');}});
-
-function init3DTilt(){const card=document.getElementById('balanceCard');if(!card)return;let busy=false;const move=(cx,cy)=>{if(busy)return;busy=true;const r=card.getBoundingClientRect();card.style.transform=`perspective(1000px) rotateX(${(cy-r.top-r.height/2)/15}deg) rotateY(${(r.width/2-(cx-r.left))/15}deg) scale3d(1.02,1.02,1.02)`;requestAnimationFrame(()=>busy=false);};card.addEventListener('mousemove',e=>move(e.clientX,e.clientY));card.addEventListener('mouseleave',()=>{card.style.transform='';});card.addEventListener('touchmove',e=>move(e.touches[0].clientX,e.touches[0].clientY),{passive:true});card.addEventListener('touchend',()=>{card.style.transform='';});}
-
-function initMagneticButtons(){document.querySelectorAll('#btnIncome,#btnExpense').forEach(btn=>{btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.15}px,${(e.clientY-r.top-r.height/2)*.15}px) scale(1.05)`;});btn.addEventListener('mouseleave',()=>{btn.style.transform='';});});}
-
 function initPullToRefresh(){const page=document.getElementById('page-home'),ind=document.getElementById('pullRefresh');let sy=0,cy=0,pulling=false,refreshing=false;page.addEventListener('touchstart',e=>{if(page.scrollTop===0&&!refreshing){sy=e.touches[0].clientY;pulling=true;}},{passive:true});page.addEventListener('touchmove',e=>{if(!pulling||refreshing)return;cy=e.touches[0].clientY;const d=cy-sy;if(d>0){const p=Math.min(d*.5,80);ind.style.top=`${p-60}px`;ind.classList.add('active');}},{passive:true});page.addEventListener('touchend',()=>{if(!pulling||refreshing)return;pulling=false;if(cy-sy>60){refreshing=true;ind.classList.add('refreshing');ind.style.top='10px';setTimeout(()=>{renderAll();loadServer();ind.classList.remove('refreshing','active');ind.style.top='-60px';refreshing=false;showToast('✅','Обновлено');},1000);}else{ind.classList.remove('active');ind.style.top='-60px';}sy=0;cy=0;});}
 
 function initSwipeGesture(w,item){let sx=0,cx=0,drag=false;item.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;drag=true;item.classList.add('swiping');},{passive:true});item.addEventListener('touchmove',e=>{if(!drag)return;cx=e.touches[0].clientX;const d=sx-cx;if(d>0)item.style.transform=`translateX(-${Math.min(d,80)}px)`;},{passive:true});item.addEventListener('touchend',()=>{drag=false;item.classList.remove('swiping');const d=sx-cx;if(d>40){w.classList.add('swiped');item.style.transform='translateX(-80px)';}else{w.classList.remove('swiped');item.style.transform='';}});}
 
 function showSkeletons(){const list=document.getElementById('txList');list.innerHTML='';for(let i=0;i<4;i++){const d=document.createElement('div');d.className='tx-item-wrapper';d.innerHTML=`<div class="tx-item" style="border:none;"><div class="tx-info"><div class="skeleton skeleton-text" style="width:${60+Math.random()*30}%"></div><div class="skeleton skeleton-text-sm"></div></div><div class="skeleton skeleton-text" style="width:60px;height:18px;"></div></div>`;list.appendChild(d);}}
 
-// ===== FIREBASE AUTH + STABLE UID SYSTEM =====
+// ===== FIREBASE + STABLE UID =====
 let useFirebase = false;
 let userRef = null;
 let dataListener = null;
 let saveTimeout = null;
 let isSyncing = false;
-let firebaseAuth = null;
 let firebaseUid = null;
-let isPWA = false;
-let isTelegram = false;
+let currentAccessCode = null;
+let codeTtlInterval = null;
 
-// Определяем режим запуска
-function detectEnvironment() {
-    isTelegram = !!(window.Telegram?.WebApp?.initDataUnsafe?.user?.id);
-    isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    
-    console.log('[ENV] Telegram:', isTelegram, '| PWA:', isPWA);
-    
-    if (isPWA && !isTelegram) {
-        setTimeout(() => {
-            document.getElementById('pwaNotice').classList.add('visible');
-            setTimeout(() => document.getElementById('pwaNotice').classList.remove('visible'), 5000);
-        }, 2000);
-    }
-}
-
-// Получаем Telegram user ID
+// Telegram user ID
 function getTelegramUserId() {
     try {
         const tid = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
         if (tid) return 'tg_' + tid;
-        
         const initData = window.Telegram?.WebApp?.initData;
         if (initData) {
             const params = new URLSearchParams(initData);
@@ -586,13 +665,11 @@ function getTelegramUserId() {
                 if (user.id) return 'tg_' + user.id;
             }
         }
-    } catch(e) {
-        console.warn('[ID] Ошибка получения Telegram ID:', e);
-    }
+    } catch(e) {}
     return null;
 }
 
-// Инициализация Firebase + Anonymous Auth
+// Init Firebase
 async function initFB() {
     try {
         const cfg = {
@@ -604,103 +681,178 @@ async function initFB() {
             messagingSenderId: "1072812838336",
             appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
         };
-        
         if (!firebase.apps.length) firebase.initializeApp(cfg);
         useFirebase = true;
         
         try {
-            firebaseAuth = firebase.auth();
-            const cred = await firebaseAuth.signInAnonymously();
+            const cred = await firebase.auth().signInAnonymously();
             firebaseUid = cred.user.uid;
-            console.log('[FB] Auth OK. Firebase UID:', firebaseUid);
             localStorage.setItem('fl_firebase_uid', firebaseUid);
+            console.log('[FB] Auth OK:', firebaseUid);
             
             const tgId = getTelegramUserId();
             if (tgId) {
-                await linkTelegramToFirebase(tgId, firebaseUid);
+                await firebase.database().ref(`userMappings/${tgId}`).set({
+                    firebaseUid: firebaseUid,
+                    linkedAt: new Date().toISOString()
+                });
+                await firebase.database().ref(`userMappingsReverse/${firebaseUid}/telegramId`).set(tgId);
             }
         } catch(authErr) {
             console.error('[FB] Auth error:', authErr);
-            firebaseUid = localStorage.getItem('fl_firebase_uid') || generateLocalUID();
+            firebaseUid = localStorage.getItem('fl_firebase_uid') || ('u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
         }
     } catch(e) {
         console.error('[FB] Init error:', e);
         useFirebase = false;
-        firebaseUid = generateLocalUID();
+        firebaseUid = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
 }
 
-// Связываем Telegram ID с Firebase UID
-async function linkTelegramToFirebase(tgId, fbUid) {
+// ===== ACCESS CODE SYSTEM =====
+function generateAccessCode() {
+    if (!useFirebase || !firebaseUid) {
+        showToast('⚠️', 'Firebase не подключён');
+        return;
+    }
+    
+    // Генерируем 6-значный код
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 минут
+    
+    firebase.database().ref(`accessCodes/${code}`).set({
+        ownerUid: firebaseUid,
+        createdAt: new Date().toISOString(),
+        expiresAt: expiresAt,
+        used: false
+    }).then(() => {
+        currentAccessCode = { code, expiresAt };
+        displayGeneratedCode(code, expiresAt);
+        haptic('success');
+        showToast('✅', 'Код сгенерирован');
+    }).catch(err => {
+        console.error(err);
+        showToast('⚠️', 'Ошибка генерации');
+    });
+}
+
+function displayGeneratedCode(code, expiresAt) {
+    document.getElementById('generatedCodeBox').style.display = 'block';
+    document.getElementById('generatedCodeValue').textContent = code;
+    document.getElementById('generateCodeBtnText').textContent = 'Обновить код';
+    document.getElementById('codeActions').style.display = 'flex';
+    
+    // Таймер
+    if (codeTtlInterval) clearInterval(codeTtlInterval);
+    const updateTtl = () => {
+        const remaining = expiresAt - Date.now();
+        if (remaining <= 0) {
+            document.getElementById('generatedCodeTtl').textContent = 'Код истёк';
+            clearInterval(codeTtlInterval);
+            return;
+        }
+        const min = Math.floor(remaining / 60000);
+        const sec = Math.floor((remaining % 60000) / 1000);
+        document.getElementById('generatedCodeTtl').textContent = `Истекает через: ${min}:${sec.toString().padStart(2, '0')}`;
+    };
+    updateTtl();
+    codeTtlInterval = setInterval(updateTtl, 1000);
+}
+
+function copyAccessCode() {
+    if (!currentAccessCode) return;
     try {
-        await firebase.database().ref(`userMappings/${tgId}`).set({
-            firebaseUid: fbUid,
-            linkedAt: new Date().toISOString(),
-            userName: window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || ''
-        });
-        await firebase.database().ref(`userMappingsReverse/${fbUid}/telegramId`).set(tgId);
-        console.log('[FB] Связка создана:', tgId, '→', fbUid);
+        navigator.clipboard.writeText(currentAccessCode.code);
+        haptic('success');
+        showToast('📋', 'Код скопирован');
     } catch(e) {
-        console.error('[FB] Ошибка связки:', e);
+        showToast('⚠️', 'Ошибка копирования');
     }
 }
 
-// Ищем Firebase UID по Telegram ID
-async function findFirebaseUidByTelegram(tgId) {
+function shareAccessCode() {
+    if (!currentAccessCode) return;
+    const text = `🔐 Код доступа Findr: ${currentAccessCode.code}\n\nВведите его в приложении на другом устройстве или в PWA для подключения к вашему аккаунту.\n\nКод действителен 10 минут.`;
+    shareText(text, 'Код доступа Findr');
+}
+
+// ===== PWA ACCESS CODE VERIFICATION =====
+function showAccessCodeModal() {
+    document.getElementById('accessCodeModal').classList.add('active');
+    setTimeout(() => document.getElementById('accessCodeInput').focus(), 300);
+}
+
+function hideAccessCodeModal() {
+    document.getElementById('accessCodeModal').classList.remove('active');
+    document.getElementById('accessCodeInput').value = '';
+    document.getElementById('accessCodeError').textContent = '';
+}
+
+async function verifyAccessCode() {
+    const codeInput = document.getElementById('accessCodeInput');
+    const errorEl = document.getElementById('accessCodeError');
+    const code = codeInput.value.trim();
+    
+    if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+        errorEl.textContent = 'Введите 6-значный код';
+        haptic('error');
+        return;
+    }
+    
+    if (!useFirebase) {
+        errorEl.textContent = 'Нет подключения к серверу';
+        haptic('error');
+        return;
+    }
+    
+    const btn = document.getElementById('accessCodeSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Проверка...</span>';
+    
     try {
-        const snap = await firebase.database().ref(`userMappings/${tgId}`).once('value');
+        const snap = await firebase.database().ref(`accessCodes/${code}`).once('value');
         const data = snap.val();
-        if (data?.firebaseUid) {
-            console.log('[FB] Найден Firebase UID по Telegram ID:', data.firebaseUid);
-            return data.firebaseUid;
+        
+        if (!data) {
+            errorEl.textContent = 'Код не найден';
+            haptic('error');
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Подключить';
+            return;
         }
-    } catch(e) {
-        console.warn('[FB] Ошибка поиска:', e);
-    }
-    return null;
-}
-
-// Генерируем локальный UID
-function generateLocalUID() {
-    let id = localStorage.getItem('fl_uid');
-    if (!id) {
-        id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('fl_uid', id);
-    }
-    return id;
-}
-
-// Главная функция: получаем стабильный UID
-async function resolveUID() {
-    detectEnvironment();
-    
-    if (firebaseUid) {
-        console.log('[UID] Используем Firebase UID:', firebaseUid);
-        return firebaseUid;
-    }
-    
-    const stored = localStorage.getItem('fl_firebase_uid');
-    if (stored) {
-        firebaseUid = stored;
-        console.log('[UID] Из localStorage:', stored);
-        return stored;
-    }
-    
-    const tgId = getTelegramUserId();
-    if (tgId && useFirebase) {
-        const linked = await findFirebaseUidByTelegram(tgId);
-        if (linked) {
-            firebaseUid = linked;
-            localStorage.setItem('fl_firebase_uid', linked);
-            console.log('[UID] По связке Telegram:', linked);
-            return linked;
+        
+        if (data.expiresAt < Date.now()) {
+            errorEl.textContent = 'Код истёк. Сгенерируйте новый в Telegram';
+            haptic('error');
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Подключить';
+            return;
         }
+        
+        // Код валиден — подключаемся к аккаунту владельца
+        localStorage.setItem('fl_viewing_owner', data.ownerUid);
+        
+        // Помечаем код как использованный (опционально)
+        await firebase.database().ref(`accessCodes/${code}/used`).set(true);
+        await firebase.database().ref(`accessCodes/${code}/usedBy`).set(firebaseUid);
+        
+        haptic('success');
+        hideAccessCodeModal();
+        showToast('✅', 'Аккаунт подключён!');
+        
+        // Перенастраиваем Firebase на владельца
+        setupUserRef();
+        subscribeToData();
+        loadTeamMembers();
+        
+    } catch(err) {
+        console.error(err);
+        errorEl.textContent = 'Ошибка проверки кода';
+        haptic('error');
     }
     
-    const local = generateLocalUID();
-    firebaseUid = local;
-    console.log('[UID] Fallback (новый):', local);
-    return local;
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Подключить';
 }
 
 // ===== TEAM ACCESS SYSTEM =====
@@ -749,6 +901,9 @@ function updateUIByRole() {
     document.getElementById('setExpPct').disabled = !settings;
     document.getElementById('inviteSection').style.display = canManageTeam() ? '' : 'none';
     
+    // Блок кода доступа — только для владельца в Telegram
+    document.getElementById('accessCodeSection').style.display = (canManageTeam() && isTelegram) ? '' : 'none';
+    
     updateMyRoleBadge();
 }
 
@@ -773,7 +928,6 @@ function selectInviteRole(role) {
 
 function generateInviteLink() {
     if (!canManageTeam()) { showToast('⚠️', 'Только владелец может приглашать'); return; }
-    
     const token = Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
     const baseUrl = window.location.href.split('?')[0].split('#')[0];
     const inviteLink = `${baseUrl}?invite=${token}&owner=${firebaseUid}&role=${selectedInviteRole}`;
@@ -790,18 +944,14 @@ function generateInviteLink() {
             document.getElementById('inviteLinkBox').classList.add('active');
             haptic('success');
             showToast('🔗', 'Ссылка создана');
-        }).catch(err => {
-            showToast('⚠️', 'Ошибка создания ссылки');
-            console.error(err);
-        });
+        }).catch(err => showToast('⚠️', 'Ошибка'));
     }
 }
 
 function copyInviteLink() {
     const input = document.getElementById('inviteLinkInput');
-    try { navigator.clipboard.writeText(input.value); } catch(e) { input.select(); document.execCommand('copy'); }
-    haptic('success');
-    showToast('📋', 'Ссылка скопирована');
+    try { navigator.clipboard.writeText(input.value); haptic('success'); showToast('📋', 'Скопировано'); } 
+    catch(e) { input.select(); document.execCommand('copy'); }
 }
 
 function shareInviteLink() {
@@ -816,60 +966,32 @@ function checkInviteAccess() {
     const ownerUid = urlParams.get('owner');
     const invitedRole = urlParams.get('role') || 'viewer';
     
-    if (!inviteToken || !ownerUid) {
-        console.log('[Invite] Нет параметров invite — обычный режим');
-        return false;
-    }
-    
-    console.log('[Invite] Обнаружена ссылка:', { inviteToken, ownerUid, invitedRole, myUID: firebaseUid });
-    
-    if (ownerUid === firebaseUid) {
-        console.log('[Invite] Моя собственная ссылка — игнорируем');
-        cleanUrl();
-        return false;
-    }
+    if (!inviteToken || !ownerUid) return false;
+    if (ownerUid === firebaseUid) { cleanUrl(); return false; }
     
     const existingOwner = localStorage.getItem('fl_viewing_owner');
-    if (existingOwner === ownerUid) {
-        console.log('[Invite] Уже в режиме просмотра владельца', ownerUid);
-        cleanUrl();
-        return true;
-    }
+    if (existingOwner === ownerUid) { cleanUrl(); return true; }
     
-    console.log('[Invite] Принимаем приглашение...');
     localStorage.setItem('fl_viewing_owner', ownerUid);
     
-    if (!useFirebase) {
-        showToast('⚠️', 'Firebase не инициализирован');
-        return true;
-    }
+    if (!useFirebase) return true;
     
     firebase.database().ref(`invites/${inviteToken}`).once('value').then(snap => {
         const invite = snap.val();
-        
-        if (!invite) {
+        if (!invite || invite.ownerUid !== ownerUid) {
             showToast('⚠️', 'Ссылка недействительна');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
             return;
         }
-        
-        if (invite.ownerUid !== ownerUid) {
-            showToast('⚠️', 'Неверная ссылка');
-            localStorage.removeItem('fl_viewing_owner');
-            cleanUrl();
-            return;
-        }
-        
         if (invite.used && invite.usedBy === firebaseUid) {
-            showToast('✅', `С возвращением! Роль: ${ROLE_INFO[invite.role || invitedRole].name}`);
+            showToast('✅', `С возвращением!`);
             cleanUrl();
             setupUserRef();
             subscribeToData();
             loadTeamMembers();
             return;
         }
-        
         if (invite.used) {
             showToast('⚠️', 'Ссылка уже использована');
             localStorage.removeItem('fl_viewing_owner');
@@ -877,38 +999,31 @@ function checkInviteAccess() {
             return;
         }
         
-        const userName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Партнёр';
-        
-        const teamData = {
-            role: invite.role || invitedRole,
-            name: userName,
-            addedAt: new Date().toISOString(),
-            addedBy: ownerUid,
-            uid: firebaseUid
-        };
-        
+        const userName = tg?.initDataUnsafe?.user?.first_name || 'Партнёр';
         Promise.all([
-            firebase.database().ref(`invites/${inviteToken}`).update({
-                used: true,
-                usedBy: firebaseUid,
-                usedAt: new Date().toISOString()
-            }),
-            firebase.database().ref(`users/${ownerUid}/team/${firebaseUid}`).set(teamData)
+            firebase.database().ref(`invites/${inviteToken}`).update({ used: true, usedBy: firebaseUid, usedAt: new Date().toISOString() }),
+            firebase.database().ref(`users/${ownerUid}/team/${firebaseUid}`).set({
+                role: invite.role || invitedRole,
+                name: userName,
+                addedAt: new Date().toISOString(),
+                addedBy: ownerUid,
+                uid: firebaseUid
+            })
         ]).then(() => {
             const role = invite.role || invitedRole;
-            showToast('✅', `Доступ получен! Роль: ${ROLE_INFO[role].icon} ${ROLE_INFO[role].name}`);
+            showToast('✅', `Доступ получен! Роль: ${ROLE_INFO[role].name}`);
             haptic('success');
             cleanUrl();
             setupUserRef();
             subscribeToData();
             loadTeamMembers();
-        }).catch(err => {
-            showToast('⚠️', 'Ошибка принятия приглашения');
+        }).catch(() => {
+            showToast('⚠️', 'Ошибка');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
         });
-    }).catch(err => {
-        showToast('⚠️', 'Ошибка проверки ссылки');
+    }).catch(() => {
+        showToast('⚠️', 'Ошибка проверки');
         localStorage.removeItem('fl_viewing_owner');
         cleanUrl();
     });
@@ -918,9 +1033,7 @@ function checkInviteAccess() {
 
 function cleanUrl() {
     const cleanUrl = window.location.href.split('?')[0].split('#')[0];
-    try {
-        window.history.replaceState({}, '', cleanUrl);
-    } catch(e) {}
+    try { window.history.replaceState({}, '', cleanUrl); } catch(e) {}
 }
 
 function getViewingOwner() {
@@ -938,18 +1051,13 @@ function setupUserRef() {
 
 function subscribeToData() {
     if (!useFirebase || !userRef) return;
-    
-    if (dataListener) {
-        userRef.off('value', dataListener);
-        dataListener = null;
-    }
+    if (dataListener) { userRef.off('value', dataListener); dataListener = null; }
     
     showSkeletons();
     updateSync('syncing');
     
     dataListener = userRef.on('value', snap => {
         const d = snap.val();
-        
         if (d?.holders) {
             holders = d.holders;
             activeHolderId = d.activeHolderId || Object.keys(holders)[0];
@@ -960,12 +1068,10 @@ function subscribeToData() {
             expensePercent = d.expensePercent || 2.5;
             goalTarget = d.goalTarget || 0;
             goalHistory = d.goalHistory || [];
-            
             const hh = holders[activeHolderId];
             if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) {
                 activeAccountId = Object.keys(hh.accounts || {})[0] || null;
             }
-            
             renderAll();
             updateSync('realtime');
         } else {
@@ -977,7 +1083,6 @@ function subscribeToData() {
         loadLocal();
         renderAll();
         updateSync('offline');
-        showToast('⚠️', 'Ошибка загрузки данных');
     });
 }
 
@@ -1029,52 +1134,27 @@ const loadLocal = () => {
 const saveServer = () => {
     if (!useFirebase || !isOnline) { updateSync('local'); return; }
     if (saveTimeout) clearTimeout(saveTimeout);
-    
     saveTimeout = setTimeout(async () => {
         if (isSyncing) return;
         isSyncing = true;
         updateSync('syncing');
-        
         try {
             const s = calcAll();
             const viewingOwner = getViewingOwner();
-            const ref = firebase.database().ref(`users/${viewingOwner}`);
-            
-            await ref.update({
-                holders,
-                activeHolderId,
-                activeAccountId,
-                capital,
-                savedReports,
-                totalIncome: s.totalIncome,
-                totalExpense: s.totalExpense,
-                totalSpend: s.totalSpend,
-                revenue: s.revenue,
-                margin: s.margin,
-                incomePercent,
-                expensePercent,
-                goalTarget,
-                goalHistory,
-                lastUpdated: new Date().toISOString(),
-                lastUpdatedBy: firebaseUid
+            await firebase.database().ref(`users/${viewingOwner}`).update({
+                holders, activeHolderId, activeAccountId, capital, savedReports,
+                totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend,
+                revenue: s.revenue, margin: s.margin, incomePercent, expensePercent,
+                goalTarget, goalHistory, lastUpdated: new Date().toISOString(), lastUpdatedBy: firebaseUid
             });
-            
             updateSync('realtime');
-        } catch(e) {
-            updateSync('error');
-        } finally {
-            isSyncing = false;
-        }
+        } catch(e) { updateSync('error'); } 
+        finally { isSyncing = false; }
     }, 500);
 };
 
 const loadServer = () => {
-    if (!useFirebase) {
-        loadLocal();
-        renderAll();
-        updateSync('local');
-        return;
-    }
+    if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; }
     subscribeToData();
 };
 
@@ -1134,18 +1214,11 @@ const calcAll = () => {
 function loadTeamMembers() {
     if (!useFirebase) return;
     const viewingOwner = getViewingOwner();
-    
     firebase.database().ref(`users/${viewingOwner}/team`).on('value', snap => {
         teamMembers = snap.val() || {};
-        
-        if (viewingOwner === firebaseUid) {
-            currentUserRole = 'owner';
-        } else if (teamMembers[firebaseUid]) {
-            currentUserRole = teamMembers[firebaseUid].role || 'viewer';
-        } else {
-            currentUserRole = 'viewer';
-        }
-        
+        if (viewingOwner === firebaseUid) currentUserRole = 'owner';
+        else if (teamMembers[firebaseUid]) currentUserRole = teamMembers[firebaseUid].role || 'viewer';
+        else currentUserRole = 'viewer';
         renderTeamMembers();
         updateUIByRole();
     });
@@ -1154,9 +1227,8 @@ function loadTeamMembers() {
 function renderTeamMembers() {
     const container = document.getElementById('teamMembersList');
     if (!container) return;
-    
     let html = '';
-    const ownerName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Вы';
+    const ownerName = tg?.initDataUnsafe?.user?.first_name || 'Вы';
     const viewingOwner = getViewingOwner();
     const isOwner = (viewingOwner === firebaseUid);
     
@@ -1186,7 +1258,7 @@ function renderTeamMembers() {
                 </div>
             </div>
             ${canManageTeam() && !isYou ? `<div class="team-actions">
-                <button class="team-btn edit-btn" onclick="openPermSheet('${uid}')" title="Изменить права">
+                <button class="team-btn edit-btn" onclick="openPermSheet('${uid}')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </button>
             </div>` : ''}
@@ -1196,22 +1268,18 @@ function renderTeamMembers() {
     if (Object.keys(teamMembers).length === 0 && canManageTeam()) {
         html += `<div style="text-align:center;padding:16px;color:var(--ios-text-secondary);font-size:0.8rem;">Пока нет приглашённых участников</div>`;
     }
-    
     container.innerHTML = html;
 }
 
-// ===== PERMISSIONS SHEET =====
 function openPermSheet(uid) {
     if (!canManageTeam()) return;
     currentPermUid = uid;
     const member = teamMembers[uid];
     if (!member) return;
-    
     selectedPermRole = member.role;
     const info = ROLE_INFO[member.role] || ROLE_INFO.viewer;
     const name = member.name || 'Партнёр';
     const initial = name.charAt(0).toUpperCase();
-    
     document.getElementById('permMemberInfo').innerHTML = `
         <div class="team-avatar ${member.role}-av" style="width:48px;height:48px;font-size:1.3rem;">${initial}</div>
         <div>
@@ -1219,12 +1287,8 @@ function openPermSheet(uid) {
             <div style="font-size:0.75rem;color:var(--ios-text-secondary);margin-top:2px;">Текущая роль: <span class="role-badge ${info.class}">${info.icon} ${info.name}</span></div>
         </div>
     `;
-    
     document.getElementById('permMemberName').value = member.name || '';
-    document.querySelectorAll('.role-option').forEach(opt => {
-        opt.classList.toggle('selected', opt.dataset.role === selectedPermRole);
-    });
-    
+    document.querySelectorAll('.role-option').forEach(opt => opt.classList.toggle('selected', opt.dataset.role === selectedPermRole));
     document.getElementById('permOverlay').classList.add('active');
     document.getElementById('permSheet').classList.add('active');
     haptic('light');
@@ -1239,52 +1303,35 @@ function closePermSheet() {
 
 function selectPermRole(role) {
     selectedPermRole = role;
-    document.querySelectorAll('.role-option').forEach(opt => {
-        opt.classList.toggle('selected', opt.dataset.role === role);
-    });
+    document.querySelectorAll('.role-option').forEach(opt => opt.classList.toggle('selected', opt.dataset.role === role));
     haptic('light');
 }
 
 function savePermissions() {
     if (!canManageTeam() || !currentPermUid || !selectedPermRole) return;
-    
     const viewingOwner = getViewingOwner();
     const newName = document.getElementById('permMemberName').value.trim();
     const updates = { role: selectedPermRole };
     if (newName) updates.name = newName;
-    
     firebase.database().ref(`users/${viewingOwner}/team/${currentPermUid}`).update(updates)
         .then(() => {
             haptic('success');
-            const info = ROLE_INFO[selectedPermRole];
-            showToast('✅', `Права изменены: ${info.icon} ${info.name}`);
+            showToast('✅', `Права изменены: ${ROLE_INFO[selectedPermRole].name}`);
             closePermSheet();
         })
-        .catch(err => {
-            haptic('error');
-            showToast('⚠️', 'Ошибка сохранения');
-        });
+        .catch(() => { haptic('error'); showToast('⚠️', 'Ошибка'); });
 }
 
 function removeMemberFromPerm() {
     if (!canManageTeam() || !currentPermUid) return;
-    
     const doRemove = () => {
         const viewingOwner = getViewingOwner();
         firebase.database().ref(`users/${viewingOwner}/team/${currentPermUid}`).remove()
-            .then(() => {
-                haptic('success');
-                showToast('🗑️', 'Участник удалён');
-                closePermSheet();
-            })
-            .catch(err => {
-                haptic('error');
-                showToast('⚠️', 'Ошибка удаления');
-            });
+            .then(() => { haptic('success'); showToast('🗑️', 'Удалён'); closePermSheet(); })
+            .catch(() => { haptic('error'); showToast('⚠️', 'Ошибка'); });
     };
-    
-    if (tg?.showConfirm) tg.showConfirm('Удалить участника из команды?', c => { if (c) doRemove(); });
-    else if (confirm('Удалить участника?')) doRemove();
+    if (tg?.showConfirm) tg.showConfirm('Удалить участника?', c => { if (c) doRemove(); });
+    else if (confirm('Удалить?')) doRemove();
 }
 
 // ===== NAVIGATION =====
@@ -1373,10 +1420,7 @@ function updateGoalPage() {
 function renderGoalHistory() {
     const c = document.getElementById('goalHistory');
     if (!c) return;
-    if (!goalHistory.length) {
-        c.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text" style="font-size:0.8rem;">История пуста</div></div>';
-        return;
-    }
+    if (!goalHistory.length) { c.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text" style="font-size:0.8rem;">История пуста</div></div>'; return; }
     c.innerHTML = '';
     goalHistory.slice().reverse().forEach((item, ri) => {
         const idx = goalHistory.length - 1 - ri, d = new Date(item.date), pct = Math.round(Math.min((item.revenueAtClose || 0) / item.target, 1) * 100);
@@ -1502,34 +1546,53 @@ window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
 let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(updateMiniRing, 100); });
 
+// Обработчик для input кода доступа — только цифры
+document.getElementById('accessCodeInput').addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+});
+document.getElementById('accessCodeInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') verifyAccessCode();
+});
+
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 console.log('=== FINDR INIT START ===');
-
 applyTheme();
 initAnimatedElements();
 
-// Асинхронная инициализация с Firebase Auth
 (async () => {
-    // 1. Инициализируем Firebase + Anonymous Auth
+    detectEnvironment();
     await initFB();
+    console.log('[Init] Firebase UID:', firebaseUid);
+    console.log('[Init] isTelegram:', isTelegram, '| isPWA:', isPWA);
     
-    // 2. Получаем стабильный UID
-    const resolvedUID = await resolveUID();
-    console.log('[Init] Итоговый UID:', resolvedUID);
-    
-    // 3. Настраиваем userRef
     setupUserRef();
     
-    // 4. Проверяем invite
+    // Проверяем invite в URL (для ссылок-приглашений)
     const hasInvite = checkInviteAccess();
     
-    // 5. Если нет invite — подписываемся на данные
     if (!hasInvite) {
-        subscribeToData();
-        loadTeamMembers();
+        // Проверяем, есть ли уже подключение к владельцу
+        const viewingOwner = localStorage.getItem('fl_viewing_owner');
+        
+        if (viewingOwner && viewingOwner !== firebaseUid) {
+            // Уже подключены к владельцу — продолжаем
+            console.log('[Init] Подключены к владельцу:', viewingOwner);
+            setupUserRef();
+            subscribeToData();
+            loadTeamMembers();
+        } else if (isPWA && !isTelegram) {
+            // PWA без Telegram и без подключения — показываем модалку ввода кода
+            console.log('[Init] PWA без подключения — показываем модалку');
+            showAccessCodeModal();
+        } else {
+            // Обычный режим (Telegram или браузер)
+            console.log('[Init] Обычный режим');
+            subscribeToData();
+            loadTeamMembers();
+        }
     }
     
-    setTimeout(() => { init3DTilt(); initMagneticButtons(); initPullToRefresh(); }, 500);
+    setTimeout(() => { initPullToRefresh(); }, 500);
 })();
 </script>
 </body>
