@@ -38,133 +38,38 @@
 html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: var(--ios-text); -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
 
 /* === MESH GRADIENT BACKGROUND === */
-.mesh-gradient-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; transition: opacity 0.5s ease; }
-.mesh-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; animation: blobFloat 20s ease-in-out infinite; transition: background 1s ease; }
+.mesh-gradient-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.5s ease;
+}
+.mesh-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: blobFloat 20s ease-in-out infinite;
+    transition: background 1s ease;
+}
 .mesh-blob:nth-child(1) { width: 300px; height: 300px; top: -100px; left: -80px; background: var(--ios-blue); animation-delay: 0s; animation-duration: 18s; }
 .mesh-blob:nth-child(2) { width: 250px; height: 250px; top: 40%; right: -100px; background: var(--ios-purple); animation-delay: -5s; animation-duration: 22s; }
 .mesh-blob:nth-child(3) { width: 200px; height: 200px; bottom: -50px; left: 30%; background: var(--ios-teal); animation-delay: -10s; animation-duration: 25s; }
 .mesh-blob:nth-child(4) { width: 180px; height: 180px; top: 20%; left: 50%; background: var(--ios-orange); animation-delay: -7s; animation-duration: 20s; opacity: 0.08; }
-@keyframes blobFloat { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(30px, -40px) scale(1.1); } 50% { transform: translate(-20px, 20px) scale(0.9); } 75% { transform: translate(40px, 30px) scale(1.05); } }
+@keyframes blobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -40px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(40px, 30px) scale(1.05); }
+}
 body.light-theme .mesh-blob { opacity: 0.08; filter: blur(100px); }
 
-.noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); transition: opacity 0.3s ease; }
-
-/* === DYNAMIC ISLAND === */
-.dynamic-island {
-    position: fixed;
-    top: max(12px, env(safe-area-inset-top));
-    left: 50%;
-    transform: translateX(-50%);
-    background: #000;
-    border-radius: 100px;
-    padding: 8px 16px;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.5s var(--spring-bounce);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    max-width: 200px;
-    overflow: hidden;
-}
-.dynamic-island.active {
-    opacity: 1;
-    visibility: visible;
-    max-width: 300px;
-    padding: 12px 20px;
-}
-.dynamic-island-icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    animation: islandPulse 1s ease-in-out infinite;
-}
-@keyframes islandPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-.dynamic-island-text {
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-    color: #fff;
-}
-
-/* === LIQUID SWIPE TRANSITIONS === */
-.page {
-    position: absolute;
-    inset: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 0 100px 0;
-    opacity: 0;
-    pointer-events: none;
-    -webkit-overflow-scrolling: touch;
-    transition: opacity 0.5s var(--spring-smooth), transform 0.6s var(--spring-snappy), clip-path 0.6s var(--spring-snappy);
-    will-change: transform, opacity, clip-path;
-    transform: translateX(30%) scale(0.95);
-    clip-path: circle(0% at 50% 50%);
-}
-.page.active {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    pointer-events: auto;
-    clip-path: circle(150% at 50% 50%);
-}
-.page.exit-left {
-    opacity: 0;
-    transform: translateX(-30%) scale(0.95);
-    clip-path: circle(0% at 0% 50%);
-}
-.page.exit-right {
-    opacity: 0;
-    transform: translateX(30%) scale(0.95);
-    clip-path: circle(0% at 100% 50%);
-}
-
-/* === FLIP CARD ANIMATION === */
-.stat-card {
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s var(--spring-bounce);
-    cursor: pointer;
-}
-.stat-card.flipped {
-    transform: rotateY(180deg);
-}
-.stat-card-front, .stat-card-back {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-.stat-card-back {
-    position: absolute;
-    inset: 0;
-    transform: rotateY(180deg);
-    background: var(--ios-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-ios-sm);
-    padding: 14px;
-    border: 1px solid var(--ios-separator);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-.stat-card-back-label {
-    font-size: 0.65rem;
-    color: var(--ios-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-weight: 500;
-}
-.stat-card-back-value {
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+.noise-overlay {
+position: fixed; inset: 0; pointer-events: none; z-index: 500; opacity: 0.035; mix-blend-mode: overlay;
+background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+transition: opacity 0.3s ease;
 }
 
 /* --- THEME ENGINE --- */
@@ -192,6 +97,15 @@ body.light-theme .balance-plus-btn { background: rgba(255, 59, 48, 0.1); border-
 
 #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; background: transparent; position: relative; z-index: 1; }
 .pages { flex: 1; position: relative; overflow: hidden; }
+.page {
+position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 100px 0;
+opacity: 0; pointer-events: none; -webkit-overflow-scrolling: touch;
+transition: opacity 0.4s var(--spring-smooth), transform 0.5s var(--spring-snappy);
+will-change: transform, opacity; transform: translateX(30%) scale(0.95);
+}
+.page.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+.page.exit-left { opacity: 0; transform: translateX(-30%) scale(0.95); }
+.page.exit-right { opacity: 0; transform: translateX(30%) scale(0.95); }
 .page::-webkit-scrollbar { display: none; }
 .page-content { padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); min-height: 100%; position: relative; }
 
@@ -216,20 +130,46 @@ body.light-theme .balance-plus-btn { background: rgba(255, 59, 48, 0.1); border-
 .progress-ring-label { position: absolute; top: 10px; right: 12px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); z-index: 4; transition: color 0.5s var(--spring-smooth); font-variant-numeric: tabular-nums; }
 
 /* === SHINE EFFECT === */
-.balance-card { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden; transition: transform 0.4s var(--spring-bounce); transform-style: preserve-3d; perspective: 1000px; }
+.balance-card {
+background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+border-radius: var(--radius-ios); padding: 24px; position: relative; overflow: hidden;
+transition: transform 0.4s var(--spring-bounce); transform-style: preserve-3d; perspective: 1000px;
+}
 .balance-card:active { transform: scale(0.98); }
 .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%); }
-.balance-card::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: skewX(-25deg); pointer-events: none; z-index: 5; animation: shineEffect 4s ease-in-out infinite; }
-@keyframes shineEffect { 0%, 100% { left: -100%; } 50% { left: 150%; } }
-body.light-theme .balance-card::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); }
+.balance-card::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    transform: skewX(-25deg); pointer-events: none; z-index: 5;
+    animation: shineEffect 4s ease-in-out infinite;
+}
+@keyframes shineEffect {
+    0%, 100% { left: -100%; }
+    50% { left: 150%; }
+}
+body.light-theme .balance-card::after {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+}
 
 /* === GLOW PULSE === */
-@keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 6px currentColor); } 50% { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 25px currentColor); } }
+@keyframes glowPulse {
+    0%, 100% { filter: drop-shadow(0 0 6px currentColor); }
+    50% { filter: drop-shadow(0 0 14px currentColor) drop-shadow(0 0 25px currentColor); }
+}
 .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
 
 /* === SKELETON LOADERS === */
-.skeleton { background: linear-gradient(90deg, var(--ios-card) 25%, rgba(120,120,128,0.15) 50%, var(--ios-card) 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 8px; border: none !important; }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skeleton {
+    background: linear-gradient(90deg, var(--ios-card) 25%, rgba(120,120,128,0.15) 50%, var(--ios-card) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+    border: none !important;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
 .skeleton-text { height: 16px; margin-bottom: 8px; }
 .skeleton-text-sm { height: 12px; width: 60%; }
 .skeleton-text-lg { height: 32px; width: 50%; }
@@ -237,13 +177,72 @@ body.light-theme .balance-card::after { background: linear-gradient(90deg, trans
 .skeleton-card { height: 100px; border-radius: var(--radius-ios-sm); }
 
 /* === SLOT MACHINE NUMBERS === */
-.slot-container { display: inline-flex; overflow: hidden; height: 1.1em; line-height: 1.1; }
-.slot-digit { display: inline-block; animation: slotSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: center; }
-@keyframes slotSpin { 0% { transform: translateY(100%); opacity: 0; } 50% { transform: translateY(-20%); opacity: 0.5; } 100% { transform: translateY(0); opacity: 1; } }
+.slot-container {
+    display: inline-flex;
+    overflow: hidden;
+    height: 1.1em;
+    line-height: 1.1;
+}
+.slot-digit {
+    display: inline-block;
+    animation: slotSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+}
+@keyframes slotSpin {
+    0% { transform: translateY(100%); opacity: 0; }
+    50% { transform: translateY(-20%); opacity: 0.5; }
+    100% { transform: translateY(0); opacity: 1; }
+}
 
 /* === PARTICLE EFFECTS === */
-.particle { position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; animation: particleFly 0.8s ease-out forwards; }
-@keyframes particleFly { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
+.particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    animation: particleFly 0.8s ease-out forwards;
+}
+@keyframes particleFly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* === SPARKLINES === */
+.sparkline-container {
+    position: relative;
+    height: 30px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+.sparkline {
+    width: 100%;
+    height: 100%;
+}
+.sparkline-path {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: sparklineDraw 1s ease-out forwards;
+}
+.sparkline-area {
+    opacity: 0.1;
+    animation: sparklineFadeIn 1s ease-out forwards;
+}
+@keyframes sparklineDraw {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+}
+@keyframes sparklineFadeIn {
+    from { opacity: 0; }
+    to { opacity: 0.1; }
+}
 
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
@@ -435,12 +434,6 @@ body.light-theme .balance-card::after { background: linear-gradient(90deg, trans
 </head>
 <body>
 
-<!-- DYNAMIC ISLAND -->
-<div class="dynamic-island" id="dynamicIsland">
-    <div class="dynamic-island-icon" id="islandIcon">💰</div>
-    <div class="dynamic-island-text" id="islandText">+500 ₽ к капиталу</div>
-</div>
-
 <!-- MESH GRADIENT BG -->
 <div class="mesh-gradient-bg" id="meshBg">
     <div class="mesh-blob"></div>
@@ -465,10 +458,10 @@ body.light-theme .balance-card::after { background: linear-gradient(90deg, trans
 <div class="sync-badge" id="syncBadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>подключение...</div>
 </div></div>
 <div class="stats-grid" id="statsGrid">
-<div class="stat-card" onclick="flipCard(this)"><div class="stat-card-front"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div><div class="stat-card-back"><div class="stat-card-back-label">За неделю</div><div class="stat-card-back-value text-blue" id="statTurnoverWeek">0 ₽</div></div></div>
-<div class="stat-card" onclick="flipCard(this)"><div class="stat-card-front"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div><div class="stat-card-back"><div class="stat-card-back-label">За неделю</div><div class="stat-card-back-value text-green" id="statIncomeWeek">0 ₽</div></div></div>
-<div class="stat-card" onclick="flipCard(this)"><div class="stat-card-front"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div><div class="stat-card-back"><div class="stat-card-back-label">За неделю</div><div class="stat-card-back-value text-red" id="statExpenseWeek">0 ₽</div></div></div>
-<div class="stat-card" onclick="flipCard(this)"><div class="stat-card-front"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div><div class="stat-card-back"><div class="stat-card-back-label">За неделю</div><div class="stat-card-back-value text-orange" id="statRevenueWeek">0 ₽</div></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div><div class="sparkline-container" id="sparkTurnover"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div><div class="sparkline-container" id="sparkIncome"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div><div class="sparkline-container" id="sparkExpense"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div><div class="sparkline-container" id="sparkRevenue"></div></div>
 </div>
 <div class="spend-block"><div class="spend-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Траты</div><div class="spend-value" id="statSpend">0 ₽</div></div>
 <div class="margin-block"><div class="margin-label"><span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>Маржинальная прибыль</span><span class="margin-sub">выручка − траты</span></div><div class="margin-value" id="statMargin">0 ₽</div></div>
@@ -599,31 +592,42 @@ function updateMeshColors(){
     }
 }
 
-// ===== DYNAMIC ISLAND =====
-function showDynamicIsland(icon, text, duration = 3000) {
-    const island = document.getElementById('dynamicIsland');
-    const iconEl = document.getElementById('islandIcon');
-    const textEl = document.getElementById('islandText');
-    
-    iconEl.textContent = icon;
-    textEl.textContent = text;
-    island.classList.add('active');
-    
-    setTimeout(() => {
-        island.classList.remove('active');
-    }, duration);
-}
-
-// ===== FLIP CARD =====
-function flipCard(card) {
-    card.classList.toggle('flipped');
-    haptic('light');
-}
-
 // ===== ANIMATION ENGINE WITH SLOT MACHINE EFFECT =====
 const previousValues=new Map();
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 
+// Slot Machine Animation
+function animateValueSlot(el,nv,fmt,dur=600){
+    const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
+    const sv=previousValues.get(id)||0,st=performance.now();
+    
+    // Create slot container if not exists
+    if(!el.querySelector('.slot-container')){
+        el.innerHTML='<span class="slot-container"></span>';
+    }
+    
+    function u(ct){
+        const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);
+        const cv=sv+(nv-sv)*ep;
+        const formatted=fmt(cv);
+        
+        // Update slot digits
+        const container=el.querySelector('.slot-container');
+        if(container){
+            const digits=formatted.split('');
+            container.innerHTML=digits.map((d,i)=>`<span class="slot-digit" style="animation-delay:${i*0.05}s">${d}</span>`).join('');
+        }
+        
+        if(p<1)requestAnimationFrame(u);
+        else{
+            previousValues.set(id,nv);
+            el.textContent=fmt(nv);
+        }
+    }
+    requestAnimationFrame(u);
+}
+
+// Fallback to simple animation
 function animateValue(el,nv,fmt,dur=600){
     const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
     const sv=previousValues.get(id)||0,st=performance.now();
@@ -662,6 +666,7 @@ function createParticles(x,y,color){
     }
 }
 
+// Add particle effect to buttons
 document.addEventListener('click',(e)=>{
     const btn=e.target.closest('.action-btn');
     if(btn){
@@ -672,6 +677,42 @@ document.addEventListener('click',(e)=>{
         createParticles(x,y,color);
     }
 });
+
+// ===== SPARKLINES =====
+function renderSparkline(containerId,data,color){
+    const container=document.getElementById(containerId);
+    if(!container||!data||data.length<2)return;
+    
+    const width=container.offsetWidth||100;
+    const height=30;
+    const max=Math.max(...data);
+    const min=Math.min(...data);
+    const range=max-min||1;
+    
+    const points=data.map((v,i)=>{
+        const x=(i/(data.length-1))*width;
+        const y=height-((v-min)/range)*height;
+        return `${x},${y}`;
+    }).join(' ');
+    
+    const areaPoints=`0,${height} ${points} ${width},${height}`;
+    
+    container.innerHTML=`
+        <svg class="sparkline" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+            <polygon class="sparkline-area" points="${areaPoints}" fill="${color}"/>
+            <polyline class="sparkline-path" points="${points}" stroke="${color}" stroke-dasharray="1000" stroke-dashoffset="1000"/>
+        </svg>
+    `;
+}
+
+// Generate sample data for sparklines
+function generateSparkData(){
+    const data=[];
+    for(let i=0;i<7;i++){
+        data.push(Math.random()*1000);
+    }
+    return data;
+}
 
 // ===== 3D TILT =====
 function init3DTilt(){const card=document.getElementById('balanceCard');if(!card)return;let busy=false;const move=(cx,cy)=>{if(busy)return;busy=true;const r=card.getBoundingClientRect(),x=cx-r.left,y=cy-r.top,rx=(y-r.height/2)/15,ry=(r.width/2-x)/15;card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;requestAnimationFrame(()=>busy=false);};card.addEventListener('mousemove',e=>move(e.clientX,e.clientY));card.addEventListener('mouseleave',()=>{card.style.transform='';});card.addEventListener('touchmove',e=>move(e.touches[0].clientX,e.touches[0].clientY),{passive:true});card.addEventListener('touchend',()=>{card.style.transform='';});}
@@ -727,23 +768,16 @@ window.saveGoal=()=>{const v=parseFloat(document.getElementById('goalTargetInput
 window.resetGoal=()=>{if(!goalTarget){showToast('ℹ️','Нет цели');return;}const r=()=>{goalHistory.push({date:new Date().toISOString(),target:goalTarget,revenueAtClose:calcAll().revenue});if(goalHistory.length>10)goalHistory=goalHistory.slice(-10);goalTarget=0;saveLocal();saveServer();refreshGoal();updateMiniRing();updateMeshColors();haptic('success');showToast('🎯','Сброшено');};if(tg?.showConfirm)tg.showConfirm('Сбросить цель?',c=>{if(c)r();});else if(confirm('Сбросить?'))r();};
 function refreshGoal(){updateGoalPage();}
 
-const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing();updateMeshColors();updateWeekStats();};
+const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing();updateMeshColors();renderSparklines();};
 const renderHome=()=>{const acc=getAccount(),h=getHolder(),ne=document.getElementById('accountName');if(!acc||!h){ne.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт';animateValue(document.getElementById('balanceDisplay'),0,fmt);['statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin'].forEach(id=>animateValue(document.getElementById(id),0,fmt));document.getElementById('txList').innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>';document.getElementById('resetBtn').style.display='none';updateMiniRing();return;}ne.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`;animateValue(document.getElementById('balanceDisplay'),acc.balance,fmt);const s=calcAcc(acc);animateValue(document.getElementById('statTurnover'),s.turnover,fmt);animateValue(document.getElementById('statIncome'),s.totalIncome,fmt);animateValue(document.getElementById('statExpense'),s.totalExpense,fmt);animateValue(document.getElementById('statRevenue'),s.revenue,fmt);animateValue(document.getElementById('statSpend'),s.totalSpend,fmt);const me=document.getElementById('statMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');const list=document.getElementById('txList');if(!acc.transactions?.length){list.innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>';document.getElementById('resetBtn').style.display='none';}else{list.innerHTML='';acc.transactions.slice().reverse().forEach((t,index)=>{if(!t)return;const d=new Date(t.date),time=isNaN(d.getTime())?'':d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});let cls,sign,desc;if(t.type==='income'){cls='text-green';sign='+';desc=t.desc||'Пополнение';}else if(t.type==='expense'){cls='text-red';sign='−';desc=t.desc||'Списание';}else if(t.type==='spend'){cls='text-purple';sign='−';desc='🛍️ '+(t.desc||'Трата');}else if(t.type==='adjustment'){cls='text-blue';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка');}else if(t.type==='revenue'){cls='text-orange';sign='+';desc='💜 '+(t.desc||'Капитализация');}else{cls='';sign='';desc=t.desc||'Операция';}const amt=t.type==='adjustment'?`${sign}${fmt(Math.abs(t.amount))}`:`${sign} ${fmt(t.amount)}`;const w=document.createElement('div');w.className='tx-item-wrapper';const sa=document.createElement('div');sa.className='tx-item-swipe';sa.textContent='🗑️ Удалить';sa.onclick=()=>deleteTransaction(index);const item=document.createElement('div');item.className='tx-item';item.innerHTML=`<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;w.appendChild(sa);w.appendChild(item);list.appendChild(w);initSwipeGesture(w,item);});document.getElementById('resetBtn').style.display='block';}saveLocal();updateMiniRing();};
 window.resetAll=()=>{const acc=getAccount(),h=getHolder();if(!acc||!h||!acc.transactions?.length){showToast('⚠️','Нет операций');return;}haptic('warning');const r=()=>{acc.balance=0;acc.transactions=[];renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Обнулено');};if(tg?.showConfirm)tg.showConfirm(`Обнулить "${acc.name}"?`,c=>{if(c)r();});else if(confirm('Обнулить?'))r();};
 
-// Update week stats for flip cards
-function updateWeekStats(){
-    const acc=getAccount();
-    if(!acc)return;
-    const weekData=calcAcc(acc,'week');
-    const weekEl1=document.getElementById('statTurnoverWeek');
-    const weekEl2=document.getElementById('statIncomeWeek');
-    const weekEl3=document.getElementById('statExpenseWeek');
-    const weekEl4=document.getElementById('statRevenueWeek');
-    if(weekEl1)weekEl1.textContent=fmt(weekData.turnover);
-    if(weekEl2)weekEl2.textContent=fmt(weekData.totalIncome);
-    if(weekEl3)weekEl3.textContent=fmt(weekData.totalExpense);
-    if(weekEl4)weekEl4.textContent=fmt(weekData.revenue);
+// Render sparklines
+function renderSparklines(){
+    renderSparkline('sparkTurnover',generateSparkData(),'var(--ios-blue)');
+    renderSparkline('sparkIncome',generateSparkData(),'var(--ios-green)');
+    renderSparkline('sparkExpense',generateSparkData(),'var(--ios-red)');
+    renderSparkline('sparkRevenue',generateSparkData(),'var(--ios-orange)');
 }
 
 // ===== REPORT, DETAIL, ADJUST, SETTINGS =====
@@ -759,7 +793,7 @@ const refreshAdjust=()=>{const acc=getAccount(),h=getHolder();if(acc&&h){documen
 const refreshSettings=()=>{document.getElementById('setCapital').value=capital;document.getElementById('setIncPct').value=incomePercent;document.getElementById('setExpPct').value=expensePercent;document.getElementById('curIncPct').textContent=incomePercent;document.getElementById('curExpPct').textContent=expensePercent;};
 
 // ===== TRANSACTIONS =====
-const doTransaction=(type)=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const amount=parseFloat(document.getElementById('amountInput').value);if(!amount||amount<=0){showToast('⚠️','Введите сумму');haptic('error');return;}if(amount>999999999)return;if(type==='income')acc.balance+=amount;else acc.balance-=amount;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});let rev=0;if(type==='income')rev=amount*(incomePercent/100);else if(type==='expense')rev=amount*(expensePercent/100);if(rev>0){capital+=rev;acc.transactions.push({type:'revenue',amount:rev,desc:'Капитализация',date:new Date().toISOString()});showDynamicIsland('💰',`+${fmt(rev)} к капиталу`);}document.getElementById('amountInput').value='';haptic('success');renderAll();saveServer();if(rev>0)setTimeout(()=>showToast('💰',`+${fmt(rev)} к капиталу`),300);};
+const doTransaction=(type)=>{const acc=getAccount();if(!acc){showToast('⚠️','Выберите счёт');return;}const amount=parseFloat(document.getElementById('amountInput').value);if(!amount||amount<=0){showToast('⚠️','Введите сумму');haptic('error');return;}if(amount>999999999)return;if(type==='income')acc.balance+=amount;else acc.balance-=amount;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type,amount,desc:type==='income'?'Пополнение':'Списание',date:new Date().toISOString()});let rev=0;if(type==='income')rev=amount*(incomePercent/100);else if(type==='expense')rev=amount*(expensePercent/100);if(rev>0){capital+=rev;acc.transactions.push({type:'revenue',amount:rev,desc:'Капитализация',date:new Date().toISOString()});}document.getElementById('amountInput').value='';haptic('success');renderAll();saveServer();if(rev>0)setTimeout(()=>showToast('💰',`+${fmt(rev)} к капиталу`),300);};
 window.openQuickExpense=()=>{if(!getAccount()){showToast('⚠️','Выберите счёт');return;}document.getElementById('quickExpenseAmount').value='';document.getElementById('quickExpenseNote').value='';document.getElementById('quickExpenseOverlay').classList.add('active');document.getElementById('quickExpenseSheet').classList.add('active');haptic('light');setTimeout(()=>document.getElementById('quickExpenseAmount').focus(),400);};
 window.closeQuickExpense=()=>{document.getElementById('quickExpenseOverlay').classList.remove('active');document.getElementById('quickExpenseSheet').classList.remove('active');};
 window.submitQuickExpense=()=>{const acc=getAccount();if(!acc)return;const a=parseFloat(document.getElementById('quickExpenseAmount').value),n=document.getElementById('quickExpenseNote').value.trim();if(!a||a<=0){showToast('⚠️','Введите сумму');haptic('error');return;}acc.balance-=a;if(!acc.transactions)acc.transactions=[];acc.transactions.push({type:'spend',amount:a,desc:n||'Трата',date:new Date().toISOString()});haptic('success');renderAll();saveLocal();saveServer();closeQuickExpense();showToast('✅',n?`"${n}" учтена`:'Трата учтена');};
@@ -795,11 +829,11 @@ window.addEventListener('offline',()=>{isOnline=false;updateSync('offline');});
 document.getElementById('amountInput').addEventListener('keypress',e=>{if(e.key==='Enter')doTransaction('expense');});
 window.addEventListener('beforeunload',()=>saveLocal());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveLocal();});
-let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(updateMiniRing,100);});
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{updateMiniRing();renderSparklines();},100);});
 
 // ===== INIT =====
 applyTheme();initAnimatedElements();initFB();loadServer();
-setTimeout(()=>{init3DTilt();initMagneticButtons();initPullToRefresh();},500);
+setTimeout(()=>{init3DTilt();initMagneticButtons();initPullToRefresh();renderSparklines();},500);
 </script>
 </body>
 </html>
