@@ -361,6 +361,13 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <div class="summary-item"><div class="summary-label">🔵 На сайте</div><div class="summary-val text-orange" id="sumSite">0 ₽</div></div>
 <div class="summary-item"><div class="summary-label">📈 Маржа</div><div class="summary-val text-teal" id="sumMargin">0 ₽</div></div>
 </div></div>
+
+<!-- НОВАЯ КНОПКА КОРРЕКТИРОВКИ КАПИТАЛА -->
+<button class="btn btn-secondary mb-12" onclick="openCapitalAdjustment()" style="border-color:rgba(175,82,222,0.3);color:var(--ios-purple);">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+Корректировка капитала
+</button>
+
 <button class="btn btn-primary mb-12" id="fixReportBtn" onclick="doFixReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L12 14"/><path d="M9 5L12 2L15 5"/><circle cx="12" cy="18" r="2" fill="currentColor"/></svg>Зафиксировать</button>
 <button class="btn btn-secondary mb-20" onclick="doShareCurrentReport()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
 <div id="lastFixedBadge" style="display:none;background:rgba(52,199,89,0.12);border-radius:12px;padding:12px;margin-bottom:16px;font-size:0.8rem;color:var(--ios-green);font-weight:500;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Последний: <span id="lastFixedDate"></span></div>
@@ -499,6 +506,29 @@ body.light-theme .toast { background: rgba(255,255,255,0.95); border: 1px solid 
 <div class="bottom-sheet" id="setGoalSheet"><div class="sheet-handle"></div><div class="sheet-title">Цель по выручке</div>
 <div class="setting-group"><div class="setting-label">Целевая выручка (₽)</div><input type="number" id="goalTargetInput" class="setting-input" placeholder="100000" step="1000" min="0"><div class="setting-hint">Текущая: <span id="goalCurrentHint">0 ₽</span></div></div>
 <button class="btn btn-primary" onclick="saveGoal()" style="margin-top:8px;">Установить</button><button class="btn btn-secondary" onclick="closeSetGoal()" style="margin-top:8px;">Отмена</button></div>
+
+<!-- НОВОЕ ОКНО КОРРЕКТИРОВКИ КАПИТАЛА -->
+<div class="sheet-overlay" id="capitalAdjOverlay" onclick="closeCapitalAdjustment()"></div>
+<div class="bottom-sheet" id="capitalAdjSheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">💜 Корректировка капитала</div>
+<div class="setting-group">
+<div class="setting-label">Текущий капитал</div>
+<div style="font-size:1.2rem;font-weight:700;color:var(--ios-blue);text-align:center;" id="currentCapitalDisplay">0 ₽</div>
+</div>
+<div class="setting-group">
+<div class="setting-label">Сумма корректировки (₽)</div>
+<input type="number" id="capitalAdjAmount" class="setting-input" placeholder="Например: 5000 или -2000" step="0.01">
+<div class="setting-hint">Введите положительное число для увеличения, отрицательное — для уменьшения</div>
+</div>
+<div class="setting-group">
+<div class="setting-label">Комментарий</div>
+<input type="text" id="capitalAdjComment" class="setting-input" placeholder="Например: Внесение наличных" style="text-align:left;font-size:0.9rem;">
+</div>
+<button class="btn btn-primary" onclick="saveCapitalAdjustment()" style="margin-top:8px;background:var(--ios-purple);">Применить</button>
+<button class="btn btn-secondary" onclick="closeCapitalAdjustment()" style="margin-top:8px;">Отмена</button>
+</div>
+
 <div class="sheet-overlay" id="permOverlay" onclick="closePermSheet()"></div>
 <div class="bottom-sheet" id="permSheet">
 <div class="sheet-handle"></div>
@@ -687,7 +717,6 @@ localStorage.setItem('fl_viewing_owner', data.ownerUid);
 await firebase.database().ref(`accessCodes/${code}/used`).set(true);
 await firebase.database().ref(`accessCodes/${code}/usedBy`).set(firebaseUid);
 
-// 【КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ】 Добавляем пользователя в team с правами Admin
 const userName = tg?.initDataUnsafe?.user?.first_name || 'PWA User';
 await firebase.database().ref(`users/${data.ownerUid}/team/${firebaseUid}`).set({
 role: 'admin',
@@ -709,7 +738,7 @@ let currentUserRole = 'owner';
 let teamMembers = {};
 let currentPermUid = null;
 let selectedPermRole = null;
-let selectedInviteRole = 'admin'; // По умолчанию Админ
+let selectedInviteRole = 'admin';
 const ROLE_INFO = {
 owner: { name: 'Владелец', icon: '👑', class: 'role-owner' },
 admin: { name: 'Админ', icon: '🛡️', class: 'role-admin' },
@@ -973,6 +1002,53 @@ updates[`users/${firebaseUid}/invites/${token}`] = null;
 firebase.database().ref().update(updates).then(() => { haptic('success'); showToast('🗑️', 'Приглашение удалено'); }).catch(() => showToast('⚠️', 'Ошибка'));
 };
 
+// ===== CAPITAL ADJUSTMENT =====
+window.openCapitalAdjustment = () => {
+if (!canEdit()) return;
+document.getElementById('currentCapitalDisplay').textContent = fmt(capital);
+document.getElementById('capitalAdjAmount').value = '';
+document.getElementById('capitalAdjComment').value = '';
+document.getElementById('capitalAdjOverlay').classList.add('active');
+document.getElementById('capitalAdjSheet').classList.add('active');
+haptic('light');
+setTimeout(() => document.getElementById('capitalAdjAmount').focus(), 400);
+};
+window.closeCapitalAdjustment = () => {
+document.getElementById('capitalAdjOverlay').classList.remove('active');
+document.getElementById('capitalAdjSheet').classList.remove('active');
+};
+window.saveCapitalAdjustment = () => {
+if (!canEdit()) return;
+const amount = parseFloat(document.getElementById('capitalAdjAmount').value);
+if (isNaN(amount) || amount === 0) {
+showToast('⚠️', 'Введите ненулевую сумму');
+haptic('error');
+return;
+}
+const comment = document.getElementById('capitalAdjComment').value.trim();
+const acc = getAccount();
+if (!acc) {
+showToast('⚠️', 'Выберите счёт для записи');
+return;
+}
+
+capital += amount;
+
+if (!acc.transactions) acc.transactions = [];
+acc.transactions.push({
+type: 'capital_adj',
+amount: amount,
+desc: comment || 'Корректировка капитала',
+date: new Date().toISOString()
+});
+
+haptic('success');
+renderAll();
+saveServer();
+closeCapitalAdjustment();
+showToast('✅', `Капитал изменен на ${fmt(amount)}`);
+};
+
 // ===== NAVIGATION =====
 let currentPageName = 'home';
 const pageOrder = ['home', 'report', 'goal', 'detail', 'settings'];
@@ -999,9 +1075,9 @@ window.saveGoal = () => { if (!canEdit()) return; const v = parseFloat(document.
 window.resetGoal = () => { if (!canEdit()) return; if (!goalTarget) { showToast('ℹ️', 'Нет цели'); return; } const r = () => { goalHistory.push({ date: new Date().toISOString(), target: goalTarget, revenueAtClose: calcAll().revenue }); if (goalHistory.length > 10) goalHistory = goalHistory.slice(-10); goalTarget = 0; saveLocal(); saveServer(); refreshGoal(); updateMiniRing(); updateMeshColors(); haptic('success'); showToast('🎯', 'Сброшено'); }; if (tg?.showConfirm) tg.showConfirm('Сбросить цель?', c => { if (c) r(); }); else if (confirm('Сбросить?')) r(); };
 function refreshGoal() { updateGoalPage(); }
 const renderAll = () => { renderHome(); renderReport(); renderDetail(); updateMiniRing(); updateMeshColors(); };
-const renderHome = () => { const acc = getAccount(), h = getHolder(), ne = document.getElementById('accountName'); if (!acc || !h) { ne.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт'; animateValue(document.getElementById('balanceDisplay'), 0, fmt); ['statTurnover', 'statIncome', 'statExpense', 'statRevenue', 'statSpend', 'statMargin'].forEach(id => animateValue(document.getElementById(id), 0, fmt)); document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; updateMiniRing(); return; } ne.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`; animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt); const s = calcAcc(acc); animateValue(document.getElementById('statTurnover'), s.turnover, fmt); animateValue(document.getElementById('statIncome'), s.totalIncome, fmt); animateValue(document.getElementById('statExpense'), s.totalExpense, fmt); animateValue(document.getElementById('statRevenue'), s.revenue, fmt); animateValue(document.getElementById('statSpend'), s.totalSpend, fmt); const me = document.getElementById('statMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach((t, index) => { if (!t) return; const d = new Date(t.date), time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const w = document.createElement('div'); w.className = 'tx-item-wrapper'; const sa = document.createElement('div'); sa.className = 'tx-item-swipe'; sa.textContent = '🗑️ Удалить'; sa.onclick = () => deleteTransaction(index); const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; w.appendChild(sa); w.appendChild(item); list.appendChild(w); initSwipeGesture(w, item); }); document.getElementById('resetBtn').style.display = canDelete() ? 'block' : 'none'; } saveLocal(); updateMiniRing(); };
+const renderHome = () => { const acc = getAccount(), h = getHolder(), ne = document.getElementById('accountName'); if (!acc || !h) { ne.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт'; animateValue(document.getElementById('balanceDisplay'), 0, fmt); ['statTurnover', 'statIncome', 'statExpense', 'statRevenue', 'statSpend', 'statMargin'].forEach(id => animateValue(document.getElementById(id), 0, fmt)); document.getElementById('txList').innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>'; document.getElementById('resetBtn').style.display = 'none'; updateMiniRing(); return; } ne.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`; animateValue(document.getElementById('balanceDisplay'), acc.balance, fmt); const s = calcAcc(acc); animateValue(document.getElementById('statTurnover'), s.turnover, fmt); animateValue(document.getElementById('statIncome'), s.totalIncome, fmt); animateValue(document.getElementById('statExpense'), s.totalExpense, fmt); animateValue(document.getElementById('statRevenue'), s.revenue, fmt); animateValue(document.getElementById('statSpend'), s.totalSpend, fmt); const me = document.getElementById('statMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); const list = document.getElementById('txList'); if (!acc.transactions?.length) { list.innerHTML = '<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>'; document.getElementById('resetBtn').style.display = 'none'; } else { list.innerHTML = ''; acc.transactions.slice().reverse().forEach((t, index) => { if (!t) return; const d = new Date(t.date), time = isNaN(d.getTime()) ? '' : d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); let cls, sign, desc; if (t.type === 'income') { cls = 'text-green'; sign = '+'; desc = t.desc || 'Пополнение'; } else if (t.type === 'expense') { cls = 'text-red'; sign = '−'; desc = t.desc || 'Списание'; } else if (t.type === 'spend') { cls = 'text-purple'; sign = '−'; desc = '🛍️ ' + (t.desc || 'Трата'); } else if (t.type === 'adjustment') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '✏️ ' + (t.desc || 'Корректировка'); } else if (t.type === 'revenue') { cls = 'text-orange'; sign = '+'; desc = '💜 ' + (t.desc || 'Капитализация'); } else if (t.type === 'capital_adj') { cls = 'text-blue'; sign = t.amount >= 0 ? '+' : ''; desc = '💜 ✏️ ' + (t.desc || 'Корректировка капитала'); } else { cls = ''; sign = ''; desc = t.desc || 'Операция'; } const amt = t.type === 'adjustment' || t.type === 'capital_adj' ? `${sign}${fmt(Math.abs(t.amount))}` : `${sign} ${fmt(t.amount)}`; const w = document.createElement('div'); w.className = 'tx-item-wrapper'; const sa = document.createElement('div'); sa.className = 'tx-item-swipe'; sa.textContent = '🗑️ Удалить'; sa.onclick = () => deleteTransaction(index); const item = document.createElement('div'); item.className = 'tx-item'; item.innerHTML = `<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`; w.appendChild(sa); w.appendChild(item); list.appendChild(w); initSwipeGesture(w, item); }); document.getElementById('resetBtn').style.display = canDelete() ? 'block' : 'none'; } saveLocal(); updateMiniRing(); };
 window.resetAll = () => { if (!canDelete()) return; const acc = getAccount(), h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast('⚠️', 'Нет операций'); return; } haptic('warning'); const r = () => { acc.balance = 0; acc.transactions = []; renderAll(); saveLocal(); saveServer(); haptic('success'); showToast('✅', 'Обнулено'); }; if (tg?.showConfirm) tg.showConfirm(`Обнулить "${acc.name}"?`, c => { if (c) r(); }); else if (confirm('Обнулить?')) r(); };
-window.deleteTransaction = (idx) => { if (!canEdit()) return; const acc = getAccount(); if (!acc?.transactions) return; const ri = acc.transactions.length - 1 - idx; if (ri < 0 || ri >= acc.transactions.length) return; const tx = acc.transactions[ri]; const del = () => { if (tx.type === 'income') { acc.balance -= tx.amount; capital -= tx.amount * (incomePercent / 100); } else if (tx.type === 'expense') { acc.balance += tx.amount; capital -= tx.amount * (expensePercent / 100); } else if (tx.type === 'adjustment') { acc.balance -= tx.amount; } else if (tx.type === 'revenue') { capital -= tx.amount; } acc.transactions.splice(ri, 1); renderAll(); saveServer(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm('Удалить?', c => { if (c) del(); }); else if (confirm('Удалить?')) del(); };
+window.deleteTransaction = (idx) => { if (!canEdit()) return; const acc = getAccount(); if (!acc?.transactions) return; const ri = acc.transactions.length - 1 - idx; if (ri < 0 || ri >= acc.transactions.length) return; const tx = acc.transactions[ri]; const del = () => { if (tx.type === 'income') { acc.balance -= tx.amount; capital -= tx.amount * (incomePercent / 100); } else if (tx.type === 'expense') { acc.balance += tx.amount; capital -= tx.amount * (expensePercent / 100); } else if (tx.type === 'adjustment') { acc.balance -= tx.amount; } else if (tx.type === 'revenue') { capital -= tx.amount; } else if (tx.type === 'capital_adj') { capital -= tx.amount; } acc.transactions.splice(ri, 1); renderAll(); saveServer(); haptic('success'); showToast('🗑️', 'Удалено'); }; if (tg?.showConfirm) tg.showConfirm('Удалить?', c => { if (c) del(); }); else if (confirm('Удалить?')) del(); };
 const refreshReport = () => { const s = calcAll(); ['sumTurnover', 'sumRevenue', 'sumIncome', 'sumExpense', 'sumSpend', 'sumBalance', 'sumCapital', 'sumSite'].forEach((id, i) => animateValue(document.getElementById(id), [s.turnover, s.revenue, s.totalIncome, s.totalExpense, s.totalSpend, s.totalBalance, capital, s.siteBalance][i], fmt)); const me = document.getElementById('sumMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); renderReportsList(); checkLastFixed(); };
 const renderReport = refreshReport;
 const renderReportsList = () => { const list = document.getElementById('reportsList'), keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date), sp = r.spend || 0, mg = r.margin ?? ((r.revenue || 0) - sp); const c = document.createElement('div'); c.className = 'report-card'; c.innerHTML = `<div class="report-header"><div><div class="report-date">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div><div class="report-time">${d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>${canDelete() ? `<button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>` : ''}</div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmt(sp)}</span></div><div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmt(mg)}</span></div></div>`; list.appendChild(c); }); };
