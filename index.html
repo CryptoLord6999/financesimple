@@ -54,35 +54,10 @@ html, body { height: 100%; overflow: hidden; background: var(--ios-bg); color: v
     animation: blobFloat 20s ease-in-out infinite;
     transition: background 1s ease;
 }
-.mesh-blob:nth-child(1) {
-    width: 300px; height: 300px;
-    top: -100px; left: -80px;
-    background: var(--ios-blue);
-    animation-delay: 0s;
-    animation-duration: 18s;
-}
-.mesh-blob:nth-child(2) {
-    width: 250px; height: 250px;
-    top: 40%; right: -100px;
-    background: var(--ios-purple);
-    animation-delay: -5s;
-    animation-duration: 22s;
-}
-.mesh-blob:nth-child(3) {
-    width: 200px; height: 200px;
-    bottom: -50px; left: 30%;
-    background: var(--ios-teal);
-    animation-delay: -10s;
-    animation-duration: 25s;
-}
-.mesh-blob:nth-child(4) {
-    width: 180px; height: 180px;
-    top: 20%; left: 50%;
-    background: var(--ios-orange);
-    animation-delay: -7s;
-    animation-duration: 20s;
-    opacity: 0.08;
-}
+.mesh-blob:nth-child(1) { width: 300px; height: 300px; top: -100px; left: -80px; background: var(--ios-blue); animation-delay: 0s; animation-duration: 18s; }
+.mesh-blob:nth-child(2) { width: 250px; height: 250px; top: 40%; right: -100px; background: var(--ios-purple); animation-delay: -5s; animation-duration: 22s; }
+.mesh-blob:nth-child(3) { width: 200px; height: 200px; bottom: -50px; left: 30%; background: var(--ios-teal); animation-delay: -10s; animation-duration: 25s; }
+.mesh-blob:nth-child(4) { width: 180px; height: 180px; top: 20%; left: 50%; background: var(--ios-orange); animation-delay: -7s; animation-duration: 20s; opacity: 0.08; }
 @keyframes blobFloat {
     0%, 100% { transform: translate(0, 0) scale(1); }
     25% { transform: translate(30px, -40px) scale(1.1); }
@@ -201,6 +176,74 @@ body.light-theme .balance-card::after {
 .skeleton-circle { border-radius: 50%; }
 .skeleton-card { height: 100px; border-radius: var(--radius-ios-sm); }
 
+/* === SLOT MACHINE NUMBERS === */
+.slot-container {
+    display: inline-flex;
+    overflow: hidden;
+    height: 1.1em;
+    line-height: 1.1;
+}
+.slot-digit {
+    display: inline-block;
+    animation: slotSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+}
+@keyframes slotSpin {
+    0% { transform: translateY(100%); opacity: 0; }
+    50% { transform: translateY(-20%); opacity: 0.5; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* === PARTICLE EFFECTS === */
+.particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    animation: particleFly 0.8s ease-out forwards;
+}
+@keyframes particleFly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* === SPARKLINES === */
+.sparkline-container {
+    position: relative;
+    height: 30px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+.sparkline {
+    width: 100%;
+    height: 100%;
+}
+.sparkline-path {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: sparklineDraw 1s ease-out forwards;
+}
+.sparkline-area {
+    opacity: 0.1;
+    animation: sparklineFadeIn 1s ease-out forwards;
+}
+@keyframes sparklineDraw {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+}
+@keyframes sparklineFadeIn {
+    from { opacity: 0; }
+    to { opacity: 0.1; }
+}
+
 .balance-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; position: relative; z-index: 2; }
 .balance-label { font-size: 0.75rem; color: var(--ios-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .balance-edit-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--spring-bounce); color: var(--ios-text-secondary); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -236,7 +279,7 @@ body.light-theme .balance-card::after {
 .amount-input { width: 100%; background: transparent; border: none; color: var(--ios-text); font-size: 1.75rem; font-weight: 600; text-align: center; padding: 14px; outline: none; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 .amount-input::placeholder { color: var(--ios-text-secondary); }
 .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.action-btn { padding: 14px; border-radius: var(--radius-ios-sm); border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring-bounce); display: flex; align-items: center; justify-content: center; gap: 6px; position: relative; overflow: hidden; }
 .action-btn:active { transform: scale(0.92); }
 .action-income { background: var(--ios-green); color: white; box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3); }
 .action-expense { background: var(--ios-red); color: white; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
@@ -415,10 +458,10 @@ body.light-theme .balance-card::after {
 <div class="sync-badge" id="syncBadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>подключение...</div>
 </div></div>
 <div class="stats-grid" id="statsGrid">
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div></div>
-<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-turnover" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF"/><stop offset="100%" style="stop-color:#5AC8FA"/></linearGradient></defs><path d="M3 17L9 11L13 15L21 7" stroke="url(#grad-turnover)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Оборот</span></div><div class="stat-value text-blue" id="statTurnover">0 ₽</div><div class="sparkline-container" id="sparkTurnover"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-income" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style="stop-color:#34C759"/><stop offset="100%" style="stop-color:#30D158"/></linearGradient></defs><path d="M12 19V5M5 12L12 5L19 12" stroke="url(#grad-income)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Доход</span></div><div class="stat-value text-green" id="statIncome">0 ₽</div><div class="sparkline-container" id="sparkIncome"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-expense" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF3B30"/><stop offset="100%" style="stop-color:#FF453A"/></linearGradient></defs><path d="M12 5V19M5 12L12 19L19 12" stroke="url(#grad-expense)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="stat-name">Расход</span></div><div class="stat-value text-red" id="statExpense">0 ₽</div><div class="sparkline-container" id="sparkExpense"></div></div>
+<div class="stat-card"><div class="stat-header"><svg class="stat-icon" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="grad-revenue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF9500"/><stop offset="100%" style="stop-color:#FFCC00"/></linearGradient></defs><circle cx="12" cy="12" r="9" stroke="url(#grad-revenue)" stroke-width="2.5"/><path d="M12 8V12L15 14" stroke="url(#grad-revenue)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="stat-name">Выручка</span></div><div class="stat-value text-orange" id="statRevenue">0 ₽</div><div class="sparkline-container" id="sparkRevenue"></div></div>
 </div>
 <div class="spend-block"><div class="spend-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Траты</div><div class="spend-value" id="statSpend">0 ₽</div></div>
 <div class="margin-block"><div class="margin-label"><span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>Маржинальная прибыль</span><span class="margin-sub">выручка − траты</span></div><div class="margin-value" id="statMargin">0 ₽</div></div>
@@ -502,7 +545,7 @@ body.light-theme .balance-card::after {
 <div class="nav-item" data-page="settings" onclick="switchPage('settings')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="nav-label">Настройки</span></div>
 </nav></div>
 
-<!-- SHEETS (account, edit balance, quick expense, set goal) - same as before -->
+<!-- SHEETS -->
 <div class="sheet-overlay" id="accountOverlay" onclick="closeAccountSheet()"></div>
 <div class="bottom-sheet" id="accountSheet"><div class="sheet-handle"></div><div class="sheet-header"><div style="width:36px;"></div><div class="sheet-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Выбор счёта</div><button class="sheet-menu-btn" onclick="toggleActionsMenu()"><div class="hamburger-icon"><span></span><span></span><span></span></div></button></div><div class="actions-menu" id="actionsMenu"><div class="action-item" onclick="createHolder()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="action-item-text">Создать держателя</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div><div class="action-item" onclick="createAccount()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span class="action-item-text">Создать счёт</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div><div class="action-item" onclick="toggleEditMode()"><svg class="action-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="action-item-text">Редактировать</span><svg class="action-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div><input type="text" id="accountSearch" class="setting-input" placeholder="Поиск..." style="font-size:0.9rem;text-align:left;margin-bottom:16px;border:1px solid var(--ios-separator);border-radius:12px;padding:10px 14px;background:var(--ios-card);"><div id="accountTree"></div><button class="btn btn-secondary" onclick="closeAccountSheet()" style="margin-top:12px;">Закрыть</button></div>
 
@@ -538,7 +581,7 @@ function applyTheme(){
 }
 window.setTheme=(m)=>{localStorage.setItem('fl_theme',m);applyTheme();haptic('light');};
 
-// MESH GRADIENT COLORS based on financial state
+// MESH GRADIENT COLORS
 function updateMeshColors(){
     const blobs=document.querySelectorAll('.mesh-blob');
     const s=calcAll&&typeof calcAll==='function'?calcAll():{margin:0,revenue:0};
@@ -549,15 +592,49 @@ function updateMeshColors(){
     }
 }
 
-// ===== ANIMATION ENGINE =====
+// ===== ANIMATION ENGINE WITH SLOT MACHINE EFFECT =====
 const previousValues=new Map();
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+
+// Slot Machine Animation
+function animateValueSlot(el,nv,fmt,dur=600){
+    const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
+    const sv=previousValues.get(id)||0,st=performance.now();
+    
+    // Create slot container if not exists
+    if(!el.querySelector('.slot-container')){
+        el.innerHTML='<span class="slot-container"></span>';
+    }
+    
+    function u(ct){
+        const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);
+        const cv=sv+(nv-sv)*ep;
+        const formatted=fmt(cv);
+        
+        // Update slot digits
+        const container=el.querySelector('.slot-container');
+        if(container){
+            const digits=formatted.split('');
+            container.innerHTML=digits.map((d,i)=>`<span class="slot-digit" style="animation-delay:${i*0.05}s">${d}</span>`).join('');
+        }
+        
+        if(p<1)requestAnimationFrame(u);
+        else{
+            previousValues.set(id,nv);
+            el.textContent=fmt(nv);
+        }
+    }
+    requestAnimationFrame(u);
+}
+
+// Fallback to simple animation
 function animateValue(el,nv,fmt,dur=600){
     const id=el.id||el.dataset.animId;if(!id){el.textContent=fmt(nv);return;}
     const sv=previousValues.get(id)||0,st=performance.now();
     function u(ct){const p=Math.min((ct-st)/dur,1),ep=easeOutCubic(p);el.textContent=fmt(sv+(nv-sv)*ep);if(p<1)requestAnimationFrame(u);else previousValues.set(id,nv);}
     requestAnimationFrame(u);
 }
+
 function initAnimatedElements(){['balanceDisplay','statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin','sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite','sumMargin','detBalance','detCapital','detSite','detSpend','detRevenue','detMargin','goalCurrentRevenue','goalTargetEl','goalRemaining','goalPercent'].forEach(id=>{const el=document.getElementById(id);if(el)previousValues.set(id,0);});}
 
 // ===== SPLASH =====
@@ -572,6 +649,70 @@ const fmt=(n)=>{if(n==null||isNaN(n))n=0;return new Intl.NumberFormat('ru-RU',{s
 
 // ===== CONFETTI =====
 function showConfetti(){const c=document.getElementById('confettiContainer'),colors=['#007AFF','#34C759','#FF9500','#FF3B30','#AF52DE','#5AC8FA'];for(let i=0;i<60;i++){const d=document.createElement('div');d.className='confetti';d.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${Math.random()*2+2}s;width:${Math.random()*8+6}px;height:${Math.random()*8+6}px;border-radius:${Math.random()>.5?'50%':'2px'};`;c.appendChild(d);setTimeout(()=>d.remove(),4500);}haptic('success');}
+
+// ===== PARTICLE EFFECTS =====
+function createParticles(x,y,color){
+    const colors=[color,'#007AFF','#34C759','#FF9500','#AF52DE'];
+    for(let i=0;i<12;i++){
+        const p=document.createElement('div');
+        p.className='particle';
+        const angle=(Math.PI*2*i)/12;
+        const distance=60+Math.random()*40;
+        const tx=Math.cos(angle)*distance;
+        const ty=Math.sin(angle)*distance;
+        p.style.cssText=`left:${x}px;top:${y}px;width:${6+Math.random()*4}px;height:${6+Math.random()*4}px;background:${colors[Math.floor(Math.random()*colors.length)]};--tx:${tx}px;--ty:${ty}px;`;
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),800);
+    }
+}
+
+// Add particle effect to buttons
+document.addEventListener('click',(e)=>{
+    const btn=e.target.closest('.action-btn');
+    if(btn){
+        const rect=btn.getBoundingClientRect();
+        const x=rect.left+rect.width/2;
+        const y=rect.top+rect.height/2;
+        const color=btn.classList.contains('action-income')?'#34C759':'#FF3B30';
+        createParticles(x,y,color);
+    }
+});
+
+// ===== SPARKLINES =====
+function renderSparkline(containerId,data,color){
+    const container=document.getElementById(containerId);
+    if(!container||!data||data.length<2)return;
+    
+    const width=container.offsetWidth||100;
+    const height=30;
+    const max=Math.max(...data);
+    const min=Math.min(...data);
+    const range=max-min||1;
+    
+    const points=data.map((v,i)=>{
+        const x=(i/(data.length-1))*width;
+        const y=height-((v-min)/range)*height;
+        return `${x},${y}`;
+    }).join(' ');
+    
+    const areaPoints=`0,${height} ${points} ${width},${height}`;
+    
+    container.innerHTML=`
+        <svg class="sparkline" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+            <polygon class="sparkline-area" points="${areaPoints}" fill="${color}"/>
+            <polyline class="sparkline-path" points="${points}" stroke="${color}" stroke-dasharray="1000" stroke-dashoffset="1000"/>
+        </svg>
+    `;
+}
+
+// Generate sample data for sparklines
+function generateSparkData(){
+    const data=[];
+    for(let i=0;i<7;i++){
+        data.push(Math.random()*1000);
+    }
+    return data;
+}
 
 // ===== 3D TILT =====
 function init3DTilt(){const card=document.getElementById('balanceCard');if(!card)return;let busy=false;const move=(cx,cy)=>{if(busy)return;busy=true;const r=card.getBoundingClientRect(),x=cx-r.left,y=cy-r.top,rx=(y-r.height/2)/15,ry=(r.width/2-x)/15;card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;requestAnimationFrame(()=>busy=false);};card.addEventListener('mousemove',e=>move(e.clientX,e.clientY));card.addEventListener('mouseleave',()=>{card.style.transform='';});card.addEventListener('touchmove',e=>move(e.touches[0].clientX,e.touches[0].clientY),{passive:true});card.addEventListener('touchend',()=>{card.style.transform='';});}
@@ -593,7 +734,7 @@ function showSkeletons(){
     for(let i=0;i<4;i++){const d=document.createElement('div');d.className='tx-item-wrapper';d.innerHTML=`<div class="tx-item" style="border:none;"><div class="tx-info"><div class="skeleton skeleton-text" style="width:${60+Math.random()*30}%"></div><div class="skeleton skeleton-text-sm"></div></div><div class="skeleton skeleton-text" style="width:60px;height:18px;"></div></div>`;list.appendChild(d);}
 }
 
-// ===== DATA LAYER (holders, accounts, capital, reports, etc.) =====
+// ===== DATA LAYER =====
 let holders={},activeHolderId=null,activeAccountId=null,capital=0,savedReports={},incomePercent=7,expensePercent=2.5,detailPeriod='today',isOnline=navigator.onLine,isEditMode=false,expandedHolders={},goalTarget=0,goalHistory=[];
 const saveLocal=()=>{try{localStorage.setItem('fl_holders',JSON.stringify(holders));localStorage.setItem('fl_ah',activeHolderId);localStorage.setItem('fl_aa',activeAccountId);localStorage.setItem('fl_cap',capital.toString());localStorage.setItem('fl_reports',JSON.stringify(savedReports));localStorage.setItem('fl_ip',incomePercent.toString());localStorage.setItem('fl_ep',expensePercent.toString());localStorage.setItem('fl_goal',goalTarget.toString());localStorage.setItem('fl_goal_history',JSON.stringify(goalHistory));}catch(e){}};
 const loadLocal=()=>{try{const h=localStorage.getItem('fl_holders');if(h){holders=JSON.parse(h);activeHolderId=localStorage.getItem('fl_ah');activeAccountId=localStorage.getItem('fl_aa');if(!activeHolderId||!holders[activeHolderId])activeHolderId=Object.keys(holders)[0];const hh=holders[activeHolderId];if(hh&&(!activeAccountId||!hh.accounts[activeAccountId]))activeAccountId=Object.keys(hh.accounts||{})[0]||null;}else{const hid='h_'+Date.now(),aid='a_'+Date.now();holders={[hid]:{id:hid,name:'Основной',accounts:{[aid]:{id:aid,name:'Основной',balance:0,transactions:[],createdAt:new Date().toISOString()}},createdAt:new Date().toISOString()}};activeHolderId=hid;activeAccountId=aid;}savedReports=JSON.parse(localStorage.getItem('fl_reports')||'{}');incomePercent=parseFloat(localStorage.getItem('fl_ip'))||7;expensePercent=parseFloat(localStorage.getItem('fl_ep'))||2.5;capital=parseFloat(localStorage.getItem('fl_cap'))||0;goalTarget=parseFloat(localStorage.getItem('fl_goal'))||0;goalHistory=JSON.parse(localStorage.getItem('fl_goal_history')||'[]');}catch(e){}};
@@ -627,11 +768,19 @@ window.saveGoal=()=>{const v=parseFloat(document.getElementById('goalTargetInput
 window.resetGoal=()=>{if(!goalTarget){showToast('ℹ️','Нет цели');return;}const r=()=>{goalHistory.push({date:new Date().toISOString(),target:goalTarget,revenueAtClose:calcAll().revenue});if(goalHistory.length>10)goalHistory=goalHistory.slice(-10);goalTarget=0;saveLocal();saveServer();refreshGoal();updateMiniRing();updateMeshColors();haptic('success');showToast('🎯','Сброшено');};if(tg?.showConfirm)tg.showConfirm('Сбросить цель?',c=>{if(c)r();});else if(confirm('Сбросить?'))r();};
 function refreshGoal(){updateGoalPage();}
 
-const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing();updateMeshColors();};
+const renderAll=()=>{renderHome();renderReport();renderDetail();updateMiniRing();updateMeshColors();renderSparklines();};
 const renderHome=()=>{const acc=getAccount(),h=getHolder(),ne=document.getElementById('accountName');if(!acc||!h){ne.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Выберите счёт';animateValue(document.getElementById('balanceDisplay'),0,fmt);['statTurnover','statIncome','statExpense','statRevenue','statSpend','statMargin'].forEach(id=>animateValue(document.getElementById(id),0,fmt));document.getElementById('txList').innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет счетов</div></div>';document.getElementById('resetBtn').style.display='none';updateMiniRing();return;}ne.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${h.name} → ${acc.name}`;animateValue(document.getElementById('balanceDisplay'),acc.balance,fmt);const s=calcAcc(acc);animateValue(document.getElementById('statTurnover'),s.turnover,fmt);animateValue(document.getElementById('statIncome'),s.totalIncome,fmt);animateValue(document.getElementById('statExpense'),s.totalExpense,fmt);animateValue(document.getElementById('statRevenue'),s.revenue,fmt);animateValue(document.getElementById('statSpend'),s.totalSpend,fmt);const me=document.getElementById('statMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');const list=document.getElementById('txList');if(!acc.transactions?.length){list.innerHTML='<div class="empty-state"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="empty-text">Нет операций</div></div>';document.getElementById('resetBtn').style.display='none';}else{list.innerHTML='';acc.transactions.slice().reverse().forEach((t,index)=>{if(!t)return;const d=new Date(t.date),time=isNaN(d.getTime())?'':d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});let cls,sign,desc;if(t.type==='income'){cls='text-green';sign='+';desc=t.desc||'Пополнение';}else if(t.type==='expense'){cls='text-red';sign='−';desc=t.desc||'Списание';}else if(t.type==='spend'){cls='text-purple';sign='−';desc='🛍️ '+(t.desc||'Трата');}else if(t.type==='adjustment'){cls='text-blue';sign=t.amount>=0?'+':'';desc='✏️ '+(t.desc||'Корректировка');}else if(t.type==='revenue'){cls='text-orange';sign='+';desc='💜 '+(t.desc||'Капитализация');}else{cls='';sign='';desc=t.desc||'Операция';}const amt=t.type==='adjustment'?`${sign}${fmt(Math.abs(t.amount))}`:`${sign} ${fmt(t.amount)}`;const w=document.createElement('div');w.className='tx-item-wrapper';const sa=document.createElement('div');sa.className='tx-item-swipe';sa.textContent='🗑️ Удалить';sa.onclick=()=>deleteTransaction(index);const item=document.createElement('div');item.className='tx-item';item.innerHTML=`<div class="tx-info"><div class="tx-desc">${desc}</div><div class="tx-time">${time}</div></div><div class="tx-amount ${cls}">${amt}</div>`;w.appendChild(sa);w.appendChild(item);list.appendChild(w);initSwipeGesture(w,item);});document.getElementById('resetBtn').style.display='block';}saveLocal();updateMiniRing();};
 window.resetAll=()=>{const acc=getAccount(),h=getHolder();if(!acc||!h||!acc.transactions?.length){showToast('⚠️','Нет операций');return;}haptic('warning');const r=()=>{acc.balance=0;acc.transactions=[];renderAll();saveLocal();saveServer();haptic('success');showToast('✅','Обнулено');};if(tg?.showConfirm)tg.showConfirm(`Обнулить "${acc.name}"?`,c=>{if(c)r();});else if(confirm('Обнулить?'))r();};
 
-// ===== REPORT, DETAIL, ADJUST, SETTINGS (same logic as v5.06) =====
+// Render sparklines
+function renderSparklines(){
+    renderSparkline('sparkTurnover',generateSparkData(),'var(--ios-blue)');
+    renderSparkline('sparkIncome',generateSparkData(),'var(--ios-green)');
+    renderSparkline('sparkExpense',generateSparkData(),'var(--ios-red)');
+    renderSparkline('sparkRevenue',generateSparkData(),'var(--ios-orange)');
+}
+
+// ===== REPORT, DETAIL, ADJUST, SETTINGS =====
 const refreshReport=()=>{const s=calcAll();['sumTurnover','sumRevenue','sumIncome','sumExpense','sumSpend','sumBalance','sumCapital','sumSite'].forEach((id,i)=>animateValue(document.getElementById(id),[s.turnover,s.revenue,s.totalIncome,s.totalExpense,s.totalSpend,s.totalBalance,capital,s.siteBalance][i],fmt));const me=document.getElementById('sumMargin');animateValue(me,s.margin,fmt);s.margin<0?me.classList.add('negative'):me.classList.remove('negative');renderReportsList();checkLastFixed();};
 const renderReport=refreshReport;
 const renderReportsList=()=>{const list=document.getElementById('reportsList'),keys=Object.keys(savedReports).sort().reverse();if(!keys.length){list.innerHTML='<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>';return;}list.innerHTML='';keys.forEach(key=>{const r=savedReports[key];if(!r)return;const d=new Date(r.date),sp=r.spend||0,mg=r.margin??((r.revenue||0)-sp);const c=document.createElement('div');c.className='report-card';c.innerHTML=`<div class="report-header"><div><div class="report-date">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div><div class="report-time">${d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">💹</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">💰</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">🟢</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">🔴</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">🛍️</span><span class="report-stat-value text-purple">${fmt(sp)}</span></div><div class="report-stat"><span class="report-stat-label">📈</span><span class="report-stat-value text-teal">${fmt(mg)}</span></div></div>`;list.appendChild(c);});};
@@ -680,11 +829,11 @@ window.addEventListener('offline',()=>{isOnline=false;updateSync('offline');});
 document.getElementById('amountInput').addEventListener('keypress',e=>{if(e.key==='Enter')doTransaction('expense');});
 window.addEventListener('beforeunload',()=>saveLocal());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveLocal();});
-let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(updateMiniRing,100);});
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{updateMiniRing();renderSparklines();},100);});
 
 // ===== INIT =====
 applyTheme();initAnimatedElements();initFB();loadServer();
-setTimeout(()=>{init3DTilt();initMagneticButtons();initPullToRefresh();},500);
+setTimeout(()=>{init3DTilt();initMagneticButtons();initPullToRefresh();renderSparklines();},500);
 </script>
 </body>
 </html>
