@@ -8,6 +8,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -287,6 +288,8 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 .role-option.selected .role-option-check { background: var(--ios-blue); border-color: var(--ios-blue); }
 .my-role-badge { position: fixed; top: max(8px, env(safe-area-inset-top)); right: 12px; z-index: 999; padding: 4px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 600; backdrop-filter: blur(20px); display: none; }
 .my-role-badge.visible { display: flex; align-items: center; gap: 4px; animation: toastIn 0.5s var(--spring-bounce); }
+.pwa-notice { position: fixed; top: max(60px, calc(env(safe-area-inset-top) + 50px)); left: 16px; right: 16px; z-index: 998; background: rgba(255,149,0,0.15); border: 1px solid rgba(255,149,0,0.3); border-radius: 12px; padding: 12px 16px; font-size: 0.8rem; color: var(--ios-orange); display: none; align-items: center; gap: 8px; backdrop-filter: blur(20px); }
+.pwa-notice.visible { display: flex; animation: toastIn 0.5s var(--spring-bounce); }
 ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
 </style>
 </head>
@@ -294,6 +297,10 @@ body.light-theme .noise-overlay { opacity: 0.015; mix-blend-mode: multiply; }
 <div class="mesh-gradient-bg"><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div><div class="mesh-blob"></div></div>
 <div class="noise-overlay"></div>
 <div class="my-role-badge" id="myRoleBadge"></div>
+<div class="pwa-notice" id="pwaNotice">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>Режим PWA — для полной функциональности откройте через Telegram</span>
+</div>
 <div id="splash"><canvas id="splashCanvas"></canvas><div class="splash-title">Findr</div><div class="splash-sub">Решения для бизнеса</div></div>
 <div class="toast-container" id="toastContainer"></div>
 <div id="app">
@@ -538,6 +545,164 @@ function initSwipeGesture(w,item){let sx=0,cx=0,drag=false;item.addEventListener
 
 function showSkeletons(){const list=document.getElementById('txList');list.innerHTML='';for(let i=0;i<4;i++){const d=document.createElement('div');d.className='tx-item-wrapper';d.innerHTML=`<div class="tx-item" style="border:none;"><div class="tx-info"><div class="skeleton skeleton-text" style="width:${60+Math.random()*30}%"></div><div class="skeleton skeleton-text-sm"></div></div><div class="skeleton skeleton-text" style="width:60px;height:18px;"></div></div>`;list.appendChild(d);}}
 
+// ===== FIREBASE AUTH + STABLE UID SYSTEM =====
+let useFirebase = false;
+let userRef = null;
+let dataListener = null;
+let saveTimeout = null;
+let isSyncing = false;
+let firebaseAuth = null;
+let firebaseUid = null;
+let isPWA = false;
+let isTelegram = false;
+
+// Определяем режим запуска
+function detectEnvironment() {
+    isTelegram = !!(window.Telegram?.WebApp?.initDataUnsafe?.user?.id);
+    isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    
+    console.log('[ENV] Telegram:', isTelegram, '| PWA:', isPWA);
+    
+    if (isPWA && !isTelegram) {
+        setTimeout(() => {
+            document.getElementById('pwaNotice').classList.add('visible');
+            setTimeout(() => document.getElementById('pwaNotice').classList.remove('visible'), 5000);
+        }, 2000);
+    }
+}
+
+// Получаем Telegram user ID
+function getTelegramUserId() {
+    try {
+        const tid = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+        if (tid) return 'tg_' + tid;
+        
+        const initData = window.Telegram?.WebApp?.initData;
+        if (initData) {
+            const params = new URLSearchParams(initData);
+            const userStr = params.get('user');
+            if (userStr) {
+                const user = JSON.parse(decodeURIComponent(userStr));
+                if (user.id) return 'tg_' + user.id;
+            }
+        }
+    } catch(e) {
+        console.warn('[ID] Ошибка получения Telegram ID:', e);
+    }
+    return null;
+}
+
+// Инициализация Firebase + Anonymous Auth
+async function initFB() {
+    try {
+        const cfg = {
+            apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
+            authDomain: "financesimple-7c73a.firebaseapp.com",
+            databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "financesimple-7c73a",
+            storageBucket: "financesimple-7c73a.firebasestorage.app",
+            messagingSenderId: "1072812838336",
+            appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
+        };
+        
+        if (!firebase.apps.length) firebase.initializeApp(cfg);
+        useFirebase = true;
+        
+        try {
+            firebaseAuth = firebase.auth();
+            const cred = await firebaseAuth.signInAnonymously();
+            firebaseUid = cred.user.uid;
+            console.log('[FB] Auth OK. Firebase UID:', firebaseUid);
+            localStorage.setItem('fl_firebase_uid', firebaseUid);
+            
+            const tgId = getTelegramUserId();
+            if (tgId) {
+                await linkTelegramToFirebase(tgId, firebaseUid);
+            }
+        } catch(authErr) {
+            console.error('[FB] Auth error:', authErr);
+            firebaseUid = localStorage.getItem('fl_firebase_uid') || generateLocalUID();
+        }
+    } catch(e) {
+        console.error('[FB] Init error:', e);
+        useFirebase = false;
+        firebaseUid = generateLocalUID();
+    }
+}
+
+// Связываем Telegram ID с Firebase UID
+async function linkTelegramToFirebase(tgId, fbUid) {
+    try {
+        await firebase.database().ref(`userMappings/${tgId}`).set({
+            firebaseUid: fbUid,
+            linkedAt: new Date().toISOString(),
+            userName: window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || ''
+        });
+        await firebase.database().ref(`userMappingsReverse/${fbUid}/telegramId`).set(tgId);
+        console.log('[FB] Связка создана:', tgId, '→', fbUid);
+    } catch(e) {
+        console.error('[FB] Ошибка связки:', e);
+    }
+}
+
+// Ищем Firebase UID по Telegram ID
+async function findFirebaseUidByTelegram(tgId) {
+    try {
+        const snap = await firebase.database().ref(`userMappings/${tgId}`).once('value');
+        const data = snap.val();
+        if (data?.firebaseUid) {
+            console.log('[FB] Найден Firebase UID по Telegram ID:', data.firebaseUid);
+            return data.firebaseUid;
+        }
+    } catch(e) {
+        console.warn('[FB] Ошибка поиска:', e);
+    }
+    return null;
+}
+
+// Генерируем локальный UID
+function generateLocalUID() {
+    let id = localStorage.getItem('fl_uid');
+    if (!id) {
+        id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('fl_uid', id);
+    }
+    return id;
+}
+
+// Главная функция: получаем стабильный UID
+async function resolveUID() {
+    detectEnvironment();
+    
+    if (firebaseUid) {
+        console.log('[UID] Используем Firebase UID:', firebaseUid);
+        return firebaseUid;
+    }
+    
+    const stored = localStorage.getItem('fl_firebase_uid');
+    if (stored) {
+        firebaseUid = stored;
+        console.log('[UID] Из localStorage:', stored);
+        return stored;
+    }
+    
+    const tgId = getTelegramUserId();
+    if (tgId && useFirebase) {
+        const linked = await findFirebaseUidByTelegram(tgId);
+        if (linked) {
+            firebaseUid = linked;
+            localStorage.setItem('fl_firebase_uid', linked);
+            console.log('[UID] По связке Telegram:', linked);
+            return linked;
+        }
+    }
+    
+    const local = generateLocalUID();
+    firebaseUid = local;
+    console.log('[UID] Fallback (новый):', local);
+    return local;
+}
+
 // ===== TEAM ACCESS SYSTEM =====
 let currentUserRole = 'owner';
 let teamMembers = {};
@@ -611,11 +776,11 @@ function generateInviteLink() {
     
     const token = Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
     const baseUrl = window.location.href.split('?')[0].split('#')[0];
-    const inviteLink = `${baseUrl}?invite=${token}&owner=${UID}&role=${selectedInviteRole}`;
+    const inviteLink = `${baseUrl}?invite=${token}&owner=${firebaseUid}&role=${selectedInviteRole}`;
     
     if (useFirebase) {
         firebase.database().ref(`invites/${token}`).set({
-            ownerUid: UID,
+            ownerUid: firebaseUid,
             role: selectedInviteRole,
             createdAt: new Date().toISOString(),
             used: false
@@ -645,29 +810,25 @@ function shareInviteLink() {
     shareText(`🤝 Приглашение в Findr\n\nРоль: ${role}\n${link}`, 'Приглашение Findr');
 }
 
-// ===== ПРАВИЛЬНАЯ ЛОГИКА ПРИГЛАШЕНИЙ =====
 function checkInviteAccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const inviteToken = urlParams.get('invite');
     const ownerUid = urlParams.get('owner');
     const invitedRole = urlParams.get('role') || 'viewer';
     
-    // Если нет параметров приглашения — это обычный пользователь
     if (!inviteToken || !ownerUid) {
-        console.log('[Invite] Нет параметров invite в URL — обычный режим');
+        console.log('[Invite] Нет параметров invite — обычный режим');
         return false;
     }
     
-    console.log('[Invite] Обнаружена ссылка:', { inviteToken, ownerUid, invitedRole, myUID: UID });
+    console.log('[Invite] Обнаружена ссылка:', { inviteToken, ownerUid, invitedRole, myUID: firebaseUid });
     
-    // Если я сам владелец (перешёл по своей же ссылке) — игнорируем
-    if (ownerUid === UID) {
-        console.log('[Invite] Это моя собственная ссылка — игнорируем');
+    if (ownerUid === firebaseUid) {
+        console.log('[Invite] Моя собственная ссылка — игнорируем');
         cleanUrl();
         return false;
     }
     
-    // Если уже есть viewing_owner и он совпадает — просто продолжаем
     const existingOwner = localStorage.getItem('fl_viewing_owner');
     if (existingOwner === ownerUid) {
         console.log('[Invite] Уже в режиме просмотра владельца', ownerUid);
@@ -675,10 +836,7 @@ function checkInviteAccess() {
         return true;
     }
     
-    // Новый invite — принимаем его
     console.log('[Invite] Принимаем приглашение...');
-    
-    // СРАЗУ сохраняем viewing_owner, чтобы Firebase работал правильно
     localStorage.setItem('fl_viewing_owner', ownerUid);
     
     if (!useFirebase) {
@@ -686,12 +844,10 @@ function checkInviteAccess() {
         return true;
     }
     
-    // Проверяем invite в Firebase
     firebase.database().ref(`invites/${inviteToken}`).once('value').then(snap => {
         const invite = snap.val();
         
         if (!invite) {
-            console.error('[Invite] Invite не найден');
             showToast('⚠️', 'Ссылка недействительна');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
@@ -699,35 +855,28 @@ function checkInviteAccess() {
         }
         
         if (invite.ownerUid !== ownerUid) {
-            console.error('[Invite] ownerUid не совпадает');
             showToast('⚠️', 'Неверная ссылка');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
             return;
         }
         
-        // Если invite уже использован ЭТИМ ЖЕ пользователем — просто продолжаем
-        if (invite.used && invite.usedBy === UID) {
-            console.log('[Invite] Уже использован мной — продолжаем');
+        if (invite.used && invite.usedBy === firebaseUid) {
             showToast('✅', `С возвращением! Роль: ${ROLE_INFO[invite.role || invitedRole].name}`);
             cleanUrl();
-            // Пересоздаём userRef на правильного владельца и загружаем данные
             setupUserRef();
             subscribeToData();
             loadTeamMembers();
             return;
         }
         
-        // Если invite уже использован ДРУГИМ пользователем
         if (invite.used) {
-            console.error('[Invite] Использован другим пользователем:', invite.usedBy);
             showToast('⚠️', 'Ссылка уже использована');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
             return;
         }
         
-        // Новый invite — принимаем
         const userName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Партнёр';
         
         const teamData = {
@@ -735,35 +884,30 @@ function checkInviteAccess() {
             name: userName,
             addedAt: new Date().toISOString(),
             addedBy: ownerUid,
-            uid: UID
+            uid: firebaseUid
         };
         
-        // Выполняем оба обновления параллельно
         Promise.all([
             firebase.database().ref(`invites/${inviteToken}`).update({
                 used: true,
-                usedBy: UID,
+                usedBy: firebaseUid,
                 usedAt: new Date().toISOString()
             }),
-            firebase.database().ref(`users/${ownerUid}/team/${UID}`).set(teamData)
+            firebase.database().ref(`users/${ownerUid}/team/${firebaseUid}`).set(teamData)
         ]).then(() => {
             const role = invite.role || invitedRole;
-            console.log('[Invite] Приглашение принято! Роль:', role);
             showToast('✅', `Доступ получен! Роль: ${ROLE_INFO[role].icon} ${ROLE_INFO[role].name}`);
             haptic('success');
             cleanUrl();
-            // Пересоздаём userRef и загружаем данные владельца
             setupUserRef();
             subscribeToData();
             loadTeamMembers();
         }).catch(err => {
-            console.error('[Invite] Ошибка:', err);
             showToast('⚠️', 'Ошибка принятия приглашения');
             localStorage.removeItem('fl_viewing_owner');
             cleanUrl();
         });
     }).catch(err => {
-        console.error('[Invite] Ошибка проверки:', err);
         showToast('⚠️', 'Ошибка проверки ссылки');
         localStorage.removeItem('fl_viewing_owner');
         cleanUrl();
@@ -772,90 +916,39 @@ function checkInviteAccess() {
     return true;
 }
 
-// Очищаем URL от параметров приглашения
 function cleanUrl() {
     const cleanUrl = window.location.href.split('?')[0].split('#')[0];
     try {
         window.history.replaceState({}, '', cleanUrl);
-    } catch(e) {
-        console.warn('Не удалось очистить URL через history API');
-    }
+    } catch(e) {}
 }
 
-// ===== FIREBASE: ПРАВИЛЬНАЯ ИНИЦИАЛИЗАЦИЯ =====
-let useFirebase = false;
-let userRef = null;
-let dataListener = null; // Для real-time подписки
-let saveTimeout = null;
-let isSyncing = false;
-
-const getUserId = () => {
-    const tid = tg?.initDataUnsafe?.user?.id;
-    if (tid) return 'tg_' + tid;
-    let id = localStorage.getItem('fl_uid');
-    if (!id) {
-        id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('fl_uid', id);
-    }
-    return id;
-};
-const UID = getUserId();
-
-// Получаем UID владельца (кого мы просматриваем)
 function getViewingOwner() {
     const stored = localStorage.getItem('fl_viewing_owner');
-    // Если есть viewing_owner и это НЕ мы — используем его
-    if (stored && stored !== UID) return stored;
-    // Иначе — мы сами владелец
-    return UID;
+    if (stored && stored !== firebaseUid) return stored;
+    return firebaseUid;
 }
 
-// Инициализация Firebase приложения (только один раз)
-function initFB() {
-    try {
-        const cfg = {
-            apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY",
-            authDomain: "financesimple-7c73a.firebaseapp.com",
-            databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "financesimple-7c73a",
-            storageBucket: "financesimple-7c73a.firebasestorage.app",
-            messagingSenderId: "1072812838336",
-            appId: "1:1072812838336:web:262ce9e7cc79e93c514c25"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(cfg);
-        useFirebase = true;
-        console.log('[FB] Приложение инициализировано. Мой UID:', UID);
-    } catch(e) {
-        console.error('[FB] Ошибка инициализации:', e);
-        useFirebase = false;
-    }
-}
-
-// Создаём userRef на ПРАВИЛЬНЫЙ узел (владелец или я)
 function setupUserRef() {
-    if (!useFirebase) return;
+    if (!useFirebase || !firebaseUid) return;
     const viewingOwner = getViewingOwner();
     userRef = firebase.database().ref(`users/${viewingOwner}`);
-    console.log('[FB] userRef настроен на владельца:', viewingOwner, viewingOwner === UID ? '(это я)' : '(приглашённый)');
+    console.log('[FB] userRef →', viewingOwner, viewingOwner === firebaseUid ? '(это я)' : '(приглашённый)');
 }
 
-// ===== REAL-TIME ПОДПИСКА НА ДАННЫЕ =====
 function subscribeToData() {
     if (!useFirebase || !userRef) return;
     
-    // Отписываемся от предыдущей подписки, если была
     if (dataListener) {
-        firebase.database().ref().off('value', dataListener);
+        userRef.off('value', dataListener);
         dataListener = null;
     }
     
     showSkeletons();
     updateSync('syncing');
     
-    // Подписываемся на изменения в реальном времени
     dataListener = userRef.on('value', snap => {
         const d = snap.val();
-        console.log('[FB] Получены данные:', d ? 'есть данные' : 'пусто');
         
         if (d?.holders) {
             holders = d.holders;
@@ -876,13 +969,11 @@ function subscribeToData() {
             renderAll();
             updateSync('realtime');
         } else {
-            // Нет данных — загружаем локальные и сохраняем
             loadLocal();
             renderAll();
             saveServer();
         }
     }, err => {
-        console.error('[FB] Ошибка подписки:', err);
         loadLocal();
         renderAll();
         updateSync('offline');
@@ -890,7 +981,7 @@ function subscribeToData() {
     });
 }
 
-// ===== SAVE/LOAD =====
+// ===== DATA LAYER =====
 let holders = {}, activeHolderId = null, activeAccountId = null, capital = 0, savedReports = {};
 let incomePercent = 7, expensePercent = 2.5, detailPeriod = 'today';
 let isOnline = navigator.onLine, isEditMode = false, expandedHolders = {};
@@ -935,7 +1026,6 @@ const loadLocal = () => {
     } catch(e) {}
 };
 
-// Сохранение в Firebase — ВСЕГДА в узел владельца
 const saveServer = () => {
     if (!useFirebase || !isOnline) { updateSync('local'); return; }
     if (saveTimeout) clearTimeout(saveTimeout);
@@ -966,13 +1056,11 @@ const saveServer = () => {
                 goalTarget,
                 goalHistory,
                 lastUpdated: new Date().toISOString(),
-                lastUpdatedBy: UID
+                lastUpdatedBy: firebaseUid
             });
             
-            console.log('[FB] Данные сохранены в узел:', viewingOwner);
             updateSync('realtime');
         } catch(e) {
-            console.error('[FB] Ошибка сохранения:', e);
             updateSync('error');
         } finally {
             isSyncing = false;
@@ -980,7 +1068,6 @@ const saveServer = () => {
     }, 500);
 };
 
-// Загрузка — больше не нужна отдельная функция, всё через subscribeToData
 const loadServer = () => {
     if (!useFirebase) {
         loadLocal();
@@ -988,7 +1075,6 @@ const loadServer = () => {
         updateSync('local');
         return;
     }
-    // Просто перезапускаем подписку
     subscribeToData();
 };
 
@@ -1052,18 +1138,16 @@ function loadTeamMembers() {
     firebase.database().ref(`users/${viewingOwner}/team`).on('value', snap => {
         teamMembers = snap.val() || {};
         
-        if (viewingOwner === UID) {
+        if (viewingOwner === firebaseUid) {
             currentUserRole = 'owner';
-        } else if (teamMembers[UID]) {
-            currentUserRole = teamMembers[UID].role || 'viewer';
+        } else if (teamMembers[firebaseUid]) {
+            currentUserRole = teamMembers[firebaseUid].role || 'viewer';
         } else {
             currentUserRole = 'viewer';
         }
         
         renderTeamMembers();
         updateUIByRole();
-    }, err => {
-        console.error('[Team] Ошибка загрузки:', err);
     });
 }
 
@@ -1074,7 +1158,7 @@ function renderTeamMembers() {
     let html = '';
     const ownerName = tg?.initDataUnsafe?.user?.first_name || tg?.initDataUnsafe?.user?.username || 'Вы';
     const viewingOwner = getViewingOwner();
-    const isOwner = (viewingOwner === UID);
+    const isOwner = (viewingOwner === firebaseUid);
     
     html += `<div class="team-member">
         <div class="team-avatar owner-av">👑</div>
@@ -1090,7 +1174,7 @@ function renderTeamMembers() {
         const initial = name.charAt(0).toUpperCase();
         const avClass = data.role + '-av';
         const addedDate = data.addedAt ? new Date(data.addedAt).toLocaleDateString('ru-RU') : '';
-        const isYou = (uid === UID);
+        const isYou = (uid === firebaseUid);
         
         html += `<div class="team-member">
             <div class="team-avatar ${avClass}">${initial}</div>
@@ -1177,7 +1261,6 @@ function savePermissions() {
             closePermSheet();
         })
         .catch(err => {
-            console.error(err);
             haptic('error');
             showToast('⚠️', 'Ошибка сохранения');
         });
@@ -1195,7 +1278,6 @@ function removeMemberFromPerm() {
                 closePermSheet();
             })
             .catch(err => {
-                console.error(err);
                 haptic('error');
                 showToast('⚠️', 'Ошибка удаления');
             });
@@ -1420,31 +1502,35 @@ window.addEventListener('beforeunload', () => saveLocal());
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveLocal(); });
 let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(updateMiniRing, 100); });
 
-// ===== ПРАВИЛЬНЫЙ ПОРЯДОК ИНИЦИАЛИЗАЦИИ =====
+// ===== ИНИЦИАЛИЗАЦИЯ =====
 console.log('=== FINDR INIT START ===');
-console.log('Мой UID:', UID);
-console.log('viewing_owner из localStorage:', localStorage.getItem('fl_viewing_owner'));
 
 applyTheme();
 initAnimatedElements();
 
-// 1. Инициализируем Firebase приложение
-initFB();
-
-// 2. Настраиваем userRef на правильного владельца (с учётом viewing_owner)
-setupUserRef();
-
-// 3. Проверяем invite-ссылку
-const hasInvite = checkInviteAccess();
-
-// 4. Если нет invite — подписываемся на свои данные
-if (!hasInvite) {
-    console.log('[Init] Обычный режим — подписываемся на свои данные');
-    subscribeToData();
-    loadTeamMembers();
-}
-
-setTimeout(() => { init3DTilt(); initMagneticButtons(); initPullToRefresh(); }, 500);
+// Асинхронная инициализация с Firebase Auth
+(async () => {
+    // 1. Инициализируем Firebase + Anonymous Auth
+    await initFB();
+    
+    // 2. Получаем стабильный UID
+    const resolvedUID = await resolveUID();
+    console.log('[Init] Итоговый UID:', resolvedUID);
+    
+    // 3. Настраиваем userRef
+    setupUserRef();
+    
+    // 4. Проверяем invite
+    const hasInvite = checkInviteAccess();
+    
+    // 5. Если нет invite — подписываемся на данные
+    if (!hasInvite) {
+        subscribeToData();
+        loadTeamMembers();
+    }
+    
+    setTimeout(() => { init3DTilt(); initMagneticButtons(); initPullToRefresh(); }, 500);
+})();
 </script>
 </body>
 </html>
