@@ -1,0 +1,55 @@
+# Review package: 72aea8a..HEAD
+
+## Commits
+a7d897b feat: persist reportPeriodStart alongside capital/savedReports
+
+## Files changed
+ index.html | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+## Diff
+diff --git a/index.html b/index.html
+index 1f607bd..ef60c24 100644
+--- a/index.html
++++ b/index.html
+@@ -1155,35 +1155,35 @@ const viewingOwner = getViewingOwner();
+ userRef = firebase.database().ref(`users/${viewingOwner}`);
+ }
+ function subscribeToData() {
+ if (!useFirebase || !userRef) return;
+ if (dataListener) { userRef.off('value', dataListener); dataListener = null; }
+ showSkeletons(); updateSync('syncing');
+ dataListener = userRef.on('value', snap => {
+ const d = snap.val();
+ if (d?.holders) {
+ holders = d.holders; activeHolderId = d.activeHolderId || Object.keys(holders)[0]; activeAccountId = d.activeAccountId;
+-capital = d.capital || 0; savedReports = d.savedReports || {}; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5;
++capital = d.capital || 0; savedReports = d.savedReports || {}; reportPeriodStart = d.reportPeriodStart || null; incomePercent = d.incomePercent || 7; expensePercent = d.expensePercent || 2.5;
+ goalTarget = d.goalTarget || 0; goalHistory = d.goalHistory || [];
+ const hh = holders[activeHolderId];
+ if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts || {})[0] || null;
+ renderAll(); updateSync('realtime');
+ } else { loadLocal(); renderAll(); saveServer(); }
+ }, err => { loadLocal(); renderAll(); updateSync('offline'); });
+ }
+-let holders = {}, activeHolderId = null, activeAccountId = null, capital = 0, savedReports = {};
++let holders = {}, activeHolderId = null, activeAccountId = null, capital = 0, savedReports = {}, reportPeriodStart = null;
+ let incomePercent = 7, expensePercent = 2.5, detailPeriod = 'today', detailCustomRange = null;
+ let isOnline = navigator.onLine, isEditMode = false, expandedHolders = {}, expandedDetailAccounts = {};
+ let goalTarget = 0, goalHistory = [];
+-const saveLocal = () => { try { localStorage.setItem('fl_holders', JSON.stringify(holders)); localStorage.setItem('fl_ah', activeHolderId); localStorage.setItem('fl_aa', activeAccountId); localStorage.setItem('fl_cap', capital.toString()); localStorage.setItem('fl_reports', JSON.stringify(savedReports)); localStorage.setItem('fl_ip', incomePercent.toString()); localStorage.setItem('fl_ep', expensePercent.toString()); localStorage.setItem('fl_goal', goalTarget.toString()); localStorage.setItem('fl_goal_history', JSON.stringify(goalHistory)); } catch(e) {} };
+-const loadLocal = () => { try { const h = localStorage.getItem('fl_holders'); if (h) { holders = JSON.parse(h); activeHolderId = localStorage.getItem('fl_ah'); activeAccountId = localStorage.getItem('fl_aa'); if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0]; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts || {})[0] || null; } else { const hid = 'h_' + Date.now(), aid = 'a_' + Date.now(); holders = { [hid]: { id: hid, name: 'Основной', accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() } }; activeHolderId = hid; activeAccountId = aid; } savedReports = JSON.parse(localStorage.getItem('fl_reports') || '{}'); incomePercent = parseFloat(localStorage.getItem('fl_ip')) || 7; expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5; capital = parseFloat(localStorage.getItem('fl_cap')) || 0; goalTarget = parseFloat(localStorage.getItem('fl_goal')) || 0; goalHistory = JSON.parse(localStorage.getItem('fl_goal_history') || '[]'); } catch(e) {} };
+-const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); const viewingOwner = getViewingOwner(); await firebase.database().ref(`users/${viewingOwner}`).update({ holders, activeHolderId, activeAccountId, capital, savedReports, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, margin: s.margin, incomePercent, expensePercent, goalTarget, goalHistory, lastUpdated: new Date().toISOString(), lastUpdatedBy: firebaseUid }); updateSync('realtime'); } catch(e) { updateSync('error'); } finally { isSyncing = false; } }, 500); };
++const saveLocal = () => { try { localStorage.setItem('fl_holders', JSON.stringify(holders)); localStorage.setItem('fl_ah', activeHolderId); localStorage.setItem('fl_aa', activeAccountId); localStorage.setItem('fl_cap', capital.toString()); localStorage.setItem('fl_reports', JSON.stringify(savedReports)); localStorage.setItem('fl_rps', reportPeriodStart || ''); localStorage.setItem('fl_ip', incomePercent.toString()); localStorage.setItem('fl_ep', expensePercent.toString()); localStorage.setItem('fl_goal', goalTarget.toString()); localStorage.setItem('fl_goal_history', JSON.stringify(goalHistory)); } catch(e) {} };
++const loadLocal = () => { try { const h = localStorage.getItem('fl_holders'); if (h) { holders = JSON.parse(h); activeHolderId = localStorage.getItem('fl_ah'); activeAccountId = localStorage.getItem('fl_aa'); if (!activeHolderId || !holders[activeHolderId]) activeHolderId = Object.keys(holders)[0]; const hh = holders[activeHolderId]; if (hh && (!activeAccountId || !hh.accounts[activeAccountId])) activeAccountId = Object.keys(hh.accounts || {})[0] || null; } else { const hid = 'h_' + Date.now(), aid = 'a_' + Date.now(); holders = { [hid]: { id: hid, name: 'Основной', accounts: { [aid]: { id: aid, name: 'Основной', balance: 0, transactions: [], createdAt: new Date().toISOString() } }, createdAt: new Date().toISOString() } }; activeHolderId = hid; activeAccountId = aid; } savedReports = JSON.parse(localStorage.getItem('fl_reports') || '{}'); reportPeriodStart = localStorage.getItem('fl_rps') || null; incomePercent = parseFloat(localStorage.getItem('fl_ip')) || 7; expensePercent = parseFloat(localStorage.getItem('fl_ep')) || 2.5; capital = parseFloat(localStorage.getItem('fl_cap')) || 0; goalTarget = parseFloat(localStorage.getItem('fl_goal')) || 0; goalHistory = JSON.parse(localStorage.getItem('fl_goal_history') || '[]'); } catch(e) {} };
++const saveServer = () => { if (!useFirebase || !isOnline) { updateSync('local'); return; } if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { if (isSyncing) return; isSyncing = true; updateSync('syncing'); try { const s = calcAll(); const viewingOwner = getViewingOwner(); await firebase.database().ref(`users/${viewingOwner}`).update({ holders, activeHolderId, activeAccountId, capital, savedReports, reportPeriodStart, totalIncome: s.totalIncome, totalExpense: s.totalExpense, totalSpend: s.totalSpend, revenue: s.revenue, margin: s.margin, incomePercent, expensePercent, goalTarget, goalHistory, lastUpdated: new Date().toISOString(), lastUpdatedBy: firebaseUid }); updateSync('realtime'); } catch(e) { updateSync('error'); } finally { isSyncing = false; } }, 500); };
+ const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateSync('local'); return; } subscribeToData(); };
+ const updateSync = (s) => { const el = document.getElementById('syncBadge'); const m = { syncing: { t: 'синхронизация...', i: 'cloud', c: 'syncing' }, synced: { t: 'сохранено', i: 'cloud', c: 'synced' }, realtime: { t: 'онлайн', i: 'dot', col: '#34C759', c: 'realtime' }, offline: { t: 'локально', i: 'disk', c: '' }, error: { t: 'ошибка', i: 'warn', c: '' }, local: { t: 'локально', i: 'disk', c: '' } }[s] || { t: '...', i: 'cloud', c: '' }; el.innerHTML = `${icon(m.i, 12, m.col)} ${m.t}`; el.className = 'sync-badge ' + m.c; };
+ const getHolder = () => holders[activeHolderId];
+ const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
+ const filterTx = (txs, p) => { if (!txs || p === 'all') return txs || []; const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); if (p === 'custom') { if (!detailCustomRange) return txs; const cs = new Date(detailCustomRange.start + 'T00:00:00'), ce = new Date(detailCustomRange.end + 'T23:59:59.999'); return txs.filter(t => { const d = new Date(t.date); return d >= cs && d <= ce; }); } let s; if (p === 'today') s = today; else if (p === 'week') { s = new Date(today); s.setDate(s.getDate() - 6); } else if (p === 'month') { s = new Date(today); s.setMonth(s.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= s); };
+ function periodLabel(p) { if (p === 'today') return 'Сегодня'; if (p === 'week') return '7 дней'; if (p === 'month') return 'Месяц'; if (p === 'custom' && detailCustomRange) { const fd = (s) => { const d = new Date(s + 'T00:00:00'); return `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`; }; return `${fd(detailCustomRange.start)} – ${fd(detailCustomRange.end)}`; } return 'Всё время'; }
+ const localDateStr = (d) => `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+ window.openCustomRangeSheet = () => { const todayStr = localDateStr(new Date()); document.getElementById('customRangeStart').value = detailCustomRange?.start || localDateStr(new Date(Date.now() - 29*86400000)); document.getElementById('customRangeEnd').value = detailCustomRange?.end || todayStr; document.getElementById('customRangeEnd').max = todayStr; document.getElementById('customRangeOverlay').classList.add('active'); document.getElementById('customRangeSheet').classList.add('active'); haptic('light'); };
+ window.closeCustomRangeSheet = () => { document.getElementById('customRangeOverlay').classList.remove('active'); document.getElementById('customRangeSheet').classList.remove('active'); };
+ window.applyCustomRange = () => { const start = document.getElementById('customRangeStart').value, end = document.getElementById('customRangeEnd').value; if (!start || !end) { showToast(icon('warn',20), 'Укажите обе даты'); return; } if (start > end) { showToast(icon('warn',20), 'Начало позже конца'); return; } detailCustomRange = { start, end }; closeCustomRangeSheet(); setPeriod('custom'); haptic('success'); };

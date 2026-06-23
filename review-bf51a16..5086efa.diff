@@ -1,0 +1,60 @@
+# Review package: bf51a16..HEAD
+
+## Commits
+5086efa feat: calcAll accepts a period; Детали top summary follows the date filter
+
+## Files changed
+ index.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+## Diff
+diff --git a/index.html b/index.html
+index c0bed88..2d37df9 100644
+--- a/index.html
++++ b/index.html
+@@ -1181,21 +1181,21 @@ const loadServer = () => { if (!useFirebase) { loadLocal(); renderAll(); updateS
+ const updateSync = (s) => { const el = document.getElementById('syncBadge'); const m = { syncing: { t: 'синхронизация...', i: 'cloud', c: 'syncing' }, synced: { t: 'сохранено', i: 'cloud', c: 'synced' }, realtime: { t: 'онлайн', i: 'dot', col: '#34C759', c: 'realtime' }, offline: { t: 'локально', i: 'disk', c: '' }, error: { t: 'ошибка', i: 'warn', c: '' }, local: { t: 'локально', i: 'disk', c: '' } }[s] || { t: '...', i: 'cloud', c: '' }; el.innerHTML = `${icon(m.i, 12, m.col)} ${m.t}`; el.className = 'sync-badge ' + m.c; };
+ const getHolder = () => holders[activeHolderId];
+ const getAccount = () => { const h = getHolder(); return h?.accounts?.[activeAccountId] || null; };
+ const filterTx = (txs, p) => { if (!txs) return []; if (p === undefined) { return reportPeriodStart ? txs.filter(t => new Date(t.date) >= new Date(reportPeriodStart)) : txs; } if (p === 'all') return txs; const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); if (p === 'custom') { if (!detailCustomRange) return txs; const cs = new Date(detailCustomRange.start + 'T00:00:00'), ce = new Date(detailCustomRange.end + 'T23:59:59.999'); return txs.filter(t => { const d = new Date(t.date); return d >= cs && d <= ce; }); } let s; if (p === 'today') s = today; else if (p === 'week') { s = new Date(today); s.setDate(s.getDate() - 6); } else if (p === 'month') { s = new Date(today); s.setMonth(s.getMonth() - 1); } else return txs; return txs.filter(t => new Date(t.date) >= s); };
+ function periodLabel(p) { if (p === 'today') return 'Сегодня'; if (p === 'week') return '7 дней'; if (p === 'month') return 'Месяц'; if (p === 'custom' && detailCustomRange) { const fd = (s) => { const d = new Date(s + 'T00:00:00'); return `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`; }; return `${fd(detailCustomRange.start)} – ${fd(detailCustomRange.end)}`; } return 'Всё время'; }
+ const localDateStr = (d) => `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+ window.openCustomRangeSheet = () => { const todayStr = localDateStr(new Date()); document.getElementById('customRangeStart').value = detailCustomRange?.start || localDateStr(new Date(Date.now() - 29*86400000)); document.getElementById('customRangeEnd').value = detailCustomRange?.end || todayStr; document.getElementById('customRangeEnd').max = todayStr; document.getElementById('customRangeOverlay').classList.add('active'); document.getElementById('customRangeSheet').classList.add('active'); haptic('light'); };
+ window.closeCustomRangeSheet = () => { document.getElementById('customRangeOverlay').classList.remove('active'); document.getElementById('customRangeSheet').classList.remove('active'); };
+ window.applyCustomRange = () => { const start = document.getElementById('customRangeStart').value, end = document.getElementById('customRangeEnd').value; if (!start || !end) { showToast(icon('warn',20), 'Укажите обе даты'); return; } if (start > end) { showToast(icon('warn',20), 'Начало позже конца'); return; } detailCustomRange = { start, end }; closeCustomRangeSheet(); setPeriod('custom'); haptic('success'); };
+ const calcAcc = (acc, period) => { let inc = 0, exp = 0, spend = 0; if (!acc?.transactions) return { totalIncome: 0, totalExpense: 0, totalSpend: 0, revenue: 0, margin: 0, turnover: 0 }; filterTx(acc.transactions, period).forEach(t => { if (!t || typeof t.amount !== 'number') return; if (t.type === 'income') inc += t.amount; else if (t.type === 'expense') exp += t.amount; else if (t.type === 'spend') spend += t.amount; }); const rev = inc * (incomePercent / 100) + exp * (expensePercent / 100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp }; };
+-const calcAll = () => { let inc = 0, exp = 0, spend = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a); inc += s.totalIncome; exp += s.totalExpense; spend += s.totalSpend; bal += a.balance || 0; }); }); const rev = inc * (incomePercent / 100) + exp * (expensePercent / 100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
++const calcAll = (period) => { let inc = 0, exp = 0, spend = 0, bal = 0; Object.values(holders).forEach(h => { if (!h?.accounts) return; Object.values(h.accounts).forEach(a => { if (!a) return; const s = calcAcc(a, period); inc += s.totalIncome; exp += s.totalExpense; spend += s.totalSpend; bal += a.balance || 0; }); }); const rev = inc * (incomePercent / 100) + exp * (expensePercent / 100); return { totalIncome: inc, totalExpense: exp, totalSpend: spend, revenue: rev, margin: rev - spend, turnover: inc + exp, totalBalance: bal, siteBalance: capital - bal }; };
+ function loadTeamMembers() {
+ if (!useFirebase) return;
+ const viewingOwner = getViewingOwner();
+ firebase.database().ref(`users/${viewingOwner}/team`).on('value', snap => {
+ teamMembers = snap.val() || {};
+ if (viewingOwner === firebaseUid) currentUserRole = 'owner';
+ else if (teamMembers[firebaseUid]) currentUserRole = teamMembers[firebaseUid].role || 'viewer';
+ else currentUserRole = 'viewer';
+ renderTeamMembers(); updateUIByRole();
+ });
+@@ -1524,21 +1524,21 @@ document.getElementById('resetBtn').style.display = canDelete() ? 'block' : 'non
+ }
+ saveLocal();
+ updateMiniRing();
+ };
+ window.resetAll = () => { if (!canDelete()) return; const acc = getAccount(), h = getHolder(); if (!acc || !h || !acc.transactions?.length) { showToast(icon('warn',20),'Нет операций'); return; } haptic('warning'); const r = () => { acc.balance = 0; acc.transactions = []; renderAll(); saveLocal(); saveServer(); haptic('success'); showToast(icon('check',20),'Обнулено'); }; safeConfirm(`Обнулить "${acc.name}"?`, r); };
+ window.deleteTransaction = (idx) => { if (!canEdit()) return; const acc = getAccount(); if (!acc?.transactions) return; const ri = acc.transactions.length - 1 - idx; if (ri < 0 || ri >= acc.transactions.length) return; const tx = acc.transactions[ri]; const del = () => { if (tx.type === 'income') { acc.balance -= tx.amount; capital -= tx.amount * (incomePercent / 100); } else if (tx.type === 'expense') { acc.balance += tx.amount; capital -= tx.amount * (expensePercent / 100); } else if (tx.type === 'adjustment') { acc.balance -= tx.amount; } else if (tx.type === 'revenue') { capital -= tx.amount; } else if (tx.type === 'capital_adj') { capital -= tx.amount; } acc.transactions.splice(ri, 1); renderAll(); saveServer(); haptic('success'); showToast(icon('trash',20),'Удалено'); }; safeConfirm('Удалить?', del); };
+ const refreshReport = () => { const s = calcAll(); ['sumTurnover', 'sumRevenue', 'sumIncome', 'sumExpense', 'sumSpend', 'sumBalance', 'sumCapital', 'sumSite'].forEach((id, i) => animateValue(document.getElementById(id), [s.turnover, s.revenue, s.totalIncome, s.totalExpense, s.totalSpend, s.totalBalance, capital, s.siteBalance][i], fmt)); const me = document.getElementById('sumMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); renderReportsList(); checkLastFixed(); };
+ const renderReport = refreshReport;
+ const renderReportsList = () => { const list = document.getElementById('reportsList'), keys = Object.keys(savedReports).sort().reverse(); if (!keys.length) { list.innerHTML = '<div class="empty-state"><div class="empty-text">Нет отчётов</div></div>'; return; } list.innerHTML = ''; keys.forEach(key => { const r = savedReports[key]; if (!r) return; const d = new Date(r.date), sp = r.spend || 0, mg = r.margin ?? ((r.revenue || 0) - sp); const c = document.createElement('div'); c.className = 'report-card'; c.innerHTML = `<div class="report-header"><div><div class="report-date">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</div><div class="report-time">${d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</div></div><div class="report-actions"><button class="report-action share" onclick="shareReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>${canDelete() ? `<button class="report-action delete" onclick="deleteReport('${key}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>` : ''}</div></div><div class="report-stats"><div class="report-stat"><span class="report-stat-label">${icon('chartUp',15,'#007AFF')}</span><span class="report-stat-value text-blue">${fmt(r.turnover)}</span></div><div class="report-stat"><span class="report-stat-label">${icon('money',15,'#FF9500')}</span><span class="report-stat-value text-orange">${fmt(r.revenue)}</span></div><div class="report-stat"><span class="report-stat-label">${icon('dot',15,'#34C759')}</span><span class="report-stat-value text-green">${fmt(r.income)}</span></div><div class="report-stat"><span class="report-stat-label">${icon('dot',15,'#FF3B30')}</span><span class="report-stat-value text-red">${fmt(r.expense)}</span></div><div class="report-stat"><span class="report-stat-label">${icon('bag',15,'#AF52DE')}</span><span class="report-stat-value text-purple">${fmt(sp)}</span></div><div class="report-stat"><span class="report-stat-label">${icon('trendUp2',15,'#5AC8FA')}</span><span class="report-stat-value text-teal">${fmt(mg)}</span></div></div>`; list.appendChild(c); }); };
+ const checkLastFixed = () => { const keys = Object.keys(savedReports).sort().reverse(), b = document.getElementById('lastFixedBadge'); if (keys.length) { const d = new Date(savedReports[keys[0]].date); document.getElementById('lastFixedDate').textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; b.style.display = 'flex'; } else b.style.display = 'none'; };
+-const refreshDetail = () => { const s = calcAll(); ['detBalance', 'detCapital', 'detSite', 'detSpend', 'detRevenue'].forEach((id, i) => animateValue(document.getElementById(id), [s.totalBalance, capital, s.siteBalance, s.totalSpend, s.revenue][i], fmt)); const me = document.getElementById('detMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); renderDetailTree(); renderCompare(); renderLeaderboard(); };
++const refreshDetail = () => { const s = calcAll(detailPeriod); ['detBalance', 'detCapital', 'detSite', 'detSpend', 'detRevenue'].forEach((id, i) => animateValue(document.getElementById(id), [s.totalBalance, capital, s.siteBalance, s.totalSpend, s.revenue][i], fmt)); const me = document.getElementById('detMargin'); animateValue(me, s.margin, fmt); s.margin < 0 ? me.classList.add('negative') : me.classList.remove('negative'); renderDetailTree(); renderCompare(); renderLeaderboard(); };
+ function computeHolderRanking() {
+ return Object.keys(holders).map(hid => {
+ const h = holders[hid];
+ const accounts = Object.values(h.accounts || {}).filter(Boolean);
+ let revenue = 0;
+ accounts.forEach(a => { revenue += calcAcc(a, detailPeriod).revenue; });
+ return { hid, name: h.name, revenue };
+ }).filter(r => r.revenue !== 0).sort((a, b) => b.revenue - a.revenue);
+ }
+ function renderLeaderboard() {

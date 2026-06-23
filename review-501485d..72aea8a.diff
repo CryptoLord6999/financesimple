@@ -1,0 +1,37 @@
+# Review package: 501485d..HEAD
+
+## Commits
+72aea8a fix: scrub all occurrences of the real Firebase project id from the test copy
+6ad18c6 chore: add safe test-copy script for Firebase-free browser verification
+
+## Files changed
+ .gitignore             |  1 +
+ test/make-test-copy.sh | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
+
+## Diff
+diff --git a/.gitignore b/.gitignore
+index 7a95436..f4b9f52 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,2 @@
+ .superpowers/
++index.test.html
+diff --git a/test/make-test-copy.sh b/test/make-test-copy.sh
+new file mode 100644
+index 0000000..7c7362d
+--- /dev/null
++++ b/test/make-test-copy.sh
+@@ -0,0 +1,12 @@
++#!/usr/bin/env bash
++# Regenerates index.test.html from index.html with a deliberately invalid
++# Firebase config, so browser-driven verification never reaches the real
++# production database (financesimple-7c73a). Re-run after every edit to
++# index.html, before any Playwright verification step.
++set -e
++cd "$(dirname "$0")/.."
++cp index.html index.test.html
++sed -i 's/apiKey: "AIzaSyAbeGi5WVmiszMO9muzZV4CZQxXe17T7UY"/apiKey: "TEST-INVALID-KEY"/' index.test.html
++sed -i 's#databaseURL: "https://financesimple-7c73a-default-rtdb.europe-west1.firebasedatabase.app"#databaseURL: "https://test-invalid.invalid"#' index.test.html
++sed -i 's/financesimple-7c73a/test-invalid-project/g' index.test.html
++grep -q "TEST-INVALID-KEY" index.test.html && ! grep -q "financesimple-7c73a" index.test.html && echo "OK: test copy uses dummy Firebase config"
